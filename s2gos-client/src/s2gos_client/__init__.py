@@ -8,7 +8,6 @@ from .client import Client
 from .config import ClientConfig
 from .exceptions import ClientException
 
-__version__ = version("s2gos")
+__version__ = version("s2gos-client")
 
 __all__ = ["Client", "ClientConfig", "ClientException", "__version__"]
-

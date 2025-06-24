@@ -7,7 +7,7 @@ from typing import Optional
 
 import typer
 
-from s2gos import __version__
+from s2gos_server import __version__
 from s2gos_server.constants import S2GOS_SERVICE_ENV_VAR
 from s2gos_server.defaults import DEFAULT_HOST, DEFAULT_PORT
 
