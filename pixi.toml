@@ -1,0 +1,68 @@
+[project]
+name = "s2gos-controller"
+version = "0.0.6"
+description = "S2GOS Monorepo"
+channels = ["conda-forge"]
+platforms = ["linux-64", "win-64", "osx-64"]
+
+[dependencies]
+python = "3.13"
+#
+# Code-generation from tools/
+datamodel-code-generator = "*"
+#
+# Build tools
+build = "*"
+hatch = "*"
+hatchling = "*"
+twine = "*"
+#
+# Code Style / QA
+isort = "*"
+ruff = "*"
+#
+# Unit-Testing
+pytest = "*"
+pytest-cov = "*"
+#
+# GUI testing
+ipyleaflet = "*"
+ipywidgets = "*"
+ipywidgets_bokeh = "*"
+jupyter = "*"
+notebook = "*"
+panel = "*"
+watchfiles = "*"
+#
+# Use cases testing
+dask = "*"
+xarray = "*"
+zarr = "*"
+#
+# Doku
+mkdocs = "*"
+mkdocs-autorefs = "*"
+mkdocs-material = "*"
+mkdocstrings = "*"
+mkdocstrings-python = "*"
+
+[feature.dev.dependencies]
+s2gos_models = { path = "s2gos_models", develop = true }
+s2gos_client = { path = "s2gos_client", develop = true }
+s2gos_server = { path = "s2gos_server", develop = true }
+
+[task.codegen]
+cmd = "python tools/gen_models.py && python tools/gen_server.py && python tools/gen_client.py"
+help = "Generates code for models, client, and server from a single OpenAPI source"
+
+[task.docs]
+cmd = "mkdocs serve"
+help = "Serve documentation"
+
+[task.docs-build]
+cmd = "mkdocs build"
+help = "Build documentation"
+
+[task.test]
+cmd = "pytest"
+help = "Run all tests"
