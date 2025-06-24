@@ -136,6 +136,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# pixi project settings
+.pixi/
+
 # Spyder project settings
 .spyderproject
 .spyproject

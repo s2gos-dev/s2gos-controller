@@ -41,7 +41,7 @@ dependencies = [
   "click",
   "pydantic",
   "pyyaml",
-  "s2gos-models>=0.1.0",
+  "s2gos-models>=0.1.0.dev0",
   "typer",
   "uri-template",
 ]
