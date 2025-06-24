@@ -8342,7 +8342,7 @@ packages:
 - pypi: ./s2gos-common
   name: s2gos-common
   version: 0.1.0.dev0
-  sha256: 9e2644c78001ec2c4db6a02f4f53398b2164398adbe49213bf2cd4e0f263e63f
+  sha256: ab595147ddb6e19fe1335012cc16ec6049dc2f61f341c960b9528401377a8abe
   requires_dist:
   - pydantic
   requires_python: '>=3.10'

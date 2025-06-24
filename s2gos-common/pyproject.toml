@@ -53,11 +53,11 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build]
 sources = ["src"]
-exclude = ["src/tests/**"]
+exclude = ["src/tests/**/*"]
 
 [tool.hatch.build.targets.sdist]
 include = [
-  "src/s2gos_models/**/*",
+  "src/s2gos_common/**/*",
   "pyproject.toml",
   "README.md",
   "LICENSE",
@@ -65,5 +65,5 @@ include = [
 
 [tool.hatch.build.targets.wheel]
 include = [
-  "src/s2gos_models/**/*"
+  "src/s2gos_common/**/*"
 ]
