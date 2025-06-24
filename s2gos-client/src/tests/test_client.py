@@ -4,7 +4,7 @@
 
 from unittest import TestCase
 
-from s2gos.client import Client
+from s2gos_client.client import Client
 from s2gos_common.models import (
     Capabilities,
     ConformanceDeclaration,
@@ -15,7 +15,7 @@ from s2gos_common.models import (
     ProcessList,
     ProcessRequest,
 )
-from tests.client.helpers import MockTransport
+from tests.helpers import MockTransport
 
 
 class ClientTest(TestCase):

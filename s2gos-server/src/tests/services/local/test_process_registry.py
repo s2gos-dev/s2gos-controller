@@ -34,9 +34,7 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         self.assertIs(f1, entry.function)
         process = entry.process
         self.assertIsInstance(process, ProcessDescription)
-        self.assertEqual(
-            "tests.server.services.local.test_process_registry:f1", process.id
-        )
+        self.assertEqual("tests.services.local.test_process_registry:f1", process.id)
         self.assertEqual("0.0.0", process.version)
         self.assertEqual(None, process.title)
         self.assertEqual("This is f1.", process.description)
@@ -65,9 +63,7 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         self.assertIs(f2, entry.function)
         process = entry.process
         self.assertIsInstance(process, ProcessDescription)
-        self.assertEqual(
-            "tests.server.services.local.test_process_registry:f2", process.id
-        )
+        self.assertEqual("tests.services.local.test_process_registry:f2", process.id)
         self.assertEqual("0.0.0", process.version)
         self.assertEqual(None, process.title)
         self.assertEqual("This is f2.", process.description)

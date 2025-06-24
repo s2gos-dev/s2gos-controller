@@ -7,7 +7,7 @@ import tempfile
 from pathlib import Path
 from unittest import TestCase
 
-from s2gos.client import ClientConfig
+from s2gos_client.config import ClientConfig
 from s2gos_client.defaults import DEFAULT_CONFIG_PATH
 
 
