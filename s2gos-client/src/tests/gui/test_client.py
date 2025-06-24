@@ -4,11 +4,11 @@
 from typing import Any, Literal
 from unittest import TestCase
 
-from s2gos.client.gui import Client as GuiClient
-from s2gos.client.gui.jobs_form import JobsForm
-from s2gos.client.gui.processes_form import ProcessesForm
-from s2gos.client.transport import Transport
-from s2gos.common.models import JobList, ProcessList
+from s2gos_client.gui import Client as GuiClient
+from s2gos_client.gui.jobs_form import JobsForm
+from s2gos_client.gui.processes_form import ProcessesForm
+from s2gos_client.transport import Transport
+from s2gos_common.models import JobList, ProcessList
 
 
 class ClientTest(TestCase):

@@ -6,7 +6,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel
 
-from s2gos.client.transport import Transport
+from s2gos_client.transport import Transport
 
 
 class MockTransport(Transport):  # pragma: no cover

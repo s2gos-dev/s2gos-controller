@@ -6,7 +6,7 @@
 name = "s2gos-common"
 version = "0.1.0.dev0"
 description = "Python data models for the ESA DTE-S2GOS synthetic scene generator service"
-readne = "README.md"
+readme = "README.md"
 authors = [
   {name = "Norman Fomferra (Brockmann Consult GmbH)"},
   {name = "Tejas Morbagal Harish (Brockmann Consult GmbH)"}
@@ -48,11 +48,12 @@ Changelog = "https://github.com/s2gos-dev/s2gos-controller/blob/main/CHANGES.md"
 Issues = "https://github.com/s2gos-dev/s2gos-controller/issues"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatch"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build]
 sources = ["src"]
+exclude = ["src/tests/**"]
 
 [tool.hatch.build.targets.sdist]
 include = [

@@ -8,8 +8,8 @@ from typing import Optional
 import typer
 
 from s2gos import __version__
-from s2gos.server.constants import S2GOS_SERVICE_ENV_VAR
-from s2gos.server.defaults import DEFAULT_HOST, DEFAULT_PORT
+from s2gos_server.constants import S2GOS_SERVICE_ENV_VAR
+from s2gos_server.defaults import DEFAULT_HOST, DEFAULT_PORT
 
 cli = typer.Typer()
 
@@ -47,7 +47,7 @@ def run_server(**kwargs):
     if isinstance(service_ref, str) and service_ref:
         os.environ[S2GOS_SERVICE_ENV_VAR] = service_ref
 
-    uvicorn.run("s2gos.server.main:app", **kwargs)
+    uvicorn.run("s2gos_server.main:app", **kwargs)
 
 
 if __name__ == "__main__":  # pragma: no cover

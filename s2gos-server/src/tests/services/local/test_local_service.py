@@ -4,8 +4,8 @@
 
 from unittest import TestCase
 
-from s2gos.common.models import ProcessDescription
-from s2gos.server.services.local import LocalService, ProcessRegistry
+from s2gos_common.models import ProcessDescription
+from s2gos_server.services.local import LocalService, ProcessRegistry
 
 
 class LocalServiceTest(TestCase):

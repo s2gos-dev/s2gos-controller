@@ -12,13 +12,13 @@ from typing import (
     get_origin,
 )
 
-from s2gos.common.models import (
+from s2gos_common.models import (
     InputDescription,
     OutputDescription,
     ProcessDescription,
     Schema,
 )
-from s2gos.server.services.local.schema_factory import Annotation, SchemaFactory
+from s2gos_server.services.local.schema_factory import Annotation, SchemaFactory
 
 
 class ProcessRegistry:

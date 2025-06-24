@@ -6,9 +6,9 @@ from unittest import TestCase
 
 import pytest
 
-from s2gos.common.models import StatusCode
-from s2gos.server.services.local import Job, JobCancelledException, get_job_context
-from s2gos.server.services.local.job import NullJobContext
+from s2gos_common.models import StatusCode
+from s2gos_server.services.local import Job, JobCancelledException, get_job_context
+from s2gos_server.services.local.job import NullJobContext
 
 
 def fn_success(x: int, y: int) -> int:

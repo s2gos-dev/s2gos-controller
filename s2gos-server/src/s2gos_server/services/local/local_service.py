@@ -8,7 +8,7 @@ from typing import Callable, Optional
 
 from fastapi.responses import JSONResponse
 
-from s2gos.common.models import (
+from s2gos_common.models import (
     Capabilities,
     ConformanceDeclaration,
     JobInfo,
@@ -20,8 +20,8 @@ from s2gos.common.models import (
     ProcessSummary,
     StatusCode,
 )
-from s2gos.server.exceptions import JSONContentException
-from s2gos.server.service import Service
+from s2gos_server.exceptions import JSONContentException
+from s2gos_server.service import Service
 
 from .job import Job
 from .process_registry import ProcessRegistry

@@ -9,7 +9,7 @@ from typing import Any, TypeAlias, Union, get_args, get_origin
 
 from pydantic import BaseModel
 
-from s2gos.common.models import Schema
+from s2gos_common.models import Schema
 
 Annotation: TypeAlias = type | GenericAlias | UnionType | NoneType
 

@@ -8,7 +8,7 @@ from typing import Optional
 import click
 import typer.core
 
-from s2gos.client.defaults import DEFAULT_REQUEST_FILE, DEFAULT_SERVER_URL
+from s2gos_client.defaults import DEFAULT_REQUEST_FILE, DEFAULT_SERVER_URL
 
 
 class AliasedGroup(typer.core.TyperGroup):
@@ -66,7 +66,7 @@ def configure(
     server_url: Optional[str] = typer.Option(None, "--url"),
 ):
     """Configure the S2GOS client."""
-    from s2gos.client.config import ClientConfig
+    from s2gos_client.config import ClientConfig
 
     config = ClientConfig.read()
     if not user_name:
@@ -156,7 +156,7 @@ def get_results(job_ids: list[str]):
 
 
 def _get_config():
-    from s2gos.client.config import ClientConfig
+    from s2gos_client.config import ClientConfig
 
     config = ClientConfig.read()
     if config is None:

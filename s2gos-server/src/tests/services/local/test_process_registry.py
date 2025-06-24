@@ -4,14 +4,14 @@
 
 from unittest import TestCase
 
-from s2gos.common.models import (
+from s2gos_common.models import (
     InputDescription,
     OutputDescription,
     ProcessDescription,
     Schema,
     Type1,
 )
-from s2gos.server.services.local import ProcessRegistry
+from s2gos_server.services.local import ProcessRegistry
 from tests.helpers import BaseModelMixin
 
 

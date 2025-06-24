@@ -244,6 +244,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/pexpect-4.9.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pickleshare-0.7.5-pyhd8ed1ab_1004.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/pillow-11.2.1-py313h8db990d_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/pip-25.1.1-pyh145f28c_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pixi-pycharm-0.0.8-unix_hf108a03_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pkgutil-resolve-name-1.3.10-pyhd8ed1ab_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/platformdirs-4.3.8-pyhe01879c_0.conda
@@ -577,6 +578,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/pexpect-4.9.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pickleshare-0.7.5-pyhd8ed1ab_1004.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/pillow-11.2.1-py313h0c4f865_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/pip-25.1.1-pyh145f28c_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pixi-pycharm-0.0.8-unix_hf108a03_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pkgutil-resolve-name-1.3.10-pyhd8ed1ab_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/platformdirs-4.3.8-pyhe01879c_0.conda
@@ -897,6 +899,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/pexpect-4.9.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pickleshare-0.7.5-pyhd8ed1ab_1004.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/pillow-11.2.1-py313hda88b71_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/noarch/pip-25.1.1-pyh145f28c_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pixi-pycharm-0.0.8-win_hba80fca_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/pkgutil-resolve-name-1.3.10-pyhd8ed1ab_2.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/platformdirs-4.3.8-pyhe01879c_0.conda
@@ -7273,6 +7276,17 @@ packages:
   - pkg:pypi/pillow?source=hash-mapping
   size: 41899294
   timestamp: 1746646850330
+- conda: https://conda.anaconda.org/conda-forge/noarch/pip-25.1.1-pyh145f28c_0.conda
+  sha256: e18efebe17b1cdef5bed19786c312c2f563981bbf8843490d5007311e448ff48
+  md5: 01384ff1639c6330a0924791413b8714
+  depends:
+  - python >=3.13.0a0
+  license: MIT
+  license_family: MIT
+  purls:
+  - pkg:pypi/pip?source=hash-mapping
+  size: 1244586
+  timestamp: 1746250023993
 - conda: https://conda.anaconda.org/conda-forge/noarch/pixi-pycharm-0.0.8-unix_hf108a03_2.conda
   sha256: d61d62c0a7fa6ca17d9463d05a217040c621ca64b70a7afb4640e0ccfd63dec6
   md5: 3b56ce640f2fdb4ea97f012ef924130e
@@ -8315,20 +8329,20 @@ packages:
 - pypi: ./s2gos-client
   name: s2gos-client
   version: 0.1.0.dev0
-  sha256: 210bf8d0c00d8291cbfb87e14c6258d735702175c47155b34000b2714b4234c8
+  sha256: bf8f37e9289ab9a044b216d205551c811ec41a80304673ecea13f35758bebbd0
   requires_dist:
   - click
   - pydantic
   - pyyaml
-  - s2gos-common>=0.1.0.dev0
   - typer
   - uri-template
+  - s2gos-common>=0.0.0
   requires_python: '>=3.10'
   editable: true
 - pypi: ./s2gos-common
   name: s2gos-common
   version: 0.1.0.dev0
-  sha256: 892c6edced581acb3aa9df9c3666a2bc79846746cfa86359074c40cdf724b9ba
+  sha256: 9e2644c78001ec2c4db6a02f4f53398b2164398adbe49213bf2cd4e0f263e63f
   requires_dist:
   - pydantic
   requires_python: '>=3.10'
@@ -8336,14 +8350,14 @@ packages:
 - pypi: ./s2gos-server
   name: s2gos-server
   version: 0.1.0.dev0
-  sha256: 1a089255c8e433c3b6a8961e34e9e1c1322e9b7750ae358e0e22d88369e9e017
+  sha256: d28920d3bdac7d6a9caa20777de6362ce7e1de3abd2adee66fd1a86ef96a9677
   requires_dist:
   - fastapi
   - pydantic
   - pyyaml
-  - s2gos-common>=0.1.0.dev0
   - typer
   - uvicorn
+  - s2gos-common>=0.0.0
   requires_python: '>=3.10'
   editable: true
 - conda: https://conda.anaconda.org/conda-forge/linux-64/s2n-1.5.21-h7ab7c64_0.conda

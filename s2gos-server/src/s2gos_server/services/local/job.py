@@ -10,7 +10,7 @@ from abc import ABC, abstractmethod
 from concurrent.futures import Future
 from typing import Any, Callable, Optional
 
-from s2gos.common.models import (
+from s2gos_common.models import (
     JobInfo,
     StatusCode,
     Type,

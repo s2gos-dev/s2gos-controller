@@ -8,7 +8,7 @@ from pathlib import Path
 from unittest import TestCase
 
 from s2gos.client import ClientConfig
-from s2gos.client.defaults import DEFAULT_CONFIG_PATH
+from s2gos_client.defaults import DEFAULT_CONFIG_PATH
 
 
 class ClientConfigTest(TestCase):

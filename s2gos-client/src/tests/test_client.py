@@ -5,7 +5,7 @@
 from unittest import TestCase
 
 from s2gos.client import Client
-from s2gos.common.models import (
+from s2gos_common.models import (
     Capabilities,
     ConformanceDeclaration,
     JobInfo,

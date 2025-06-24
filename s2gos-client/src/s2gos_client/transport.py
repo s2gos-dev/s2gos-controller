@@ -12,7 +12,7 @@ import requests
 import uri_template
 from pydantic import BaseModel
 
-from s2gos.client.exceptions import ClientException
+from s2gos_client.exceptions import ClientException
 
 logger = getLogger("s2gos")
 

@@ -8,8 +8,8 @@ import time
 from pathlib import Path
 from typing import Optional
 
-from s2gos.common.models import Link
-from s2gos.server.services.local import LocalService, get_job_context
+from s2gos_common.models import Link
+from s2gos_server.services.local import LocalService, get_job_context
 
 service = LocalService(
     title="S2GOS API Server (local dummy for testing)",

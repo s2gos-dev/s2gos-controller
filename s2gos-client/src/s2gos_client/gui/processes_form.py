@@ -8,8 +8,8 @@ import panel as pn
 import param
 
 from s2gos.client import ClientException
-from s2gos.client.gui.widget_factory import WidgetFactory
-from s2gos.common.models import (
+from s2gos_client.gui.widget_factory import WidgetFactory
+from s2gos_common.models import (
     Format,
     JobInfo,
     Output,

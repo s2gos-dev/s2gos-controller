@@ -4,7 +4,7 @@
 
 from fastapi import HTTPException
 
-from s2gos.common.models import ApiError
+from s2gos_common.models import ApiError
 
 
 class JSONContentException(HTTPException):

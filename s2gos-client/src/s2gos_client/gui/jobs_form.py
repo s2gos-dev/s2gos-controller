@@ -10,7 +10,7 @@ import param
 from pydantic import BaseModel
 
 from s2gos.client import ClientException
-from s2gos.common.models import (
+from s2gos_common.models import (
     JobInfo,
     JobList,
     JobResults,
