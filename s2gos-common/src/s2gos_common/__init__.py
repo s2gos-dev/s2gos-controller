@@ -10,7 +10,7 @@ from pydantic import BaseModel
 
 from . import models
 
-__version__ = version("s2gos")
+__version__ = version("s2gos_common")
 
 __all__ = ["__version__"]
 
