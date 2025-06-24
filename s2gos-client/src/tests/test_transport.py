@@ -6,7 +6,6 @@ from unittest import TestCase
 from unittest.mock import Mock, patch
 
 import pytest
-
 from s2gos_client.exceptions import ClientException
 from s2gos_client.transport import DefaultTransport
 from s2gos_common.models import ApiError, ConformanceDeclaration

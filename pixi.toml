@@ -46,6 +46,10 @@ s2gos-server = { path = "./s2gos-server", editable = true }
 [tool.pixi]
 workspaces = ["s2gos-common", "s2gos-server", "s2gos-client"]
 
+[tool.isort]
+profile = "ruff"
+line_length = 88
+
 [tasks.develop]
 cmd = "pip install -e s2gos-common && pip install -e s2gos-server && pip install -e s2gos-client"
 

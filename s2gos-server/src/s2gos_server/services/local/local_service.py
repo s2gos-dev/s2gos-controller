@@ -7,7 +7,6 @@ from concurrent.futures.process import ProcessPoolExecutor
 from typing import Callable, Optional
 
 from fastapi.responses import JSONResponse
-
 from s2gos_common.models import (
     Capabilities,
     ConformanceDeclaration,

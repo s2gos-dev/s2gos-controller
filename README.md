@@ -13,8 +13,9 @@ Create a new environment using `pixi`
 
 ```commandline
 pixi install 
-pixi develop
+pixi shell
 ```
+
 ### Formatting
 
 ```commandline

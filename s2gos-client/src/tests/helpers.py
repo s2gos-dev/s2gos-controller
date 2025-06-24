@@ -5,7 +5,6 @@
 from typing import Any, Literal
 
 from pydantic import BaseModel
-
 from s2gos_client.transport import Transport
 
 

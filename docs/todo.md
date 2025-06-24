@@ -5,18 +5,17 @@ Given here are the issues that will be addressed next.
 
 ## Repo/package setup
 
-* Move all source code into `src` folder.
-* Use either `uv` or `pixi` for package and environment management.
-* Align `ruff` settings with other [S2GOS repos](https://github.com/s2gos-dev).
-* We need three main packages in the end to avoid naming clashes:
+* **DONE** Move all source code into `src` folder.
+* **DONE** Use either `uv` or `pixi` for package and environment management. <-- We use `pixi`
+* **DONE**: We need three main packages in the end to avoid naming clashes:
   - `s2gos_client` (now `s2gos.client`)
-  - `s2gos_models` (now `s2gos.common.models`)
+  - `s2gos_common` (now `s2gos.common.models`)
   - `s2gos_server` (now `s2gos.server`)
-* Find out and decide how to setup GitHub repo(s) for this
+* **DONE**: Find out and decide how to setup GitHub repo(s) for this
   - One repository with all three packages in `src`
-  - One repository with three subdirectories
+  - One repository with three subdirectories  <-- This is the one!
   - Three repositories 
-* Consider code generation from templates with `jinja2`
+* Align `ruff` settings with other [S2GOS repos](https://github.com/s2gos-dev).
 
 ## Client implementation
 
@@ -115,6 +114,7 @@ The output of `generators/gen_models` is not satisfying:
    `Execute` instead of `Request`.
 5. JSON generated from models is too verbose. Avoid including `None` fields and 
    fields that have default values.
+6. Consider code generation from templates with `jinja2`
 
 - **DONE**: Adjust `s2gos/common/openapi.yaml` to fix the above and/or
 - **DONE**: Configure `datamodel-code-generator` to fix the above and/or

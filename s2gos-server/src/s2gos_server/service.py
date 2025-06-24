@@ -5,7 +5,6 @@
 from abc import ABC, abstractmethod
 
 from fastapi.responses import JSONResponse
-
 from s2gos_common.models import (
     Capabilities,
     ConformanceDeclaration,

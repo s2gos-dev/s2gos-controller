@@ -3,9 +3,8 @@
 #   timestamp: 2025-06-24T20:37:40.536650
 
 
-from s2gos_common.models import (
-    ProcessRequest,
-)
+from s2gos_common.models import ProcessRequest
+
 from .app import app
 from .provider import ServiceProvider
 

@@ -4,13 +4,7 @@
 
 import dataclasses
 import inspect
-from typing import (
-    Any,
-    Callable,
-    Optional,
-    get_args,
-    get_origin,
-)
+from typing import Any, Callable, Optional, get_args, get_origin
 
 from s2gos_common.models import (
     InputDescription,

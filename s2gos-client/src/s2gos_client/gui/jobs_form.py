@@ -8,14 +8,8 @@ import pandas as pd
 import panel as pn
 import param
 from pydantic import BaseModel
-
 from s2gos_client.exceptions import ClientException
-from s2gos_common.models import (
-    JobInfo,
-    JobList,
-    JobResults,
-    StatusCode,
-)
+from s2gos_common.models import JobInfo, JobList, JobResults, StatusCode
 
 JobAction: TypeAlias = Callable[[str], Any]
 

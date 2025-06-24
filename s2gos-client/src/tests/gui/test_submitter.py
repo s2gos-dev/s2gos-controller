@@ -5,7 +5,6 @@
 from unittest import TestCase
 
 from panel.layout import Panel
-
 from s2gos_client.gui.processes_form import ProcessesForm
 from s2gos_common.models import (
     InputDescription,

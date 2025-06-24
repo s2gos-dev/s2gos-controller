@@ -10,11 +10,7 @@ from abc import ABC, abstractmethod
 from concurrent.futures import Future
 from typing import Any, Callable, Optional
 
-from s2gos_common.models import (
-    JobInfo,
-    StatusCode,
-    Type,
-)
+from s2gos_common.models import JobInfo, StatusCode, Type
 
 
 class JobCancelledException(Exception):

@@ -3,8 +3,8 @@
 #  https://opensource.org/license/apache-2-0.
 
 
-from importlib.metadata import version
 import inspect
+from importlib.metadata import version
 
 from pydantic import BaseModel
 

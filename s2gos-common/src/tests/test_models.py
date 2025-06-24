@@ -6,9 +6,8 @@ import inspect
 from enum import Enum
 from unittest import TestCase
 
-from pydantic import BaseModel
-
 import s2gos_common.models as s2g_models
+from pydantic import BaseModel
 
 REQUIRED_ENUMS = {
     "Crs",

@@ -11,7 +11,6 @@ from typing import Any, Literal
 import requests
 import uri_template
 from pydantic import BaseModel
-
 from s2gos_client.exceptions import ClientException
 
 logger = getLogger("s2gos")
