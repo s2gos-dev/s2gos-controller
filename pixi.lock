@@ -349,7 +349,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/76/42/3efaf858001d2c2913de7f354563e3a3a2f0decae3efe98427125a8f441e/typer-0.16.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/6d/0d/8adfeaa62945f90d19ddc461c55f4a50c258af7662d34b6a3d5d1f8646f6/uvicorn-0.34.3-py3-none-any.whl
       - pypi: ./s2gos-client
-      - pypi: ./s2gos-models
+      - pypi: ./s2gos-common
       - pypi: ./s2gos-server
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/annotated-types-0.7.0-pyhd8ed1ab_1.conda
@@ -682,7 +682,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/76/42/3efaf858001d2c2913de7f354563e3a3a2f0decae3efe98427125a8f441e/typer-0.16.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/6d/0d/8adfeaa62945f90d19ddc461c55f4a50c258af7662d34b6a3d5d1f8646f6/uvicorn-0.34.3-py3-none-any.whl
       - pypi: ./s2gos-client
-      - pypi: ./s2gos-models
+      - pypi: ./s2gos-common
       - pypi: ./s2gos-server
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/win-64/_openmp_mutex-4.5-2_gnu.conda
@@ -1007,7 +1007,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/76/42/3efaf858001d2c2913de7f354563e3a3a2f0decae3efe98427125a8f441e/typer-0.16.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/6d/0d/8adfeaa62945f90d19ddc461c55f4a50c258af7662d34b6a3d5d1f8646f6/uvicorn-0.34.3-py3-none-any.whl
       - pypi: ./s2gos-client
-      - pypi: ./s2gos-models
+      - pypi: ./s2gos-common
       - pypi: ./s2gos-server
 packages:
 - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
@@ -8315,20 +8315,20 @@ packages:
 - pypi: ./s2gos-client
   name: s2gos-client
   version: 0.1.0.dev0
-  sha256: 7eff009d919eb74a07dfb6fa444dd63bcd52304717181d48cb8bad4a288ee39c
+  sha256: 210bf8d0c00d8291cbfb87e14c6258d735702175c47155b34000b2714b4234c8
   requires_dist:
   - click
   - pydantic
   - pyyaml
-  - s2gos-models>=0.1.0.dev0
+  - s2gos-common>=0.1.0.dev0
   - typer
   - uri-template
   requires_python: '>=3.10'
   editable: true
-- pypi: ./s2gos-models
-  name: s2gos-models
+- pypi: ./s2gos-common
+  name: s2gos-common
   version: 0.1.0.dev0
-  sha256: 92d6d9c5ada65645956763a3f64fcae2aa677df997f37e03dc564ffc33efa34f
+  sha256: 892c6edced581acb3aa9df9c3666a2bc79846746cfa86359074c40cdf724b9ba
   requires_dist:
   - pydantic
   requires_python: '>=3.10'
@@ -8336,12 +8336,12 @@ packages:
 - pypi: ./s2gos-server
   name: s2gos-server
   version: 0.1.0.dev0
-  sha256: bf6eaa7c9c9611f2b834dbfcfbbcaaf9da5ae65343b8e6e63c4d26d976bb12c4
+  sha256: 1a089255c8e433c3b6a8961e34e9e1c1322e9b7750ae358e0e22d88369e9e017
   requires_dist:
   - fastapi
   - pydantic
   - pyyaml
-  - s2gos-models>=0.1.0.dev0
+  - s2gos-common>=0.1.0.dev0
   - typer
   - uvicorn
   requires_python: '>=3.10'

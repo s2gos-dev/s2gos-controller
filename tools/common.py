@@ -10,8 +10,9 @@ from typing import Any, Final
 
 from .openapi import OAMethod
 
-S2GOS_PATH: Final = Path(__file__).parent.parent.resolve()
-OPEN_API_PATH: Final = S2GOS_PATH / "openapi.yaml"
+THIS_DIR = Path(__file__).parent.resolve()
+S2GOS_PATH: Final = THIS_DIR.parent
+OPEN_API_PATH: Final = THIS_DIR / "openapi.yaml"
 
 C_TAB: Final = "    "
 D_TAB: Final = "  "

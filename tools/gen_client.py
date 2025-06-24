@@ -5,7 +5,7 @@
 from pathlib import Path
 from typing import Literal
 
-from generators.common import (
+from tools.common import (
     C_TAB,
     D_TAB,
     OPEN_API_PATH,
@@ -15,18 +15,18 @@ from generators.common import (
     to_py_type,
     write_file,
 )
-from generators.openapi import OAMethod, OASchema, load_openapi_schema
+from tools.openapi import OAMethod, OASchema, load_openapi_schema
 
 GENERATOR_NAME = str(Path(__file__).name)
 
-CLIENT_PATH = S2GOS_PATH / "client" / "client.py"
+CLIENT_PATH = S2GOS_PATH / "s2gos-client/src/s2gos_client/client.py"
 
 
 code_header = """
 
 from typing import Optional
 
-from s2gos.common.models import {{ model_imports }}
+from s2gos_common.models import {{ model_imports }}
 
 from .config import ClientConfig
 from .defaults import DEFAULT_SERVER_URL

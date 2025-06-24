@@ -3,7 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 [project]
-name = "s2gos-models"
+name = "s2gos-common"
 version = "0.1.0.dev0"
 description = "Python data models for the ESA DTE-S2GOS synthetic scene generator service"
 readne = "README.md"

@@ -6,7 +6,7 @@
 from pathlib import Path
 from typing import Literal
 
-from generators.common import (
+from tools.common import (
     C_TAB,
     OPEN_API_PATH,
     S2GOS_PATH,
@@ -15,12 +15,12 @@ from generators.common import (
     to_py_type,
     write_file,
 )
-from generators.openapi import OAMethod, OASchema, load_openapi_schema
+from tools.openapi import OAMethod, OASchema, load_openapi_schema
 
 GENERATOR_NAME = str(Path(__file__).name)
 
-ROUTES_PATH = S2GOS_PATH / "server" / "routes.py"
-SERVICE_PATH = S2GOS_PATH / "server" / "service.py"
+ROUTES_PATH = S2GOS_PATH / "s2gos-server/src/s2gos_server/routes.py"
+SERVICE_PATH = S2GOS_PATH / "s2gos-server/src/s2gos_server/service.py"
 
 
 def main():
@@ -35,7 +35,7 @@ def main():
         [
             "from fastapi.responses import JSONResponse\n",
             "\n",
-            f"from s2gos.common.models import {model_list}\n",
+            f"from s2gos_common.models import {model_list}\n",
             "from .app import app\n",
             "from .provider import ServiceProvider\n",
             "\n",
@@ -51,7 +51,7 @@ def main():
             "\n",
             "from fastapi.responses import JSONResponse\n",
             "\n",
-            f"from s2gos.common.models import {model_list}\n",
+            f"from s2gos_common.models import {model_list}\n",
             "\n",
             "class Service(ABC):\n",
             service_code,

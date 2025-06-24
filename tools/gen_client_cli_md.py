@@ -2,15 +2,17 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from pathlib import Path
 from typing import Final
 
 import typer.core
 from click.testing import CliRunner
 
-from s2gos.client.cli.cli import cli
+from s2gos_client.cli.cli import cli
+from tools.common import (
+    S2GOS_PATH,
+)
 
-DOCS_PATH: Final = (Path(__file__).parent / ".." / "docs").resolve()
+DOCS_PATH: Final = S2GOS_PATH / "docs"
 OUTPUT_FILE: Final = DOCS_PATH / "cli.md"
 
 

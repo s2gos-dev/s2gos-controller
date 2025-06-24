@@ -39,7 +39,7 @@ mkdocstrings = "*"
 mkdocstrings-python = "*"
 
 [pypi-dependencies]
-s2gos_models = { path = "./s2gos-models", editable = true }
+s2gos_common = { path = "./s2gos-common", editable = true }
 s2gos_client = { path = "./s2gos-client", editable = true }
 s2gos_server = { path = "./s2gos-server", editable = true }
 
