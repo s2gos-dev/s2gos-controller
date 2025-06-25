@@ -10,7 +10,16 @@ from s2gos_server import __version__
 from s2gos_server.constants import S2GOS_SERVICE_ENV_VAR
 from s2gos_server.defaults import DEFAULT_HOST, DEFAULT_PORT
 
-cli = typer.Typer()
+HELP = """
+Server for the ESA synthetic scene generator service DTE-S2GOS.
+
+It provides a restful API that should be almost compliant
+with the OGC API - Processes - Part 1: Core Standard.
+
+For details see https://ogcapi.ogc.org/processes/ 
+"""
+
+cli = typer.Typer(name="s2gos-server", help=HELP)
 
 
 @cli.command()

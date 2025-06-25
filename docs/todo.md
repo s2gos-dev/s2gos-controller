@@ -5,6 +5,10 @@ Given here are the issues that will be addressed next.
 
 ## Repo/package setup
 
+* Setup CI with `pixi`
+  - pixi run sync-versions
+  - pixi run generate
+  - pixi run coverage
 * **DONE** Move all source code into `src` folder.
 * **DONE** Use either `uv` or `pixi` for package and environment management. <-- We use `pixi`
 * **DONE**: We need three main packages in the end to avoid naming clashes:

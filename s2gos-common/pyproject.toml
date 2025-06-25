@@ -4,7 +4,7 @@
 
 [project]
 name = "s2gos-common"
-version = "0.0.6"
+version = "0.0.1"  # --> pixi run sync-versions
 description = "Python data models for the ESA DTE-S2GOS synthetic scene generator service"
 readme = "README.md"
 authors = [

@@ -3,8 +3,8 @@
 #  https://opensource.org/license/apache-2-0.
 
 from pathlib import Path
-import tomlkit
 
+import tomlkit
 
 # List of workspaces to update
 workspace_names = ["s2gos-common", "s2gos-server", "s2gos-client"]

@@ -144,11 +144,13 @@ def camel_to_snake(name: str) -> str:
     """
     # Add underscore between lowercase-to-uppercase transitions
     name = re.sub(r"(?<=[a-z0-9])([A-Z])", r"_\1", name)
-    # Add underscore between adjacent capitals and followed by lowercase (e.g., "HTTPServer" -> "http_server")
+    # Add underscore between adjacent capitals and followed by lowercase
+    # (e.g., "HTTPServer" -> "http_server")
     name = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1_\2", name)
     # Convert to lowercase
     snake = name.lower()
-    # If it starts with a digit, prepend an underscore to make it a valid identifier
+    # If it starts with a digit, prepend an underscore to
+    # make it a valid identifier
     if snake and snake[0].isdigit():
         snake = "_" + snake
     return snake

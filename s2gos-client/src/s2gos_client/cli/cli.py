@@ -55,7 +55,7 @@ You can use shorter command name aliases, e.g., use command name "vr"
 instead of "validate-request", or "lt" instead of "list-templates".
 """
 
-cli = typer.Typer(name="s2gos", cls=AliasedGroup, help=HELP)
+cli = typer.Typer(name="s2gos-client", cls=AliasedGroup, help=HELP)
 
 
 @cli.command()

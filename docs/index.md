@@ -1,3 +1,5 @@
-# DTE-S2GOS Python client
+# DTE-S2GOS Controller
 
-_Note, this software and its documentation is still in an early development stage._
+The Python control layer for the ESA DTE-S2GOS synthetic scene generator service.
+
+_Note, this project and its documentation is still in an early development stage._

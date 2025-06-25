@@ -1,6 +1,6 @@
 [project]
 name = "s2gos-controller"
-version = "0.0.6"  # --> pixi run sync-versions
+version = "0.0.1"  # --> pixi run sync-versions
 description = "S2GOS control layer comprising a server and client"
 requires-python = ">=3.10"
 
@@ -64,15 +64,24 @@ include = [
 ]
 
 [tool.ruff.lint]
-ignore = ["E501", "F821"]
+ignore = ["E501", "I001"]
 isort = { relative-imports-order = "closest-to-furthest" }
 per-file-ignores = { "*.ipynb" = ["E402"] }
 select = ["I", "F", "E"]
 
-# pixi run gencode
+# pixi run generate
 
-[tool.pixi.tasks.gencode]
-cmd = "python -m tools.gen_models && python -m tools.gen_server && python -m tools.gen_client"
+[tool.pixi.tasks.generate]
+depends-on = ["gen-common", "gen-server", "gen-client"]
+
+[tool.pixi.tasks.gen-common]
+cmd = "python -m tools.gen_common"
+
+[tool.pixi.tasks.gen-server]
+cmd = "python -m tools.gen_server"
+
+[tool.pixi.tasks.gen-client]
+cmd = "python -m tools.gen_client && python -m tools.gen_client_docs"
 
 # pixi run sync-versions
 
@@ -95,7 +104,7 @@ cmd = "pytest s2gos-client/src/tests"
 
 # pixi run cov
 
-[tool.pixi.tasks.cov]
+[tool.pixi.tasks.coverage]
 depends-on = ["cov-common", "cov-server", "cov-client"]
 
 [tool.pixi.tasks.cov-common]

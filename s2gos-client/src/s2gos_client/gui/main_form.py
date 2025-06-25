@@ -208,9 +208,12 @@ class MainForm(pn.viewable.Viewer):
         assert process_description is not None
         return process_id, ProcessRequest(
             inputs={
-                # TODO: This is not nice for several reasons (see WidgetFactory TODOs):
-                #  1. v.value: we don't know if a widget has a `value` attribute
-                #  2. _serialize_for_json(): we cannot know what value type a widget uses
+                # TODO: This is not nice for several reasons
+                #  (see WidgetFactory TODOs):
+                #  1. v.value: we don't know if a widget has a `value`
+                #     attribute
+                #  2. _serialize_for_json(): we cannot know what value type
+                #     a widget uses
                 k: _serialize_for_json(v.value)
                 for k, v in self._input_widgets.items()
             },
