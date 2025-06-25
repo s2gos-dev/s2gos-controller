@@ -45,10 +45,11 @@ s2gos-server = { path = "s2gos-server", editable = true }
 [tool.ruff]
 include = [
     "pixi.toml",
-    "tools/**/*.py",
     "s2gos-common/src/**/*.py",
     "s2gos-server/src/**/*.py",
     "s2gos-client/src/**/*.py",
+    "notebooks/**/*.py",
+    "tools/**/*.py",
 ]
 
 [tool.ruff.lint]
@@ -57,8 +58,8 @@ isort = { relative-imports-order = "closest-to-furthest" }
 per-file-ignores = { "*.ipynb" = ["E402"] }
 select = ["I", "F", "E"]
 
-[tasks.codegen]
-cmd = "python tools/gen_models.py && python tools/gen_server.py && python tools/gen_client.py"
+[tasks.gencode]
+cmd = "python -m tools.gen_models && python -m tools.gen_server && python -m tools.gen_client"
 
 [tasks.test-common]
 cmd = "pytest s2gos-common/src/tests"

@@ -138,6 +138,11 @@ def generate_method_code(
 
     return_type_union = " | ".join(set(return_types))
     py_op_name = camel_to_snake(method.operationId)
+    method_doc = (
+        method.description
+        or (method.summary and method.summary.capitalize())
+        or "No description provided."
+    )
     return (
         (
             f"# noinspection PyPep8Naming\n"
@@ -145,13 +150,14 @@ def generate_method_code(
             f"async def {py_op_name}({param_list})"
             ":\n"
             # f" -> {return_type_union}:\n"
-            f"{C_TAB}return await ServiceProvider.instance().{py_op_name}({param_service_list})\n"
+            f"{C_TAB}return await ServiceProvider.instance()."
+            f"{py_op_name}({param_service_list})\n"
         ),
         (
             f"{C_TAB}@abstractmethod\n"
             f"{C_TAB}async def {py_op_name}({service_param_list})"
             f" -> {return_type_union}:\n"
-            f"{C_TAB}{C_TAB}pass\n"
+            f'{C_TAB}{C_TAB}"""{method_doc}"""\n'
         ),
     )
 
