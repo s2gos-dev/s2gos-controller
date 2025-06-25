@@ -20,8 +20,8 @@ jobs:
           auth-host: prefix.dev
           auth-token: ${{ secrets.PREFIXDEV_AUTH_TOKEN }}
 
-      - name: Run tests
-        run: pixi run test
+      - name: Run test & coverage
+        run: pixi run coverage-ci
 
       - name: Run checks
         run: pixi run lint

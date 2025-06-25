@@ -69,6 +69,10 @@ isort = { relative-imports-order = "closest-to-furthest" }
 per-file-ignores = { "*.ipynb" = ["E402"] }
 select = ["I", "F", "E"]
 
+[tool.coverage.report]
+fail_under = 70
+show_missing = true
+
 ########################## Tasks ###############################
 
 # pixi run test
@@ -85,19 +89,28 @@ cmd = "pytest s2gos-server/src/tests"
 [tool.pixi.tasks.test-client]
 cmd = "pytest s2gos-client/src/tests"
 
-# pixi run cov
+# pixi run coverage / coverage-ci
 
 [tool.pixi.tasks.coverage]
-depends-on = ["cov-common", "cov-server", "cov-client"]
+depends-on = ["cov-common", "cov-server", "cov-client", "cov-report-html"]
+
+[tool.pixi.tasks.coverage-ci]
+depends-on = ["cov-common", "cov-server", "cov-client", "cov-report-xml"]
+
+[tool.pixi.tasks.cov-report-html]
+cmd = "coverage html -d .cov-report && coverage report"
+
+[tool.pixi.tasks.cov-report-xml]
+cmd = "coverage xml -o coverage.xml && coverage report"
 
 [tool.pixi.tasks.cov-common]
-cmd = "pytest --cov s2gos-common/src/s2gos_common --cov-report html s2gos-common/src/tests"
+cmd = "pytest --cov s2gos-common/src/s2gos_common --cov-report= --cov-append s2gos-common/src/tests"
 
 [tool.pixi.tasks.cov-server]
-cmd = "pytest --cov s2gos-server/src/s2gos_server --cov-report html s2gos-server/src/tests"
+cmd = "pytest --cov s2gos-server/src/s2gos_server --cov-report= --cov-append s2gos-server/src/tests"
 
 [tool.pixi.tasks.cov-client]
-cmd = "pytest --cov s2gos-client/src/s2gos_client --cov-report html s2gos-client/src/tests"
+cmd = "pytest --cov s2gos-client/src/s2gos_client --cov-report= --cov-append s2gos-client/src/tests"
 
 # pixi run lint
 
