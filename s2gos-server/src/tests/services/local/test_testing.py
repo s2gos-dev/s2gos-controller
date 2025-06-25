@@ -14,10 +14,11 @@ class TestingFunctionsTest(TestCase):
         kwargs = {
             "var_names": "a, b, c",
             "bbox": [-12.614059, 32.044123, 4.612504, 45.65913],
-            "resolution": 0.5,
+            "resolution": 2,
             "start_date": "2025-01-01",
             "end_date": "2025-02-03",
             "periodicity": 1,
+            "output_path": None,
         }
         link = create_datacube(**kwargs)
         self.assertIsInstance(link, Link)
