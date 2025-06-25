@@ -40,6 +40,7 @@ def write_file(generator_name: str, file_path: Path, code_parts: list[str]):
             stream.write(line)
 
     print(f"✔ Generated {file_path}")
+    subprocess.run(["isort", str(file_path)])
     subprocess.run(["ruff", "format", str(file_path)])
     subprocess.run(["ruff", "check", "--fix", str(file_path)])
 

@@ -10,12 +10,13 @@ platforms = ["linux-64", "win-64", "osx-64"]
 
 [tool.pixi.dependencies]
 pixi-pycharm = ">=0.0.8,<0.0.9"
-# Development & Build tools
+# Development & build tools
 pip = "*"
 hatch = "*"
-# Code Style / QA
+# Code style & linting
+isort = "*"
 ruff = "*"
-# Unit-Testing
+# Unit-testing
 pytest = "*"
 pytest-cov = "*"
 # GUI testing
@@ -32,7 +33,7 @@ xarray = "*"
 zarr = "*"
 # Code-generation from tools/
 datamodel-code-generator = "*"
-# Doku
+# Documentation
 mkdocs = "*"
 mkdocs-autorefs = "*"
 mkdocs-material = "*"
@@ -43,6 +44,13 @@ mkdocstrings-python = "*"
 s2gos-common = { path = "s2gos-common", editable = true }
 s2gos-client = { path = "s2gos-client", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.black]
+line-length = 88
 
 [tool.ruff]
 include = [
