@@ -43,9 +43,6 @@ s2gos-common = { path = "s2gos-common", editable = true }
 s2gos-client = { path = "s2gos-client", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
 
-#[tool.pixi]
-#workspaces = ["s2gos-common", "s2gos-server", "s2gos-client"]
-
 [tool.ruff]
 include = [
     "pixi.toml",
@@ -64,8 +61,24 @@ select = ["I", "F", "E"]
 [tasks.codegen]
 cmd = "python tools/gen_models.py && python tools/gen_server.py && python tools/gen_client.py"
 
-[tasks.test]
-cmd = "pytest s2gos-common/src/tests && pytest s2gos-server/src/tests && pytest s2gos-client/src/tests"
+[tasks.test-common]
+cmd = "pytest s2gos-common/src/tests"
+
+[tasks.cov-common]
+cmd = "pytest --cov s2gos-common/src/s2gos_common --cov-report html s2gos-common/src/tests"
+
+[tasks.test-server]
+cmd = "pytest s2gos-server/src/tests"
+
+[tasks.cov-server]
+cmd = "pytest --cov s2gos-server/src/s2gos_server --cov-report html s2gos-server/src/tests"
+
+[tasks.test-client]
+cmd = "pytest s2gos-client/src/tests"
+
+[tasks.cov-client]
+cmd = "pytest --cov s2gos-client/src/s2gos_client --cov-report html s2gos-client/src/tests"
+
 
 [tasks.docs-serve]
 cmd = "mkdocs serve"
