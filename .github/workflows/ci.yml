@@ -17,6 +17,7 @@ jobs:
       - name: Setup Pixi (with optional auth token)
         uses: prefix-dev/setup-pixi@v0.8.10
         with:
+          auth-host: prefix.dev
           auth-token: ${{ secrets.PREFIXDEV_AUTH_TOKEN }}
 
       - name: Run Tests
