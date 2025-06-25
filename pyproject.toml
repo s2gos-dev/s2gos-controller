@@ -47,6 +47,7 @@ s2gos-client = { path = "s2gos-client", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
 
 [tool.isort]
+skip = [".idea", ".github", ".pixi", "htmlcov", "site"]
 profile = "black"
 line_length = 88
 
@@ -55,7 +56,6 @@ line-length = 88
 
 [tool.ruff]
 include = [
-    "pixi.toml",
     "notebooks/**/*.py",
     "s2gos-common/src/**/*.py",
     "s2gos-server/src/**/*.py",
