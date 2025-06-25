@@ -53,16 +53,16 @@ int_input = InputDescription(
 
 class MainFormTest(TestCase):
     def test_with_int_input(self):
-        submitter = _create_main_form({"periodicity": int_input})
-        self.assertIsInstance(submitter.__panel__(), Panel)
+        main_form = _create_main_form({"periodicity": int_input})
+        self.assertIsInstance(main_form.__panel__(), Panel)
 
     def test_with_bbox_input(self):
-        submitter = _create_main_form({"bbox": bbox_input})
-        self.assertIsInstance(submitter.__panel__(), Panel)
+        main_form = _create_main_form({"bbox": bbox_input})
+        self.assertIsInstance(main_form.__panel__(), Panel)
 
     def test_with_date_input(self):
-        submitter = _create_main_form({"date": date_input})
-        self.assertIsInstance(submitter.__panel__(), Panel)
+        main_form = _create_main_form({"date": date_input})
+        self.assertIsInstance(main_form.__panel__(), Panel)
 
 
 def _create_main_form(process_inputs: dict[str, InputDescription]) -> MainForm:
@@ -73,7 +73,7 @@ def _create_main_form(process_inputs: dict[str, InputDescription]) -> MainForm:
         inputs=process_inputs,
     )
 
-    def on_get_process(process_id: str):
+    def on_get_process(_process_id: str):
         return process
 
     def on_execute_process(process_id: str, _request: ProcessRequest):
