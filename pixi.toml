@@ -12,7 +12,6 @@ pixi-pycharm = ">=0.0.8,<0.0.9"
 pip = "*"
 hatch = "*"
 # Code Style / QA
-isort = "*"
 ruff = "*"
 # Unit-Testing
 pytest = "*"

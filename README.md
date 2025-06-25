@@ -83,7 +83,7 @@ $ fastapi dev s2gos/server/main.py
 ### Run client Python API
 
 ```python
-from s2gos.client import Client
+from s2gos_client import Client
 
 client = Client()
 client.get_jobs()
@@ -92,10 +92,10 @@ client.get_jobs()
 ### Run client GUI (in Jupyter notebooks)
 
 ```python
-from s2gos.client.gui import Client
+from s2gos_client.gui import Client
 
 client = Client()
-client.show_processes()
+client.show()
 client.show_jobs()
 ```
 

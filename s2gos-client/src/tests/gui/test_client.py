@@ -6,7 +6,7 @@ from unittest import TestCase
 
 from s2gos_client.gui import Client as GuiClient
 from s2gos_client.gui.jobs_form import JobsForm
-from s2gos_client.gui.processes_form import ProcessesForm
+from s2gos_client.gui.main_form import MainForm
 from s2gos_client.transport import Transport
 from s2gos_common.models import JobList, ProcessList
 
@@ -26,8 +26,8 @@ class ClientTest(TestCase):
                 return None
 
         client = GuiClient(_transport=_MockTransport())
-        processes_form = client.show_processes()
-        self.assertIsInstance(processes_form, ProcessesForm)
+        processes_form = client.show()
+        self.assertIsInstance(processes_form, MainForm)
 
     def test_show_jobs(self):
         class _MockTransport(Transport):

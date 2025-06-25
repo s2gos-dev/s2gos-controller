@@ -5,7 +5,7 @@
 from unittest import TestCase
 
 from panel.layout import Panel
-from s2gos_client.gui.processes_form import ProcessesForm
+from s2gos_client.gui.main_form import MainForm
 from s2gos_common.models import (
     InputDescription,
     JobInfo,
@@ -51,21 +51,21 @@ int_input = InputDescription(
 )
 
 
-class SubmitterTest(TestCase):
-    def test_submitter_with_int_input(self):
-        submitter = _create_submitter({"periodicity": int_input})
+class MainFormTest(TestCase):
+    def test_with_int_input(self):
+        submitter = _create_main_form({"periodicity": int_input})
         self.assertIsInstance(submitter.__panel__(), Panel)
 
-    def test_submitter_bbox_input(self):
-        submitter = _create_submitter({"bbox": bbox_input})
+    def test_with_bbox_input(self):
+        submitter = _create_main_form({"bbox": bbox_input})
         self.assertIsInstance(submitter.__panel__(), Panel)
 
-    def test_submitter_with_date_input(self):
-        submitter = _create_submitter({"date": date_input})
+    def test_with_date_input(self):
+        submitter = _create_main_form({"date": date_input})
         self.assertIsInstance(submitter.__panel__(), Panel)
 
 
-def _create_submitter(process_inputs: dict[str, InputDescription]) -> ProcessesForm:
+def _create_main_form(process_inputs: dict[str, InputDescription]) -> MainForm:
     process = ProcessDescription(
         id="gen_scene",
         title="Generate a scene",
@@ -86,7 +86,7 @@ def _create_submitter(process_inputs: dict[str, InputDescription]) -> ProcessesF
 
     process_list = ProcessList(processes=[process], links=[])
 
-    return ProcessesForm(
+    return MainForm(
         process_list,
         None,
         on_get_process=on_get_process,

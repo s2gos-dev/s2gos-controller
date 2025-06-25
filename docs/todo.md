@@ -15,7 +15,7 @@ Given here are the issues that will be addressed next.
   - One repository with all three packages in `src`
   - One repository with three subdirectories  <-- This is the one!
   - Three repositories 
-* Align `ruff` settings with other [S2GOS repos](https://github.com/s2gos-dev).
+* **DONE**: Align `ruff` settings with other [S2GOS repos](https://github.com/s2gos-dev).
 
 ## Client implementation
 
@@ -34,6 +34,22 @@ Enhance the API Client
 
 Enhance the GUI Client
 
+-  **DOING**: `show()` - show the main form where users can select a process 
+  and submit process requests with inputs and outputs
+  - **DONE**: select process
+  - **DONE**: render input widgets
+  - **DONE**: submit request
+  - Actions
+    - **DONE*: execute request 
+    - open request 
+    - save request 
+    - save-as request
+    - **DONE*: get request 
+    - show success/failure
+  - bug: process `gen_datacube`: if no bbox selected, client receives an error 
+  - optional enhancements
+    - integrate jobs table
+    - show request as JSON
 -  **DONE**: `show_jobs()` - show all jobs in a table and provide actions on job selection: 
   - **DONE**: use `Tabulator`
   - **DONE** Add an action row with actions applicable to the current table selection
@@ -42,15 +58,7 @@ Enhance the GUI Client
     - **DONE**: ❌ delete successful/dismissed/failed job(s)
     - ♻️️ restart dismissed/failed job(s)
     - **DONE**: ⬇️ get job result(s)
--  **DONE**: `show_processes()` - show a process selector any dynamically adjust 
-  inputs and outputs
-  - **DONE**: select process
-  - **DONE**: render input widgets
-  - **DONE**: submit request
-  - open request 
-  - save request 
-  - save-as request
-  - show success/failure
+- `show_processes()` - get a nicely rendered overview of all processes 
 - `show_process(process_id: str = None, job_id: str = None, editable: bool = True)`
 - `show_job(job_id: str = None)`
 

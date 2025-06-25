@@ -22,7 +22,7 @@ ExecuteProcessAction: TypeAlias = Callable[[str, ProcessRequest], JobInfo]
 GetProcessAction: TypeAlias = Callable[[str], ProcessDescription]
 
 
-class ProcessesForm(pn.viewable.Viewer):
+class MainForm(pn.viewable.Viewer):
     _processes = param.List(default=[], doc="List of process summaries")
     _processes_dict = param.Dict(default={}, doc="Dictionary of cached processes")
 

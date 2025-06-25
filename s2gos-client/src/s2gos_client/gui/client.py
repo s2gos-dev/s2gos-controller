@@ -9,7 +9,7 @@ from typing import Optional
 from s2gos_client.client import Client as GeneratedClient
 from s2gos_client.exceptions import ClientException
 from s2gos_client.gui.jobs_form import JobsForm
-from s2gos_client.gui.processes_form import ProcessesForm
+from s2gos_client.gui.main_form import MainForm
 from s2gos_client.transport import Transport
 from s2gos_common.models import JobList, ProcessList
 
@@ -25,17 +25,17 @@ class Client(GeneratedClient):
         super().__init__(_transport=_transport, **config)
         self._update_interval = update_interval
         self._update_thread: Optional[threading.Thread] = None
-        self._processes_form: Optional[ProcessesForm] = None
+        self._main_form: Optional[MainForm] = None
         self._jobs_form: Optional[JobsForm] = None
 
-    def show_processes(self):
-        if self._processes_form is None:
-            self._processes_form = ProcessesForm(
+    def show(self):
+        if self._main_form is None:
+            self._main_form = MainForm(
                 *self._get_processes(),
                 on_get_process=self.get_process,
                 on_execute_process=self.execute_process,
             )
-        return self._processes_form
+        return self._main_form
 
     def show_jobs(self):
         if self._jobs_form is None:
