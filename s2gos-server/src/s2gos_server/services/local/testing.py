@@ -3,7 +3,6 @@
 #  https://opensource.org/license/apache-2-0.
 
 import datetime
-import tempfile
 import time
 from pathlib import Path
 from typing import Optional
@@ -74,16 +73,16 @@ def create_datacube(
     import numpy as np
     import xarray as xr
 
-    print(
-        dict(
-            var_names=var_names,
-            bbox=bbox,
-            resolution=resolution,
-            start_date=start_date,
-            end_date=end_date,
-            periodicity=periodicity,
-        )
-    )
+    # print(
+    #     dict(
+    #         var_names=var_names,
+    #         bbox=bbox,
+    #         resolution=resolution,
+    #         start_date=start_date,
+    #         end_date=end_date,
+    #         periodicity=periodicity,
+    #     )
+    # )
 
     var_names = [name.strip() for name in var_names.split(",")]
     start_date = datetime.date.fromisoformat(start_date)
@@ -115,7 +114,7 @@ def create_datacube(
         )
 
     if not output_path:
-        output_path = tempfile.mkdtemp(prefix="datacube-", suffix=".zarr")
+        output_path = "memory://datacube.zarr"
 
     dataset.to_zarr(output_path)
     if "://" in output_path:

@@ -24,9 +24,15 @@ class TestingFunctionsTest(TestCase):
         link = create_datacube(**kwargs)
         self.assertIsInstance(link, Link)
         self.assertIsInstance(link.href, str)
-        self.assertTrue(link.href.startswith("file://"))
-        if sys.version_info >= (3, 13):
-            self.assertTrue(Path.from_uri(link.href).exists())
+        self.assertTrue(link.href.startswith("memory://"))
+        self.assertTrue(link.href.endswith(".zarr"))
+        try:
+            import xarray as xr
+
+            ds = xr.open_dataset(link.href)
+            self.assertIsInstance(ds, xr.Dataset)
+        except ImportError:
+            pass
 
 
 class TestingServiceTest(IsolatedAsyncioTestCase):
