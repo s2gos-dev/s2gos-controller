@@ -69,24 +69,7 @@ isort = { relative-imports-order = "closest-to-furthest" }
 per-file-ignores = { "*.ipynb" = ["E402"] }
 select = ["I", "F", "E"]
 
-# pixi run generate
-
-[tool.pixi.tasks.generate]
-depends-on = ["gen-models", "gen-server", "gen-client"]
-
-[tool.pixi.tasks.gen-models]
-cmd = "python -m tools.gen_models"
-
-[tool.pixi.tasks.gen-server]
-cmd = "python -m tools.gen_server"
-
-[tool.pixi.tasks.gen-client]
-cmd = "python -m tools.gen_client && python -m tools.gen_client_docs"
-
-# pixi run sync-versions
-
-[tool.pixi.tasks.sync-versions]
-cmd = "python -m tools.sync_versions"
+########################## Tasks ###############################
 
 # pixi run test
 
@@ -115,6 +98,39 @@ cmd = "pytest --cov s2gos-server/src/s2gos_server --cov-report html s2gos-server
 
 [tool.pixi.tasks.cov-client]
 cmd = "pytest --cov s2gos-client/src/s2gos_client --cov-report html s2gos-client/src/tests"
+
+# pixi run lint
+
+[tool.pixi.tasks.lint]
+depends-on = ["lint-common", "lint-server", "lint-client"]
+
+[tool.pixi.tasks.lint-common]
+cmd = "ruff check s2gos-common/src"
+
+[tool.pixi.tasks.lint-server]
+cmd = "ruff check s2gos-server/src"
+
+[tool.pixi.tasks.lint-client]
+cmd = "ruff check s2gos-client/src"
+
+# pixi run generate
+
+[tool.pixi.tasks.generate]
+depends-on = ["gen-models", "gen-server", "gen-client"]
+
+[tool.pixi.tasks.gen-models]
+cmd = "python -m tools.gen_models"
+
+[tool.pixi.tasks.gen-server]
+cmd = "python -m tools.gen_server"
+
+[tool.pixi.tasks.gen-client]
+cmd = "python -m tools.gen_client && python -m tools.gen_client_docs"
+
+# pixi run sync-versions
+
+[tool.pixi.tasks.sync-versions]
+cmd = "python -m tools.sync_versions"
 
 # docs
 
