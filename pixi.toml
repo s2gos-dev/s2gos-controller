@@ -39,22 +39,33 @@ mkdocstrings = "*"
 mkdocstrings-python = "*"
 
 [pypi-dependencies]
-s2gos-common = { path = "./s2gos-common", editable = true }
-s2gos-client = { path = "./s2gos-client", editable = true }
-s2gos-server = { path = "./s2gos-server", editable = true }
+s2gos-common = { path = "s2gos-common", editable = true }
+s2gos-client = { path = "s2gos-client", editable = true }
+s2gos-server = { path = "s2gos-server", editable = true }
 
-[tool.pixi]
-workspaces = ["s2gos-common", "s2gos-server", "s2gos-client"]
+#[tool.pixi]
+#workspaces = ["s2gos-common", "s2gos-server", "s2gos-client"]
 
-[tool.isort]
-profile = "ruff"
-line_length = 88
+[tool.ruff]
+include = [
+    "pixi.toml",
+    "tools/**/*.py",
+    "s2gos-common/src/**/*.py",
+    "s2gos-server/src/**/*.py",
+    "s2gos-client/src/**/*.py",
+]
 
-[tasks.develop]
-cmd = "pip install -e s2gos-common && pip install -e s2gos-server && pip install -e s2gos-client"
+[tool.ruff.lint]
+ignore = ["E501", "F821"]
+isort = { relative-imports-order = "closest-to-furthest" }
+per-file-ignores = { "*.ipynb" = ["E402"] }
+select = ["I", "F", "E"]
 
 [tasks.codegen]
 cmd = "python tools/gen_models.py && python tools/gen_server.py && python tools/gen_client.py"
+
+[tasks.test]
+cmd = "pytest s2gos-common/src/tests && pytest s2gos-server/src/tests && pytest s2gos-client/src/tests"
 
 [tasks.docs-serve]
 cmd = "mkdocs serve"
@@ -62,5 +73,3 @@ cmd = "mkdocs serve"
 [tasks.docs-build]
 cmd = "mkdocs build"
 
-[tasks.test]
-cmd = "pytest"
