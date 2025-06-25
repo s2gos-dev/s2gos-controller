@@ -2,11 +2,13 @@
 name = "s2gos-controller"
 version = "0.0.6"
 description = "S2GOS Monorepo"
+requires-python = ">=3.10"
+
+[tool.pixi.workspace]
 channels = ["conda-forge"]
 platforms = ["linux-64", "win-64", "osx-64"]
 
-[dependencies]
-python = "3.13.*"
+[tool.pixi.dependencies]
 pixi-pycharm = ">=0.0.8,<0.0.9"
 # Development & Build tools
 pip = "*"
@@ -37,7 +39,7 @@ mkdocs-material = "*"
 mkdocstrings = "*"
 mkdocstrings-python = "*"
 
-[pypi-dependencies]
+[tool.pixi.pypi-dependencies]
 s2gos-common = { path = "s2gos-common", editable = true }
 s2gos-client = { path = "s2gos-client", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
@@ -45,10 +47,10 @@ s2gos-server = { path = "s2gos-server", editable = true }
 [tool.ruff]
 include = [
     "pixi.toml",
+    "notebooks/**/*.py",
     "s2gos-common/src/**/*.py",
     "s2gos-server/src/**/*.py",
     "s2gos-client/src/**/*.py",
-    "notebooks/**/*.py",
     "tools/**/*.py",
 ]
 
@@ -58,31 +60,31 @@ isort = { relative-imports-order = "closest-to-furthest" }
 per-file-ignores = { "*.ipynb" = ["E402"] }
 select = ["I", "F", "E"]
 
-[tasks.gencode]
+[tool.pixi.tasks.gencode]
 cmd = "python -m tools.gen_models && python -m tools.gen_server && python -m tools.gen_client"
 
-[tasks.test-common]
+[tool.pixi.tasks.test-common]
 cmd = "pytest s2gos-common/src/tests"
 
-[tasks.cov-common]
+[tool.pixi.tasks.cov-common]
 cmd = "pytest --cov s2gos-common/src/s2gos_common --cov-report html s2gos-common/src/tests"
 
-[tasks.test-server]
+[tool.pixi.tasks.test-server]
 cmd = "pytest s2gos-server/src/tests"
 
-[tasks.cov-server]
+[tool.pixi.tasks.cov-server]
 cmd = "pytest --cov s2gos-server/src/s2gos_server --cov-report html s2gos-server/src/tests"
 
-[tasks.test-client]
+[tool.pixi.tasks.test-client]
 cmd = "pytest s2gos-client/src/tests"
 
-[tasks.cov-client]
+[tool.pixi.tasks.cov-client]
 cmd = "pytest --cov s2gos-client/src/s2gos_client --cov-report html s2gos-client/src/tests"
 
 
-[tasks.docs-serve]
+[tool.pixi.tasks.docs-serve]
 cmd = "mkdocs serve"
 
-[tasks.docs-build]
+[tool.pixi.tasks.docs-build]
 cmd = "mkdocs build"
 
