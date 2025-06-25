@@ -4,7 +4,7 @@
 
 [project]
 name = "s2gos-server"
-version = "0.1.0.dev0"
+version = "0.0.6"
 description = "Python server for the ESA DTE-S2GOS synthetic scene generator service"
 readme = "README.md"
 authors = [

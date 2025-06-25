@@ -1,7 +1,7 @@
 [project]
 name = "s2gos-controller"
-version = "0.0.6"
-description = "S2GOS Monorepo"
+version = "0.0.6"  # --> pixi run sync-versions
+description = "S2GOS control layer comprising a server and client"
 requires-python = ">=3.10"
 
 [tool.pixi.workspace]
@@ -31,8 +31,9 @@ watchfiles = "*"
 dask = "*"
 xarray = "*"
 zarr = "*"
-# Code-generation from tools/
+# Needed in /tools
 datamodel-code-generator = "*"
+tomlkit = "*"  # to sync versions
 # Documentation
 mkdocs = "*"
 mkdocs-autorefs = "*"
@@ -68,31 +69,48 @@ isort = { relative-imports-order = "closest-to-furthest" }
 per-file-ignores = { "*.ipynb" = ["E402"] }
 select = ["I", "F", "E"]
 
+# pixi run gencode
+
 [tool.pixi.tasks.gencode]
 cmd = "python -m tools.gen_models && python -m tools.gen_server && python -m tools.gen_client"
+
+# pixi run sync-versions
+
+[tool.pixi.tasks.sync-versions]
+cmd = "python -m tools.sync_versions"
+
+# pixi run test
+
+[tool.pixi.tasks.test]
+depends-on = ["test-common", "test-server", "test-client"]
 
 [tool.pixi.tasks.test-common]
 cmd = "pytest s2gos-common/src/tests"
 
-[tool.pixi.tasks.cov-common]
-cmd = "pytest --cov s2gos-common/src/s2gos_common --cov-report html s2gos-common/src/tests"
-
 [tool.pixi.tasks.test-server]
 cmd = "pytest s2gos-server/src/tests"
-
-[tool.pixi.tasks.cov-server]
-cmd = "pytest --cov s2gos-server/src/s2gos_server --cov-report html s2gos-server/src/tests"
 
 [tool.pixi.tasks.test-client]
 cmd = "pytest s2gos-client/src/tests"
 
+# pixi run cov
+
+[tool.pixi.tasks.cov]
+depends-on = ["cov-common", "cov-server", "cov-client"]
+
+[tool.pixi.tasks.cov-common]
+cmd = "pytest --cov s2gos-common/src/s2gos_common --cov-report html s2gos-common/src/tests"
+
+[tool.pixi.tasks.cov-server]
+cmd = "pytest --cov s2gos-server/src/s2gos_server --cov-report html s2gos-server/src/tests"
+
 [tool.pixi.tasks.cov-client]
 cmd = "pytest --cov s2gos-client/src/s2gos_client --cov-report html s2gos-client/src/tests"
 
+# docs
 
 [tool.pixi.tasks.docs-serve]
 cmd = "mkdocs serve"
 
 [tool.pixi.tasks.docs-build]
 cmd = "mkdocs build"
-
