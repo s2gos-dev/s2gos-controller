@@ -4,10 +4,7 @@
 
 import datamodel_code_generator as dcg
 
-from tools.common import (
-    OPEN_API_PATH,
-    S2GOS_PATH,
-)
+from tools.common import OPEN_API_PATH, S2GOS_PATH
 
 MODELS_PATH = S2GOS_PATH / "s2gos-common/src/s2gos_common/models.py"
 
