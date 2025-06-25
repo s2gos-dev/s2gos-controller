@@ -9,12 +9,12 @@ from s2gos_client.gui.main_form import MainForm
 from s2gos_common.models import (
     InputDescription,
     JobInfo,
+    JobStatus,
+    JobType,
     ProcessDescription,
     ProcessList,
     ProcessRequest,
     Schema,
-    StatusCode,
-    Type,
 )
 
 bbox_input = InputDescription(
@@ -80,8 +80,8 @@ def _create_main_form(process_inputs: dict[str, InputDescription]) -> MainForm:
         return JobInfo(
             processID=process_id,
             jobID="job_8",
-            type=Type.process,
-            status=StatusCode.successful,
+            type=JobType.process,
+            status=JobStatus.successful,
         )
 
     process_list = ProcessList(processes=[process], links=[])

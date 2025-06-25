@@ -5,11 +5,11 @@
 from unittest import TestCase
 
 from s2gos_common.models import (
+    DataType,
     InputDescription,
     OutputDescription,
     ProcessDescription,
     Schema,
-    Type1,
 )
 from s2gos_server.services.local import ProcessRegistry
 from tests.helpers import BaseModelMixin
@@ -45,13 +45,13 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         self.assertEqual(["x", "y"], list(inputs.keys()))
         self.assertEqual(["result"], list(outputs.keys()))
         self.assertBaseModelEqual(
-            InputDescription(schema=Schema(type=Type1.boolean)), inputs["x"]
+            InputDescription(schema=Schema(type=DataType.boolean)), inputs["x"]
         )
         self.assertBaseModelEqual(
-            InputDescription(schema=Schema(type=Type1.integer)), inputs["y"]
+            InputDescription(schema=Schema(type=DataType.integer)), inputs["y"]
         )
         self.assertEqual(
-            OutputDescription(schema=Schema(type=Type1.number)),
+            OutputDescription(schema=Schema(type=DataType.number)),
             outputs["result"],
         )
 
@@ -74,23 +74,23 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         self.assertEqual(["a", "b"], list(inputs.keys()))
         self.assertEqual(["result_0", "result_1"], list(outputs.keys()))
         self.assertBaseModelEqual(
-            InputDescription(schema=Schema(type=Type1.boolean, nullable=True)),
+            InputDescription(schema=Schema(type=DataType.boolean, nullable=True)),
             inputs["a"],
         )
         self.assertBaseModelEqual(
             InputDescription(
                 schema=Schema(
-                    oneOf=[Schema(type=Type1.number), Schema(type=Type1.boolean)]
+                    oneOf=[Schema(type=DataType.number), Schema(type=DataType.boolean)]
                 )
             ),
             inputs["b"],
         )
         self.assertBaseModelEqual(
-            OutputDescription(schema=Schema(type=Type1.number)),
+            OutputDescription(schema=Schema(type=DataType.number)),
             outputs["result_0"],
         )
         self.assertEqual(
-            OutputDescription(schema=Schema(type=Type1.number)),
+            OutputDescription(schema=Schema(type=DataType.number)),
             outputs["result_1"],
         )
 

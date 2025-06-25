@@ -9,7 +9,7 @@ import panel as pn
 import param
 from pydantic import BaseModel
 from s2gos_client.exceptions import ClientException
-from s2gos_common.models import JobInfo, JobList, JobResults, StatusCode
+from s2gos_common.models import JobInfo, JobList, JobResults, JobStatus
 
 JobAction: TypeAlias = Callable[[str], Any]
 
@@ -99,29 +99,27 @@ class JobsForm(pn.viewable.Viewer):
         selected_jobs = self.selected_jobs
 
         self._cancel_button.disabled = self._on_cancel_job is None or self.is_disabled(
-            selected_jobs, {StatusCode.accepted, StatusCode.running}
+            selected_jobs, {JobStatus.accepted, JobStatus.running}
         )
         self._delete_button.disabled = self._on_delete_job is None or self.is_disabled(
             selected_jobs,
-            {StatusCode.successful, StatusCode.dismissed, StatusCode.failed},
+            {JobStatus.successful, JobStatus.dismissed, JobStatus.failed},
         )
         self._restart_button.disabled = (
             self._on_restart_job is None
             or self.is_disabled(
                 selected_jobs,
-                {StatusCode.successful, StatusCode.dismissed, StatusCode.failed},
+                {JobStatus.successful, JobStatus.dismissed, JobStatus.failed},
             )
         )
         self._get_results_button.disabled = (
             self._on_get_job_results is None
             or len(selected_jobs) != 1
-            or self.is_disabled(
-                selected_jobs, {StatusCode.successful, StatusCode.failed}
-            )
+            or self.is_disabled(selected_jobs, {JobStatus.successful, JobStatus.failed})
         )
 
     @classmethod
-    def is_disabled(cls, jobs: list[JobInfo], requirements: set[StatusCode]):
+    def is_disabled(cls, jobs: list[JobInfo], requirements: set[JobStatus]):
         return not jobs or not all(j.status in requirements for j in jobs)
 
     @property

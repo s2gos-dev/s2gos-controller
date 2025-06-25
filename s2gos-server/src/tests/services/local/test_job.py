@@ -5,7 +5,7 @@
 from unittest import TestCase
 
 import pytest
-from s2gos_common.models import StatusCode
+from s2gos_common.models import JobStatus
 from s2gos_server.services.local import Job, JobCancelledException, get_job_context
 from s2gos_server.services.local.job import NullJobContext
 
@@ -41,9 +41,9 @@ class JobTest(TestCase):
             function=fn_success,
             function_kwargs={"x": 4, "y": 2},
         )
-        self.assertEqual("process_54", job.status_info.processID)
-        self.assertEqual("job_27", job.status_info.jobID)
-        self.assertEqual(None, job.status_info.progress)
+        self.assertEqual("process_54", job.job_info.processID)
+        self.assertEqual("job_27", job.job_info.jobID)
+        self.assertEqual(None, job.job_info.progress)
         self.assertIs(fn_success, job.function)
         self.assertEqual({"x": 4, "y": 2}, job.function_kwargs)
 
@@ -57,21 +57,21 @@ class JobTest(TestCase):
         self.assertEqual(False, job.is_cancelled())
         self.assertEqual(None, job.check_cancelled())
         job.report_progress(progress=35, message="2/6 input files downloaded")
-        self.assertEqual(35, job.status_info.progress)
-        self.assertEqual("2/6 input files downloaded", job.status_info.message)
+        self.assertEqual(35, job.job_info.progress)
+        self.assertEqual("2/6 input files downloaded", job.job_info.message)
         job.report_progress(message="3/6 input files downloaded")
-        self.assertEqual(35, job.status_info.progress)
-        self.assertEqual("3/6 input files downloaded", job.status_info.message)
+        self.assertEqual(35, job.job_info.progress)
+        self.assertEqual("3/6 input files downloaded", job.job_info.message)
         job.report_progress(progress=40)
-        self.assertEqual(40, job.status_info.progress)
-        self.assertEqual("3/6 input files downloaded", job.status_info.message)
+        self.assertEqual(40, job.job_info.progress)
+        self.assertEqual("3/6 input files downloaded", job.job_info.message)
 
         job.cancel()
         self.assertEqual(True, job.is_cancelled())
         with pytest.raises(JobCancelledException):
             job.check_cancelled()
-        self.assertEqual(40, job.status_info.progress)
-        self.assertEqual("3/6 input files downloaded", job.status_info.message)
+        self.assertEqual(40, job.job_info.progress)
+        self.assertEqual("3/6 input files downloaded", job.job_info.message)
 
     def test_run_success(self):
         job = Job(
@@ -82,9 +82,9 @@ class JobTest(TestCase):
         )
         result = job.run()
         self.assertEqual(27, result)
-        self.assertEqual(StatusCode.successful, job.status_info.status)
-        self.assertEqual(None, job.status_info.progress)
-        self.assertEqual(None, job.status_info.message)
+        self.assertEqual(JobStatus.successful, job.job_info.status)
+        self.assertEqual(None, job.job_info.progress)
+        self.assertEqual(None, job.job_info.message)
 
     def test_run_success_report(self):
         job = Job(
@@ -95,9 +95,9 @@ class JobTest(TestCase):
         )
         result = job.run()
         self.assertEqual("outputs/result.zarr", result)
-        self.assertEqual(StatusCode.successful, job.status_info.status)
-        self.assertEqual(100, job.status_info.progress)
-        self.assertEqual("Almost done", job.status_info.message)
+        self.assertEqual(JobStatus.successful, job.job_info.status)
+        self.assertEqual(100, job.job_info.progress)
+        self.assertEqual("Almost done", job.job_info.message)
 
     def test_run_exc(self):
         job = Job(
@@ -108,7 +108,7 @@ class JobTest(TestCase):
         )
         result = job.run()
         self.assertEqual(None, result)
-        self.assertEqual(StatusCode.failed, job.status_info.status)
+        self.assertEqual(JobStatus.failed, job.job_info.status)
 
     def test_run_failed(self):
         job = Job(
@@ -119,7 +119,7 @@ class JobTest(TestCase):
         )
         result = job.run()
         self.assertEqual(None, result)
-        self.assertEqual(StatusCode.dismissed, job.status_info.status)
+        self.assertEqual(JobStatus.dismissed, job.job_info.status)
 
 
 class GetJobContextTest(TestCase):

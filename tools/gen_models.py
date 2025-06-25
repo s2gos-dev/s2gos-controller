@@ -16,6 +16,7 @@ def main():
         use_double_quotes=True,
         use_standard_collections=True,
         use_schema_description=True,
+        use_title_as_name=True,
         set_default_enum_member=True,
         target_python_version=dcg.PythonVersion.PY_310,
         output_model_type=dcg.DataModelType.PydanticV2BaseModel,

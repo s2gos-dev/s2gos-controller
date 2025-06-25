@@ -11,11 +11,13 @@ from pydantic import BaseModel
 
 REQUIRED_ENUMS = {
     "Crs",
+    "DataType",
+    "MaxOccurs",
     "JobControlOptions",
-    "StatusCode",
+    "JobStatus",
 }
 
-REQUIRED_MODELS = {
+REQUIRED_CLASSES = {
     "ApiError",
     "Capabilities",
     "ConformanceDeclaration",
@@ -43,20 +45,23 @@ class ModelsTest(TestCase):
             for name, obj in inspect.getmembers(s2g_models, inspect.isclass)
             if issubclass(obj, Enum)
         )
-        self.assertSetEqual(set(), REQUIRED_ENUMS - all_enums)
+        self.assertSetIsOk(REQUIRED_ENUMS, all_enums)
 
-    def test_models(self):
-        all_models = set(
+    def test_classes(self):
+        all_classes = set(
             name
             for name, obj in inspect.getmembers(s2g_models, inspect.isclass)
             if issubclass(obj, BaseModel)
         )
+        self.assertSetIsOk(REQUIRED_CLASSES, all_classes)
 
-        self.assertSetEqual(set(), REQUIRED_MODELS - all_models)
+    def assertSetIsOk(self, required: set[str], actual: set[str]):
+        contained_items = set(c for c in required if c in actual)
+        self.assertSetEqual(required, contained_items, "contained")
 
     def test_models_have_repr_json(self):
         for name, obj in inspect.getmembers(s2g_models, inspect.isclass):
-            if name in REQUIRED_MODELS and issubclass(obj, BaseModel):
+            if name in REQUIRED_CLASSES and issubclass(obj, BaseModel):
                 self.assertTrue(hasattr(obj, "_repr_json_"), msg=f"model {name}")
 
         obj = s2g_models.Bbox(bbox=[10, 20, 30, 40])

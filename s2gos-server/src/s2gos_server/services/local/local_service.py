@@ -13,11 +13,11 @@ from s2gos_common.models import (
     JobInfo,
     JobList,
     JobResults,
+    JobStatus,
     ProcessDescription,
     ProcessList,
     ProcessRequest,
     ProcessSummary,
-    StatusCode,
 )
 from s2gos_server.exceptions import JSONContentException
 from s2gos_server.service import Service
@@ -116,40 +116,40 @@ class LocalService(Service):
         job.future = self.executor.submit(job.run)
         # 201 means, async execution started
         return JSONResponse(
-            status_code=201, content=job.status_info.model_dump(mode="json")
+            status_code=201, content=job.job_info.model_dump(mode="json")
         )
 
     async def get_jobs(self) -> JobList:
-        return JobList(jobs=[job.status_info for job in self.jobs.values()], links=[])
+        return JobList(jobs=[job.job_info for job in self.jobs.values()], links=[])
 
     async def get_job(self, job_id: str) -> JobInfo:
         job = self._get_job(job_id, forbidden_status_codes={})
-        return job.status_info
+        return job.job_info
 
     async def dismiss_job(self, job_id: str) -> JobInfo:
         job = self._get_job(job_id, forbidden_status_codes={})
-        if job.status_info.status in (StatusCode.accepted, StatusCode.running):
+        if job.job_info.status in (JobStatus.accepted, JobStatus.running):
             job.cancel()
-        elif job.status_info.status in (
-            StatusCode.dismissed,
-            StatusCode.successful,
-            StatusCode.failed,
+        elif job.job_info.status in (
+            JobStatus.dismissed,
+            JobStatus.successful,
+            JobStatus.failed,
         ):
             del self.jobs[job_id]
-        return job.status_info
+        return job.job_info
 
     async def get_job_results(self, job_id: str) -> JobResults:
         job = self._get_job(
             job_id,
             forbidden_status_codes={
-                StatusCode.accepted: "has not started yet",
-                StatusCode.running: "is still running",
-                StatusCode.dismissed: "has been cancelled",
-                StatusCode.failed: "has failed",
+                JobStatus.accepted: "has not started yet",
+                JobStatus.running: "is still running",
+                JobStatus.dismissed: "has been cancelled",
+                JobStatus.failed: "has failed",
             },
         )
         result = job.future.result()
-        entry = self.process_registry.get_entry(job.status_info.processID)
+        entry = self.process_registry.get_entry(job.job_info.processID)
         outputs = entry.process.outputs or {}
         output_count = len(outputs)
         return JobResults.model_validate(
@@ -182,12 +182,12 @@ class LocalService(Service):
         return process_entry
 
     def _get_job(
-        self, job_id: str, forbidden_status_codes: dict[StatusCode, str]
+        self, job_id: str, forbidden_status_codes: dict[JobStatus, str]
     ) -> Job:
         job = self.jobs.get(job_id)
         if job is None:
             raise JSONContentException(404, detail=f"Job {job_id!r} does not exist")
-        message = forbidden_status_codes.get(job.status_info.status)
+        message = forbidden_status_codes.get(job.job_info.status)
         if message:
             raise JSONContentException(403, detail=f"Job {job_id!r} {message}")
         return job

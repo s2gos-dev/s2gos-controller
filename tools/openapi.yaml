@@ -21,7 +21,7 @@ paths:
       summary: landing page of this API
       description: |-
         The landing page provides links to the:
-          * The APIDefinition (no fixed path),
+          * The OpenAPI-definition (no fixed path),
           * The Conformance statements (path /conformance),
           * The processes metadata (path /processes),
           * The endpoint for job monitoring (path /jobs).
@@ -484,11 +484,7 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/output'
         response:
-          type: string
-          default: raw
-          enum:
-          - raw
-          - document
+          $ref: '#/components/schemas/responseType'
         subscriber:
           $ref: '#/components/schemas/subscriber'
     jobResults:
@@ -505,13 +501,11 @@ components:
         processID:
           type: string
         type:
-          type: string
-          enum:
-          - process
+          $ref: '#/components/schemas/jobType'
         jobID:
           type: string
         status:
-          $ref: '#/components/schemas/statusCode'
+          $ref: '#/components/schemas/jobStatus'
         message:
           type: string
         created:
@@ -595,9 +589,7 @@ components:
             oneOf:
             - type: integer
               default: 1
-            - type: string
-              enum:
-              - unbounded
+            - $ref: '#/components/schemas/maxOccurs'
           schema:
             oneOf:
             - $ref: '#/components/schemas/schema'
@@ -613,6 +605,10 @@ components:
             oneOf:
             - $ref: '#/components/schemas/schema'
             - $ref: '#/components/schemas/reference'
+    maxOccurs:
+      type: string
+      enum:
+      - unbounded
     inlineOrRefValue:
       oneOf:
       - $ref: '#/components/schemas/inlineValue'
@@ -625,6 +621,12 @@ components:
           $ref: '#/components/schemas/format'
         transmissionMode:
           $ref: '#/components/schemas/transmissionMode'
+    responseType:
+      type: string
+      default: raw
+      enum:
+      - raw
+      - document
     subscriber:
       required:
       - successUrl
@@ -645,7 +647,7 @@ components:
         Support for this parameter is not required and the parameter may be
         removed from the API definition, if conformance class **'callback'**
         is not listed in the conformance declaration under `/conformance`.
-    statusCode:
+    jobStatus:
       type: string
       nullable: false
       enum:
@@ -654,6 +656,10 @@ components:
       - successful
       - failed
       - dismissed
+    jobType:
+      type: string
+      enum:
+      - process
     descriptionType:
       type: object
       properties:
@@ -690,6 +696,15 @@ components:
       enum:
       - value
       - reference
+    dataType:
+      type: string
+      enum:
+      - array
+      - boolean
+      - integer
+      - number
+      - object
+      - string
     schema:
       type: object
       properties:
@@ -749,14 +764,7 @@ components:
           items:
             type: object
         type:
-          type: string
-          enum:
-          - array
-          - boolean
-          - integer
-          - number
-          - object
-          - string
+          $ref: '#/components/schemas/dataType'
         not:
           oneOf:
           - $ref: '#/components/schemas/schema'

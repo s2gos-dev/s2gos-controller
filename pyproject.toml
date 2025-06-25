@@ -72,10 +72,10 @@ select = ["I", "F", "E"]
 # pixi run generate
 
 [tool.pixi.tasks.generate]
-depends-on = ["gen-common", "gen-server", "gen-client"]
+depends-on = ["gen-models", "gen-server", "gen-client"]
 
-[tool.pixi.tasks.gen-common]
-cmd = "python -m tools.gen_common"
+[tool.pixi.tasks.gen-models]
+cmd = "python -m tools.gen_models"
 
 [tool.pixi.tasks.gen-server]
 cmd = "python -m tools.gen_server"

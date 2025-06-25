@@ -10,7 +10,7 @@ from abc import ABC, abstractmethod
 from concurrent.futures import Future
 from typing import Any, Callable, Optional
 
-from s2gos_common.models import JobInfo, StatusCode, Type
+from s2gos_common.models import JobInfo, JobStatus, JobType
 
 
 class JobCancelledException(Exception):
@@ -71,11 +71,11 @@ class Job(JobContext):
         function: Callable[..., Any],
         function_kwargs: dict[str, Any],
     ):
-        self.status_info = JobInfo(
-            type=Type.process,
+        self.job_info = JobInfo(
+            type=JobType.process,
             processID=process_id,
             jobID=job_id,
-            status=StatusCode.accepted,
+            status=JobStatus.accepted,
             created=datetime.datetime.now(),
         )
         self.function = function
@@ -87,11 +87,11 @@ class Job(JobContext):
         self, progress: Optional[int] = None, message: Optional[str] = None
     ):
         self.check_cancelled()
-        self.status_info.updated = datetime.datetime.now()
+        self.job_info.updated = datetime.datetime.now()
         if progress is not None:
-            self.status_info.progress = progress
+            self.job_info.progress = progress
         if message is not None:
-            self.status_info.message = message
+            self.job_info.message = message
 
     def is_cancelled(self) -> bool:
         return self.cancelled
@@ -120,25 +120,23 @@ class Job(JobContext):
         try:
             self.check_cancelled()
             result = self.function(**self.function_kwargs)
-            self._finish_job(StatusCode.successful)
+            self._finish_job(JobStatus.successful)
         except JobCancelledException:
-            self._finish_job(StatusCode.dismissed)
+            self._finish_job(JobStatus.dismissed)
         except Exception as e:
-            self._finish_job(StatusCode.failed, exception=e)
+            self._finish_job(JobStatus.failed, exception=e)
         return result
 
     def _start_job(self):
-        self.status_info.started = datetime.datetime.now()
-        self.status_info.status = StatusCode.running
+        self.job_info.started = datetime.datetime.now()
+        self.job_info.status = JobStatus.running
 
-    def _finish_job(
-        self, status_code: StatusCode, exception: Optional[Exception] = None
-    ):
-        self.status_info.finished = datetime.datetime.now()
-        self.status_info.status = status_code
+    def _finish_job(self, job_status: JobStatus, exception: Optional[Exception] = None):
+        self.job_info.finished = datetime.datetime.now()
+        self.job_info.status = job_status
         if exception is not None:
-            self.status_info.message = f"{exception}"
-            self.status_info.traceback = traceback.format_exception(
+            self.job_info.message = f"{exception}"
+            self.job_info.traceback = traceback.format_exception(
                 type(exception), exception, exception.__traceback__
             )
 
