@@ -20,7 +20,13 @@ from tools.openapi import OAMethod, OASchema, load_openapi_schema
 GENERATOR_NAME = str(Path(__file__).name)
 
 ROUTES_PATH = S2GOS_PATH / "s2gos-server/src/s2gos_server/routes.py"
-SERVICE_PATH = S2GOS_PATH / "s2gos-server/src/s2gos_server/service.py"
+SERVICE_PATH = S2GOS_PATH / "s2gos-common/src/s2gos_common/service.py"
+
+magic_param_list = [
+    ("fa_request", "fastapi.Request"),
+    ("fa_response", "fastapi.Response"),
+    # add more as desired
+]
 
 
 def main():
@@ -33,7 +39,7 @@ def main():
         GENERATOR_NAME,
         ROUTES_PATH,
         [
-            "from fastapi.responses import JSONResponse\n",
+            "import fastapi\n",
             "\n",
             f"from s2gos_common.models import {model_list}\n",
             "from .app import app\n",
@@ -49,9 +55,7 @@ def main():
         [
             "from abc import ABC, abstractmethod\n",
             "\n",
-            "from fastapi.responses import JSONResponse\n",
-            "\n",
-            f"from s2gos_common.models import {model_list}\n",
+            f"from .models import {model_list}\n",
             "\n",
             "class Service(ABC):\n",
             service_code,
@@ -128,9 +132,28 @@ def generate_method_code(
     if method.responses.get("201"):
         extra_status_code = ", status_code=201"
 
-    param_list = ", ".join([*pos_params, *kw_params])
-    service_param_list = ", ".join(["self", *pos_service_params, *kw_service_params])
-    param_service_list = ", ".join([*service_args, *service_kwargs])
+    param_list = ", ".join(
+        [
+            *pos_params,
+            *[f"{k}: {v}" for k, v in magic_param_list],
+            *kw_params,
+        ]
+    )
+    service_param_list = ", ".join(
+        [
+            "self",
+            *pos_service_params,
+            *kw_service_params,
+            "**kwargs",
+        ]
+    )
+    param_service_list = ", ".join(
+        [
+            *service_args,
+            *[f"{k}={k}" for k, _ in magic_param_list],
+            *service_kwargs,
+        ]
+    )
 
     return_types_, error_types = parse_responses(method, models, skip_errors=True)
 
@@ -150,9 +173,7 @@ def generate_method_code(
         (
             f"# noinspection PyPep8Naming\n"
             f"@app.{method_name}({path!r}{extra_status_code})\n"
-            f"async def {py_op_name}({param_list})"
-            ":\n"
-            # f" -> {return_type_union}:\n"
+            f"async def {py_op_name}({param_list}):\n"
             f"{C_TAB}return await ServiceProvider.instance()."
             f"{py_op_name}({param_service_list})\n"
         ),
