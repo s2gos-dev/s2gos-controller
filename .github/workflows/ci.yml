@@ -30,6 +30,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          slug: s2gos-dev/s2gos-controller
 
       # Add other pixi tasks here
 
