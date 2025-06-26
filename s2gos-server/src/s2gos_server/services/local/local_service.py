@@ -6,7 +6,6 @@ from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures.process import ProcessPoolExecutor
 from typing import Callable, Optional
 
-from fastapi.responses import JSONResponse
 from s2gos_common.models import (
     Capabilities,
     ConformanceDeclaration,
@@ -82,7 +81,7 @@ class LocalService(Service):
 
     async def execute_process(
         self, process_id: str, request: ProcessRequest
-    ) -> JSONResponse:
+    ) -> JobInfo:
         process_entry = self._get_process_entry(process_id)
         process_info = process_entry.process
 
@@ -115,9 +114,7 @@ class LocalService(Service):
         self.jobs[job_id] = job
         job.future = self.executor.submit(job.run)
         # 201 means, async execution started
-        return JSONResponse(
-            status_code=201, content=job.job_info.model_dump(mode="json")
-        )
+        return job.job_info
 
     async def get_jobs(self) -> JobList:
         return JobList(jobs=[job.job_info for job in self.jobs.values()], links=[])
