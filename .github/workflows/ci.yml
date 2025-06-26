@@ -20,11 +20,16 @@ jobs:
           auth-host: prefix.dev
           auth-token: ${{ secrets.PREFIXDEV_AUTH_TOKEN }}
 
+      - name: Run checks
+        run: pixi run lint
+
       - name: Run test & coverage
         run: pixi run coverage-ci
 
-      - name: Run checks
-        run: pixi run lint
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       # Add other pixi tasks here
 
