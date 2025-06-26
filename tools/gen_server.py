@@ -124,6 +124,10 @@ def generate_method_code(
             kw_service_params.append(request_kw_param)
         service_args.append("request=request")
 
+    extra_status_code = ""
+    if method.responses.get("201"):
+        extra_status_code = ", status_code=201"
+
     param_list = ", ".join([*pos_params, *kw_params])
     service_param_list = ", ".join(["self", *pos_service_params, *kw_service_params])
     param_service_list = ", ".join([*service_args, *service_kwargs])
@@ -133,7 +137,6 @@ def generate_method_code(
     return_types = list(v[0] for v in return_types_.values())
     if not return_types:
         return_types = ["None"]
-    return_types.append("JSONResponse")
     return_types = sorted(return_types)
 
     return_type_union = " | ".join(set(return_types))
@@ -146,7 +149,7 @@ def generate_method_code(
     return (
         (
             f"# noinspection PyPep8Naming\n"
-            f"@app.{method_name}({path!r})\n"
+            f"@app.{method_name}({path!r}{extra_status_code})\n"
             f"async def {py_op_name}({param_list})"
             ":\n"
             # f" -> {return_type_union}:\n"
