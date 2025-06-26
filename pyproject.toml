@@ -70,7 +70,7 @@ per-file-ignores = { "*.ipynb" = ["E402"] }
 select = ["I", "F", "E"]
 
 [tool.coverage.report]
-fail_under = 70
+fail_under = 80
 show_missing = true
 
 ########################## Tasks ###############################
