@@ -5,7 +5,6 @@
 from unittest import TestCase
 
 import pytest
-
 from s2gos_server.provider import ServiceProvider
 from s2gos_server.services.local import LocalService
 

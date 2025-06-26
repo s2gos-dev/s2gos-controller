@@ -6,6 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures.process import ProcessPoolExecutor
 from typing import Callable, Optional
 
+import fastapi
 from fastapi import Request
 from s2gos_common.models import (
     Capabilities,
@@ -44,7 +45,10 @@ class LocalService(Service):
         self.process_registry = ProcessRegistry()
         self.jobs: dict[str, Job] = {}
 
-    async def get_capabilities(self, **kwargs) -> Capabilities:
+    async def get_capabilities(
+        self, fa_request: fastapi.Request, **kwargs
+    ) -> Capabilities:
+        print(fa_request)
         return self.capabilities
 
     async def get_conformance(self, **kwargs) -> ConformanceDeclaration:
