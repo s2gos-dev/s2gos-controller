@@ -6,8 +6,8 @@ from typing import Final
 
 import typer.core
 from click.testing import CliRunner
-from s2gos_client.cli.cli import cli
 
+from s2gos_client.cli.cli import cli
 from tools.common import S2GOS_PATH
 
 DOCS_PATH: Final = S2GOS_PATH / "docs"

@@ -6,6 +6,8 @@ from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures.process import ProcessPoolExecutor
 from typing import Callable, Optional
 
+import fastapi
+
 from s2gos_common.models import (
     Capabilities,
     ConformanceDeclaration,
@@ -18,8 +20,8 @@ from s2gos_common.models import (
     ProcessRequest,
     ProcessSummary,
 )
+from s2gos_common.service import Service
 from s2gos_server.exceptions import JSONContentException
-from s2gos_server.service import Service
 
 from .job import Job
 from .process_registry import ProcessRegistry
@@ -43,10 +45,13 @@ class LocalService(Service):
         self.process_registry = ProcessRegistry()
         self.jobs: dict[str, Job] = {}
 
-    async def get_capabilities(self) -> Capabilities:
+    async def get_capabilities(
+        self, fa_request: fastapi.Request, **kwargs
+    ) -> Capabilities:
+        print(fa_request)
         return self.capabilities
 
-    async def get_conformance(self) -> ConformanceDeclaration:
+    async def get_conformance(self, **kwargs) -> ConformanceDeclaration:
         return ConformanceDeclaration(
             conformsTo=[
                 "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/core",
@@ -75,12 +80,12 @@ class LocalService(Service):
             links=[],
         )
 
-    async def get_process(self, process_id: str) -> ProcessDescription:
+    async def get_process(self, process_id: str, **kwargs) -> ProcessDescription:
         process_entry = self._get_process_entry(process_id)
         return process_entry.process
 
     async def execute_process(
-        self, process_id: str, request: ProcessRequest
+        self, process_id: str, request: ProcessRequest, **kwargs
     ) -> JobInfo:
         process_entry = self._get_process_entry(process_id)
         process_info = process_entry.process
@@ -100,6 +105,8 @@ class LocalService(Service):
             elif input_name in input_default_params:
                 function_kwargs[input_name] = input_default_params[input_name]
 
+        # TODO: validate function_kwargs
+
         # print("input_params:", input_params)
         # print("input_default_params:", input_default_params)
         # print("params:", function_kwargs)
@@ -116,14 +123,14 @@ class LocalService(Service):
         # 201 means, async execution started
         return job.job_info
 
-    async def get_jobs(self) -> JobList:
+    async def get_jobs(self, **kwargs) -> JobList:
         return JobList(jobs=[job.job_info for job in self.jobs.values()], links=[])
 
-    async def get_job(self, job_id: str) -> JobInfo:
+    async def get_job(self, job_id: str, **kwargs) -> JobInfo:
         job = self._get_job(job_id, forbidden_status_codes={})
         return job.job_info
 
-    async def dismiss_job(self, job_id: str) -> JobInfo:
+    async def dismiss_job(self, job_id: str, **kwargs) -> JobInfo:
         job = self._get_job(job_id, forbidden_status_codes={})
         if job.job_info.status in (JobStatus.accepted, JobStatus.running):
             job.cancel()
@@ -135,7 +142,7 @@ class LocalService(Service):
             del self.jobs[job_id]
         return job.job_info
 
-    async def get_job_results(self, job_id: str) -> JobResults:
+    async def get_job_results(self, job_id: str, **kwargs) -> JobResults:
         job = self._get_job(
             job_id,
             forbidden_status_codes={

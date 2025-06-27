@@ -26,9 +26,7 @@ class ClientConfig(BaseModel):
     server_url: Optional[str] = None
 
     def _repr_json_(self):
-        return self.model_dump(
-            mode="json", by_alias=True, exclude_none=True, exclude_defaults=False
-        ), dict(root="Configuration:")
+        return self.model_dump(mode="json", by_alias=True), dict(root="Configuration:")
 
     @classmethod
     def read(cls, config_path: Optional[str | Path] = None) -> Optional["ClientConfig"]:

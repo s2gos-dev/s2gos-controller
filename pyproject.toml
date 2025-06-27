@@ -9,6 +9,18 @@ channels = ["conda-forge"]
 platforms = ["linux-64", "win-64", "osx-64"]
 
 [tool.pixi.dependencies]
+# Combined sub-workspace dependencies to prevent our editable
+# PyPI dependencies (our project's sub-workspaces) to install
+# PyPI packages instead of using conda packages.
+click = "*"
+fastapi = "*"
+httpx = "*"
+pydantic = "*"
+pyyaml = "*"
+typer = "*"
+uri-template = "*"
+uvicorn = "*"
+# IDE integration
 pixi-pycharm = ">=0.0.8,<0.0.9"
 # Development & build tools
 pip = "*"
@@ -42,6 +54,9 @@ mkdocstrings = "*"
 mkdocstrings-python = "*"
 
 [tool.pixi.pypi-dependencies]
+# I wished we could have "no-deps=true" here,
+# or even better "[tool.pixi.workspaces]".
+# See https://github.com/prefix-dev/pixi/issues/1417.
 s2gos-common = { path = "s2gos-common", editable = true }
 s2gos-client = { path = "s2gos-client", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
@@ -50,6 +65,7 @@ s2gos-server = { path = "s2gos-server", editable = true }
 skip = [".idea", ".github", ".pixi", "htmlcov", "site"]
 profile = "black"
 line_length = 88
+known_first_party = ["s2gos_common", "s2gos_client", "s2gos_server"]
 
 [tool.black]
 line-length = 88
@@ -70,7 +86,6 @@ per-file-ignores = { "*.ipynb" = ["E402"] }
 select = ["I", "F", "E"]
 
 [tool.coverage.report]
-fail_under = 80
 show_missing = true
 
 ########################## Tasks ###############################

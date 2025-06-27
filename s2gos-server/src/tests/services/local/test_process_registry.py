@@ -4,6 +4,8 @@
 
 from unittest import TestCase
 
+from tests.helpers import BaseModelMixin
+
 from s2gos_common.models import (
     DataType,
     InputDescription,
@@ -12,7 +14,6 @@ from s2gos_common.models import (
     Schema,
 )
 from s2gos_server.services.local import ProcessRegistry
-from tests.helpers import BaseModelMixin
 
 
 def f1(x: bool, y: int) -> float:

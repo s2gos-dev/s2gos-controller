@@ -5,6 +5,7 @@
 from unittest import TestCase
 
 import pytest
+
 from s2gos_common.models import JobStatus
 from s2gos_server.services.local import Job, JobCancelledException, get_job_context
 from s2gos_server.services.local.job import NullJobContext
