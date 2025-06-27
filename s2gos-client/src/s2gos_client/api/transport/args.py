@@ -4,7 +4,7 @@
 
 import inspect
 from dataclasses import dataclass, field
-from typing import Any, Optional, Literal
+from typing import Any, Literal, Optional
 from urllib.parse import urljoin
 
 import uri_template

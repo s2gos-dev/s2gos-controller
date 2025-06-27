@@ -3,8 +3,8 @@
 #  https://opensource.org/license/apache-2-0.
 
 from typing import Any, Callable
-from unittest import TestCase, IsolatedAsyncioTestCase
-from unittest.mock import MagicMock, AsyncMock
+from unittest import IsolatedAsyncioTestCase, TestCase
+from unittest.mock import AsyncMock, MagicMock
 
 import httpx
 import pytest

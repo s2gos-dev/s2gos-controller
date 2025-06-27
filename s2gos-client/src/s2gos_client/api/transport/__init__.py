@@ -2,7 +2,7 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from .transport import Transport, AsyncTransport
 from .args import TransportArgs
+from .transport import AsyncTransport, Transport
 
 __all__ = ["AsyncTransport", "Transport", "TransportArgs"]
