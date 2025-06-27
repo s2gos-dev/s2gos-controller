@@ -9,7 +9,7 @@ from typing import Optional
 import yaml
 from pydantic import BaseModel
 
-from s2gos_client.api.defaults import DEFAULT_CONFIG_PATH
+from .defaults import DEFAULT_CONFIG_PATH
 
 
 class ClientConfig(BaseModel):

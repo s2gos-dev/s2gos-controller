@@ -9,7 +9,7 @@ import panel as pn
 import param
 from pydantic import BaseModel
 
-from s2gos_client.api.exceptions import ClientException
+from s2gos_client.api.error import ClientError
 from s2gos_common.models import JobInfo, JobList, JobResults, JobStatus
 
 JobAction: TypeAlias = Callable[[str], Any]
@@ -21,7 +21,7 @@ class JobsForm(pn.viewable.Viewer):
     def __init__(
         self,
         job_list: JobList,
-        job_list_error: ClientException | None,
+        job_list_error: ClientError | None,
         on_delete_job: Optional[JobAction] = None,
         on_cancel_job: Optional[JobAction] = None,
         on_restart_job: Optional[JobAction] = None,
@@ -85,7 +85,7 @@ class JobsForm(pn.viewable.Viewer):
     def __panel__(self) -> pn.viewable.Viewable:
         return self._view
 
-    def set_job_list(self, job_list: JobList, job_list_error: ClientException | None):
+    def set_job_list(self, job_list: JobList, job_list_error: ClientError | None):
         self._jobs = job_list.jobs
         self._job_list_error = job_list_error
 
@@ -193,7 +193,7 @@ class JobsForm(pn.viewable.Viewer):
                     messages.append(success_format.format(job=job_text))
                 elif callable(success_format):
                     messages.append(success_format(job_id, result).format(job=job_text))
-            except ClientException as e:
+            except ClientError as e:
                 messages.append(
                     error_format.format(
                         job=job_text,

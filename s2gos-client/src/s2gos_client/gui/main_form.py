@@ -7,7 +7,7 @@ from typing import Any, Callable, TypeAlias
 import panel as pn
 import param
 
-from s2gos_client.api.exceptions import ClientException
+from s2gos_client.api.error import ClientError
 from s2gos_client.gui.widget_factory import WidgetFactory
 from s2gos_common.models import (
     Format,
@@ -30,7 +30,7 @@ class MainForm(pn.viewable.Viewer):
     def __init__(
         self,
         process_list: ProcessList,
-        process_list_error: ClientException | None,
+        process_list_error: ClientError | None,
         on_get_process: GetProcessAction,
         on_execute_process: ExecuteProcessAction,
     ):
@@ -129,7 +129,7 @@ class MainForm(pn.viewable.Viewer):
                 try:
                     process_description = self._on_get_process(process_id)
                     self._processes_dict[process_id] = process_description
-                except ClientException as e:
+                except ClientError as e:
                     process_description = None
                     process_markdown = (
                         f"**Error**: {e.title} (status `{e.status_code}`): {e.detail}"
@@ -172,7 +172,7 @@ class MainForm(pn.viewable.Viewer):
             self._execute_button.disabled = True
             _job_info = self._on_execute_process(process_id, process_request)
             # TODO: Show status info in GUI
-        except ClientException as e:
+        except ClientError as e:
             # TODO: Show error in GUI
             print(f"error: {e}")
         finally:

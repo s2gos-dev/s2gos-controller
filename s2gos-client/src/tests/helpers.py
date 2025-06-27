@@ -4,29 +4,24 @@
 
 from typing import Any
 
-from s2gos_client.api.transport import Transport, TransportArgs
+from s2gos_client.api.transport import AsyncTransport, Transport, TransportArgs
 
 
-class MockTransport(Transport):  # pragma: no cover
+class MockTransport(AsyncTransport, Transport):  # pragma: no cover
     def __init__(self):
-        self._call_stack = []
-
-    @property
-    def call_stack(self) -> list[dict]:
-        return self._call_stack
+        self.calls: list[TransportArgs] = []
+        self.async_calls: list[TransportArgs] = []
 
     def call(self, args: TransportArgs) -> Any:
-        self._call_stack.append(
-            dict(
-                path=args.path,
-                method=args.method,
-                path_params=args.path_params,
-                query_params=args.query_params,
-                request=args.request,
-                return_types=args.return_types,
-                error_types=args.error_types,
-            )
-        )
+        self.calls.append(args)
+        return self._create_model_object(args)
+
+    async def async_call(self, args: TransportArgs) -> Any:
+        self.async_calls.append(args)
+        return self._create_model_object(args)
+
+    @staticmethod
+    def _create_model_object(args: TransportArgs) -> Any:
         return_type = args.return_types.get("200", args.return_types.get("201"))
         # noinspection PyTypeChecker
         return object.__new__(return_type) if return_type is not None else None

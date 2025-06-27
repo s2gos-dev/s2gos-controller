@@ -5,17 +5,17 @@
 from typing import Optional
 
 
-class ClientException(Exception):
-    """Raised if a web API call failed with a status code != 2xx."""
+class ClientError(Exception):
+    """Raised if a web API call failed with a status code that is not 2xx."""
 
     def __init__(
         self,
+        message: str,
         status_code: int,
-        reason: str,
         title: Optional[str] = None,
         detail: Optional[str] = None,
     ):
-        super().__init__(reason)
+        super().__init__(message)
         self.status_code = status_code
         self.title = title
         self.detail = detail

@@ -7,7 +7,7 @@ import time
 from typing import Optional
 
 from s2gos_client.api.client import Client as GeneratedClient
-from s2gos_client.api.exceptions import ClientException
+from s2gos_client.api.error import ClientError
 from s2gos_client.api.transport import Transport
 from s2gos_client.gui.jobs_form import JobsForm
 from s2gos_client.gui.main_form import MainForm
@@ -79,14 +79,14 @@ class Client(GeneratedClient):
             if self._jobs_form is not None:
                 self._jobs_form.set_job_list(*self._get_jobs())
 
-    def _get_processes(self) -> tuple[ProcessList, ClientException | None]:
+    def _get_processes(self) -> tuple[ProcessList, ClientError | None]:
         try:
             return self.get_processes(), None
-        except ClientException as e:
+        except ClientError as e:
             return ProcessList(processes=[], links=[]), e
 
-    def _get_jobs(self) -> tuple[JobList, ClientException | None]:
+    def _get_jobs(self) -> tuple[JobList, ClientError | None]:
         try:
             return self.get_jobs(), None
-        except ClientException as e:
+        except ClientError as e:
             return JobList(jobs=[], links=[]), e

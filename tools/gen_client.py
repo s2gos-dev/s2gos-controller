@@ -31,7 +31,8 @@ from s2gos_common.models import {{ model_imports }}
 
 from .config import ClientConfig
 from .defaults import DEFAULT_SERVER_URL
-from .transport import DefaultTransport, {{ uc_async }}Transport, TransportArgs
+from .transport import {{ uc_async }}Transport, TransportArgs
+from .transport.httpx import HttpxTransport
 
 
 class {{ uc_async }}Client:
@@ -65,7 +66,7 @@ class {{ uc_async }}Client:
         )
         self._config = config
         self._transport = (
-            DefaultTransport(server_url=config.server_url, debug=debug)
+            HttpxTransport(server_url=config.server_url, debug=debug)
             if _transport is None
             else _transport
         )
@@ -278,7 +279,7 @@ def generate_function_doc(method: OAMethod) -> str:
     ):
         lines.append("")
         lines.append("Raises:")
-        lines.append(f"{D_TAB}ClientException: if the call to the web service fails")
+        lines.append(f"{D_TAB}ClientError: if the call to the web service fails")
         lines.append(f"{D_TAB}{D_TAB}with a status code != `2xx`.")
         if resp_types:
             for resp_code, (resp_type, desc_lines) in resp_types.items():

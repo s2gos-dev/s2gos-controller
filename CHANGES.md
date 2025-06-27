@@ -1,7 +1,7 @@
 ## Changes in version 0.0.2 (in development)
 
-* Moved top-level module in `s2gos_client` into package `s2gos_client.api`
-* Generated `AsyncClient`, next to existing, synchronous `s2gos_client.api.Client`
+* Moved top-level module in `s2gos_client` into package `s2gos_client.api`.
+* Generated `AsyncClient`, next to existing, synchronous `s2gos_client.api.Client`.
 * Updated `tools/openapi.yaml` to rename some unintuitive names.
   Regenerated and adjusted remaining code for following classes 
   renamed in `s2gos_common.models`:
@@ -9,6 +9,7 @@
   - `StatusCode` into `JobStatus`
   - `Type` into `JobType`
   - `Type1` into `DataType`
+* Using `httpx` package instead of `requests`.
 
 ## Changes in version 0.0.1
 
