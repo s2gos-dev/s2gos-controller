@@ -9,7 +9,7 @@ import panel as pn
 import param
 from pydantic import BaseModel
 
-from s2gos_client.exceptions import ClientException
+from s2gos_client.api.exceptions import ClientException
 from s2gos_common.models import JobInfo, JobList, JobResults, JobStatus
 
 JobAction: TypeAlias = Callable[[str], Any]

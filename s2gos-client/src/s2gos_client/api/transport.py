@@ -5,7 +5,6 @@
 import inspect
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from logging import getLogger
 from typing import Any, Literal
 from urllib.parse import urljoin
 
@@ -13,9 +12,7 @@ import requests
 import uri_template
 from pydantic import BaseModel
 
-from s2gos_client.exceptions import ClientException
-
-logger = getLogger("s2gos")
+from s2gos_client.api.exceptions import ClientException
 
 
 @dataclass

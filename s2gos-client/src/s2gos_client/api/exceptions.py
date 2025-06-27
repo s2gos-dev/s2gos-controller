@@ -6,6 +6,8 @@ from typing import Optional
 
 
 class ClientException(Exception):
+    """Raised if a web API call failed with a status code != 2xx."""
+
     def __init__(
         self,
         status_code: int,

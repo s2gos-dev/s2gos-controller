@@ -7,8 +7,8 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from s2gos_client.exceptions import ClientException
-from s2gos_client.transport import DefaultTransport, TransportArgs
+from s2gos_client.api.exceptions import ClientException
+from s2gos_client.api.transport import DefaultTransport, TransportArgs
 from s2gos_common.models import ApiError, ConformanceDeclaration
 
 

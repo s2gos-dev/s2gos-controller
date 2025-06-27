@@ -8,11 +8,15 @@ from importlib.metadata import version
 
 from pydantic import BaseModel
 
-from . import models
+from . import models, service
 
 __version__ = version("s2gos-common")
 
-__all__ = ["__version__"]
+__all__ = [
+    "__version__",
+    "models",
+    "service",
+]
 
 
 def _patch_models():

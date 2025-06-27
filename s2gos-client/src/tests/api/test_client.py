@@ -6,7 +6,7 @@ from unittest import TestCase
 
 from tests.helpers import MockTransport
 
-from s2gos_client.client import Client
+from s2gos_client.api.client import Client
 from s2gos_common.models import (
     Capabilities,
     ConformanceDeclaration,

@@ -5,10 +5,10 @@
 from typing import Any
 from unittest import TestCase
 
+from s2gos_client.api.transport import Transport, TransportArgs
 from s2gos_client.gui import Client as GuiClient
 from s2gos_client.gui.jobs_form import JobsForm
 from s2gos_client.gui.main_form import MainForm
-from s2gos_client.transport import Transport, TransportArgs
 from s2gos_common.models import JobList, ProcessList
 
 
