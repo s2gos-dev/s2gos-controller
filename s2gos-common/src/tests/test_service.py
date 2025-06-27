@@ -3,10 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 import inspect
-from enum import Enum
 from unittest import TestCase
-
-from pydantic import BaseModel
 
 from s2gos_common.service import Service
 
