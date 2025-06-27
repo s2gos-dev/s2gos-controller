@@ -25,10 +25,12 @@ Given here are the issues that will be addressed next.
 
 General design
 
-- We need two API Client API versions: sync and async
-  - generate them using [`httpx`](https://github.com/encode/httpx), which 
+- We need two API client versions: sync and async
+  - Generate them using [`httpx`](https://github.com/encode/httpx), which 
     should replace currently used `requests`
-  - use the async version in the Client GUI 
+  - Use the async API client version in the GUI Client.
+    `panel` widget handler that use the client can and should be async.
+  - Use the sync API client version in the CLI Client. 
 
 Enhance the API Client
 
