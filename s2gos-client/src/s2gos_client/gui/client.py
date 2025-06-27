@@ -6,11 +6,11 @@ import threading
 import time
 from typing import Optional
 
-from s2gos_client.client import Client as GeneratedClient
-from s2gos_client.exceptions import ClientException
+from s2gos_client.api.client import Client as GeneratedClient
+from s2gos_client.api.exceptions import ClientException
+from s2gos_client.api.transport import Transport
 from s2gos_client.gui.jobs_form import JobsForm
 from s2gos_client.gui.main_form import MainForm
-from s2gos_client.transport import Transport
 from s2gos_common.models import JobList, ProcessList
 
 

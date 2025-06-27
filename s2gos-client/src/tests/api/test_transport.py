@@ -7,8 +7,8 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from s2gos_client.exceptions import ClientException
-from s2gos_client.transport import DefaultTransport, TransportArgs
+from s2gos_client.api.exceptions import ClientException
+from s2gos_client.api.transport import DefaultTransport, TransportArgs
 from s2gos_common.models import ApiError, ConformanceDeclaration
 
 
@@ -21,7 +21,7 @@ class DefaultTransportTest(TestCase):
 
         transport = DefaultTransport(server_url="https://api.example.com", debug=True)
         with patch(
-            "s2gos_client.transport.requests.request", return_value=mock_response
+            "s2gos_client.api.transport.requests.request", return_value=mock_response
         ) as mock_request:
             result = transport.call(
                 TransportArgs(
@@ -48,7 +48,7 @@ class DefaultTransportTest(TestCase):
 
         transport = DefaultTransport(server_url="https://api.example.com", debug=True)
         with patch(
-            "s2gos_client.transport.requests.request", return_value=mock_response
+            "s2gos_client.api.transport.requests.request", return_value=mock_response
         ) as mock_request:
             result = transport.call(
                 TransportArgs(
@@ -75,7 +75,7 @@ class DefaultTransportTest(TestCase):
 
         transport = DefaultTransport(server_url="https://api.example.com", debug=True)
         with patch(
-            "s2gos_client.transport.requests.request", return_value=mock_response
+            "s2gos_client.api.transport.requests.request", return_value=mock_response
         ) as mock_request:
             result = transport.call(
                 TransportArgs(
@@ -101,7 +101,7 @@ class DefaultTransportTest(TestCase):
 
         transport = DefaultTransport(server_url="https://api.example.com", debug=True)
         with patch(
-            "s2gos_client.transport.requests.request", return_value=mock_response
+            "s2gos_client.api.transport.requests.request", return_value=mock_response
         ):
             with pytest.raises(ClientException, match="Conformance not found"):
                 transport.call(

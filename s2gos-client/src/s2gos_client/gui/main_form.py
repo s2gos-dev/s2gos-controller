@@ -7,7 +7,7 @@ from typing import Any, Callable, TypeAlias
 import panel as pn
 import param
 
-from s2gos_client.exceptions import ClientException
+from s2gos_client.api.exceptions import ClientException
 from s2gos_client.gui.widget_factory import WidgetFactory
 from s2gos_common.models import (
     Format,

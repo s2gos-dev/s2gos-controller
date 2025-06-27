@@ -26,6 +26,7 @@ Given here are the issues that will be addressed next.
 General design
 
 - We need two API client versions: sync and async
+  - Generate `AsyncClient`, next to `Client` 
   - Generate them using [`httpx`](https://github.com/encode/httpx), which 
     should replace currently used `requests`
   - Use the async API client version in the GUI Client.

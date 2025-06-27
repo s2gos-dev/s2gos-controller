@@ -19,7 +19,8 @@ from tools.openapi import OAMethod, OASchema, load_openapi_schema
 
 GENERATOR_NAME = str(Path(__file__).name)
 
-CLIENT_PATH = S2GOS_PATH / "s2gos-client/src/s2gos_client/client.py"
+SYNC_CLIENT_PATH = S2GOS_PATH / "s2gos-client/src/s2gos_client/api/client.py"
+ASYNC_CLIENT_PATH = S2GOS_PATH / "s2gos-client/src/s2gos_client/api/async_client.py"
 
 
 code_header = """
@@ -27,16 +28,15 @@ code_header = """
 from typing import Optional
 
 from s2gos_common.models import {{ model_imports }}
-from s2gos_common.service import Service
 
 from .config import ClientConfig
 from .defaults import DEFAULT_SERVER_URL
-from .transport import DefaultTransport, Transport, TransportArgs
+from .transport import DefaultTransport, {{ uc_async }}Transport, TransportArgs
 
 
-class Client(Service):
+class {{ uc_async }}Client:
     \"\"\"    
-    The S2GOS Client API.
+    The client API for the web service ({{ hr_async }} mode).
 
     Args:
       config_path: Optional path of the configuration file to be loaded
@@ -55,7 +55,7 @@ class Client(Service):
         user_name: Optional[str] = None,
         access_token: Optional[str] = None,
         debug: bool = False,
-        _transport: Optional[Transport] = None,
+        _transport: Optional[{{ uc_async }}Transport] = None,
     ):
         default_config = ClientConfig.read(config_path=config_path)
         config = ClientConfig(
@@ -84,27 +84,48 @@ class Client(Service):
 
 def main():
     schema = load_openapi_schema(OPEN_API_PATH)
+
     models: set[str] = set()
-    client_methods = generate_api_code(schema, models)
+    client_methods = generate_api_code(schema, models, is_async=False)
     model_list = ", ".join(sorted(models))
 
-    code = code_header
-    code = code.replace("{{ model_imports }}", model_list)
-    code = code.replace("{{ client_methods }}", client_methods)
+    sync_code = code_header
+    sync_code = sync_code.replace("{{ model_imports }}", model_list)
+    sync_code = sync_code.replace("{{ client_methods }}", client_methods)
+    sync_code = sync_code.replace("{{ uc_async }}", "")
+    sync_code = sync_code.replace("{{ hr_async }}", "synchronous")
 
     write_file(
         GENERATOR_NAME,
-        CLIENT_PATH,
-        [code],
+        SYNC_CLIENT_PATH,
+        [sync_code],
+    )
+
+    models: set[str] = set()
+    client_methods = generate_api_code(schema, models, is_async=True)
+    model_list = ", ".join(sorted(models))
+
+    async_code = code_header
+    async_code = async_code.replace("{{ model_imports }}", model_list)
+    async_code = async_code.replace("{{ client_methods }}", client_methods)
+    async_code = async_code.replace("{{ uc_async }}", "Async")
+    async_code = async_code.replace("{{ hr_async }}", "asynchronous")
+
+    write_file(
+        GENERATOR_NAME,
+        ASYNC_CLIENT_PATH,
+        [async_code],
     )
 
 
-def generate_api_code(schema: OASchema, models: set[str]) -> str:
+def generate_api_code(schema: OASchema, models: set[str], is_async: bool) -> str:
     functions: list[str] = []
     for path, endpoint in schema.paths.items():
         for method_name, method in endpoint.items():
             # noinspection PyTypeChecker
-            function_code = generate_function_code(path, method_name, method, models)
+            function_code = generate_function_code(
+                path, method_name, method, models, is_async=is_async
+            )
             functions.append(function_code)
     return "\n\n".join(functions)
 
@@ -114,6 +135,7 @@ def generate_function_code(
     method_name: Literal["get", "post", "put", "delete"],
     method: OAMethod,
     models: set[str],
+    is_async: bool,
 ) -> str:
     param_args: list[str] = ["self"]
     param_kwargs: list[str] = []
@@ -190,10 +212,13 @@ def generate_function_code(
     transport_args_list = ", ".join(a for a in transport_args if a is not None)
 
     return (
-        f"{C_TAB}def {camel_to_snake(method.operationId)}({param_list})"
+        f"{C_TAB}{'async ' if is_async else ''}"
+        f"def {camel_to_snake(method.operationId)}({param_list})"
         f" -> {return_type_union}:\n"
         f"{function_doc}"
-        f"{C_TAB}{C_TAB}return self._transport.call("
+        f"{C_TAB}{C_TAB}return "
+        f"{'await ' if is_async else ''}"
+        f"self._transport.{'async_' if is_async else ''}call("
         f"TransportArgs({transport_args_list})"
         f")\n"
     )
@@ -235,11 +260,11 @@ def generate_function_doc(method: OAMethod) -> str:
 
     return_types, error_types = parse_responses(method, set())
 
-    def append_responses(
-        resp_title: str, resp_types: dict[str, tuple[str, list[str]]], lines: list[str]
+    def append_return_types(
+        resp_types: dict[str, tuple[str, list[str]]], lines: list[str]
     ):
         lines.append("")
-        lines.append(f"{resp_title}:")
+        lines.append("Returns")
         for resp_code, (resp_type, desc_lines) in resp_types.items():
             if desc_lines:
                 lines.append(f"{D_TAB}{resp_type}: {desc_lines[0]}")
@@ -248,11 +273,26 @@ def generate_function_doc(method: OAMethod) -> str:
             else:
                 lines.append(f"{D_TAB}{resp_type}:")
 
-    if return_types:
-        append_responses("Returns", return_types, doc_lines)
+    def append_error_types(
+        resp_types: dict[str, tuple[str, list[str]]], lines: list[str]
+    ):
+        lines.append("")
+        lines.append("Raises:")
+        lines.append(f"{D_TAB}ClientException: if the call to the web service fails")
+        lines.append(f"{D_TAB}{D_TAB}with a status code != `2xx`.")
+        if resp_types:
+            for resp_code, (resp_type, desc_lines) in resp_types.items():
+                if desc_lines:
+                    lines.append(f"{D_TAB}{D_TAB}- `{resp_code}`: {desc_lines[0]}")
+                    for desc_line in desc_lines[1:]:
+                        lines.append(f"{D_TAB}{D_TAB}  {desc_line}")
+                else:
+                    lines.append(f"{D_TAB}{D_TAB}- `{resp_code}`:")
 
-    if error_types:
-        append_responses("Raises", error_types, doc_lines)
+    if return_types:
+        append_return_types(return_types, doc_lines)
+
+    append_error_types(error_types, doc_lines)
 
     doc_lines = [
         '"""',

@@ -4,10 +4,17 @@
 
 from importlib.metadata import version
 
-from .client import Client
-from .config import ClientConfig
-from .exceptions import ClientException
+from .api.async_client import AsyncClient
+from .api.client import Client
+from .api.config import ClientConfig
+from .api.exceptions import ClientException
 
 __version__ = version("s2gos-client")
 
-__all__ = ["Client", "ClientConfig", "ClientException", "__version__"]
+__all__ = [
+    "AsyncClient",
+    "Client",
+    "ClientConfig",
+    "ClientException",
+    "__version__",
+]

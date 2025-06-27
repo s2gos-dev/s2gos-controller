@@ -4,7 +4,7 @@
 
 from typing import Any
 
-from s2gos_client.transport import Transport, TransportArgs
+from s2gos_client.api.transport import Transport, TransportArgs
 
 
 class MockTransport(Transport):  # pragma: no cover
