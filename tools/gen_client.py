@@ -27,13 +27,14 @@ code_header = """
 from typing import Optional
 
 from s2gos_common.models import {{ model_imports }}
+from s2gos_common.service import Service
 
 from .config import ClientConfig
 from .defaults import DEFAULT_SERVER_URL
-from .transport import DefaultTransport, Transport
+from .transport import DefaultTransport, Transport, TransportArgs
 
 
-class Client:
+class Client(Service):
     \"\"\"    
     The S2GOS Client API.
 
@@ -158,7 +159,7 @@ def generate_function_code(
         else:
             param_kwargs.append(f"request: Optional[{request_type}] = None")
 
-    param_list = ", ".join([*param_args, *param_kwargs])
+    param_list = ", ".join([*param_args, *param_kwargs, "**kwargs"])
     path_param_dict = "{" + ", ".join(path_param_mappings) + "}"
     query_param_dict = "{" + ", ".join(query_param_mappings) + "}"
 
@@ -175,18 +176,25 @@ def generate_function_code(
     error_type_dict = (
         "{" + ", ".join([f"{k!r}: {v[0]}" for k, v in error_types.items()]) + "}"
     )
+
+    transport_args = [
+        f"path={path!r}",
+        f"method={method_name!r}",
+        f"path_params={path_param_dict}" if path_param_mappings else None,
+        f"query_params={query_param_dict}" if query_param_mappings else None,
+        "request=request" if request_type else None,
+        f"return_types={return_type_dict}" if return_types else None,
+        f"error_types={error_type_dict}" if error_types else None,
+        "extra_kwargs=kwargs",
+    ]
+    transport_args_list = ", ".join(a for a in transport_args if a is not None)
+
     return (
         f"{C_TAB}def {camel_to_snake(method.operationId)}({param_list})"
         f" -> {return_type_union}:\n"
         f"{function_doc}"
         f"{C_TAB}{C_TAB}return self._transport.call("
-        f"path={path!r}, "
-        f"method={method_name!r}, "
-        f"path_params={path_param_dict}, "
-        f"query_params={query_param_dict}, "
-        f"request={'request' if request_type else 'None'}, "
-        f"return_types={return_type_dict}, "
-        f"error_types={error_type_dict}"
+        f"TransportArgs({transport_args_list})"
         f")\n"
     )
 
@@ -208,6 +216,8 @@ def generate_function_doc(method: OAMethod) -> str:
                 )
             else:
                 doc_lines.append(f"{D_TAB}{param_name}:")
+        doc_lines.append(f"{D_TAB}kwargs: Optional keyword arguments that may be")
+        doc_lines.append(f"{D_TAB}{D_TAB}used by the underlying transport.")
 
     # TODO: split long lines that exceed 80 characters
 

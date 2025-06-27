@@ -4,8 +4,9 @@
 
 from unittest import TestCase
 
-from s2gos_server.cli import cli
 from typer.testing import CliRunner
+
+from s2gos_server.cli import cli
 
 runner = CliRunner()
 

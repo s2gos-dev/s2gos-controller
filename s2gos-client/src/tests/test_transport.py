@@ -6,8 +6,9 @@ from unittest import TestCase
 from unittest.mock import Mock, patch
 
 import pytest
+
 from s2gos_client.exceptions import ClientException
-from s2gos_client.transport import DefaultTransport
+from s2gos_client.transport import DefaultTransport, TransportArgs
 from s2gos_common.models import ApiError, ConformanceDeclaration
 
 
@@ -23,13 +24,12 @@ class DefaultTransportTest(TestCase):
             "s2gos_client.transport.requests.request", return_value=mock_response
         ) as mock_request:
             result = transport.call(
-                path="/conformance",
-                method="get",
-                path_params={},
-                query_params={},
-                request=None,
-                return_types={"200": ConformanceDeclaration},
-                error_types={"401": ApiError},
+                TransportArgs(
+                    path="/conformance",
+                    method="get",
+                    return_types={"200": ConformanceDeclaration},
+                    error_types={"401": ApiError},
+                )
             )
             mock_request.assert_called_once_with(
                 "GET",
@@ -51,13 +51,12 @@ class DefaultTransportTest(TestCase):
             "s2gos_client.transport.requests.request", return_value=mock_response
         ) as mock_request:
             result = transport.call(
-                path="/conformance",
-                method="get",
-                path_params={},
-                query_params={},
-                request=None,
-                return_types={"201": ConformanceDeclaration},
-                error_types={"401": ApiError},
+                TransportArgs(
+                    path="/conformance",
+                    method="get",
+                    return_types={"201": ConformanceDeclaration},
+                    error_types={"401": ApiError},
+                )
             )
             mock_request.assert_called_once_with(
                 "GET",
@@ -79,13 +78,9 @@ class DefaultTransportTest(TestCase):
             "s2gos_client.transport.requests.request", return_value=mock_response
         ) as mock_request:
             result = transport.call(
-                path="/conformance",
-                method="get",
-                path_params={},
-                query_params={},
-                request=None,
-                return_types={},
-                error_types={"401": ApiError},
+                TransportArgs(
+                    path="/conformance", method="get", error_types={"401": ApiError}
+                )
             )
             mock_request.assert_called_once_with(
                 "GET",
@@ -110,11 +105,10 @@ class DefaultTransportTest(TestCase):
         ):
             with pytest.raises(ClientException, match="Conformance not found"):
                 transport.call(
-                    path="/conformance",
-                    method="get",
-                    path_params={},
-                    query_params={},
-                    request=None,
-                    return_types={"200": ConformanceDeclaration},
-                    error_types={"401": ApiError},
+                    TransportArgs(
+                        path="/conformance",
+                        method="get",
+                        return_types={"200": ConformanceDeclaration},
+                        error_types={"401": ApiError},
+                    )
                 )

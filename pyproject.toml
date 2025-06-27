@@ -65,6 +65,7 @@ s2gos-server = { path = "s2gos-server", editable = true }
 skip = [".idea", ".github", ".pixi", "htmlcov", "site"]
 profile = "black"
 line_length = 88
+known_first_party = ["s2gos_common", "s2gos_client", "s2gos_server"]
 
 [tool.black]
 line-length = 88

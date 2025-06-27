@@ -5,6 +5,7 @@
 from unittest import TestCase
 
 from panel.layout import Panel
+
 from s2gos_client.gui.jobs_form import JobsForm
 from s2gos_common.models import JobInfo, JobList, JobStatus
 

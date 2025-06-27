@@ -8,6 +8,7 @@ from unittest import TestCase
 
 import pytest
 from fastapi import FastAPI
+
 from s2gos_server.provider import ServiceProvider
 from s2gos_server.services.local.testing import service as test_service
 
