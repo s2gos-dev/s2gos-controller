@@ -19,8 +19,7 @@ from tools.openapi import OAMethod, OASchema, load_openapi_schema
 
 GENERATOR_NAME = str(Path(__file__).name)
 
-CLIENT_PATH = S2GOS_PATH / "s2gos-client/src/s2gos_client/client2.py"  # testing!
-SERVICE_IMPL_PATH = S2GOS_PATH / "s2gos-client/src/s2gos_client/service_impl.py"
+CLIENT_PATH = S2GOS_PATH / "s2gos-client/src/s2gos_client/client.py"
 
 
 code_header = """
@@ -28,11 +27,9 @@ code_header = """
 from typing import Optional
 
 from s2gos_common.models import {{ model_imports }}
-from s2gos_common.service import Service
 
 from .config import ClientConfig
 from .defaults import DEFAULT_SERVER_URL
-from .service_impl import ServiceImpl
 from .transport import DefaultTransport, Transport
 
 
@@ -46,7 +43,6 @@ class Client:
       user_name: Optional username
       user_name: Optional user access token
       debug: Whether to output debug logs
-      _service: Optional service implementation (for testing only).
       _transport: Optional web API transport (for testing only).
     \"\"\"
 
@@ -58,7 +54,6 @@ class Client:
         user_name: Optional[str] = None,
         access_token: Optional[str] = None,
         debug: bool = False,
-        _service: Optional[Service] = None,
         _transport: Optional[Transport] = None,
     ):
         default_config = ClientConfig.read(config_path=config_path)
@@ -68,16 +63,10 @@ class Client:
             server_url=server_url or default_config.server_url or DEFAULT_SERVER_URL,
         )
         self._config = config
-        
-        transport = (
+        self._transport = (
             DefaultTransport(server_url=config.server_url, debug=debug)
             if _transport is None
             else _transport
-        )
-        self._service = (
-            ServiceImpl(transport)
-            if _service is None
-            else _service
         )
 
     @property
@@ -91,76 +80,40 @@ class Client:
 {{ client_methods }}        
 """
 
-service_header = """
-
-from typing import Any, Optional
-
-from s2gos_common.models import {{ model_imports }}
-from s2gos_common.service import Service
-
-from .transport import Transport
-
-
-class ServiceImpl(Service):
-
-    def __init__(self, transport: Transport):
-        self._transport = transport
-
-{{ service_methods }}
-
-    def _assert_no_kwargs(kwargs: dict[str, Any]):
-        if kwargs:
-            raise ValueError(f"unexpected keyword argument(s): {list(kwargs.keys())}")   
-"""
-
 
 def main():
     schema = load_openapi_schema(OPEN_API_PATH)
     models: set[str] = set()
-    client_methods, service_methods = generate_client_code(schema, models)
+    client_methods = generate_api_code(schema, models)
     model_list = ", ".join(sorted(models))
 
-    client_code = code_header
-    client_code = client_code.replace("{{ model_imports }}", model_list)
-    client_code = client_code.replace("{{ client_methods }}", client_methods)
-
-    service_code = service_header
-    service_code = service_code.replace("{{ model_imports }}", model_list)
-    service_code = service_code.replace("{{ service_methods }}", service_methods)
+    code = code_header
+    code = code.replace("{{ model_imports }}", model_list)
+    code = code.replace("{{ client_methods }}", client_methods)
 
     write_file(
         GENERATOR_NAME,
         CLIENT_PATH,
-        [client_code],
-    )
-
-    write_file(
-        GENERATOR_NAME,
-        SERVICE_IMPL_PATH,
-        [service_code],
+        [code],
     )
 
 
-def generate_client_code(schema: OASchema, models: set[str]) -> tuple[str, str]:
-    client_methods: list[str] = []
-    service_methods: list[str] = []
+def generate_api_code(schema: OASchema, models: set[str]) -> str:
+    functions: list[str] = []
     for path, endpoint in schema.paths.items():
         for method_name, method in endpoint.items():
             # noinspection PyTypeChecker
-            client_code, service_code = generate_method_code(
-                path, method_name, method, models
-            )
-            client_methods.append(client_code)
-            service_methods.append(service_code)
-    return "\n\n".join(client_methods), "\n\n".join(service_methods)
+            function_code = generate_function_code(path, method_name, method, models)
+            functions.append(function_code)
+    return "\n\n".join(functions)
 
 
-def generate_method_code(
+def generate_function_code(
     path: str,
     method_name: Literal["get", "post", "put", "delete"],
     method: OAMethod,
     models: set[str],
-) -> tuple[str, str]:
+) -> str:
     param_args: list[str] = ["self"]
     param_kwargs: list[str] = []
     path_param_mappings: list[str] = []
@@ -222,30 +175,19 @@ def generate_method_code(
     error_type_dict = (
         "{" + ", ".join([f"{k!r}: {v[0]}" for k, v in error_types.items()]) + "}"
     )
-
-    py_method_name = camel_to_snake(method.operationId)
-
     return (
-        (
-            f"{C_TAB}def {py_method_name}({param_list}) -> {return_type_union}:\n"
-            f"{function_doc}"
-            f"{C_TAB}{C_TAB}return self._service()\n"
-        ),
-        (
-            f"{C_TAB}def {py_method_name}({param_list}, **kwargs)"
-            f" -> {return_type_union}:\n"
-            f"{function_doc}"
-            f"{C_TAB}{C_TAB}self._assert_no_kwargs(kwargs)\n"
-            f"{C_TAB}{C_TAB}return self._transport.call("
-            f"path={path!r}, "
-            f"method={method_name!r}, "
-            f"path_params={path_param_dict}, "
-            f"query_params={query_param_dict}, "
-            f"request={'request' if request_type else 'None'}, "
-            f"return_types={return_type_dict}, "
-            f"error_types={error_type_dict}"
-            f")\n"
-        ),
+        f"{C_TAB}def {camel_to_snake(method.operationId)}({param_list})"
+        f" -> {return_type_union}:\n"
+        f"{function_doc}"
+        f"{C_TAB}{C_TAB}return self._transport.call("
+        f"path={path!r}, "
+        f"method={method_name!r}, "
+        f"path_params={path_param_dict}, "
+        f"query_params={query_param_dict}, "
+        f"request={'request' if request_type else 'None'}, "
+        f"return_types={return_type_dict}, "
+        f"error_types={error_type_dict}"
+        f")\n"
     )
 
 
