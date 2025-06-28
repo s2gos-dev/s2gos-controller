@@ -25,9 +25,9 @@ Given here are the issues that will be addressed next.
 
 General design
 
-- We need two API client versions: sync and async
-  - Generate `AsyncClient`, next to `Client` 
-  - Generate them using [`httpx`](https://github.com/encode/httpx), which 
+- **DOING**: We need two API client versions: sync and async
+  - **DONE**: Generate `AsyncClient`, next to `Client` 
+  - **DONE**: Generate them using [`httpx`](https://github.com/encode/httpx), which 
     should replace currently used `requests`
   - Use the async API client version in the GUI Client.
     `panel` widget handler that use the client can and should be async.
@@ -55,7 +55,7 @@ Enhance the GUI Client
     - show success/failure
   - bug: process `gen_datacube`: if no bbox selected, client receives an error 
   - optional enhancements
-    - integrate jobs table
+    - integrate job status panel
     - show request as JSON
 -  **DONE**: `show_jobs()` - show all jobs in a table and provide actions on job selection: 
   - **DONE**: use `Tabulator`
@@ -82,12 +82,12 @@ Local service
 - **DONE**: Implement local service that can invoke any Python function
 - Path `/`:
   - Also provide a HTML version, support mimetype `text/html`
-  - The landing page provides links to the:
-    * The APIDefinition (no fixed path),
-    * The Conformance statements (path `/conformance`),
-    * The processes metadata (path `/processes`),
-    * The endpoint for job monitoring (path `/jobs`).
-  - Links should be absolute URL, hence we need `request: Request` as 1st function arg
+  - **DONE**: The landing page provides links to the:
+    * **DONE**: The APIDefinition (no fixed path),
+    * **DONE**: The Conformance statements (path `/conformance`),
+    * **DONE**: The processes metadata (path `/processes`),
+    * **DONE**: The endpoint for job monitoring (path `/jobs`).
+  - **DONE**: Links should be absolute URL, hence we need `request: Request` as 1st function arg
 
 Airflow-based service
 
