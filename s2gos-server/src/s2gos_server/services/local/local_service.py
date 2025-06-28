@@ -51,7 +51,7 @@ class LocalService(Service):
         print(fa_request)
         return self.capabilities
 
-    async def get_conformance(self, **kwargs) -> ConformanceDeclaration:
+    async def get_conformance(self, **_kwargs) -> ConformanceDeclaration:
         return ConformanceDeclaration(
             conformsTo=[
                 "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/core",
@@ -66,7 +66,7 @@ class LocalService(Service):
             ]
         )
 
-    async def get_processes(self) -> ProcessList:
+    async def get_processes(self, **_kwargs) -> ProcessList:
         return ProcessList(
             processes=[
                 ProcessSummary(
@@ -85,7 +85,7 @@ class LocalService(Service):
         return process_entry.process
 
     async def execute_process(
-        self, process_id: str, request: ProcessRequest, **kwargs
+        self, process_id: str, request: ProcessRequest, **_kwargs
     ) -> JobInfo:
         process_entry = self._get_process_entry(process_id)
         process_info = process_entry.process
@@ -123,14 +123,14 @@ class LocalService(Service):
         # 201 means, async execution started
         return job.job_info
 
-    async def get_jobs(self, **kwargs) -> JobList:
+    async def get_jobs(self, **_kwargs) -> JobList:
         return JobList(jobs=[job.job_info for job in self.jobs.values()], links=[])
 
     async def get_job(self, job_id: str, **kwargs) -> JobInfo:
         job = self._get_job(job_id, forbidden_status_codes={})
         return job.job_info
 
-    async def dismiss_job(self, job_id: str, **kwargs) -> JobInfo:
+    async def dismiss_job(self, job_id: str, **_kwargs) -> JobInfo:
         job = self._get_job(job_id, forbidden_status_codes={})
         if job.job_info.status in (JobStatus.accepted, JobStatus.running):
             job.cancel()
@@ -142,7 +142,7 @@ class LocalService(Service):
             del self.jobs[job_id]
         return job.job_info
 
-    async def get_job_results(self, job_id: str, **kwargs) -> JobResults:
+    async def get_job_results(self, job_id: str, **_kwargs) -> JobResults:
         job = self._get_job(
             job_id,
             forbidden_status_codes={
