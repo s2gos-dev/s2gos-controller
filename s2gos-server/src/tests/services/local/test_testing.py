@@ -41,7 +41,7 @@ class TestingServiceTest(IsolatedAsyncioTestCase):
             def url_for(self, name, **_params):
                 return f"https://api.com/{name}"
 
-        process_list = await testing_service.get_processes(fa_request=MockRequest())
+        process_list = await testing_service.get_processes(request=MockRequest())
         self.assertIsInstance(process_list, ProcessList)
         self.assertEqual(3, len(process_list.processes))
         process_dict = {v.id: v for v in process_list.processes}

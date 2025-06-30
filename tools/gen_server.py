@@ -1,8 +1,7 @@
 #  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
-
-
+import re
 from pathlib import Path
 from typing import Literal
 
@@ -23,8 +22,8 @@ ROUTES_PATH = S2GOS_PATH / "s2gos-server/src/s2gos_server/routes.py"
 SERVICE_PATH = S2GOS_PATH / "s2gos-common/src/s2gos_common/service.py"
 
 magic_param_list = [
-    ("fa_request", "fastapi.Request"),
-    ("fa_response", "fastapi.Response"),
+    ("request", "fastapi.Request"),
+    ("response", "fastapi.Response"),
     # add more as desired
 ]
 
@@ -119,15 +118,16 @@ def generate_method_code(
             request_type = to_py_type(
                 json_content.schema_, f"{method.operationId}.requestBody", models
             )
+        request_param_name = _camel_to_snake(request_type)
         if method.requestBody.required:
-            request_pos_param = f"request: {request_type}"
+            request_pos_param = f"{request_param_name}: {request_type}"
             pos_params.append(request_pos_param)
             pos_service_params.append(request_pos_param)
         else:
-            request_kw_param = f"request: Optional[{request_type}] = None"
+            request_kw_param = f"{request_param_name}: Optional[{request_type}] = None"
             kw_params.append(request_kw_param)
             kw_service_params.append(request_kw_param)
-        service_args.append("request=request")
+        service_args.append(f"{request_param_name}={request_param_name}")
 
     extra_status_code = ""
     if method.responses.get("201"):
@@ -186,6 +186,14 @@ def generate_method_code(
             f'{C_TAB}{C_TAB}"""{method_doc}"""\n'
         ),
     )
+
+
+def _camel_to_snake(name: str) -> str:
+    """Convert CamelCase or camelCase to snake_case."""
+    # Insert underscore before uppercase letters (except at the beginning), then lowercase everything
+    s1 = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", name)
+    s2 = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s1)
+    return s2.lower()
 
 
 if __name__ == "__main__":

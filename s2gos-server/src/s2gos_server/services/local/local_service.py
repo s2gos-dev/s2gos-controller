@@ -62,9 +62,9 @@ class LocalService(Service):
         self.jobs: dict[str, Job] = {}
 
     async def get_capabilities(
-        self, fa_request: fastapi.Request, **kwargs
+        self, request: fastapi.Request, **kwargs
     ) -> Capabilities:
-        links = _get_capabilities(fa_request)
+        links = _get_capabilities(request)
         return Capabilities(
             title=self.title,
             description=self.description,
@@ -74,9 +74,7 @@ class LocalService(Service):
     async def get_conformance(self, **_kwargs) -> ConformanceDeclaration:
         return ConformanceDeclaration(conformsTo=conforms_to)
 
-    async def get_processes(
-        self, fa_request: fastapi.Request, **_kwargs
-    ) -> ProcessList:
+    async def get_processes(self, request: fastapi.Request, **_kwargs) -> ProcessList:
         return ProcessList(
             processes=[
                 ProcessSummary(
@@ -87,7 +85,7 @@ class LocalService(Service):
                 )
                 for p in self.process_registry.get_process_list()
             ],
-            links=[_get_self_link(fa_request, "get_processes")],
+            links=[_get_self_link(request, "get_processes")],
         )
 
     async def get_process(self, process_id: str, **kwargs) -> ProcessDescription:
@@ -95,13 +93,14 @@ class LocalService(Service):
         return process_entry.process
 
     async def execute_process(
-        self, process_id: str, request: ProcessRequest, **_kwargs
+        self, process_id: str, process_request: ProcessRequest, **_kwargs
     ) -> JobInfo:
         process_entry = self._get_process_entry(process_id)
         process_info = process_entry.process
 
         input_params = (
-            request.model_dump(mode="json", include={"inputs"}).get("inputs") or {}
+            process_request.model_dump(mode="json", include={"inputs"}).get("inputs")
+            or {}
         )
         input_default_params = {
             input_name: input_info.schema_.default
@@ -133,10 +132,10 @@ class LocalService(Service):
         # 201 means, async execution started
         return job.job_info
 
-    async def get_jobs(self, fa_request: fastapi.Request, **_kwargs) -> JobList:
+    async def get_jobs(self, request: fastapi.Request, **_kwargs) -> JobList:
         return JobList(
             jobs=[job.job_info for job in self.jobs.values()],
-            links=[_get_self_link(fa_request, "get_jobs")],
+            links=[_get_self_link(request, "get_jobs")],
         )
 
     async def get_job(self, job_id: str, **kwargs) -> JobInfo:
