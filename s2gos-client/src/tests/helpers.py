@@ -11,6 +11,7 @@ class MockTransport(AsyncTransport, Transport):  # pragma: no cover
     def __init__(self):
         self.calls: list[TransportArgs] = []
         self.async_calls: list[TransportArgs] = []
+        self.closed = False
 
     def call(self, args: TransportArgs) -> Any:
         self.calls.append(args)
@@ -25,3 +26,9 @@ class MockTransport(AsyncTransport, Transport):  # pragma: no cover
         return_type = args.return_types.get("200", args.return_types.get("201"))
         # noinspection PyTypeChecker
         return object.__new__(return_type) if return_type is not None else None
+
+    def close(self):
+        self.closed = True
+
+    async def async_close(self):
+        self.closed = True

@@ -79,3 +79,8 @@ class AsyncClientTest(IsolatedAsyncioTestCase):
     async def test_get_job_results(self):
         result = await self.client.get_job_results("job_12")
         self.assertIsInstance(result, JobResults)
+
+    async def test_close(self):
+        self.assertFalse(self.transport.closed)
+        await self.client.close()
+        self.assertTrue(self.transport.closed)
