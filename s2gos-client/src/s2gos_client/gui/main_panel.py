@@ -1,17 +1,17 @@
 #  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
-import datetime
+
 from typing import Any, Callable, TypeAlias
 
 import panel as pn
 import param
 
 from s2gos_client.api.error import ClientError
-from s2gos_client.gui.widget_factory import WidgetFactory
 from s2gos_common.models import (
     Format,
     JobInfo,
+    JobList,
     Output,
     ProcessDescription,
     ProcessList,
@@ -19,12 +19,19 @@ from s2gos_common.models import (
     TransmissionMode,
 )
 
+from .job_info_panel import JobInfoPanel
+from .jobs_observer import JobsObserver
+from .util import json_serialize
+from .widget_factory import WidgetFactory
+
 ExecuteProcessAction: TypeAlias = Callable[[str, ProcessRequest], JobInfo]
 GetProcessAction: TypeAlias = Callable[[str], ProcessDescription]
 
 
-class MainForm(pn.viewable.Viewer):
+class MainPanel(pn.viewable.Viewer):
+    # can be normal list
     _processes = param.List(default=[], doc="List of process summaries")
+    # can be normal dict
     _processes_dict = param.Dict(default={}, doc="Dictionary of cached processes")
 
     def __init__(
@@ -102,11 +109,15 @@ class MainForm(pn.viewable.Viewer):
         self._inputs_panel = pn.Column()
         self._outputs_panel = pn.Column()
 
+        self._last_job_info: JobInfo | None = None
+        self._job_info_panel = JobInfoPanel()
+
         self._view = pn.Column(
             process_panel,
             self._inputs_panel,
             self._outputs_panel,
             action_panel,
+            self._job_info_panel,
         )
 
         self._input_widgets = {}
@@ -116,6 +127,22 @@ class MainForm(pn.viewable.Viewer):
 
     def __panel__(self) -> pn.viewable.Viewable:
         return self._view
+
+    def on_job_added(self, job_info: JobInfo):
+        self._job_info_panel.on_job_added(job_info)
+
+    def on_job_changed(self, job_info: JobInfo):
+        self._job_info_panel.on_job_changed(job_info)
+
+    def on_job_removed(self, job_info: JobInfo):
+        self._job_info_panel.on_job_removed(job_info)
+
+    def on_job_list_changed(self, job_list: JobList):
+        pass
+
+    def on_job_list_error(self, job_list: JobList):
+        # TODO: render error
+        pass
 
     def _on_process_id_changed(self, process_id: str | None = None):
         process_description: ProcessDescription | None = None
@@ -170,11 +197,14 @@ class MainForm(pn.viewable.Viewer):
         process_id, process_request = self._new_process_request()
         try:
             self._execute_button.disabled = True
-            _job_info = self._on_execute_process(process_id, process_request)
-            # TODO: Show status info in GUI
+            job_info = self._on_execute_process(process_id, process_request)
+            # TODO: check why self._job_info_panel does not show!
+            self._job_info_panel.set_job_info(job_info)
+            pn.state.notifications.success(
+                f"Accepted job {job_info.jobID!r}", duration=3000
+            )
         except ClientError as e:
-            # TODO: Show error in GUI
-            print(f"error: {e}")
+            self._job_info_panel.set_client_error(e)
         finally:
             self._execute_button.disabled = False
 
@@ -213,9 +243,9 @@ class MainForm(pn.viewable.Viewer):
                 #  (see WidgetFactory TODOs):
                 #  1. v.value: we don't know if a widget has a `value`
                 #     attribute
-                #  2. _serialize_for_json(): we cannot know what value type
+                #  2. json_serialize(): we cannot know what value type
                 #     a widget uses
-                k: _serialize_for_json(v.value)
+                k: json_serialize(v.value)
                 for k, v in self._input_widgets.items()
             },
             outputs={
@@ -232,8 +262,4 @@ class MainForm(pn.viewable.Viewer):
         )
 
 
-def _serialize_for_json(value: Any):
-    # check if there are more cases to be handled
-    if isinstance(value, datetime.date):
-        return value.isoformat()
-    return value
+JobsObserver.register(MainPanel)

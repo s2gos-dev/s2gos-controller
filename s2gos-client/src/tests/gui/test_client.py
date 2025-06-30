@@ -7,8 +7,8 @@ from unittest import TestCase
 
 from s2gos_client.api.transport import Transport, TransportArgs
 from s2gos_client.gui import Client as GuiClient
-from s2gos_client.gui.jobs_form import JobsForm
-from s2gos_client.gui.main_form import MainForm
+from s2gos_client.gui.jobs_panel import JobsPanel
+from s2gos_client.gui.main_panel import MainPanel
 from s2gos_common.models import JobList, ProcessList
 
 
@@ -22,7 +22,7 @@ class ClientTest(TestCase):
 
         client = GuiClient(_transport=_MockTransport())
         processes_form = client.show()
-        self.assertIsInstance(processes_form, MainForm)
+        self.assertIsInstance(processes_form, MainPanel)
 
     def test_show_jobs(self):
         class _MockTransport(Transport):
@@ -33,4 +33,4 @@ class ClientTest(TestCase):
 
         client = GuiClient(_transport=_MockTransport())
         jobs_form = client.show_jobs()
-        self.assertIsInstance(jobs_form, JobsForm)
+        self.assertIsInstance(jobs_form, JobsPanel)

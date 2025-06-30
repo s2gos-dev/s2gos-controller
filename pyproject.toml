@@ -86,6 +86,9 @@ per-file-ignores = { "*.ipynb" = ["E402"] }
 select = ["I", "F", "E"]
 
 [tool.coverage.report]
+omit = [
+    "s2gos-client/src/s2gos_client/gui/**/*"
+]
 show_missing = true
 
 ########################## Tasks ###############################

@@ -116,7 +116,7 @@ def create_datacube(
     if not output_path:
         output_path = "memory://datacube.zarr"
 
-    dataset.to_zarr(output_path)
+    dataset.to_zarr(output_path, mode="w")
     if "://" in output_path:
         href = output_path
     else:
