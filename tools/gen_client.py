@@ -128,6 +128,7 @@ def generate_api_code(schema: OASchema, models: set[str], is_async: bool) -> str
                 path, method_name, method, models, is_async=is_async
             )
             functions.append(function_code)
+    functions.append(generate_close_method_code(is_async))
     return "\n\n".join(functions)
 
 
@@ -223,6 +224,23 @@ def generate_function_code(
         f"TransportArgs({transport_args_list})"
         f")\n"
     )
+
+
+def generate_close_method_code(is_async: bool) -> str:
+    if is_async:
+        return (
+            f"{C_TAB}async def close(self):\n"
+            f'{C_TAB}{C_TAB}"""Closes this client."""\n'
+            f"{C_TAB}{C_TAB}if self._transport is not None:"
+            f"{C_TAB}{C_TAB}{C_TAB}await self._transport.async_close()"
+        )
+    else:
+        return (
+            f"{C_TAB}def close(self):\n"
+            f'{C_TAB}{C_TAB}"""Closes this client."""\n'
+            f"{C_TAB}{C_TAB}if self._transport is not None:"
+            f"{C_TAB}{C_TAB}{C_TAB}self._transport.close()"
+        )
 
 
 def generate_function_doc(method: OAMethod) -> str:

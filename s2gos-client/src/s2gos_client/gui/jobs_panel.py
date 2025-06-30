@@ -6,35 +6,34 @@ from typing import Any, Callable, Optional, TypeAlias
 
 import pandas as pd
 import panel as pn
-import param
 from pydantic import BaseModel
 
 from s2gos_client.api.error import ClientError
 from s2gos_common.models import JobInfo, JobList, JobResults, JobStatus
 
+from .jobs_observer import JobsObserver
+from .util import JsonDict
+
 JobAction: TypeAlias = Callable[[str], Any]
 
 
-class JobsForm(pn.viewable.Viewer):
-    _jobs = param.List(default=[], doc="List of current jobs")
-
+class JobsPanel(pn.viewable.Viewer):
     def __init__(
         self,
-        job_list: JobList,
-        job_list_error: ClientError | None,
         on_delete_job: Optional[JobAction] = None,
         on_cancel_job: Optional[JobAction] = None,
         on_restart_job: Optional[JobAction] = None,
         on_get_job_results: Optional[JobAction] = None,
     ):
         super().__init__()
-        # TODO: Report job_list_error if not None
-        self._job_list_error = job_list_error
+        self._jobs: list[JobInfo] = []
+        self._client_error: ClientError | None = None
+
         self._on_delete_job = on_delete_job
         self._on_cancel_job = on_cancel_job
         self._on_restart_job = on_restart_job
         self._on_get_job_results = on_get_job_results
-        self._tabulator = self._new_tabulator(job_list)
+        self._tabulator = self._new_tabulator()
         self._tabulator.param.watch(self._update_buttons, "selection")
         # A placeholder for clicked action
         self._cancel_button = pn.widgets.Button(
@@ -73,42 +72,53 @@ class JobsForm(pn.viewable.Viewer):
         )
         self._message_md = pn.pane.Markdown("")
         self._view = pn.Column(
-            self._action_row,
             self._tabulator,
+            self._action_row,
             self._message_md,
         )
-
-        # Reaction to changes in jobs list
-        self.param.watch(self._on_jobs_changed, "_jobs")
-        self.set_job_list(job_list, job_list_error)
 
     def __panel__(self) -> pn.viewable.Viewable:
         return self._view
 
-    def set_job_list(self, job_list: JobList, job_list_error: ClientError | None):
-        self._jobs = job_list.jobs
-        self._job_list_error = job_list_error
+    def on_job_added(self, _job_info: JobInfo):
+        pass
 
-    def _on_jobs_changed(self, _event: Any = None):
-        """Will be called automatically, if self.jobs changes."""
-        df = self._jobs_to_dataframe(self._jobs)
-        self._tabulator.value = df
+    def on_job_removed(self, _job_info: JobInfo):
+        pass
+
+    def on_job_changed(self, _job_info: JobInfo):
+        pass
+
+    def on_job_list_changed(self, job_list: JobList):
+        self._jobs = list(job_list.jobs)
+        dataframe = _jobs_to_dataframe(job_list.jobs)
+        self._tabulator.value = dataframe
+        self._update_buttons()
+
+    def on_job_list_error(self, error: ClientError | None):
+        # TODO: render error
+        self._client_error = error
+        self._update_buttons()
 
     def _update_buttons(self, _event: Any = None):
-        """Will be called if selection changes."""
+        selected_jobs = self.get_selected_jobs()
 
-        selected_jobs = self.selected_jobs
-
-        self._cancel_button.disabled = self._on_cancel_job is None or self.is_disabled(
-            selected_jobs, {JobStatus.accepted, JobStatus.running}
+        self._cancel_button.disabled = (
+            self._on_cancel_job is None
+            or not _job_requirements_fulfilled(
+                selected_jobs, {JobStatus.accepted, JobStatus.running}
+            )
         )
-        self._delete_button.disabled = self._on_delete_job is None or self.is_disabled(
-            selected_jobs,
-            {JobStatus.successful, JobStatus.dismissed, JobStatus.failed},
+        self._delete_button.disabled = (
+            self._on_delete_job is None
+            or not _job_requirements_fulfilled(
+                selected_jobs,
+                {JobStatus.successful, JobStatus.dismissed, JobStatus.failed},
+            )
         )
         self._restart_button.disabled = (
             self._on_restart_job is None
-            or self.is_disabled(
+            or not _job_requirements_fulfilled(
                 selected_jobs,
                 {JobStatus.successful, JobStatus.dismissed, JobStatus.failed},
             )
@@ -116,15 +126,12 @@ class JobsForm(pn.viewable.Viewer):
         self._get_results_button.disabled = (
             self._on_get_job_results is None
             or len(selected_jobs) != 1
-            or self.is_disabled(selected_jobs, {JobStatus.successful, JobStatus.failed})
+            or not _job_requirements_fulfilled(
+                selected_jobs, {JobStatus.successful, JobStatus.failed}
+            )
         )
 
-    @classmethod
-    def is_disabled(cls, jobs: list[JobInfo], requirements: set[JobStatus]):
-        return not jobs or not all(j.status in requirements for j in jobs)
-
-    @property
-    def selected_jobs(self) -> list[JobInfo]:
+    def get_selected_jobs(self) -> list[JobInfo]:
         """Get selected jobs from jobs table."""
         selection = self._tabulator.selection
         if not selection:
@@ -162,10 +169,11 @@ class JobsForm(pn.viewable.Viewer):
                 results = results.root
             if isinstance(results, dict):
                 results = JsonDict(
+                    "Results",
                     {
                         k: (v.model_dump() if isinstance(v, BaseModel) else v)
                         for k, v in results.items()
-                    }
+                    },
                 )
             var_name = "_results"
             get_ipython().user_ns[var_name] = results
@@ -184,7 +192,7 @@ class JobsForm(pn.viewable.Viewer):
         error_format: str,
     ):
         messages = []
-        for job in self.selected_jobs:
+        for job in self.get_selected_jobs():
             job_id = job.jobID
             job_text = f"job `{job_id}`"
             try:
@@ -203,8 +211,8 @@ class JobsForm(pn.viewable.Viewer):
         self._message_md.object = " \n".join(messages)
 
     @classmethod
-    def _new_tabulator(cls, job_list: JobList) -> pn.widgets.Tabulator:
-        dataframe = cls._jobs_to_dataframe(job_list.jobs)
+    def _new_tabulator(cls) -> pn.widgets.Tabulator:
+        dataframe = _jobs_to_dataframe([])
 
         tabulator = pn.widgets.Tabulator(
             dataframe,
@@ -251,21 +259,25 @@ class JobsForm(pn.viewable.Viewer):
 
         return tabulator
 
-    @classmethod
-    def _jobs_to_dataframe(cls, jobs: list[JobInfo]):
-        return pd.DataFrame([cls._job_to_dataframe_row(job) for job in jobs])
 
-    @classmethod
-    def _job_to_dataframe_row(cls, job: JobInfo):
-        return {
-            "process_id": job.processID,
-            "job_id": job.jobID,
-            "status": job.status.value,
-            "progress": job.progress or 0,
-            "message": job.message or "-",
-        }
+JobsObserver.register(JobsPanel)
 
 
-class JsonDict(dict):
-    def _repr_json_(self):
-        return self, {"root": "Results:"}
+def _jobs_to_dataframe(jobs: list[JobInfo]):
+    return pd.DataFrame([_job_to_dataframe_row(job) for job in jobs])
+
+
+def _job_to_dataframe_row(job: JobInfo):
+    return {
+        "process_id": job.processID,
+        "job_id": job.jobID,
+        "status": job.status.value,
+        "progress": job.progress or 0,
+        "message": job.message or "-",
+    }
+
+
+def _job_requirements_fulfilled(
+    jobs: list[JobInfo], requirements: set[JobStatus]
+) -> bool:
+    return jobs and all(j.status in requirements for j in jobs)

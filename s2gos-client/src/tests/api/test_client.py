@@ -78,3 +78,8 @@ class ClientTest(TestCase):
     def test_get_job_results(self):
         result = self.client.get_job_results("job_12")
         self.assertIsInstance(result, JobResults)
+
+    def test_close(self):
+        self.assertFalse(self.transport.closed)
+        self.client.close()
+        self.assertTrue(self.transport.closed)
