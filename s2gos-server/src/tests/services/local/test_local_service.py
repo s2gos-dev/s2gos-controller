@@ -9,23 +9,33 @@ from s2gos_server.services.local import LocalService, ProcessRegistry
 
 
 class LocalServiceTest(TestCase):
-    @staticmethod
-    def get_service() -> LocalService:
-        return LocalService(title="OGC API - Processes - Test Service")
-
-    def test_process_decorator(self):
-        service = self.get_service()
+    def test_process_registration(self):
+        service = LocalService(title="OGC API - Processes - Test Service")
 
         self.assertIsNone(service.process_registry.get_entry("foo"))
+        self.assertIsNone(service.process_registry.get_entry("bar"))
 
-        @service.process(id="foo", version="1.4.2")
         def foo(x: bool, y: int) -> float:
             return 2 * y if x else y / 2
 
-        entry = service.process_registry.get_entry("foo")
-        self.assertIsInstance(entry, ProcessRegistry.Entry)
-        self.assertIs(foo, entry.function)
-        foo_process = entry.process
+        service.register_process(foo, id="foo", version="1.0.0")
+
+        @service.process(id="bar", version="1.4.2")
+        def bar(x: bool, y: int) -> float:
+            return 2 * y if x else y / 2
+
+        foo_entry = service.process_registry.get_entry("foo")
+        self.assertIsInstance(foo_entry, ProcessRegistry.Entry)
+        self.assertIs(foo, foo_entry.function)
+        foo_process = foo_entry.process
         self.assertIsInstance(foo_process, ProcessDescription)
         self.assertEqual("foo", foo_process.id)
-        self.assertEqual("1.4.2", foo_process.version)
+        self.assertEqual("1.0.0", foo_process.version)
+
+        bar_entry = service.process_registry.get_entry("bar")
+        self.assertIsInstance(bar_entry, ProcessRegistry.Entry)
+        self.assertIs(bar, bar_entry.function)
+        bar_process = bar_entry.process
+        self.assertIsInstance(bar_process, ProcessDescription)
+        self.assertEqual("bar", bar_process.id)
+        self.assertEqual("1.4.2", bar_process.version)
