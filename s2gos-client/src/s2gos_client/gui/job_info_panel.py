@@ -5,6 +5,7 @@
 from typing import Any
 
 import panel
+import param
 import panel as pn
 
 from s2gos_client import ClientError
@@ -14,63 +15,55 @@ from .jobs_observer import JobsObserver
 
 
 class JobInfoPanel(pn.viewable.Viewer):
+    job_info = param.ClassSelector(class_=JobInfo, allow_None=True, default=None)
+    client_error = param.ClassSelector(
+        class_=ClientError, allow_None=True, default=None
+    )
+
     def __init__(self):
         super().__init__()
-
-        self._job_info: JobInfo | None = None
-        self._client_error: ClientError | None = None
-
         self._message_pane = panel.pane.Markdown()
-        self._view = pn.Column([self._message_pane])
-
-        self._render_view()
+        self._layout = pn.Column()
+        self._render_layout()
 
     def __panel__(self) -> pn.viewable.Viewable:
-        return self._view
-
-    def set_job_info(self, job_info: JobInfo | None):
-        self._job_info = job_info
-        self._render_view()
-
-    def set_client_error(self, client_error: ClientError | None):
-        self._client_error = client_error
-        self._render_view()
+        return self._layout
 
     def on_job_added(self, job_info: JobInfo):
         self.on_job_changed(job_info)
 
     def on_job_changed(self, job_info: JobInfo):
         if self._is_observed_job(job_info):
-            self.set_job_info(job_info)
+            self.job_info = job_info
 
     def on_job_removed(self, job_info: JobInfo):
         if self._is_observed_job(job_info):
             self._message_pane.object = (
                 f"Job with ID=`{job_info.jobID}` has been deleted."
             )
-            self.set_job_info(None)
+            self.job_info = None
 
     def on_job_list_changed(self, job_list: JobList):
         # Nothing to do
         pass
 
     def on_job_list_error(self, client_error: ClientError | None):
-        self.set_client_error(client_error)
+        self.client_error = client_error
 
     def _is_observed_job(self, job_info):
-        return self._job_info is not None and self._job_info.jobID == job_info.jobID
+        return self.job_info is not None and self.job_info.jobID == job_info.jobID
 
-    def _render_view(self):
-        # TODO: render self._client_error
-
-        job_info: JobInfo = self._job_info
-        if job_info is None:
-            self._message_pane.object = "No job selected."
-            self._view.objects[:] = [self._message_pane]
+    @param.depends("job_info", "client_error", watch=True)
+    def _render_layout(self):
+        if self.client_error is not None:
+            self._layout[:] = [pn.pane.Markdown(f"⚠️ Error: {self.client_error}")]
             return
 
-        def _to_value(value: Any, units: str = ""):
-            return f"{value}{units}" if value is not None else "-"
+        job_info: JobInfo = self.job_info
+        if job_info is None:
+            self._message_pane.object = "ℹ️ No job selected."
+            self._layout.objects[:] = [self._message_pane]
+            return
 
         column1 = pn.Column(
             pn.widgets.StaticText(name="Process ID", value=job_info.processID),
@@ -87,7 +80,12 @@ class JobInfoPanel(pn.viewable.Viewer):
             pn.widgets.StaticText(name="Finished", value=_to_value(job_info.finished)),
         )
         self._message_pane.object = job_info.message or ""
-        self._view.objects[:] = [self._message_pane, pn.Row(column1, column2)]
+        self._layout[:] = [self._message_pane, pn.Row(column1, column2)]
+        # pn.state.notifications.success(f"Change {job_info.updated}", duration=1000)
 
 
 JobsObserver.register(JobInfoPanel)
+
+
+def _to_value(value: Any, units: str = ""):
+    return f"{value}{units}" if value is not None else "-"

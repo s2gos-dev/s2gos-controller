@@ -51,6 +51,11 @@ class Client(ApiClient):
                 on_get_process=self.get_process,
                 on_execute_process=self.execute_process,
             )
+            # noinspection PyTypeChecker
+            self._jobs_observers.append(self._main_panel)
+
+        self._ensure_update_thread_is_running()
+
         return self._main_panel
 
     def show_jobs(self) -> JobsPanel:
@@ -72,7 +77,7 @@ class Client(ApiClient):
         job_info_panel = self._job_info_panels.get(job_id)
         if job_info_panel is None:
             job_info_panel = JobInfoPanel()
-            job_info_panel.set_job_info(self._jobs.get(job_id))
+            job_info_panel.job_info = self._jobs.get(job_id)
             self._job_info_panels[job_id] = job_info_panel
             # noinspection PyTypeChecker
             self._jobs_observers.append(job_info_panel)

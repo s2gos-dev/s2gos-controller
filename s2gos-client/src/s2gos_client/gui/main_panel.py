@@ -198,13 +198,9 @@ class MainPanel(pn.viewable.Viewer):
         try:
             self._execute_button.disabled = True
             job_info = self._on_execute_process(process_id, process_request)
-            # TODO: check why self._job_info_panel does not show!
-            self._job_info_panel.set_job_info(job_info)
-            pn.state.notifications.success(
-                f"Accepted job {job_info.jobID!r}", duration=3000
-            )
+            self._job_info_panel.job_info = job_info
         except ClientError as e:
-            self._job_info_panel.set_client_error(e)
+            self._job_info_panel.client_error = e
         finally:
             self._execute_button.disabled = False
 
