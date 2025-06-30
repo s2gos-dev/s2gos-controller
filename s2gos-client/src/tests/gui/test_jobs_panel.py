@@ -6,14 +6,19 @@ from unittest import TestCase
 
 from panel.layout import Panel
 
+from s2gos_client.gui.jobs_observer import JobsObserver
 from s2gos_client.gui.jobs_panel import JobsPanel
 from s2gos_common.models import JobInfo, JobList, JobStatus, JobType
 
 
 class JobsFormTest(TestCase):
     def test_it(self):
+        jobs_panel = _create_jobs_form()
+        self.assertIsInstance(jobs_panel.__panel__(), Panel)
+
+    def test_is_observer(self):
         jobs_form = _create_jobs_form()
-        self.assertIsInstance(jobs_form.__panel__(), Panel)
+        self.assertIsInstance(jobs_form, JobsObserver)
 
 
 def _create_jobs_form() -> JobsPanel:

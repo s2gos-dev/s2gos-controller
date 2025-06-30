@@ -6,6 +6,7 @@ from unittest import TestCase
 
 from panel.layout import Panel
 
+from s2gos_client.gui.jobs_observer import JobsObserver
 from s2gos_client.gui.main_panel import MainPanel
 from s2gos_common.models import (
     InputDescription,
@@ -53,20 +54,24 @@ int_input = InputDescription(
 
 
 class MainFormTest(TestCase):
+    def test_is_observer(self):
+        main_panel = _create_main_panel({})
+        self.assertIsInstance(main_panel, JobsObserver)
+
     def test_with_int_input(self):
-        main_form = _create_main_form({"periodicity": int_input})
-        self.assertIsInstance(main_form.__panel__(), Panel)
+        main_panel = _create_main_panel({"periodicity": int_input})
+        self.assertIsInstance(main_panel.__panel__(), Panel)
 
     def test_with_bbox_input(self):
-        main_form = _create_main_form({"bbox": bbox_input})
-        self.assertIsInstance(main_form.__panel__(), Panel)
+        main_panel = _create_main_panel({"bbox": bbox_input})
+        self.assertIsInstance(main_panel.__panel__(), Panel)
 
     def test_with_date_input(self):
-        main_form = _create_main_form({"date": date_input})
-        self.assertIsInstance(main_form.__panel__(), Panel)
+        main_panel = _create_main_panel({"date": date_input})
+        self.assertIsInstance(main_panel.__panel__(), Panel)
 
 
-def _create_main_form(process_inputs: dict[str, InputDescription]) -> MainPanel:
+def _create_main_panel(process_inputs: dict[str, InputDescription]) -> MainPanel:
     process = ProcessDescription(
         id="gen_scene",
         title="Generate a scene",
