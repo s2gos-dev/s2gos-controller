@@ -8,4 +8,4 @@ from .client import Client
 
 __all__ = ["Client"]
 
-pn.extension("ipywidgets", "tabulator")
+pn.extension("ipywidgets", "tabulator", notifications=True)

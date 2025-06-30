@@ -6,7 +6,7 @@ from unittest import TestCase
 
 from panel.layout import Panel
 
-from s2gos_client.gui.main_form import MainForm
+from s2gos_client.gui.main_panel import MainPanel
 from s2gos_common.models import (
     InputDescription,
     JobInfo,
@@ -66,7 +66,7 @@ class MainFormTest(TestCase):
         self.assertIsInstance(main_form.__panel__(), Panel)
 
 
-def _create_main_form(process_inputs: dict[str, InputDescription]) -> MainForm:
+def _create_main_form(process_inputs: dict[str, InputDescription]) -> MainPanel:
     process = ProcessDescription(
         id="gen_scene",
         title="Generate a scene",
@@ -87,7 +87,7 @@ def _create_main_form(process_inputs: dict[str, InputDescription]) -> MainForm:
 
     process_list = ProcessList(processes=[process], links=[])
 
-    return MainForm(
+    return MainPanel(
         process_list,
         None,
         on_get_process=on_get_process,

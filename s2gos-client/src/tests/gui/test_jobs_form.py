@@ -6,7 +6,7 @@ from unittest import TestCase
 
 from panel.layout import Panel
 
-from s2gos_client.gui.jobs_form import JobsForm
+from s2gos_client.gui.jobs_panel import JobsPanel
 from s2gos_common.models import JobInfo, JobList, JobStatus
 
 
@@ -16,7 +16,7 @@ class JobsFormTest(TestCase):
         self.assertIsInstance(jobs_form.__panel__(), Panel)
 
 
-def _create_jobs_form() -> JobsForm:
+def _create_jobs_form() -> JobsPanel:
     job_list = JobList(
         jobs=[
             JobInfo(
@@ -63,7 +63,7 @@ def _create_jobs_form() -> JobsForm:
     def on_get_job_results(job_id: str):
         pass
 
-    return JobsForm(
+    return JobsPanel(
         job_list,
         job_list_error,
         on_delete_job=on_delete_job,
