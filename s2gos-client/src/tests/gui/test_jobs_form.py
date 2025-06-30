@@ -7,7 +7,7 @@ from unittest import TestCase
 from panel.layout import Panel
 
 from s2gos_client.gui.jobs_panel import JobsPanel
-from s2gos_common.models import JobInfo, JobList, JobStatus
+from s2gos_common.models import JobInfo, JobList, JobStatus, JobType
 
 
 class JobsFormTest(TestCase):
@@ -20,28 +20,28 @@ def _create_jobs_form() -> JobsPanel:
     job_list = JobList(
         jobs=[
             JobInfo(
-                type="process",
+                type=JobType.process,
                 processID="gen_scene",
                 jobID="job_1",
                 status=JobStatus.successful,
                 progress=100,
             ),
             JobInfo(
-                type="process",
+                type=JobType.process,
                 processID="gen_scene",
                 jobID="job_2",
                 status=JobStatus.running,
                 progress=23,
             ),
             JobInfo(
-                type="process",
+                type=JobType.process,
                 processID="gen_scene",
                 jobID="job_3",
                 status=JobStatus.failed,
                 progress=97,
             ),
             JobInfo(
-                type="process",
+                type=JobType.process,
                 processID="gen_scene",
                 jobID="job_4",
                 status=JobStatus.accepted,
@@ -49,7 +49,6 @@ def _create_jobs_form() -> JobsPanel:
         ],
         links=[],
     )
-    job_list_error = None
 
     def on_delete_job(job_id: str):
         pass
@@ -63,11 +62,11 @@ def _create_jobs_form() -> JobsPanel:
     def on_get_job_results(job_id: str):
         pass
 
-    return JobsPanel(
-        job_list,
-        job_list_error,
+    panel = JobsPanel(
         on_delete_job=on_delete_job,
         on_cancel_job=on_cancel_job,
         on_restart_job=on_restart_job,
         on_get_job_results=on_get_job_results,
     )
+    panel.on_job_list_changed(job_list)
+    return panel
