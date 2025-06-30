@@ -4,15 +4,15 @@
 
 from . import routes
 from .app import app
-from .provider import ServiceProvider
+from .provider import get_service
 
 """
 This module imports both, the FastAPI `app` instance and the application's 
-path functions. It also sets the server's service instance and exports the 
-the application as the `app` module attribute.
+path functions from the `routes` module. 
+It also sets the server's service instance and exports the application as 
+the `app` module attribute.
 """
 
-ServiceProvider.init()
-print(f"Running service {ServiceProvider.instance()}")
-
 __all__ = ["app", "routes"]
+
+print(f"Using service of type {type(get_service()).__class__}")

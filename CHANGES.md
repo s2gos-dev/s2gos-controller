@@ -10,6 +10,7 @@
 - `s2gos-server` package:
   - `LocalService` in `s2gos_server.services.local` now reports links to `self`
     and reports absolute capability URLs.
+  - Now using `fastapi.Depends()` feature
 
 - `s2gos-common` package:
   - Updated `tools/openapi.yaml` to rename some unintuitive names.

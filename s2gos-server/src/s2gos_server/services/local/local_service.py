@@ -16,11 +16,11 @@ from s2gos_common.models import (
     JobList,
     JobResults,
     JobStatus,
+    Link,
     ProcessDescription,
     ProcessList,
     ProcessRequest,
     ProcessSummary,
-    Link,
 )
 from s2gos_common.service import Service
 from s2gos_server.exceptions import JSONContentException

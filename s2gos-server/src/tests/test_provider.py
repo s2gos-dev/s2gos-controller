@@ -4,9 +4,7 @@
 
 from unittest import TestCase
 
-import pytest
-
-from s2gos_server.provider import ServiceProvider
+from s2gos_server.provider import ServiceProvider, get_service
 from s2gos_server.services.local import LocalService
 
 
@@ -17,9 +15,5 @@ class ServiceProviderTest(TestCase):
     def test_set_instance(self):
         service = LocalService(title="Test service")
         ServiceProvider.set_instance(service)
-        self.assertIs(service, ServiceProvider.instance())
-
-    # noinspection PyMethodMayBeStatic
-    def test_instance_raises_if_not_set(self):
-        with pytest.raises(AssertionError):
-            ServiceProvider.instance()
+        self.assertIs(service, ServiceProvider.get_instance())
+        self.assertIs(service, get_service())
