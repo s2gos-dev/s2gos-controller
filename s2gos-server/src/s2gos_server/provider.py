@@ -10,15 +10,25 @@ from s2gos_common.service import Service
 from .constants import S2GOS_SERVICE_ENV_VAR
 
 
+def get_service() -> Service:
+    return ServiceProvider.get_instance()
+
+
 class ServiceProvider:
     _service: Service | None = None
 
     @classmethod
-    def init(cls):
-        cls.set_instance(cls.load_service())
+    def get_instance(cls) -> Service:
+        if cls._service is None:
+            cls._service = cls._load_service()
+        return cls._service
 
     @classmethod
-    def load_service(cls) -> Service:
+    def set_instance(cls, service: Service):
+        cls._service = service
+
+    @classmethod
+    def _load_service(cls) -> Service:
         service_impl_spec = os.environ.get(S2GOS_SERVICE_ENV_VAR)
         if not service_impl_spec:
             raise RuntimeError(
@@ -29,13 +39,3 @@ class ServiceProvider:
         module = importlib.import_module(module_name)
         service = getattr(module, class_name)
         return service
-
-    @classmethod
-    def instance(cls) -> Service:
-        assert isinstance(cls._service, Service)
-        return cls._service
-
-    @classmethod
-    def set_instance(cls, service: Service):
-        assert isinstance(service, Service)
-        cls._service = service

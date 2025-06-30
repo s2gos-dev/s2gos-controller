@@ -42,8 +42,9 @@ def main():
             "import fastapi\n",
             "\n",
             f"from s2gos_common.models import {model_list}\n",
+            "from s2gos_common.service import Service\n",
             "from .app import app\n",
-            "from .provider import ServiceProvider\n",
+            "from .provider import get_service\n",
             "\n",
             routes_code,
         ],
@@ -136,6 +137,7 @@ def generate_method_code(
         [
             *pos_params,
             *[f"{k}: {v}" for k, v in magic_param_list],
+            "service: Service = fastapi.Depends(get_service)",
             *kw_params,
         ]
     )
@@ -174,7 +176,7 @@ def generate_method_code(
             f"# noinspection PyPep8Naming\n"
             f"@app.{method_name}({path!r}{extra_status_code})\n"
             f"async def {py_op_name}({param_list}):\n"
-            f"{C_TAB}return await ServiceProvider.instance()."
+            f"{C_TAB}return await service."
             f"{py_op_name}({param_service_list})\n"
         ),
         (

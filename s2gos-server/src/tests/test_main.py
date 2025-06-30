@@ -25,7 +25,7 @@ class MainTest(TestCase):
             module = importlib.import_module("s2gos_server.main")
             self.assertTrue(hasattr(module, "app"))
             self.assertIsInstance(getattr(module, "app"), FastAPI)
-            service = ServiceProvider.instance()
+            service = ServiceProvider.get_instance()
             self.assertIsNotNone(service)
             self.assertIs(test_service, service)
         finally:
