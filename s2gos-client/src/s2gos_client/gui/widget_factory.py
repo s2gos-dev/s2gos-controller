@@ -3,7 +3,8 @@
 #  https://opensource.org/license/apache-2-0.
 
 import datetime
-from typing import Any
+from abc import ABC, abstractmethod
+from typing import Any, TypeAlias, Literal
 
 import panel as pn
 import param
@@ -21,6 +22,61 @@ DEFAULTS = {"boolean": False, "integer": 0, "number": 0.0, "string": "", "array"
 #     - one can get the widget
 #     - one can check if a given schema can instantiate the extension
 #       from schema (abstract classmethod)
+
+Schema: TypeAlias = dict[str, Any]
+JsonType = Literal["boolean", "integer", "number", "string", "array", "object"]
+
+
+class ViewableProvider(ABC):
+    @abstractmethod
+    def get_viewable(self, schema: Schema, name: str) -> pn.viewable.Viewable:
+        """
+        Get a widget for a given schema.
+
+        Args:
+            schema: the JSON schema dictionary
+            name: the name of a parameter for which the viewable
+                is provided
+        """
+
+    @abstractmethod
+    def is_valid_schema(self, schema: Schema) -> bool:
+        """Whether the given schema can be used to provide a viewable."""
+
+    @abstractmethod
+    def get_json_value(self, viewable: pn.viewable.Viewable) -> Any:
+        """Get the current JSON value that `viewable` represents."""
+
+
+class ViewableProviderRegistry:
+    def __init__(self):
+        self._providers: dict[str, dict[str, ViewableProvider]] = {}
+
+    def register(
+        self,
+        provider: ViewableProvider,
+        json_type: JsonType | None = None,
+        json_format: str | None = None,
+    ):
+        type_key = str(json_type) or "*"
+        format_key = json_format or "*"
+        self._providers[type_key][format_key] = provider
+
+    def get_viewable(self, schema: Schema) -> ViewableProvider | None:
+        type_key = schema.get("type") or "*"
+        format_key = schema.get("format") or "*"
+        provider = self._get_viewable(type_key, format_key)
+        if provider is None and type_key != "*":
+            provider = self._get_viewable("*", format_key)
+        return provider
+
+    def _get_viewable(self, type_key: str, format_key: str) -> ViewableProvider | None:
+        format_dict = self._providers.get(type_key)
+        if format_dict is not None:
+            provider = format_dict.get(format_key)
+            if provider is None and format_key != "*":
+                return format_dict.get("*")
+        return None
 
 
 class WidgetFactory:
