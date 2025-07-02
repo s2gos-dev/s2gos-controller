@@ -4,7 +4,7 @@
 
 import datetime
 from abc import ABC, abstractmethod
-from typing import Any, TypeAlias, Literal
+from typing import Any, Literal, TypeAlias
 
 import panel as pn
 import param

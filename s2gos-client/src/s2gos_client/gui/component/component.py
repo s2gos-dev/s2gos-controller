@@ -2,16 +2,15 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from abc import abstractmethod
 from typing import Any, Callable, Optional
 
 import panel as pn
 import param
 
-from s2gos_client.gui.viewable.types import (
-    JsonValue,
+from .types import (
     JsonCodec,
-    IdentityJsonCodec,
+    JsonIdentityCodec,
+    JsonValue,
 )
 
 
@@ -21,12 +20,12 @@ class Component(param.Parameterized):
     ):
         super().__init__()
         self.viewable = viewable
-        self.json_codec = IdentityJsonCodec() if json_codec is None else json_codec
+        self.json_codec = JsonIdentityCodec() if json_codec is None else json_codec
 
     def __panel__(self) -> pn.viewable.Viewable:
         return self.viewable
 
-    def get_json_value(self, json_value: JsonValue) -> Any:
+    def get_json_value(self) -> Any:
         """Get the viewable's value as a json value."""
         return self.json_codec.encode(self.get_value())
 
@@ -34,15 +33,12 @@ class Component(param.Parameterized):
         """Sets the viewable's value from a json value."""
         self.set_value(self.json_codec.decode(json_value))
 
-    @abstractmethod
     def get_value(self) -> Any:
         """Get the viewable's value."""
 
-    @abstractmethod
     def set_value(self, value: Any):
         """Sets the viewable's value."""
 
-    @abstractmethod
     def watch_value(self, callback: Callable[[Any, Any], Any]):
         """Watch for value changes in the viewable."""
 
@@ -56,17 +52,14 @@ class WidgetComponent(Component):
         # noinspection PyTypeChecker
         return self.viewable
 
-    @abstractmethod
     def watch_value(self, callback: Callable[[Any, Any], Any]):
         """Watch for value changes in the viewable."""
         self.widget.param.watch(callback, "value")
 
-    @abstractmethod
     def get_value(self) -> Any:
         """Get the viewable's value."""
         return self.widget.value
 
-    @abstractmethod
     def set_value(self, value: Any):
         """Sets the viewable's value."""
         self.widget.value = value

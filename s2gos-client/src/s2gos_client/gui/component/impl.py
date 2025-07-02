@@ -10,7 +10,7 @@ from .bbox import BboxSelector
 from .component import Component, WidgetComponent
 from .factory import TypedComponentFactory
 from .registry import ComponentFactoryRegistry
-from .types import JsonSchema, JsonDateCodec
+from .types import JsonDateCodec, JsonSchema
 
 
 class BooleanComponentFactory(TypedComponentFactory):

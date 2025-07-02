@@ -19,10 +19,9 @@ from s2gos_common.models import (
     TransmissionMode,
 )
 
+from .component.container import ComponentContainer
 from .job_info_panel import JobInfoPanel
 from .jobs_observer import JobsObserver
-from .util import json_serialize
-from .widget_factory import WidgetFactory
 
 ExecuteProcessAction: TypeAlias = Callable[[str, ProcessRequest], JobInfo]
 GetProcessAction: TypeAlias = Callable[[str], ProcessDescription]
@@ -118,8 +117,7 @@ class MainPanel(pn.viewable.Viewer):
             self._job_info_panel,
         )
 
-        self._input_widgets = {}
-        self._output_widgets = {}
+        self._component_container: ComponentContainer | None = None
 
         self._on_process_id_changed(process_id)
 
@@ -169,27 +167,17 @@ class MainPanel(pn.viewable.Viewer):
         if not process_description:
             self._execute_button.disabled = True
             self._request_button.disabled = True
-            self._input_widgets = {}
-            self._output_widgets = {}
+            self._component_container = None
+            self._inputs_panel[:] = []
+            self._outputs_panel[:] = []
         else:
             self._execute_button.disabled = False
             self._request_button.disabled = False
-            self._input_widgets = {
-                param_name: WidgetFactory().get_widget_for_schema(
-                    param_name,
-                    input_description.schema_.model_dump(
-                        mode="json", exclude_defaults=True
-                    ),
-                    False,
-                )
-                for param_name, input_description in (
-                    process_description.inputs or {}
-                ).items()
-            }
-            self._output_widgets = {}
-
-        self._inputs_panel[:] = self._input_widgets.values()
-        self._outputs_panel[:] = self._output_widgets.values()
+            self._component_container = ComponentContainer.from_input_descriptions(
+                process_description.inputs or {}, {}
+            )
+            self._inputs_panel[:] = self._component_container.get_components()
+            self._outputs_panel[:] = []
 
     def _on_execute_button_clicked(self, _event: Any = None):
         process_id, process_request = self._new_process_request()
@@ -229,19 +217,15 @@ class MainPanel(pn.viewable.Viewer):
     def _new_process_request(self) -> tuple[str, ProcessRequest]:
         process_id = self._process_select.value
         assert process_id is not None
+
         process_description = self._processes_dict.get(process_id)
         assert process_description is not None
+
+        component_container = self._component_container
+        assert component_container is not None
+
         return process_id, ProcessRequest(
-            inputs={
-                # TODO: This is not nice for several reasons
-                #  (see WidgetFactory TODOs):
-                #  1. v.value: we don't know if a widget has a `value`
-                #     attribute
-                #  2. json_serialize(): we cannot know what value type
-                #     a widget uses
-                k: json_serialize(v.value)
-                for k, v in self._input_widgets.items()
-            },
+            inputs=component_container.get_json_values(),
             outputs={
                 k: Output(
                     format=Format(

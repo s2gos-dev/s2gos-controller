@@ -5,8 +5,8 @@
 from collections import defaultdict
 from typing import TypeAlias
 
-from .types import JsonType, JsonSchema
 from .factory import ComponentFactory
+from .types import JsonSchema, JsonType
 
 _RegistryKey: TypeAlias = tuple[JsonType | None, str | None, bool | None]
 
@@ -26,7 +26,7 @@ class ComponentFactoryRegistry:
     ):
         self._factories[(type, format, nullable)].append(factory)
 
-    def get_factory(self, schema: JsonSchema) -> ComponentFactory | None:
+    def find_factory(self, schema: JsonSchema) -> ComponentFactory | None:
         type = schema.get("type")
         format = schema.get("format")
         nullable = schema.get("nullable")

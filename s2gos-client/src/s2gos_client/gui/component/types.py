@@ -2,9 +2,10 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from abc import ABC, abstractmethod
-from typing import TypeAlias, Literal, Final, Any
 import datetime
+from abc import ABC, abstractmethod
+from types import NoneType
+from typing import Any, Final, Literal, TypeAlias
 
 JSON_TYPES: Final = {"boolean", "integer", "number", "string", "array", "object"}
 
@@ -19,19 +20,21 @@ JsonSchema: TypeAlias = dict[str, JsonValue]
 
 class JsonCodec(ABC):
     @abstractmethod
-    def encode(self, value: Any) -> Any:
+    def encode(self, value: Any) -> JsonValue:
         """Return a JSON value from given value."""
 
     @abstractmethod
-    def decode(self, json_value: Any) -> Any:
+    def decode(self, json_value: JsonValue) -> Any:
         """Return a value from given JSON value."""
 
 
 class JsonIdentityCodec(JsonCodec):
-    def encode(self, value: Any) -> Any:
+    def encode(self, value: Any) -> JsonValue:
+        assert isinstance(value, (bool, int, float, str, list, dict, NoneType))
         return value
 
-    def decode(self, json_value: Any) -> Any:
+    def decode(self, json_value: JsonValue) -> Any:
+        assert isinstance(json_value, (bool, int, float, str, list, dict, NoneType))
         return json_value
 
 

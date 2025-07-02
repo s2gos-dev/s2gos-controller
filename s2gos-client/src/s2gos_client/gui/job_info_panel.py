@@ -5,8 +5,8 @@
 from typing import Any
 
 import panel
-import param
 import panel as pn
+import param
 
 from s2gos_client import ClientError
 from s2gos_common.models import JobInfo, JobList

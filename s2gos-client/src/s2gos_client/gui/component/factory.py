@@ -3,7 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from .component import Component
 from .types import JsonSchema, JsonType, JsonValue
