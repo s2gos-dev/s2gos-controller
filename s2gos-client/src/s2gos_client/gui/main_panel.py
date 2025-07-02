@@ -52,12 +52,10 @@ class MainPanel(pn.viewable.Viewer):
         if process_select_options:
             process_id = process_select_options[0]
         else:
-            process_id = process_select_options
+            process_id = None
 
         self._process_select = pn.widgets.Select(
-            name="Process",
-            options=process_select_options,
-            value=process_select_options[0] if process_select_options else None,
+            name="Process", options=process_select_options, value=process_id
         )
         self._process_select.param.watch(
             lambda e: self._on_process_id_changed(e.new), "value"

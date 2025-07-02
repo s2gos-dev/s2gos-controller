@@ -7,7 +7,7 @@ import param
 from ipyleaflet import DrawControl, GeoJSON, Map
 
 
-class BboxSelector(pn.viewable.Viewer):
+class BboxSelector(pn.viewable.Viewable):
     value = param.List(
         bounds=(4, 4),
         default=None,
@@ -15,6 +15,7 @@ class BboxSelector(pn.viewable.Viewer):
     )
 
     def __init__(self, center=(0, 0), zoom=2, **params):
+        # noinspection PyArgumentList
         super().__init__(**params)
 
         # Set up the draw control
