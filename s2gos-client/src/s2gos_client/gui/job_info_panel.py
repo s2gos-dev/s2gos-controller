@@ -84,6 +84,7 @@ class JobInfoPanel(pn.viewable.Viewer):
         # pn.state.notifications.success(f"Change {job_info.updated}", duration=1000)
 
 
+# Register JobInfoPanel as a virtual subclass of JobsObserver
 JobsObserver.register(JobInfoPanel)
 
 

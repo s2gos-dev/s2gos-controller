@@ -256,4 +256,5 @@ class MainPanel(pn.viewable.Viewer):
         )
 
 
+# Register MainPanel as a virtual subclass of JobsObserver
 JobsObserver.register(MainPanel)
