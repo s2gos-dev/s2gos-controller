@@ -176,7 +176,7 @@ class MainPanel(pn.viewable.Viewer):
             self._component_container = ComponentContainer.from_input_descriptions(
                 process_description.inputs or {}, {}
             )
-            self._inputs_panel[:] = self._component_container.get_components()
+            self._inputs_panel[:] = self._component_container.get_viewables()
             self._outputs_panel[:] = []
 
     def _on_execute_button_clicked(self, _event: Any = None):

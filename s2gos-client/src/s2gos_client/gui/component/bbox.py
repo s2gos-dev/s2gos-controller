@@ -7,7 +7,7 @@ import param
 from ipyleaflet import DrawControl, GeoJSON, Map
 
 
-class BboxSelector(pn.viewable.Viewable):
+class BboxSelector(pn.viewable.Viewer):
     value = param.List(
         bounds=(4, 4),
         default=None,

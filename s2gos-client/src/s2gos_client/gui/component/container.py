@@ -5,6 +5,8 @@
 import warnings
 from dataclasses import dataclass
 from typing import Any, Callable, Literal, TypeAlias
+import panel as pn
+import param
 
 from s2gos_common.models import InputDescription, Schema
 
@@ -22,7 +24,7 @@ class ComponentContainer:
     @dataclass
     class Item:
         schema: JsonSchemaDict
-        # TODO: check if we need value
+        # TODO: check if we need value here
         value: JsonValue
         component: Component
 
@@ -57,7 +59,7 @@ class ComponentContainer:
         for name, schema in schemas.items():
             factory = self.registry.find_factory(schema)
             if factory is not None:
-                value = json_values.get(name, schemas.get("default"))
+                value = json_values.get(name, schema.get("default"))
                 title = schema.get("title") or _get_title_from_name(name)
                 component = factory.create_component(value, title, schema)
                 # TODO: check if we need this
@@ -89,6 +91,9 @@ class ComponentContainer:
 
     def get_components(self) -> list[Component]:
         return [entry.component for entry in self._entries.values()]
+
+    def get_viewables(self) -> list[param.Parameterized]:
+        return [entry.component.viewable for entry in self._entries.values()]
 
     def _get_on_value_changed(self, name: str, component: Component) -> Callable:
         def on_value_changed(event: Any):

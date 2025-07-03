@@ -15,7 +15,6 @@ class ComponentTest(TestCase):
         widget = pn.widgets.TextInput(name="Test", value="output.zarr")
         component = Component(widget)
         self.assertIs(widget, component.viewable)
-        self.assertIs(widget, component.__panel__())
         with pytest.raises(NotImplementedError):
             component.get_value()
         with pytest.raises(NotImplementedError):
@@ -30,7 +29,6 @@ class WidgetComponentTest(TestCase):
         component = WidgetComponent(widget)
         self.assertIs(widget, component.widget)
         self.assertIs(widget, component.viewable)
-        self.assertIs(widget, component.__panel__())
         self.assertEqual("output.zarr", component.get_json_value())
         self.assertEqual("output.zarr", component.get_value())
 

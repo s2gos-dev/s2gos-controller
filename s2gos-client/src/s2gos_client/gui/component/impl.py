@@ -30,7 +30,7 @@ class IntegerComponentFactory(ComponentFactory):
     def create_component(
         self, value: int, title: str, schema: JsonSchemaDict
     ) -> Component:
-        return Component(
+        return WidgetComponent(
             pn.widgets.IntSlider(
                 name=title,
                 start=int(schema.get("minimum", 0)),
@@ -48,7 +48,7 @@ class NumberComponentFactory(ComponentFactory):
         self, json_value: int | float, title: str, schema: JsonSchemaDict
     ) -> Component:
         # noinspection PyTypeChecker
-        return Component(
+        return WidgetComponent(
             pn.widgets.FloatSlider(
                 name=title,
                 start=float(schema.get("minimum", 0)),
@@ -60,7 +60,7 @@ class NumberComponentFactory(ComponentFactory):
 
 
 class StringComponentFactory(ComponentFactory):
-    base_schema = dict(type="string", nullable=False)
+    base_schema = dict(type="string")
 
     def create_component(self, value, title, schema: JsonSchemaDict) -> Component:
         if "enum" in schema:
@@ -78,7 +78,7 @@ class DateComponentFactory(ComponentFactory):
     ) -> Component:
         json_codec = JsonDateCodec()
         date = json_codec.decode(value)
-        return Component(
+        return WidgetComponent(
             pn.widgets.DatePicker(name=title, value=date), json_codec=json_codec
         )
 

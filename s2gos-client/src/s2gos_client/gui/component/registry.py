@@ -33,7 +33,7 @@ class ComponentFactoryRegistry:
         # we reverse to force LIFO
         for factory in reversed(candidate_factories):
             r = factory.get_score(schema)
-            if best_factory is None or r > best_r:
+            if r > best_r:
                 best_r = r
                 best_factory = factory
         return best_factory

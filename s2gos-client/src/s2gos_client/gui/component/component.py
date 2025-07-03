@@ -14,16 +14,15 @@ from .json import (
 )
 
 
-class Component(param.Parameterized):
+class Component:
     def __init__(
-        self, viewable: pn.viewable.Viewable, json_codec: Optional[JsonCodec] = None
+        self,
+        viewable: param.Parameterized,
+        json_codec: Optional[JsonCodec] = None,
     ):
         super().__init__()
         self.viewable = viewable
         self.json_codec = JsonIdentityCodec() if json_codec is None else json_codec
-
-    def __panel__(self) -> pn.viewable.Viewable:
-        return self.viewable
 
     def get_json_value(self) -> Any:
         """Get the viewable's value as a json value."""
