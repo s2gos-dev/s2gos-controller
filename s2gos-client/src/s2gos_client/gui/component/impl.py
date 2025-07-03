@@ -8,28 +8,28 @@ import panel as pn
 
 from .bbox import BboxSelector
 from .component import Component, WidgetComponent
-from .factory import TypedComponentFactory
+from .factory import ComponentFactory
 from .registry import ComponentFactoryRegistry
-from .types import JsonDateCodec, JsonSchema
+from .json import JsonDateCodec, JsonSchemaDict
 
 
-class BooleanComponentFactory(TypedComponentFactory):
-    type = "boolean"
-    nullable = False
+class BooleanComponentFactory(ComponentFactory):
+    base_schema = dict(type="boolean", nullable=False)
 
     def create_component(
-        self, value: bool, title: str, schema: JsonSchema
+        self, value: bool, title: str, schema: JsonSchemaDict
     ) -> Component:
         return WidgetComponent(
             pn.widgets.Checkbox(name=title, value=value),
         )
 
 
-class IntegerComponentFactory(TypedComponentFactory):
-    type = "integer"
-    nullable = False
+class IntegerComponentFactory(ComponentFactory):
+    base_schema = dict(type="integer", nullable=False)
 
-    def create_component(self, value: int, title: str, schema: JsonSchema) -> Component:
+    def create_component(
+        self, value: int, title: str, schema: JsonSchemaDict
+    ) -> Component:
         return Component(
             pn.widgets.IntSlider(
                 name=title,
@@ -41,12 +41,11 @@ class IntegerComponentFactory(TypedComponentFactory):
         )
 
 
-class NumberComponentFactory(TypedComponentFactory):
-    type = "number"
-    nullable = False
+class NumberComponentFactory(ComponentFactory):
+    base_schema = dict(type="number", nullable=False)
 
     def create_component(
-        self, json_value: int | float, title: str, schema: JsonSchema
+        self, json_value: int | float, title: str, schema: JsonSchemaDict
     ) -> Component:
         # noinspection PyTypeChecker
         return Component(
@@ -60,11 +59,10 @@ class NumberComponentFactory(TypedComponentFactory):
         )
 
 
-class StringComponentFactory(TypedComponentFactory):
-    type = "string"
-    nullable = False
+class StringComponentFactory(ComponentFactory):
+    base_schema = dict(type="string", nullable=False)
 
-    def create_component(self, value, title, schema: JsonSchema) -> Component:
+    def create_component(self, value, title, schema: JsonSchemaDict) -> Component:
         if "enum" in schema:
             widget = pn.widgets.Select(name=title, options=schema["enum"], value=value)
         else:
@@ -72,12 +70,12 @@ class StringComponentFactory(TypedComponentFactory):
         return WidgetComponent(widget)
 
 
-class DateComponentFactory(TypedComponentFactory):
-    type = "string"
-    format = "date"
-    nullable = False
+class DateComponentFactory(ComponentFactory):
+    base_schema = dict(type="string", format="date", nullable=False)
 
-    def create_component(self, value: str, title: str, schema: JsonSchema) -> Component:
+    def create_component(
+        self, value: str, title: str, schema: JsonSchemaDict
+    ) -> Component:
         json_codec = JsonDateCodec()
         date = json_codec.decode(value)
         return Component(
@@ -85,11 +83,10 @@ class DateComponentFactory(TypedComponentFactory):
         )
 
 
-class BboxComponentFactory(TypedComponentFactory):
-    type = "array"
-    format = "bbox"
+class BboxComponentFactory(ComponentFactory):
+    base_schema = dict(type="array", format="bbox")
 
-    def create_component(self, value, title, schema: JsonSchema) -> Component:
+    def create_component(self, value, title, schema: JsonSchemaDict) -> Component:
         selector = BboxSelector()
         # TODO: set value & title
         return BboxComponent(selector)

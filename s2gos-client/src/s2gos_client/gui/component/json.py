@@ -7,7 +7,7 @@ from abc import ABC, abstractmethod
 from types import NoneType
 from typing import Any, Final, Literal, TypeAlias
 
-JSON_TYPES: Final = {"boolean", "integer", "number", "string", "array", "object"}
+JSON_TYPE_NAMES: Final = {"boolean", "integer", "number", "string", "array", "object"}
 
 JsonType: TypeAlias = Literal[
     "boolean", "integer", "number", "string", "array", "object"
@@ -15,7 +15,7 @@ JsonType: TypeAlias = Literal[
 JsonValue: TypeAlias = (
     bool | int | float | str | list["JsonValue"] | dict[str, "JsonValue"] | None
 )
-JsonSchema: TypeAlias = dict[str, JsonValue]
+JsonSchemaDict: TypeAlias = dict[str, JsonValue]
 
 
 class JsonCodec(ABC):

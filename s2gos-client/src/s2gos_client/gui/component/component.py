@@ -7,7 +7,7 @@ from typing import Any, Callable, Optional
 import panel as pn
 import param
 
-from .types import (
+from .json import (
     JsonCodec,
     JsonIdentityCodec,
     JsonValue,
@@ -35,12 +35,15 @@ class Component(param.Parameterized):
 
     def get_value(self) -> Any:
         """Get the viewable's value."""
+        raise NotImplementedError
 
     def set_value(self, value: Any):
         """Sets the viewable's value."""
+        raise NotImplementedError
 
-    def watch_value(self, callback: Callable[[Any, Any], Any]):
+    def watch_value(self, callback: Callable[[Any], Any]):
         """Watch for value changes in the viewable."""
+        raise NotImplementedError
 
 
 class WidgetComponent(Component):
@@ -52,10 +55,6 @@ class WidgetComponent(Component):
         # noinspection PyTypeChecker
         return self.viewable
 
-    def watch_value(self, callback: Callable[[Any, Any], Any]):
-        """Watch for value changes in the viewable."""
-        self.widget.param.watch(callback, "value")
-
     def get_value(self) -> Any:
         """Get the viewable's value."""
         return self.widget.value
@@ -63,3 +62,7 @@ class WidgetComponent(Component):
     def set_value(self, value: Any):
         """Sets the viewable's value."""
         self.widget.value = value
+
+    def watch_value(self, callback: Callable[[Any], Any]):
+        """Watch for value changes in the viewable."""
+        self.widget.param.watch(callback, "value")

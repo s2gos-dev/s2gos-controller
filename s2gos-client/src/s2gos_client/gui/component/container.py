@@ -11,7 +11,7 @@ from s2gos_common.models import InputDescription, Schema
 from .component import Component
 from .impl import register_all
 from .registry import ComponentFactoryRegistry
-from .types import JsonSchema, JsonValue
+from .json import JsonSchemaDict, JsonValue
 
 
 class ComponentContainer:
@@ -19,7 +19,7 @@ class ComponentContainer:
 
     @dataclass
     class Item:
-        schema: JsonSchema
+        schema: JsonSchemaDict
         # TODO: check if we need value
         value: JsonValue
         component: Component
@@ -30,7 +30,7 @@ class ComponentContainer:
         input_descriptions: dict[str, InputDescription],
         json_values: dict[str, JsonValue],
     ) -> "ComponentContainer":
-        schemas: JsonSchema = {}
+        schemas: JsonSchemaDict = {}
         for k, v in input_descriptions.items():
             schema = _get_schema_from_input_description(v)
             if schema is not None:
@@ -40,7 +40,7 @@ class ComponentContainer:
         return cls(schemas, json_values)
 
     def __init__(
-        self, schemas: dict[str, JsonSchema], json_values: dict[str, JsonValue]
+        self, schemas: dict[str, JsonSchemaDict], json_values: dict[str, JsonValue]
     ):
         self._entries: dict[str, ComponentContainer.Item] = {}
         for name, schema in schemas.items():
@@ -57,12 +57,15 @@ class ComponentContainer:
 
     def get_json_values(self):
         """Get component values as JSON values."""
-        return {name: entry.get_json_value() for name, entry in self._entries.items()}
+        return {
+            name: entry.component.get_json_value()
+            for name, entry in self._entries.items()
+        }
 
     def set_json_values(self, json_values: dict[str, JsonValue]):
         """Set component values from JSON values."""
         return {
-            name: entry.set_json_value(json_values)
+            name: entry.component.set_json_value(json_values)
             for name, entry in self._entries.items()
             if name in json_values
         }
@@ -87,7 +90,7 @@ def _get_title_from_name(name: str) -> str:
 
 def _get_schema_from_input_description(
     input_description: InputDescription,
-) -> JsonSchema | None:
+) -> JsonSchemaDict | None:
     v = input_description
     if not isinstance(v.schema_, Schema):
         return None
