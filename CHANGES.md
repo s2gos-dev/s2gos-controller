@@ -6,6 +6,8 @@
   - Added `show_job(job_id)` to `Client` of `s2gos_client.gui`. It displays job details.
   - Added `close()` methods to clients and transports.
   - Using `httpx` package instead of `requests`.
+  - Dedicated GUI widgets for given JSON schemas can now be registered in
+    global registry `registry` of `s2gos_client.gui.component.ComponentContainer`.
 
 - `s2gos-server` package:
   - `LocalService` in `s2gos_server.services.local` now reports links to `self`

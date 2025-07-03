@@ -5,7 +5,7 @@
 import warnings
 from dataclasses import dataclass
 from typing import Any, Callable, Literal, TypeAlias
-import panel as pn
+
 import param
 
 from s2gos_common.models import InputDescription, Schema

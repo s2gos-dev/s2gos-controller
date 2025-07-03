@@ -5,7 +5,7 @@
 from collections import defaultdict
 
 from .factory import ComponentFactory
-from .json import JsonSchemaDict, JsonType, JSON_TYPE_NAMES
+from .json import JSON_TYPE_NAMES, JsonSchemaDict, JsonType
 
 
 class ComponentFactoryRegistry:
