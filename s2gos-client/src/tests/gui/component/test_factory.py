@@ -59,12 +59,7 @@ class ComponentFactoryTest(TestCase):
         GoodFactory2.register_in(registry)
         GoodFactory3.register_in(registry)
         self.assertEqual(
-            [
-                {"type": None},
-                {"type": "string"},
-                {"type": "integer"},
-                {"type": "boolean"},
-            ],
+            [{}, {}, {}, {}],
             [kwargs for _args, kwargs in registry.registrations],
         )
         self.assertIsInstance(registry.registrations[0][0][0], GoodFactory0)

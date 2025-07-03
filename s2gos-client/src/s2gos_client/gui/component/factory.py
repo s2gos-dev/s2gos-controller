@@ -43,4 +43,4 @@ class ComponentFactory(ABC):
     @classmethod
     def register_in(cls, registry: "ComponentFactoryRegistry"):
         """Register this factory in the given registry."""
-        registry.register_factory(cls(), type=cls.type)
+        registry.register_factory(cls())

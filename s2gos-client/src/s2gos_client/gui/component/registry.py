@@ -5,7 +5,7 @@
 from collections import defaultdict
 
 from .factory import ComponentFactory
-from .json import JsonSchemaDict, JsonType
+from .json import JsonSchemaDict, JsonType, JSON_TYPE_NAMES
 
 
 class ComponentFactoryRegistry:
@@ -17,13 +17,17 @@ class ComponentFactoryRegistry:
     def register_factory(
         self,
         factory: ComponentFactory,
-        type: JsonType | None = None,
     ):
-        self._factories[type].append(factory)
+        key = factory.type
+        if key is not None and key not in JSON_TYPE_NAMES:
+            raise ValueError(
+                f"Factory type must be one of {JSON_TYPE_NAMES}, was {key!r}"
+            )
+        self._factories[key].append(factory)
 
     def find_factory(self, schema: JsonSchemaDict) -> ComponentFactory | None:
-        type = schema.get("type")
-        candidate_factories = self._factories.get(type)
+        key = schema.get("type")
+        candidate_factories = self._factories.get(key)
         if not candidate_factories:
             return None
         if len(candidate_factories) == 1:
