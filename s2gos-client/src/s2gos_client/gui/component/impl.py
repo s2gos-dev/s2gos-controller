@@ -9,8 +9,8 @@ import panel as pn
 from .bbox import BboxSelector
 from .component import Component, WidgetComponent
 from .factory import ComponentFactory
-from .registry import ComponentFactoryRegistry
 from .json import JsonDateCodec, JsonSchemaDict
+from .registry import ComponentFactoryRegistry
 
 
 class BooleanComponentFactory(ComponentFactory):

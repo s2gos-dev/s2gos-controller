@@ -10,9 +10,8 @@ from s2gos_common.models import InputDescription, Schema
 
 from .component import Component
 from .impl import register_all
-from .registry import ComponentFactoryRegistry
 from .json import JsonSchemaDict, JsonValue
-
+from .registry import ComponentFactoryRegistry
 
 FailMode: TypeAlias = Literal["raise", "warn", "ignore"]
 

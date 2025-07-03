@@ -3,14 +3,15 @@
 #  https://opensource.org/license/apache-2-0.
 
 from unittest import TestCase
+
 import panel as pn
 
 from s2gos_client.gui.component import (
     Component,
     ComponentFactory,
     ComponentFactoryRegistry,
-    JsonValue,
     JsonSchemaDict,
+    JsonValue,
 )
 
 

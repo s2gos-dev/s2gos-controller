@@ -3,10 +3,11 @@
 #  https://opensource.org/license/apache-2-0.
 
 from unittest import TestCase
-from s2gos_client.gui.component import ComponentContainer
-from s2gos_common.models import InputDescription, Schema
 
 import panel as pn
+
+from s2gos_client.gui.component import ComponentContainer
+from s2gos_common.models import InputDescription, Schema
 
 
 class ComponentContainerTest(TestCase):

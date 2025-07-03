@@ -3,17 +3,17 @@
 #  https://opensource.org/license/apache-2-0.
 
 from .component import Component, WidgetComponent
-from .registry import ComponentFactoryRegistry
-from .factory import ComponentFactory
 from .container import ComponentContainer
+from .factory import ComponentFactory
 from .json import (
-    JsonType,
-    JsonSchemaDict,
     JsonCodec,
-    JsonIdentityCodec,
-    JsonValue,
     JsonDateCodec,
+    JsonIdentityCodec,
+    JsonSchemaDict,
+    JsonType,
+    JsonValue,
 )
+from .registry import ComponentFactoryRegistry
 
 __all__ = [
     "Component",

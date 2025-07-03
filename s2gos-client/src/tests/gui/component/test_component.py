@@ -3,10 +3,11 @@
 #  https://opensource.org/license/apache-2-0.
 
 from unittest import TestCase
+
 import panel as pn
 import pytest
 
-from s2gos_client.gui.component import Component, WidgetComponent, JsonDateCodec
+from s2gos_client.gui.component import Component, JsonDateCodec, WidgetComponent
 
 
 class ComponentTest(TestCase):

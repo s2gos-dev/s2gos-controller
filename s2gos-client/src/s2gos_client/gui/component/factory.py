@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 from .component import Component
-from .json import JsonSchemaDict, JsonType, JsonValue, JSON_TYPE_NAMES
+from .json import JsonSchemaDict, JsonValue
 
 if TYPE_CHECKING:
     from .registry import ComponentFactoryRegistry
