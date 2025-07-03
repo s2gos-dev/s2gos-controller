@@ -5,8 +5,8 @@
 from typing import Any
 
 import panel
-import param
 import panel as pn
+import param
 
 from s2gos_client import ClientError
 from s2gos_common.models import JobInfo, JobList
@@ -84,6 +84,7 @@ class JobInfoPanel(pn.viewable.Viewer):
         # pn.state.notifications.success(f"Change {job_info.updated}", duration=1000)
 
 
+# Register JobInfoPanel as a virtual subclass of JobsObserver
 JobsObserver.register(JobInfoPanel)
 
 

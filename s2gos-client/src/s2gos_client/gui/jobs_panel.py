@@ -260,6 +260,7 @@ class JobsPanel(pn.viewable.Viewer):
         return tabulator
 
 
+# Register JobsPanel as a virtual subclass of JobsObserver
 JobsObserver.register(JobsPanel)
 
 

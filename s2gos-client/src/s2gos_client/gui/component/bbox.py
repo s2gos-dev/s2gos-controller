@@ -15,6 +15,7 @@ class BboxSelector(pn.viewable.Viewer):
     )
 
     def __init__(self, center=(0, 0), zoom=2, **params):
+        # noinspection PyArgumentList
         super().__init__(**params)
 
         # Set up the draw control
