@@ -28,29 +28,31 @@ class ComponentFactoryRegistryTest(TestCase):
             pass
 
         class Factory1(FactoryBase):
-            base_schema = dict(type="string")
+            type = "string"
 
         class Factory2(FactoryBase):
-            base_schema = dict(type="string", format="date")
+            type = "string"
+
+            def get_score(self, schema: JsonSchemaDict) -> int:
+                return 2 if schema.get("format") == "date" else 0
 
         class Factory3(FactoryBase):
-            base_schema = dict(type="string", format="date", nullable=True)
+            type = "string"
+
+            def get_score(self, schema: JsonSchemaDict) -> int:
+                return 2 if schema.get("format") == "bbox" else 0
 
         registry = ComponentFactoryRegistry()
 
-        factory = registry.find_factory(
-            dict(type="string", format="date", nullable=True)
-        )
+        factory = registry.find_factory(dict(type="string"))
         self.assertIsNone(factory)
 
-        Factory0.register_in(registry)
-        Factory1.register_in(registry)
-        Factory2.register_in(registry)
         Factory3.register_in(registry)
+        Factory0.register_in(registry)
+        Factory2.register_in(registry)
+        Factory1.register_in(registry)
 
-        factory = registry.find_factory(
-            dict(type="string", format="date", nullable=True)
-        )
+        factory = registry.find_factory(dict(type="string", format="bbox"))
         self.assertIsInstance(factory, Factory3)
 
         factory = registry.find_factory(dict(type="string", format="date"))

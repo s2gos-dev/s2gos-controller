@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 from .component import Component
-from .json import JsonSchemaDict, JsonValue
+from .json import JsonSchemaDict, JsonType, JsonValue
 
 if TYPE_CHECKING:
     from .registry import ComponentFactoryRegistry
@@ -15,8 +15,8 @@ if TYPE_CHECKING:
 class ComponentFactory(ABC):
     """Factory for components."""
 
-    base_schema: JsonSchemaDict = {}
-    """Specifies required schema values."""
+    type: JsonType | None = None
+    """Specifies the JSON type to use as a registry key."""
 
     @abstractmethod
     def create_component(
@@ -38,16 +38,9 @@ class ComponentFactory(ABC):
         Get a score of how well the components produced by this factory
         can represent the given schema.
         """
-        scores = {"type": 10, "format": 5}
-        defaults = {"nullable": False}
-        score = 0
-        for k, v in self.base_schema.items():
-            if v != schema.get(k, defaults.get(k)):
-                return 0
-            score += scores.get(k, 1)
-        return score
+        return 1 if (self.type and self.type == schema.get("type")) else 0
 
     @classmethod
     def register_in(cls, registry: "ComponentFactoryRegistry"):
         """Register this factory in the given registry."""
-        registry.register_factory(cls(), type=cls.base_schema.get("type"))
+        registry.register_factory(cls(), type=cls.type)

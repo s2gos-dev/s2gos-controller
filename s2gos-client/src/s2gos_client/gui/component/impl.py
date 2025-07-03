@@ -14,7 +14,7 @@ from .registry import ComponentFactoryRegistry
 
 
 class BooleanComponentFactory(ComponentFactory):
-    base_schema = dict(type="boolean", nullable=False)
+    type = "boolean"
 
     def create_component(
         self, value: bool, title: str, schema: JsonSchemaDict
@@ -25,7 +25,7 @@ class BooleanComponentFactory(ComponentFactory):
 
 
 class IntegerComponentFactory(ComponentFactory):
-    base_schema = dict(type="integer", nullable=False)
+    type = "integer"
 
     def create_component(
         self, value: int, title: str, schema: JsonSchemaDict
@@ -42,7 +42,7 @@ class IntegerComponentFactory(ComponentFactory):
 
 
 class NumberComponentFactory(ComponentFactory):
-    base_schema = dict(type="number", nullable=False)
+    type = "number"
 
     def create_component(
         self, json_value: int | float, title: str, schema: JsonSchemaDict
@@ -60,7 +60,7 @@ class NumberComponentFactory(ComponentFactory):
 
 
 class StringComponentFactory(ComponentFactory):
-    base_schema = dict(type="string")
+    type = "string"
 
     def create_component(self, value, title, schema: JsonSchemaDict) -> Component:
         if "enum" in schema:
@@ -71,7 +71,11 @@ class StringComponentFactory(ComponentFactory):
 
 
 class DateComponentFactory(ComponentFactory):
-    base_schema = dict(type="string", format="date", nullable=False)
+    type = "string"
+
+    def get_score(self, schema: JsonSchemaDict) -> int:
+        score = super().get_score(schema)
+        return score + 1 if (score > 0 and schema.get("format") == "date") else 0
 
     def create_component(
         self, value: str, title: str, schema: JsonSchemaDict
@@ -84,7 +88,11 @@ class DateComponentFactory(ComponentFactory):
 
 
 class BboxComponentFactory(ComponentFactory):
-    base_schema = dict(type="array", format="bbox")
+    type = "array"
+
+    def get_score(self, schema: JsonSchemaDict) -> int:
+        score = super().get_score(schema)
+        return score + 1 if (score > 0 and schema.get("format") == "bbox") else 0
 
     def create_component(self, value, title, schema: JsonSchemaDict) -> Component:
         selector = BboxSelector()

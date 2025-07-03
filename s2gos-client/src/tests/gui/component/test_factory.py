@@ -30,19 +30,14 @@ class MockRegistry:
 
 
 class ComponentFactoryTest(TestCase):
-    def test_get_relevance(self):
+    def test_get_score(self):
         class Factory(FactoryBase):
-            base_schema = dict(type="string", format="date", nullable=True)
+            type = "string"
 
         f = Factory()
         self.assertEqual(0, f.get_score(dict()))
-        self.assertEqual(0, f.get_score(dict(type="integer", nullable=True)))
-        self.assertEqual(0, f.get_score(dict(type="string", nullable=True)))
-        self.assertEqual(0, f.get_score(dict(type="string", format="bbox")))
-        self.assertEqual(0, f.get_score(dict(type="string", format="date ")))
-        self.assertEqual(
-            16, f.get_score(dict(type="string", format="date", nullable=True))
-        )
+        self.assertEqual(0, f.get_score(dict(type="integer")))
+        self.assertEqual(1, f.get_score(dict(type="string")))
 
     # noinspection PyMethodMayBeStatic,PyTypeChecker
     def test_register_in(self):
@@ -50,13 +45,13 @@ class ComponentFactoryTest(TestCase):
             pass
 
         class GoodFactory1(FactoryBase):
-            base_schema = dict(type="string")
+            type = "string"
 
         class GoodFactory2(FactoryBase):
-            base_schema = dict(type="string", format="date")
+            type = "integer"
 
         class GoodFactory3(FactoryBase):
-            base_schema = dict(type="string", format="date", nullable=True)
+            type = "boolean"
 
         registry = MockRegistry()
         GoodFactory0.register_in(registry)
@@ -67,8 +62,8 @@ class ComponentFactoryTest(TestCase):
             [
                 {"type": None},
                 {"type": "string"},
-                {"type": "string"},
-                {"type": "string"},
+                {"type": "integer"},
+                {"type": "boolean"},
             ],
             [kwargs for _args, kwargs in registry.registrations],
         )
