@@ -4,7 +4,7 @@
 
 import warnings
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any, Callable, Literal, TypeAlias
 
 from s2gos_common.models import InputDescription, Schema
 
@@ -12,6 +12,9 @@ from .component import Component
 from .impl import register_all
 from .registry import ComponentFactoryRegistry
 from .json import JsonSchemaDict, JsonValue
+
+
+FailMode: TypeAlias = Literal["raise", "warn", "ignore"]
 
 
 class ComponentContainer:
@@ -29,31 +32,46 @@ class ComponentContainer:
         cls,
         input_descriptions: dict[str, InputDescription],
         json_values: dict[str, JsonValue],
+        fail_mode: FailMode = "warn",
     ) -> "ComponentContainer":
         schemas: JsonSchemaDict = {}
         for k, v in input_descriptions.items():
             schema = _get_schema_from_input_description(v)
             if schema is not None:
                 schemas[k] = schema
-            else:
-                warnings.warn(f"Cannot get usable JSON schema from input {k!r}.")
-        return cls(schemas, json_values)
+            elif fail_mode != "ignore":
+                msg = f"Failed getting usable JSON schema for input {k!r}"
+                if fail_mode == "warn":
+                    warnings.warn(msg)
+                else:
+                    raise ValueError(msg)
+
+        return cls(schemas, json_values, fail_mode=fail_mode)
 
     def __init__(
-        self, schemas: dict[str, JsonSchemaDict], json_values: dict[str, JsonValue]
+        self,
+        schemas: dict[str, JsonSchemaDict],
+        json_values: dict[str, JsonValue],
+        fail_mode: Literal["raise", "warn", "ignore"] = "warn",
     ):
         self._entries: dict[str, ComponentContainer.Item] = {}
         for name, schema in schemas.items():
             factory = self.registry.find_factory(schema)
-            if factory is None:
-                warnings.warn(f"Cannot create component for input {name!r}")
-                continue
-            value = json_values.get(name, schemas.get("default"))
-            title = schema.get("title") or _get_title_from_name(name)
-            component = factory.create_component(value, title, schema)
-            # TODO: check if we need this
-            component.watch_value(self._get_on_value_changed(name, component))
-            self._entries[name] = ComponentContainer.Item(schema, value, component)
+            if factory is not None:
+                value = json_values.get(name, schemas.get("default"))
+                title = schema.get("title") or _get_title_from_name(name)
+                component = factory.create_component(value, title, schema)
+                # TODO: check if we need this
+                component.watch_value(self._get_on_value_changed(name, component))
+                self._entries[name] = ComponentContainer.Item(schema, value, component)
+            elif fail_mode != "ignore":
+                msg = (
+                    f"Failed creating component for input {name!r}"
+                    f" with schema {schema!r}"
+                )
+                if fail_mode == "raise":
+                    raise ValueError(msg)
+                warnings.warn(msg)
 
     def get_json_values(self):
         """Get component values as JSON values."""
@@ -65,7 +83,7 @@ class ComponentContainer:
     def set_json_values(self, json_values: dict[str, JsonValue]):
         """Set component values from JSON values."""
         return {
-            name: entry.component.set_json_value(json_values)
+            name: entry.component.set_json_value(json_values[name])
             for name, entry in self._entries.items()
             if name in json_values
         }
@@ -74,8 +92,8 @@ class ComponentContainer:
         return [entry.component for entry in self._entries.values()]
 
     def _get_on_value_changed(self, name: str, component: Component) -> Callable:
-        def on_value_changed(_event: Any, new_value: Any):
-            json_value = component.json_codec.encode(new_value)
+        def on_value_changed(event: Any):
+            json_value = component.json_codec.encode(event.new)
             self._entries[name].value = json_value
 
         return on_value_changed
