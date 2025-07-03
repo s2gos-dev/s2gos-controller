@@ -20,9 +20,18 @@ class ComponentFactory(ABC):
 
     @abstractmethod
     def create_component(
-        self, json_value: JsonValue, title: str, schema: JsonSchemaDict
+        self, value: JsonValue, title: str, schema: JsonSchemaDict
     ) -> Component:
-        """Create a new component from given JSON schema."""
+        """
+        Create a new component from given JSON schema.
+
+        Args:
+            value: the initial JSON input value, may be `None`
+            title: a component title
+            schema: the schema
+
+        Returns: a component
+        """
 
     def get_score(self, schema: JsonSchemaDict) -> int:
         """
