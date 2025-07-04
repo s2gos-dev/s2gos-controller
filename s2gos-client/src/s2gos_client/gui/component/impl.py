@@ -1,7 +1,7 @@
 #  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
-
+import datetime
 from typing import Any, Callable
 
 import panel as pn
@@ -19,6 +19,7 @@ class BooleanComponentFactory(ComponentFactoryBase):
     def create_component(
         self, value: bool, title: str, schema: JsonSchemaDict
     ) -> Component:
+        value = value if value is not None else False
         return WidgetComponent(
             pn.widgets.Checkbox(name=title, value=value),
         )
@@ -30,6 +31,7 @@ class IntegerComponentFactory(ComponentFactoryBase):
     def create_component(
         self, value: int, title: str, schema: JsonSchemaDict
     ) -> Component:
+        value = value if value is not None else 0
         return WidgetComponent(
             pn.widgets.IntSlider(
                 name=title,
@@ -45,15 +47,16 @@ class NumberComponentFactory(ComponentFactoryBase):
     type = "number"
 
     def create_component(
-        self, json_value: int | float, title: str, schema: JsonSchemaDict
+        self, value: int | float, title: str, schema: JsonSchemaDict
     ) -> Component:
+        value = value if value is not None else 0.0
         # noinspection PyTypeChecker
         return WidgetComponent(
             pn.widgets.FloatSlider(
                 name=title,
                 start=float(schema.get("minimum", 0)),
                 end=float(schema.get("maximum", 100)),
-                value=float(json_value),
+                value=float(value),
                 step=1,
             )
         )
@@ -63,6 +66,7 @@ class StringComponentFactory(ComponentFactoryBase):
     type = "string"
 
     def create_component(self, value, title, schema: JsonSchemaDict) -> Component:
+        value = value or ""
         if "enum" in schema:
             widget = pn.widgets.Select(name=title, options=schema["enum"], value=value)
         else:
@@ -78,7 +82,7 @@ class DateComponentFactory(ComponentFactoryBase):
         self, value: str, title: str, schema: JsonSchemaDict
     ) -> Component:
         json_codec = JsonDateCodec()
-        date = json_codec.decode(value)
+        date = json_codec.to_json(value) or datetime.date.today()
         return WidgetComponent(
             pn.widgets.DatePicker(name=title, value=date), json_codec=json_codec
         )

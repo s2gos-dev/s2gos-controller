@@ -26,11 +26,11 @@ class Component:
 
     def get_json_value(self) -> Any:
         """Get the viewable's value as a json value."""
-        return self.json_codec.encode(self.get_value())
+        return self.json_codec.from_json(self.get_value())
 
     def set_json_value(self, json_value: JsonValue):
         """Sets the viewable's value from a json value."""
-        self.set_value(self.json_codec.decode(json_value))
+        self.set_value(self.json_codec.to_json(json_value))
 
     def get_value(self) -> Any:
         """Get the viewable's value."""
