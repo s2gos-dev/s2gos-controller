@@ -15,9 +15,6 @@ if TYPE_CHECKING:
 class ComponentFactory(ABC):
     """Factory for components."""
 
-    type: JsonType | None = None
-    """Specifies the JSON type to use as a registry key."""
-
     @abstractmethod
     def create_component(
         self, value: JsonValue, title: str, schema: JsonSchemaDict
@@ -33,14 +30,44 @@ class ComponentFactory(ABC):
         Returns: a component
         """
 
+    @abstractmethod
     def get_score(self, schema: JsonSchemaDict) -> int:
         """
         Get a score of how well the components produced by this factory
         can represent the given schema.
         """
-        return 1 if (self.type and self.type == schema.get("type")) else 0
+
+    # noinspection PyShadowingBuiltins
+    @staticmethod
+    def get_key(type: str | None, format: str | None) -> str:
+        """
+        Get a key for given JSON data type name `type` and `format`.
+        """
+        type_key = type if type else "*"
+        format_key = format if format else "*"
+        return f"{type_key}.{format_key}"
+
+
+class ComponentFactoryBase(ComponentFactory, ABC):
+    """Factory for components."""
+
+    type: JsonType | None = None
+    """Specifies the JSON type to use as a registry key."""
+
+    format: str | None = None
+    """Specifies the JSON type to use as a registry key."""
+
+    # noinspection PyShadowingBuiltins
+    def get_score(self, schema: JsonSchemaDict) -> int:
+        type = schema.get("type")
+        format = schema.get("format")
+        if self.type and self.type == type:
+            if self.format:
+                return 2 if self.format == format else 0
+            return 1
+        return 0
 
     @classmethod
     def register_in(cls, registry: "ComponentFactoryRegistry"):
         """Register this factory in the given registry."""
-        registry.register_factory(cls())
+        registry.register_factory(cls(), type=cls.type, format=cls.format)

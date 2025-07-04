@@ -8,12 +8,12 @@ import panel as pn
 
 from .bbox import BboxSelector
 from .component import Component, WidgetComponent
-from .factory import ComponentFactory
+from .factory import ComponentFactoryBase
 from .json import JsonDateCodec, JsonSchemaDict
 from .registry import ComponentFactoryRegistry
 
 
-class BooleanComponentFactory(ComponentFactory):
+class BooleanComponentFactory(ComponentFactoryBase):
     type = "boolean"
 
     def create_component(
@@ -24,7 +24,7 @@ class BooleanComponentFactory(ComponentFactory):
         )
 
 
-class IntegerComponentFactory(ComponentFactory):
+class IntegerComponentFactory(ComponentFactoryBase):
     type = "integer"
 
     def create_component(
@@ -41,7 +41,7 @@ class IntegerComponentFactory(ComponentFactory):
         )
 
 
-class NumberComponentFactory(ComponentFactory):
+class NumberComponentFactory(ComponentFactoryBase):
     type = "number"
 
     def create_component(
@@ -59,7 +59,7 @@ class NumberComponentFactory(ComponentFactory):
         )
 
 
-class StringComponentFactory(ComponentFactory):
+class StringComponentFactory(ComponentFactoryBase):
     type = "string"
 
     def create_component(self, value, title, schema: JsonSchemaDict) -> Component:
@@ -70,12 +70,9 @@ class StringComponentFactory(ComponentFactory):
         return WidgetComponent(widget)
 
 
-class DateComponentFactory(ComponentFactory):
+class DateComponentFactory(ComponentFactoryBase):
     type = "string"
-
-    def get_score(self, schema: JsonSchemaDict) -> int:
-        score = super().get_score(schema)
-        return score + 1 if (score > 0 and schema.get("format") == "date") else 0
+    format = "date"
 
     def create_component(
         self, value: str, title: str, schema: JsonSchemaDict
@@ -87,12 +84,9 @@ class DateComponentFactory(ComponentFactory):
         )
 
 
-class BboxComponentFactory(ComponentFactory):
+class BboxComponentFactory(ComponentFactoryBase):
     type = "array"
-
-    def get_score(self, schema: JsonSchemaDict) -> int:
-        score = super().get_score(schema)
-        return score + 1 if (score > 0 and schema.get("format") == "bbox") else 0
+    format = "bbox"
 
     def create_component(self, value, title, schema: JsonSchemaDict) -> Component:
         selector = BboxSelector()

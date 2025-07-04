@@ -8,13 +8,13 @@ import panel as pn
 
 from s2gos_client.gui.component import (
     Component,
-    ComponentFactory,
+    ComponentFactoryBase,
     JsonSchemaDict,
     JsonValue,
 )
 
 
-class FactoryBase(ComponentFactory):
+class MockFactory(ComponentFactoryBase):
     def create_component(
         self, json_value: JsonValue, title: str, schema: JsonSchemaDict
     ) -> Component:
@@ -31,26 +31,39 @@ class MockRegistry:
 
 class ComponentFactoryTest(TestCase):
     def test_get_score(self):
-        class Factory(FactoryBase):
+        class Factory1(MockFactory):
             type = "string"
 
-        f = Factory()
-        self.assertEqual(0, f.get_score(dict()))
-        self.assertEqual(0, f.get_score(dict(type="integer")))
-        self.assertEqual(1, f.get_score(dict(type="string")))
+        f1 = Factory1()
+        self.assertEqual(0, f1.get_score(dict()))
+        self.assertEqual(0, f1.get_score(dict(type="integer")))
+        self.assertEqual(1, f1.get_score(dict(type="string")))
+        self.assertEqual(1, f1.get_score(dict(type="string", format="date")))
+        self.assertEqual(0, f1.get_score(dict(format="date")))
+
+        class Factory2(MockFactory):
+            type = "array"
+            format = "bbox"
+
+        f2 = Factory2()
+        self.assertEqual(0, f2.get_score(dict()))
+        self.assertEqual(0, f2.get_score(dict(type="integer")))
+        self.assertEqual(0, f2.get_score(dict(type="array")))
+        self.assertEqual(2, f2.get_score(dict(type="array", format="bbox")))
+        self.assertEqual(0, f2.get_score(dict(format="bbox")))
 
     # noinspection PyMethodMayBeStatic,PyTypeChecker
     def test_register_in(self):
-        class GoodFactory0(FactoryBase):
+        class GoodFactory0(MockFactory):
             pass
 
-        class GoodFactory1(FactoryBase):
+        class GoodFactory1(MockFactory):
             type = "string"
 
-        class GoodFactory2(FactoryBase):
+        class GoodFactory2(MockFactory):
             type = "integer"
 
-        class GoodFactory3(FactoryBase):
+        class GoodFactory3(MockFactory):
             type = "boolean"
 
         registry = MockRegistry()
@@ -59,7 +72,12 @@ class ComponentFactoryTest(TestCase):
         GoodFactory2.register_in(registry)
         GoodFactory3.register_in(registry)
         self.assertEqual(
-            [{}, {}, {}, {}],
+            [
+                {"format": None, "type": None},
+                {"format": None, "type": "string"},
+                {"format": None, "type": "integer"},
+                {"format": None, "type": "boolean"},
+            ],
             [kwargs for _args, kwargs in registry.registrations],
         )
         self.assertIsInstance(registry.registrations[0][0][0], GoodFactory0)

@@ -9,24 +9,28 @@ from .json import JSON_TYPE_NAMES, JsonSchemaDict, JsonType
 
 
 class ComponentFactoryRegistry:
-    def __init__(self):
-        self._factories: dict[JsonType | None, list[ComponentFactory]] = defaultdict(
-            list
-        )
+    """A registry for component factories."""
 
+    def __init__(self):
+        self._factories: dict[str, list[ComponentFactory]] = defaultdict(list)
+
+    # noinspection PyShadowingBuiltins
     def register_factory(
-        self,
-        factory: ComponentFactory,
+        self, factory: ComponentFactory, type: JsonType | None, format: str | None
     ):
-        key = factory.type
-        if key is not None and key not in JSON_TYPE_NAMES:
+        """
+        Register a component factory using optional
+        `type` and `format` as keys.
+        """
+        if type and type not in JSON_TYPE_NAMES:
             raise ValueError(
-                f"Factory type must be one of {JSON_TYPE_NAMES}, was {key!r}"
+                f"Factory type must be one of {JSON_TYPE_NAMES}, was {type!r}"
             )
+        key = ComponentFactory.get_key(type, format)
         self._factories[key].append(factory)
 
     def find_factory(self, schema: JsonSchemaDict) -> ComponentFactory | None:
-        key = schema.get("type")
+        key = ComponentFactory.get_key(schema.get("type"), schema.get("format"))
         candidate_factories = self._factories.get(key)
         if not candidate_factories:
             return None
