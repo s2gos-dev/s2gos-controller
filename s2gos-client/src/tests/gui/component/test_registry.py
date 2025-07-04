@@ -8,14 +8,14 @@ import panel as pn
 
 from s2gos_client.gui.component import (
     Component,
-    ComponentFactory,
+    ComponentFactoryBase,
     ComponentFactoryRegistry,
     JsonSchemaDict,
     JsonValue,
 )
 
 
-class FactoryBase(ComponentFactory):
+class MockFactory(ComponentFactoryBase):
     def create_component(
         self, json_value: JsonValue, title: str, schema: JsonSchemaDict
     ) -> Component:
@@ -24,42 +24,33 @@ class FactoryBase(ComponentFactory):
 
 class ComponentFactoryRegistryTest(TestCase):
     def test_register_and_find(self):
-        class Factory0(FactoryBase):
+        class Factory0(MockFactory):
             pass
 
-        class Factory1(FactoryBase):
+        class Factory1(MockFactory):
             type = "string"
 
-        class Factory2(FactoryBase):
-            type = "string"
-
-            def get_score(self, schema: JsonSchemaDict) -> int:
-                return 2 if schema.get("format") == "date" else 0
-
-        class Factory3(FactoryBase):
-            type = "string"
-
-            def get_score(self, schema: JsonSchemaDict) -> int:
-                return 2 if schema.get("format") == "bbox" else 0
+        class Factory2(MockFactory):
+            type = "array"
+            format = "bbox"
 
         registry = ComponentFactoryRegistry()
 
         factory = registry.find_factory(dict(type="string"))
         self.assertIsNone(factory)
 
-        Factory3.register_in(registry)
         Factory0.register_in(registry)
         Factory2.register_in(registry)
         Factory1.register_in(registry)
 
-        factory = registry.find_factory(dict(type="string", format="bbox"))
-        self.assertIsInstance(factory, Factory3)
-
-        factory = registry.find_factory(dict(type="string", format="date"))
-        self.assertIsInstance(factory, Factory2)
+        factory = registry.find_factory(dict())
+        self.assertIsInstance(factory, Factory0)
 
         factory = registry.find_factory(dict(type="string"))
         self.assertIsInstance(factory, Factory1)
 
-        factory = registry.find_factory(dict())
-        self.assertIsInstance(factory, Factory0)
+        factory = registry.find_factory(dict(type="array"))
+        self.assertIsNone(factory)
+
+        factory = registry.find_factory(dict(type="array", format="bbox"))
+        self.assertIsInstance(factory, Factory2)

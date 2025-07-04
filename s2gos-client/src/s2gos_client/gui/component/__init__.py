@@ -4,7 +4,7 @@
 
 from .component import Component, WidgetComponent
 from .container import ComponentContainer
-from .factory import ComponentFactory
+from .factory import ComponentFactory, ComponentFactoryBase
 from .json import (
     JsonCodec,
     JsonDateCodec,
@@ -19,6 +19,7 @@ __all__ = [
     "Component",
     "ComponentContainer",
     "ComponentFactory",
+    "ComponentFactoryBase",
     "ComponentFactoryRegistry",
     "JsonCodec",
     "JsonDateCodec",
