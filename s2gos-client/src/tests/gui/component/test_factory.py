@@ -30,27 +30,39 @@ class MockRegistry:
 
 
 class ComponentFactoryTest(TestCase):
-    def test_get_score(self):
-        class Factory1(MockFactory):
-            type = "string"
-
-        f1 = Factory1()
-        self.assertEqual(0, f1.get_score(dict()))
-        self.assertEqual(0, f1.get_score(dict(type="integer")))
-        self.assertEqual(1, f1.get_score(dict(type="string")))
-        self.assertEqual(1, f1.get_score(dict(type="string", format="date")))
-        self.assertEqual(0, f1.get_score(dict(format="date")))
-
+    def test_get_score_type_and_format(self):
         class Factory2(MockFactory):
             type = "array"
             format = "bbox"
 
         f2 = Factory2()
-        self.assertEqual(0, f2.get_score(dict()))
-        self.assertEqual(0, f2.get_score(dict(type="integer")))
-        self.assertEqual(0, f2.get_score(dict(type="array")))
-        self.assertEqual(2, f2.get_score(dict(type="array", format="bbox")))
-        self.assertEqual(0, f2.get_score(dict(format="bbox")))
+        self.assertEqual(False, f2.accept(dict()))
+        self.assertEqual(False, f2.accept(dict(type="integer")))
+        self.assertEqual(False, f2.accept(dict(type="array")))
+        self.assertEqual(True, f2.accept(dict(type="array", format="bbox")))
+        self.assertEqual(False, f2.accept(dict(format="bbox")))
+
+    def test_get_score_type_only(self):
+        class Factory1(MockFactory):
+            type = "string"
+
+        f1 = Factory1()
+        self.assertEqual(False, f1.accept(dict()))
+        self.assertEqual(False, f1.accept(dict(type="integer")))
+        self.assertEqual(True, f1.accept(dict(type="string")))
+        self.assertEqual(False, f1.accept(dict(type="string", format="date")))
+        self.assertEqual(False, f1.accept(dict(format="date")))
+
+    def test_get_score_format_only(self):
+        class Factory(MockFactory):
+            format = "point"
+
+        f = Factory()
+        self.assertEqual(False, f.accept(dict()))
+        self.assertEqual(False, f.accept(dict(format="bbox")))
+        self.assertEqual(True, f.accept(dict(format="point")))
+        self.assertEqual(False, f.accept(dict(type="integer", format="point")))
+        self.assertEqual(False, f.accept(dict(type="number")))
 
     # noinspection PyMethodMayBeStatic,PyTypeChecker
     def test_register_in(self):
@@ -65,6 +77,7 @@ class ComponentFactoryTest(TestCase):
 
         class GoodFactory3(MockFactory):
             type = "boolean"
+            format = "*"
 
         registry = MockRegistry()
         GoodFactory0.register_in(registry)
@@ -76,7 +89,7 @@ class ComponentFactoryTest(TestCase):
                 {"format": None, "type": None},
                 {"format": None, "type": "string"},
                 {"format": None, "type": "integer"},
-                {"format": None, "type": "boolean"},
+                {"format": "*", "type": "boolean"},
             ],
             [kwargs for _args, kwargs in registry.registrations],
         )

@@ -3,7 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 from .component import Component
 from .json import JsonSchemaDict, JsonType, JsonValue
@@ -13,7 +13,12 @@ if TYPE_CHECKING:
 
 
 class ComponentFactory(ABC):
-    """Factory for components."""
+    """
+    Factory for components.
+    Instances of this class are registered in a `ComponentFactoryRegistry`
+    using the combination of a JSON schema type and format
+    as registration key.
+    """
 
     @abstractmethod
     def create_component(
@@ -31,41 +36,45 @@ class ComponentFactory(ABC):
         """
 
     @abstractmethod
-    def get_score(self, schema: JsonSchemaDict) -> int:
+    def accept(self, schema: JsonSchemaDict) -> bool:
         """
-        Get a score of how well the components produced by this factory
-        can represent the given schema.
+        Check, whether the components produced by this factory
+        can use the given schema.
         """
-
-    # noinspection PyShadowingBuiltins
-    @staticmethod
-    def get_key(type: str | None, format: str | None) -> str:
-        """
-        Get a key for given JSON data type name `type` and `format`.
-        """
-        type_key = type if type else "*"
-        format_key = format if format else "*"
-        return f"{type_key}.{format_key}"
 
 
 class ComponentFactoryBase(ComponentFactory, ABC):
-    """Factory for components."""
+    """
+    Base class for component factories that dedicated to JSON type and/or format.
+    """
 
-    type: JsonType | None = None
-    """Specifies the JSON type to use as a registry key."""
+    type: JsonType | Literal["*"] | None = None
+    """
+    Specifies the JSON type to use as a registry key.
+    The key `"*"` can be used for arbitrary types and requires
+    overriding the `accept` method by a suitable implementation
+    that recognizes the actual type in the schema.
+    The key `None` expects that a type must not be specified
+    in a given schema.
+    """
 
-    format: str | None = None
-    """Specifies the JSON type to use as a registry key."""
+    format: str | Literal["*"] | None = None
+    """
+    Specifies the JSON type to use as a registry key.
+    The key `"*"` can be used for arbitrary types and requires
+    overriding the `accept` method by a suitable implementation
+    that recognizes the actual format in the schema.
+    The key `None` expects that a type must not be specified
+    in a given schema.
+    """
 
     # noinspection PyShadowingBuiltins
-    def get_score(self, schema: JsonSchemaDict) -> int:
-        type = schema.get("type")
-        format = schema.get("format")
-        if self.type and self.type == type:
-            if self.format:
-                return 2 if self.format == format else 0
-            return 1
-        return 0
+    def accept(self, schema: JsonSchemaDict) -> bool:
+        other_type = schema.get("type")
+        other_format = schema.get("format")
+        type_matches = self.type == other_type or self.type == "*"
+        format_matches = self.format == other_format or self.format == "*"
+        return type_matches and format_matches
 
     @classmethod
     def register_in(cls, registry: "ComponentFactoryRegistry"):
