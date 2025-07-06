@@ -5,6 +5,7 @@
 from unittest import TestCase
 
 import panel as pn
+import pytest
 
 from s2gos_client.gui.component import (
     Component,
@@ -79,6 +80,9 @@ class ComponentFactoryTest(TestCase):
             type = "boolean"
             format = "*"
 
+            def accept(self, schema: JsonSchemaDict) -> bool:
+                return schema.get("format") in ("bistate", "tristate")
+
         registry = MockRegistry()
         GoodFactory0.register_in(registry)
         GoodFactory1.register_in(registry)
@@ -97,3 +101,33 @@ class ComponentFactoryTest(TestCase):
         self.assertIsInstance(registry.registrations[1][0][0], GoodFactory1)
         self.assertIsInstance(registry.registrations[2][0][0], GoodFactory2)
         self.assertIsInstance(registry.registrations[3][0][0], GoodFactory3)
+
+    # noinspection PyMethodMayBeStatic
+    def test_raise_on_missing_accept(self):
+        class FactoryWithoutOwnAccept(MockFactory):
+            type = "string"
+            format = "*"
+
+        with pytest.raises(
+            TypeError,
+            match=(
+                r"class FactoryWithoutOwnAccept must override method "
+                r"ComponentFactoryBase\.accept\(\)"
+            ),
+        ):
+            FactoryWithoutOwnAccept()
+
+    # noinspection PyMethodMayBeStatic
+    def test_raise_on_wrong_type(self):
+        class FactoryWithWrongTypeName(MockFactory):
+            type = "strong"
+
+        with pytest.raises(
+            ValueError,
+            match=(
+                "value of ComponentFactoryBase.type must be one of "
+                "'boolean', 'integer', 'number', 'string', 'array', 'object', "
+                "but was 'strong'"
+            ),
+        ):
+            FactoryWithWrongTypeName()

@@ -5,8 +5,7 @@
 from collections import defaultdict
 
 from .factory import ComponentFactory
-from .json import JSON_TYPE_NAMES, JsonSchemaDict
-
+from .json import JsonSchemaDict
 
 KeyType = tuple[str | None, str | None]
 

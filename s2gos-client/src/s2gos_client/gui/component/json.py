@@ -7,7 +7,7 @@ from abc import ABC, abstractmethod
 from types import NoneType
 from typing import Any, Final, Literal, TypeAlias
 
-JSON_TYPE_NAMES: Final = {"boolean", "integer", "number", "string", "array", "object"}
+JSON_TYPE_NAMES: Final = ("boolean", "integer", "number", "string", "array", "object")
 
 JsonType: TypeAlias = Literal[
     "boolean", "integer", "number", "string", "array", "object"
@@ -33,7 +33,7 @@ class JsonCodec(ABC):
 class JsonIdentityCodec(JsonCodec):
     def from_json(self, value: Any) -> JsonValue:
         assert isinstance(value, (bool, int, float, str, list, dict, NoneType))
-        return value if value is not None else JSON_DEFAULT_VALUES[type(value)]
+        return value
 
     def to_json(self, json_value: JsonValue) -> Any:
         assert isinstance(json_value, (bool, int, float, str, list, dict, NoneType))
@@ -42,6 +42,8 @@ class JsonIdentityCodec(JsonCodec):
 
 class JsonDateCodec(JsonCodec):
     def from_json(self, value: datetime.date | None) -> str | None:
+        if not value:
+            return None
         assert isinstance(value, datetime.date)
         return datetime.date.isoformat(value)
 

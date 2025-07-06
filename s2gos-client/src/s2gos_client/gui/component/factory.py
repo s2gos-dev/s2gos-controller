@@ -2,11 +2,13 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+import inspect
 from abc import ABC, abstractmethod
+from types import FunctionType
 from typing import TYPE_CHECKING, Literal
 
 from .component import Component
-from .json import JsonSchemaDict, JsonType, JsonValue
+from .json import JSON_TYPE_NAMES, JsonSchemaDict, JsonType, JsonValue
 
 if TYPE_CHECKING:
     from .registry import ComponentFactoryRegistry
@@ -68,6 +70,20 @@ class ComponentFactoryBase(ComponentFactory, ABC):
     in a given schema.
     """
 
+    def __init__(self):
+        if self.type == "*" or self.format == "*":
+            if not _has_own_accept_impl(self):
+                raise TypeError(
+                    f"class {self.__class__.__name__} must override method "
+                    f"{ComponentFactoryBase.__name__}.accept()"
+                )
+        if self.type and self.type != "*" and self.type not in JSON_TYPE_NAMES:
+            raise ValueError(
+                f"value of {ComponentFactoryBase.__name__}.type must be "
+                f"one of {', '.join(map(repr, JSON_TYPE_NAMES))}, "
+                f"but was {self.type!r}"
+            )
+
     # noinspection PyShadowingBuiltins
     def accept(self, schema: JsonSchemaDict) -> bool:
         other_type = schema.get("type")
@@ -80,3 +96,21 @@ class ComponentFactoryBase(ComponentFactory, ABC):
     def register_in(cls, registry: "ComponentFactoryRegistry"):
         """Register this factory in the given registry."""
         registry.register_factory(cls(), type=cls.type, format=cls.format)
+
+
+def _has_own_accept_impl(factory: ComponentFactoryBase) -> bool:
+    """
+    Check if `factory` is an instance of a subclass of `ComponentFactoryBase`
+    that overrides an instance method named `accept`.
+    """
+    method_name = "accept"
+    factory_cls = factory.__class__
+    if factory_cls is ComponentFactoryBase:
+        return False
+    for cls in inspect.getmro(factory_cls):
+        if cls is ComponentFactoryBase:
+            break
+        method = cls.__dict__.get(method_name)
+        if isinstance(method, FunctionType):
+            return True
+    return False
