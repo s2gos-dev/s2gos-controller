@@ -5,7 +5,7 @@
 from unittest import TestCase
 
 import pytest
-from pydantic import Field
+from pydantic import Field, BaseModel
 from tests.helpers import BaseModelMixin
 
 from s2gos_common.models import (
@@ -26,6 +26,16 @@ def f1(x: bool, y: int) -> float:
 def f2(a: bool | None, b: float | bool) -> tuple[float, float]:
     """This is f2."""
     return (2.0 * b, 0.5 * b) if a else (0.5 * b, 2.0 * b)
+
+
+class Point(BaseModel):
+    x: float = Field(0.0, title="X-coordinate")
+    y: float = Field(0.0, title="Y-coordinate")
+
+
+def f3(point1: Point, point2: Point) -> Point:
+    """This is f3."""
+    return Point(x=(point2.x - point1.x), y=(point2.y - point1.y))
 
 
 class ProcessRegistryTest(BaseModelMixin, TestCase):
@@ -260,6 +270,35 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         self.assertEqual("This is f1.", p1.description)
         self.assertIsInstance(p1.inputs, dict)
         self.assertIsInstance(p1.outputs, dict)
+
+    def test_register_f3_with_inline_base_model(self):
+        registry = ProcessRegistry()
+
+        entry = registry.register_function(f3, id="f3-1", inline_inputs=True)
+        self.assertEqual(
+            {"point1.x", "point1.y", "point2.x", "point2.y"},
+            set(entry.process.inputs.keys()),
+        )
+        self.assertBaseModelEqual(
+            InputDescription(
+                minOccurs=0,
+                title="X-coordinate",
+                schema=Schema(type="number", default=0.0),
+            ),
+            entry.process.inputs["point1.x"],
+        )
+
+        entry = registry.register_function(f3, id="f3-2", inline_inputs="point2")
+        self.assertEqual(
+            {"point1", "point2.x", "point2.y"},
+            set(entry.process.inputs.keys()),
+        )
+
+        entry = registry.register_function(f3, id="f3-3", inline_inputs=["point1"])
+        self.assertEqual(
+            {"point1.x", "point1.y", "point2"},
+            set(entry.process.inputs.keys()),
+        )
 
     def test_register_multiple(self):
         registry = ProcessRegistry()

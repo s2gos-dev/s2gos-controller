@@ -1,7 +1,7 @@
 #  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
-
+import copy
 import dataclasses
 import inspect
 import json
@@ -188,10 +188,8 @@ def create_json_schema(
     inline_objects: bool | str | list[str] = False,
     inline_sep: str | None = ".",
 ) -> dict[str, Any]:
-    schema = model_class.model_json_schema(
-        ref_template="",
-        mode="serialization",
-    )
+    schema = model_class.model_json_schema(mode="serialization")
+    schema = inline_pydantic_schema_refs(schema)
     if inline_objects and isinstance(schema.get("properties"), dict):
         schema = inline_object_properties(schema, inline_objects, inline_sep)
     return backport_schema_to_openapi_3_0(schema)
@@ -234,6 +232,47 @@ def inline_object_properties(
         schema: dict[str, Any] = dict(schema)
         schema["properties"] = schema_properties
         schema["required"] = schema_required
+    return schema
+
+
+def inline_pydantic_schema_refs(schema: dict[str, Any]):
+    defs: dict[str, Any] | None = schema.get("$defs")
+    if not defs:
+        return schema
+    schema = copy.copy(schema)
+    schema.pop("$defs")
+    return _inline_pydantic_schema_refs(
+        schema, {f"#/$defs/{k}": v for k, v in defs.items()}
+    )
+
+
+def _inline_pydantic_schema_refs(schema: dict[str, Any], defs: dict[str, Any]):
+    if "$ref" in schema:
+        ref = schema["$ref"]
+        if ref in defs:
+            ref_schema = _inline_pydantic_schema_refs(defs[ref], defs)
+            schema = copy.copy(schema)
+            schema.pop("$ref")
+            schema.update(copy.deepcopy(ref_schema))
+            return schema
+    schema = copy.copy(schema)
+    for k in ("allOf", "anyOf", "oneOf"):
+        if k in schema:
+            if isinstance(schema[k], list):
+                schema[k] = [_inline_pydantic_schema_refs(s, defs) for s in schema[k]]
+    for k in ("items", "prefixItems", "additionalProperties"):
+        if k in schema:
+            if isinstance(schema[k], list):
+                schema[k] = [_inline_pydantic_schema_refs(s, defs) for s in schema[k]]
+            else:
+                schema[k] = _inline_pydantic_schema_refs(schema[k], defs)
+    for k in ("properties",):
+        if k in schema:
+            if isinstance(schema[k], dict):
+                schema[k] = {
+                    k: _inline_pydantic_schema_refs(s, defs)
+                    for k, s in schema[k].items()
+                }
     return schema
 
 
