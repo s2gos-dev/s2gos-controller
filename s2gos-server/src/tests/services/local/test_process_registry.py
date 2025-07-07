@@ -5,7 +5,7 @@
 from unittest import TestCase
 
 import pytest
-from pydantic import Field, BaseModel
+from pydantic import BaseModel, Field
 from tests.helpers import BaseModelMixin
 
 from s2gos_common.models import (
