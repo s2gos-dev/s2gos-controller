@@ -154,7 +154,7 @@ def _generate_outputs(
                 f"function {fn_name!r}: return type must be tuple[] with arguments"
             )
         if len(args) != len(output_fields):
-            raise TypeError(
+            raise ValueError(
                 f"function {fn_name!r}: number of outputs must match number "
                 f"of tuple[] arguments"
             )

@@ -4,6 +4,7 @@
 
 from unittest import TestCase
 
+import pytest
 from pydantic import Field
 from tests.helpers import BaseModelMixin
 
@@ -112,7 +113,43 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
             outputs["return_value"],
         )
 
-    def test_register_f2_with_output_fields(self):
+    def test_register_f2_with_1_output_field(self):
+        registry = ProcessRegistry()
+
+        entry = registry.register_function(
+            f2,
+            output_fields={
+                "point": Field(title="A point (x, y)"),
+            },
+        )
+        self.assertIsInstance(entry, ProcessRegistry.Entry)
+        self.assertIs(f2, entry.function)
+        process = entry.process
+        self.assertIsInstance(process, ProcessDescription)
+        self.assertEqual("tests.services.local.test_process_registry:f2", process.id)
+        self.assertEqual("0.0.0", process.version)
+        self.assertEqual(None, process.title)
+        self.assertEqual("This is f2.", process.description)
+        inputs = process.inputs
+        outputs = process.outputs
+        self.assertIsInstance(inputs, dict)
+        self.assertIsInstance(outputs, dict)
+        self.assertEqual(["a", "b"], list(inputs.keys()))
+        self.assertEqual(["point"], list(outputs.keys()))
+        self.assertBaseModelEqual(
+            OutputDescription(
+                title="A point (x, y)",
+                schema=Schema(
+                    type=DataType.array,
+                    items=Schema(type="number"),
+                    minItems=2,
+                    maxItems=2,
+                ),
+            ),
+            outputs["point"],
+        )
+
+    def test_register_f2_with_2_output_fields(self):
         registry = ProcessRegistry()
 
         entry = registry.register_function(
@@ -150,6 +187,64 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
             ),
             outputs["y"],
         )
+
+    # noinspection PyMethodMayBeStatic
+    def test_register_illegal_f1_with_output_fields(self):
+        registry = ProcessRegistry()
+        with pytest.raises(
+            TypeError,
+            match=(
+                r"function 'tests.services.local.test_process_registry\:f1'\: "
+                r"return type must be tuple\[\] with arguments"
+            ),
+        ):
+            registry.register_function(
+                f1,
+                output_fields={
+                    "x": Field(title="The X", ge=0.0),
+                    "y": Field(title="The Y", lt=1.0),
+                },
+            )
+
+    # noinspection PyMethodMayBeStatic
+    def test_register_f1_with_illegal_input_fields(self):
+        registry = ProcessRegistry()
+        with pytest.raises(
+            ValueError,
+            match=(
+                r"function tests\.services\.local\.test_process_registry\:f1\: "
+                r"all input names must have corresponding parameter names; "
+                r"invalid input name\(s\)\: 'u', 'v'"
+            ),
+        ):
+            registry.register_function(
+                f1,
+                input_fields={
+                    "x": Field(title="The valid X", ge=0.0),
+                    "y": Field(title="The valid Y", lt=1.0),
+                    "u": Field(title="The illegal U"),
+                    "v": Field(title="The illegal V"),
+                },
+            )
+
+    # noinspection PyMethodMayBeStatic
+    def test_register_f2_with_illegal_output_fields(self):
+        registry = ProcessRegistry()
+        with pytest.raises(
+            ValueError,
+            match=(
+                r"function 'tests.services.local.test_process_registry\:f2'\: "
+                r"number of outputs must match number of tuple\[\] arguments"
+            ),
+        ):
+            registry.register_function(
+                f2,
+                output_fields={
+                    "x": Field(title="The X", ge=0.0),
+                    "y": Field(title="The Y", lt=1.0),
+                    "z": Field(title="The Z"),
+                },
+            )
 
     def test_register_f1_with_props(self):
         registry = ProcessRegistry()
