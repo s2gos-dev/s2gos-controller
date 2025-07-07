@@ -7,6 +7,8 @@ import time
 from pathlib import Path
 from typing import Optional
 
+from pydantic import Field
+
 from s2gos_common.models import Link
 from s2gos_server.services.local import LocalService, get_job_context
 
@@ -23,40 +25,40 @@ service = LocalService(
         "Creates an xarray dataset and writes it as Zarr into a temporary location. "
         "Requires installed dask, xarray, and zarr packages."
     ),
-    inputs={
-        "var_names": {
-            "title": "Variable names",
-            "description": "Comma-separated list of variable names.",
-        },
-        "bbox": {
-            "title": "Bounding box",
-            "description": "Bounding box in geographical coordinates.",
-            "format": "bbox",
-        },
-        "resolution": {
-            "title": "Spatial resolution",
-            "description": "Spatial resolution in degree.",
-            "minimum": 0.01,
-            "maximum": 10,
-        },
-        "start_date": {
-            "title": "Start date",
-            "format": "date",
-        },
-        "end_date": {
-            "title": "End date",
-            "format": "date",
-        },
-        "periodicity": {
-            "title": "Periodicity",
-            "description": "Size of time steps in days.",
-            "minimum": 1,
-            "maximum": 10,
-        },
-        "output_path": {
-            "title": "Output path",
-            "description": "Local output path or URI.",
-        },
+    input_fields={
+        "var_names": Field(
+            title="Variable names",
+            description="Comma-separated list of variable names.",
+        ),
+        "bbox": Field(
+            title="Bounding box",
+            description="Bounding box in geographical coordinates.",
+            format="bbox",
+        ),
+        "resolution": Field(
+            title="Spatial resolution",
+            description="Spatial resolution in degree.",
+            minimum=0.01,
+            maximum=10,
+        ),
+        "start_date": Field(
+            title="Start date",
+            format="date",
+        ),
+        "end_date": Field(
+            title="End date",
+            format="date",
+        ),
+        "periodicity": Field(
+            title="Periodicity",
+            description="Size of time steps in days.",
+            minimum=1,
+            maximum=10,
+        ),
+        "output_path": Field(
+            title="Output path",
+            description="Local output path or URI.",
+        ),
     },
 )
 def create_datacube(

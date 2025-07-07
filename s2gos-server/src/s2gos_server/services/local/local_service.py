@@ -7,6 +7,7 @@ from concurrent.futures.process import ProcessPoolExecutor
 from typing import Callable, Optional
 
 import fastapi
+from pydantic.fields import FieldInfo
 from starlette.routing import Route
 
 from s2gos_common.models import (
@@ -175,19 +176,35 @@ class LocalService(Service):
             }
         )
 
-    # TODO: be user-friendly, turn kwargs into parameter list
-    def process(self, **kwargs) -> Callable[[Callable], Callable]:
+    # noinspection PyShadowingBuiltins
+    def process(
+        self,
+        id: Optional[str] = None,
+        version: Optional[str] = None,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
+        expand_inputs: bool | list[str] = False,
+        expand_with_prefix: bool = False,
+        input_fields: dict[str, FieldInfo] = None,
+        output_fields: dict[str, FieldInfo] = None,
+    ) -> Callable[[Callable], Callable]:
         """A decorator for user functions to be registered as processes."""
 
         def _factory(function: Callable):
-            self.register_process(function, **kwargs)
+            self.process_registry.register_function(
+                function,
+                id=id,
+                version=version,
+                title=title,
+                description=description,
+                expand_inputs=expand_inputs,
+                expand_with_prefix=expand_with_prefix,
+                input_fields=input_fields,
+                output_fields=output_fields,
+            )
             return function
 
         return _factory
-
-    def register_process(self, function: Callable, **kwargs) -> ProcessRegistry.Entry:
-        """Register a user function as process."""
-        return self.process_registry.register_function(function, **kwargs)
 
     def _get_process_entry(self, process_id: str) -> ProcessRegistry.Entry:
         process_entry = self.process_registry.get_entry(process_id)

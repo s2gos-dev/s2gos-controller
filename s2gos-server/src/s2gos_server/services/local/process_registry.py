@@ -4,7 +4,9 @@
 
 import dataclasses
 import inspect
-from typing import Any, Callable, Optional, get_args, get_origin
+from typing import Callable, Optional, get_args, get_origin
+
+import pydantic
 
 from s2gos_common.models import (
     InputDescription,
@@ -12,7 +14,6 @@ from s2gos_common.models import (
     ProcessDescription,
     Schema,
 )
-from s2gos_server.services.local.schema_factory import Annotation, SchemaFactory
 
 
 class ProcessRegistry:
@@ -36,159 +37,107 @@ class ProcessRegistry:
         return self._dict.get(process_id)
 
     def register_function(
-        self, function: Callable, **kwargs
+        self,
+        function: Callable,
+        id: Optional[str] = None,
+        version: Optional[str] = None,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
+        expand_inputs: bool | list[str] = False,
+        expand_with_prefix: bool = False,
+        input_fields: dict[str, pydantic.fields.FieldInfo] = None,
+        output_fields: dict[str, pydantic.fields.FieldInfo] = None,
     ) -> "ProcessRegistry.Entry":
         if not inspect.isfunction(function):
             raise ValueError("function argument must be callable")
-
         fn_name = f"{function.__module__}:{function.__qualname__}"
-
-        id_ = kwargs.pop("id", None) or fn_name
-        version = kwargs.pop("version", None) or "0.0.0"
-        input_schemas = kwargs.pop("inputs", None) or {}
-        output_schemas = kwargs.pop("outputs", None) or {}
-        description = kwargs.pop("description", None) or function.__doc__
-
         signature = inspect.signature(function)
-        if not input_schemas:
-            inputs = _generate_inputs(fn_name, signature)
-        else:
-            inputs = _complete_inputs(fn_name, signature, input_schemas)
-
-        if not output_schemas:
-            outputs = _generate_outputs(fn_name, signature.return_annotation)
-        else:
-            outputs = _complete_outputs(fn_name, signature, output_schemas)
-
+        inputs = _generate_inputs(fn_name, signature, input_fields)
+        outputs = _generate_outputs(fn_name, signature.return_annotation, output_fields)
         entry = ProcessRegistry.Entry(
             function,
             signature,
             ProcessDescription(
-                id=id_,
+                id=id,
                 version=version,
+                title=title,
                 description=description,
                 inputs=inputs,
                 outputs=outputs,
-                **kwargs,
             ),
         )
-        self._dict[id_] = entry
+        self._dict[id] = entry
         return entry
 
 
 def _generate_inputs(
-    fn_name: str, signature: inspect.Signature
+    fn_name: str,
+    signature: inspect.Signature,
+    input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
 ) -> dict[str, InputDescription]:
+    model_field_definitions = {}
+    for param_name, parameter in signature.parameters.items():
+        if parameter.default is inspect.Parameter.empty:
+            field = parameter.annotation
+        else:
+            field = parameter.annotation, parameter.default
+        model_field_definitions[param_name] = field
+    model_class = pydantic.create_model("Inputs", **model_field_definitions)
+    if input_fields:
+        # TODO: check input names match param names
+        model_fields: dict[str, pydantic.fields.FieldInfo] = dict(
+            model_class.model_fields()
+        )
+        for input_name, field_info in input_fields.items():
+            if input_name in model_fields:
+                model_fields[input_name] = pydantic.fields.FieldInfo.merge_field_infos(
+                    model_fields[input_name], field_info
+                )
+        model_class: type[pydantic.BaseModel] = pydantic.create_model(
+            "Inputs", **model_field_definitions
+        )
+    inputs_schema = model_class.model_json_schema(mode="serialization")
+    # TODO: 1. respect expanding params
+    # TODO: 2. backport schema to OpenAPI 3.0
     return {
-        param_name: _generate_input(fn_name, param)
-        for param_name, param in signature.parameters.items()
-        if param_name != "ctx"
+        input_name: InputDescription(
+            minOccurs=1 if input_name in inputs_schema.get("required", []) else 0,
+            maxOccurs=None,
+            title=schema.get("title"),
+            description=schema.get("description"),
+            schema_=Schema(**schema),
+        )
+        for input_name, schema in inputs_schema["properties"]
     }
 
 
-def _complete_inputs(
-    fn_name: str, signature: inspect.Signature, input_schemas: dict[str, Any]
-):
-    assert isinstance(input_schemas, dict)
-
-    unknown_input_names = [
-        k for k in input_schemas.keys() if k not in signature.parameters
-    ]
-    if unknown_input_names:
-        raise ValueError(f"Invalid input name(s): {', '.join(unknown_input_names)}")
-
-    _inputs: dict[str, InputDescription] = {}
-    for param_name, parameter in signature.parameters.items():
-        if param_name not in input_schemas:
-            _inputs[param_name] = _generate_input(fn_name, parameter)
-        else:
-            input_schema_dict = input_schemas[param_name]
-            assert isinstance(input_schema_dict, dict)
-
-            schema_factory = _schema_factory_from_parameter(fn_name, parameter)
-            param_schema_dict = schema_factory.get_schema_dict()
-
-            merged_schema_dict = dict(param_schema_dict)
-            merged_schema_dict.update(input_schema_dict)
-
-            merged_schema = Schema.model_validate(merged_schema_dict)
-
-            _inputs[param_name] = InputDescription(schema=merged_schema)
-
-    return _inputs
-
-
-def _generate_input(fn_name: str, parameter: inspect.Parameter) -> InputDescription:
-    schema_factory = _schema_factory_from_parameter(fn_name, parameter)
-    return InputDescription(schema=schema_factory.get_schema())
-
-
 def _generate_outputs(
-    fn_name: str, annotation: Annotation
-) -> dict[str, OutputDescription]:
-    origin = get_origin(annotation)
-    args = get_args(annotation)
-    if origin is tuple and args:
-        return {
-            f"result_{i}": _generate_output(fn_name, f"result_{i}", arg)
-            for i, arg in enumerate(args)
-        }
-    else:
-        return {"result": _generate_output(fn_name, "result", annotation)}
-
-
-def _complete_outputs(
-    _fn_name: str,
-    _signature: inspect.Signature,
-    output_schemas: dict[str, OutputDescription],
-):
-    assert isinstance(output_schemas, dict)
-    # TODO: implement _complete_outputs()
-    return dict(output_schemas)
-
-
-def _generate_output(
-    fn_name: str, name: str, annotation: Annotation
-) -> OutputDescription:
-    return OutputDescription(
-        schema=_schema_from_return_annotation(fn_name, name, annotation)
-    )
-
-
-def _schema_factory_from_parameter(
-    fn_name: str, parameter: inspect.Parameter
-) -> SchemaFactory:
-    return SchemaFactory(
-        fn_name,
-        parameter.name,
-        _normalize_inspect_value(parameter.annotation, default=Any),
-        default=_normalize_inspect_value(parameter.default, default=...),
-    )
-
-
-def _schema_from_parameter(fn_name: str, parameter: inspect.Parameter) -> Schema:
-    return SchemaFactory(
-        fn_name,
-        parameter.name,
-        _normalize_inspect_value(parameter.annotation, default=Any),
-        default=_normalize_inspect_value(parameter.default, default=...),
-    ).get_schema()
-
-
-def _schema_from_return_annotation(
     fn_name: str,
-    name: str,
-    annotation: Annotation,
-) -> Schema:
-    return SchemaFactory(
-        fn_name,
-        name,
-        _normalize_inspect_value(annotation, default=Any),
-        is_return=True,
-    ).get_schema()
-
-
-def _normalize_inspect_value(value: Any, *, default: Any) -> Any:
-    if value is inspect.Parameter.empty:
-        return default
-    return value
+    annotation: type,
+    output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
+) -> dict[str, OutputDescription]:
+    model_field_definitions = {}
+    if not output_fields:
+        model_field_definitions = {"return_value": annotation}
+    elif len(output_fields) == 1:
+        output_name, field_info = next(iter(output_fields.items()))
+        model_field_definitions = {output_name: (annotation, field_info)}
+    else:
+        origin = get_origin(annotation)
+        args = get_args(annotation)
+        if not (origin is tuple and args):
+            raise TypeError("return type must be tuple[] with arguments")
+        if len(args) != len(output_fields):
+            raise TypeError("number of outputs must match number of tuple[] arguments")
+        for arg_type, output_name, field_info in zip(args, output_fields):
+            model_field_definitions[output_name] = (arg_type, field_info)
+    model_class = pydantic.create_model("Outputs", **model_field_definitions)
+    outputs_schema = model_class.model_json_schema(mode="serialization")
+    return {
+        output_name: OutputDescription(
+            title=schema.get("title"),
+            description=schema.get("description"),
+            schema_=Schema(**schema),
+        )
+        for output_name, schema in outputs_schema["properties"]
+    }

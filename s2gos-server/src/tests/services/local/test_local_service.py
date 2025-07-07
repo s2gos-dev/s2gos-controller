@@ -18,7 +18,7 @@ class LocalServiceTest(TestCase):
         def foo(x: bool, y: int) -> float:
             return 2 * y if x else y / 2
 
-        service.register_process(foo, id="foo", version="1.0.0")
+        service.process_registry.register_process(foo, id="foo", version="1.0.0")
 
         @service.process(id="bar", version="1.4.2")
         def bar(x: bool, y: int) -> float:
