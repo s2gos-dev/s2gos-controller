@@ -97,7 +97,7 @@ class ComponentContainer:
 
     def _get_on_value_changed(self, name: str, component: Component) -> Callable:
         def on_value_changed(event: Any):
-            json_value = component.json_codec.encode(event.new)
+            json_value = component.json_codec.from_json(event.new)
             self._entries[name].value = json_value
 
         return on_value_changed
