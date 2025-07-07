@@ -4,8 +4,14 @@
 
 from unittest import TestCase
 
+import pydantic
 import pytest
 from pydantic import BaseModel, Field
+
+from s2gos_server.services.local.process_registry import (
+    create_schema_instance,
+    inline_schema_refs,
+)
 from tests.helpers import BaseModelMixin
 
 from s2gos_common.models import (
@@ -319,3 +325,68 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         self.assertIsInstance(p2, ProcessDescription)
         self.assertIs(p1, registry.get_process(p1.id))
         self.assertIs(p2, registry.get_process(p2.id))
+
+    def test_create_schema_instance(self):
+        self.assertEqual(
+            Schema(type="number"),
+            create_schema_instance("x", {"type": "number"}),
+        )
+
+        with pytest.raises(pydantic.ValidationError):
+            create_schema_instance("x", {"tüp": "number"})
+
+
+class InlineRefsTest(TestCase):
+    def test_inline_schema_refs(self):
+        schema = inline_schema_refs(
+            {
+                "type": "array",
+                "items": {"$ref": "#/$defs/Line"},
+                "$defs": {
+                    "Line": {
+                        "type": "object",
+                        "properties": {
+                            "p1": {"$ref": "#/$defs/Point"},
+                            "p2": {"$ref": "#/$defs/Point"},
+                        },
+                        "required": ["p1", "p2"],
+                    },
+                    "Point": {
+                        "type": "object",
+                        "properties": {
+                            "x": {"type": "number"},
+                            "y": {"type": "number"},
+                        },
+                        "required": ["x", "y"],
+                    },
+                },
+            }
+        )
+        self.assertEqual(
+            {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": ["p1", "p2"],
+                    "properties": {
+                        "p1": {
+                            "type": "object",
+                            "required": ["x", "y"],
+                            "properties": {
+                                "x": {"type": "number"},
+                                "y": {"type": "number"},
+                            },
+                        },
+                        "p2": {
+                            "type": "object",
+                            "required": ["x", "y"],
+                            "properties": {
+                                "x": {"type": "number"},
+                                "y": {"type": "number"},
+                            },
+                        },
+                    },
+                },
+            },
+            schema,
+        )
