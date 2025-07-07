@@ -4,6 +4,7 @@
 
 from unittest import TestCase
 
+from pydantic import Field
 from tests.helpers import BaseModelMixin
 
 from s2gos_common.models import (
@@ -44,16 +45,21 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         self.assertIsInstance(inputs, dict)
         self.assertIsInstance(outputs, dict)
         self.assertEqual(["x", "y"], list(inputs.keys()))
-        self.assertEqual(["result"], list(outputs.keys()))
+        self.assertEqual(["return_value"], list(outputs.keys()))
         self.assertBaseModelEqual(
-            InputDescription(schema=Schema(type=DataType.boolean)), inputs["x"]
+            InputDescription(title="X", schema=Schema(type=DataType.boolean)),
+            inputs["x"],
         )
         self.assertBaseModelEqual(
-            InputDescription(schema=Schema(type=DataType.integer)), inputs["y"]
+            InputDescription(title="Y", schema=Schema(type=DataType.integer)),
+            inputs["y"],
         )
         self.assertEqual(
-            OutputDescription(schema=Schema(type=DataType.number)),
-            outputs["result"],
+            OutputDescription(
+                title="Return Value",
+                schema=Schema(type=DataType.number),
+            ),
+            outputs["return_value"],
         )
 
     def test_register_f2(self):
@@ -73,26 +79,76 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         self.assertIsInstance(inputs, dict)
         self.assertIsInstance(outputs, dict)
         self.assertEqual(["a", "b"], list(inputs.keys()))
-        self.assertEqual(["result_0", "result_1"], list(outputs.keys()))
+        self.assertEqual(["return_value"], list(outputs.keys()))
         self.assertBaseModelEqual(
-            InputDescription(schema=Schema(type=DataType.boolean, nullable=True)),
+            InputDescription(
+                title="A",
+                schema=Schema(type=DataType.boolean, nullable=True),
+            ),
             inputs["a"],
         )
         self.assertBaseModelEqual(
             InputDescription(
+                title="B",
                 schema=Schema(
-                    oneOf=[Schema(type=DataType.number), Schema(type=DataType.boolean)]
-                )
+                    anyOf=[
+                        Schema(type=DataType.number),
+                        Schema(type=DataType.boolean),
+                    ],
+                ),
             ),
             inputs["b"],
         )
         self.assertBaseModelEqual(
-            OutputDescription(schema=Schema(type=DataType.number)),
-            outputs["result_0"],
+            OutputDescription(
+                title="Return Value",
+                schema=Schema(
+                    type=DataType.array,
+                    items=Schema(type="number"),
+                    minItems=2,
+                    maxItems=2,
+                ),
+            ),
+            outputs["return_value"],
+        )
+
+    def test_register_f2_with_output_fields(self):
+        registry = ProcessRegistry()
+
+        entry = registry.register_function(
+            f2,
+            output_fields={
+                "x": Field(title="The X", ge=0.0),
+                "y": Field(title="The Y", lt=1.0),
+            },
+        )
+        self.assertIsInstance(entry, ProcessRegistry.Entry)
+        self.assertIs(f2, entry.function)
+        process = entry.process
+        self.assertIsInstance(process, ProcessDescription)
+        self.assertEqual("tests.services.local.test_process_registry:f2", process.id)
+        self.assertEqual("0.0.0", process.version)
+        self.assertEqual(None, process.title)
+        self.assertEqual("This is f2.", process.description)
+        inputs = process.inputs
+        outputs = process.outputs
+        self.assertIsInstance(inputs, dict)
+        self.assertIsInstance(outputs, dict)
+        self.assertEqual(["a", "b"], list(inputs.keys()))
+        self.assertEqual(["x", "y"], list(outputs.keys()))
+        self.assertBaseModelEqual(
+            OutputDescription(
+                title="The X",
+                schema=Schema(type=DataType.number, minimum=0.0),
+            ),
+            outputs["x"],
         )
         self.assertEqual(
-            OutputDescription(schema=Schema(type=DataType.number)),
-            outputs["result_1"],
+            OutputDescription(
+                title="The Y",
+                schema=Schema(type=DataType.number, exclusiveMaximum=1.0),
+            ),
+            outputs["y"],
         )
 
     def test_register_f1_with_props(self):
