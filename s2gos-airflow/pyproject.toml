@@ -21,6 +21,7 @@ ruff = "*"
 pytest = "*"
 
 [tool.pixi.pip.dependencies]
+# minimal Airflow install (uses sqlite, good enough for dev)
 apache-airflow = "3.0.2"
 
 #### other tools ###################
