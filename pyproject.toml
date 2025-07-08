@@ -89,7 +89,6 @@ select = ["I", "F", "E"]
 omit = [
     "s2gos-client/src/s2gos_client/gui/**/*"
 ]
-show_missing = true
 
 ########################## Tasks ###############################
 
