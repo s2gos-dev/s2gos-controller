@@ -5,39 +5,43 @@
 from collections import defaultdict
 
 from .factory import ComponentFactory
-from .json import JSON_TYPE_NAMES, JsonSchemaDict, JsonType
+from .json import JsonSchemaDict
+
+KeyType = tuple[str | None, str | None]
 
 
 class ComponentFactoryRegistry:
-    def __init__(self):
-        self._factories: dict[JsonType | None, list[ComponentFactory]] = defaultdict(
-            list
-        )
+    """A registry for component factories."""
 
+    def __init__(self):
+        self._factories: dict[KeyType, list[ComponentFactory]] = defaultdict(list)
+
+    # noinspection PyShadowingBuiltins
     def register_factory(
         self,
         factory: ComponentFactory,
+        type: str | None,
+        format: str | None,
     ):
-        key = factory.type
-        if key is not None and key not in JSON_TYPE_NAMES:
-            raise ValueError(
-                f"Factory type must be one of {JSON_TYPE_NAMES}, was {key!r}"
-            )
-        self._factories[key].append(factory)
+        """
+        Register a component factory using optional
+        `type` and `format` as keys.
+        """
+        self._factories[(type, format)].append(factory)
 
     def find_factory(self, schema: JsonSchemaDict) -> ComponentFactory | None:
-        key = schema.get("type")
-        candidate_factories = self._factories.get(key)
-        if not candidate_factories:
-            return None
-        if len(candidate_factories) == 1:
-            return candidate_factories[0]
-        best_factory: ComponentFactory | None = None
-        best_r = 0
-        # we reverse to force LIFO
-        for factory in reversed(candidate_factories):
-            r = factory.get_score(schema)
-            if r > best_r:
-                best_r = r
-                best_factory = factory
-        return best_factory
+        schema_type = schema.get("type")
+        schema_format = schema.get("format")
+        for t, f in (
+            (schema_type, schema_format),
+            (schema_type, "*"),
+            ("*", schema_format),
+            ("*", "*"),
+        ):
+            candidate_factories = self._factories.get((t, f))
+            if candidate_factories:
+                # we reverse to have LI-FO behaviour
+                for factory in reversed(candidate_factories):
+                    if factory.accept(schema):
+                        return factory
+        return None
