@@ -7,6 +7,8 @@ import time
 from pathlib import Path
 from typing import Optional
 
+from pydantic import Field
+
 from s2gos_common.models import Link
 from s2gos_server.services.local import LocalService, get_job_context
 
@@ -23,40 +25,40 @@ service = LocalService(
         "Creates an xarray dataset and writes it as Zarr into a temporary location. "
         "Requires installed dask, xarray, and zarr packages."
     ),
-    inputs={
-        "var_names": {
-            "title": "Variable names",
-            "description": "Comma-separated list of variable names.",
-        },
-        "bbox": {
-            "title": "Bounding box",
-            "description": "Bounding box in geographical coordinates.",
-            "format": "bbox",
-        },
-        "resolution": {
-            "title": "Spatial resolution",
-            "description": "Spatial resolution in degree.",
-            "minimum": 0.01,
-            "maximum": 10,
-        },
-        "start_date": {
-            "title": "Start date",
-            "format": "date",
-        },
-        "end_date": {
-            "title": "End date",
-            "format": "date",
-        },
-        "periodicity": {
-            "title": "Periodicity",
-            "description": "Size of time steps in days.",
-            "minimum": 1,
-            "maximum": 10,
-        },
-        "output_path": {
-            "title": "Output path",
-            "description": "Local output path or URI.",
-        },
+    input_fields={
+        "var_names": Field(
+            title="Variable names",
+            description="Comma-separated list of variable names.",
+        ),
+        "bbox": Field(
+            title="Bounding box",
+            description="Bounding box in geographical coordinates.",
+            json_schema_extra=dict(format="bbox"),
+        ),
+        "resolution": Field(
+            title="Spatial resolution",
+            description="Spatial resolution in degree.",
+            le=0.01,
+            ge=10,
+        ),
+        "start_date": Field(
+            title="Start date",
+            json_schema_extra=dict(format="date"),
+        ),
+        "end_date": Field(
+            title="End date",
+            json_schema_extra=dict(format="date"),
+        ),
+        "periodicity": Field(
+            title="Periodicity",
+            description="Size of time steps in days.",
+            le=1,
+            ge=10,
+        ),
+        "output_path": Field(
+            title="Output path",
+            description="Local output path or URI.",
+        ),
     },
 )
 def create_datacube(
@@ -155,7 +157,7 @@ def sleep_a_while(
         "Returns the list of prime numbers between a `min_val` and `max_val`. "
     ),
 )
-def primes_between(min_val: int, max_val: int) -> list[int]:
+def primes_between(min_val: int = 0, max_val: int = 100) -> list[int]:
     ctx = get_job_context()
 
     if max_val < 2 or max_val <= min_val:

@@ -7,6 +7,7 @@ from concurrent.futures.process import ProcessPoolExecutor
 from typing import Callable, Optional
 
 import fastapi
+import pydantic
 from starlette.routing import Route
 
 from s2gos_common.models import (
@@ -56,7 +57,7 @@ class LocalService(Service):
         executor: Optional[ThreadPoolExecutor | ProcessPoolExecutor] = None,
     ):
         self.title = title
-        self.description = description = description
+        self.description = description
         self.executor = executor or ThreadPoolExecutor(max_workers=3)
         self.process_registry = ProcessRegistry()
         self.jobs: dict[str, Job] = {}
@@ -175,19 +176,35 @@ class LocalService(Service):
             }
         )
 
-    # TODO: be user-friendly, turn kwargs into parameter list
-    def process(self, **kwargs) -> Callable[[Callable], Callable]:
+    # noinspection PyShadowingBuiltins
+    def process(
+        self,
+        id: Optional[str] = None,
+        version: Optional[str] = None,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
+        inline_inputs: bool | str | list[str] = False,
+        inline_sep: str | None = ".",
+        input_fields: dict[str, pydantic.fields.FieldInfo] = None,
+        output_fields: dict[str, pydantic.fields.FieldInfo] = None,
+    ) -> Callable[[Callable], Callable]:
         """A decorator for user functions to be registered as processes."""
 
         def _factory(function: Callable):
-            self.register_process(function, **kwargs)
+            self.process_registry.register_function(
+                function,
+                id=id,
+                version=version,
+                title=title,
+                description=description,
+                inline_inputs=inline_inputs,
+                inline_sep=inline_sep,
+                input_fields=input_fields,
+                output_fields=output_fields,
+            )
             return function
 
         return _factory
-
-    def register_process(self, function: Callable, **kwargs) -> ProcessRegistry.Entry:
-        """Register a user function as process."""
-        return self.process_registry.register_function(function, **kwargs)
 
     def _get_process_entry(self, process_id: str) -> ProcessRegistry.Entry:
         process_entry = self.process_registry.get_entry(process_id)
