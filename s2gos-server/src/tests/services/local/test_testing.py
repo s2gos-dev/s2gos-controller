@@ -5,22 +5,22 @@
 from unittest import IsolatedAsyncioTestCase, TestCase
 
 from s2gos_common.models import InputDescription, Link, ProcessDescription, ProcessList
-from s2gos_server.services.local.testing import create_datacube
 from s2gos_server.services.local.testing import service as testing_service
+from s2gos_server.services.local.testing import simulate_scene
 
 
 class TestingFunctionsTest(TestCase):
-    def test_create_datacube(self):
+    def test_simulate_scene(self):
         kwargs = {
-            "var_names": "a, b, c",
-            "bbox": [-12.614059, 32.044123, 4.612504, 45.65913],
-            "resolution": 2,
+            "var_names": "a, b",
+            "bbox": [-10, 30, 5, 45],
+            "resolution": 1,
             "start_date": "2025-01-01",
-            "end_date": "2025-02-03",
+            "end_date": "2025-01-03",
             "periodicity": 1,
             "output_path": None,
         }
-        link = create_datacube(**kwargs)
+        link = simulate_scene(**kwargs)
         self.assertIsInstance(link, Link)
         self.assertIsInstance(link.href, str)
         self.assertTrue(link.href.startswith("memory://"))
@@ -30,6 +30,9 @@ class TestingFunctionsTest(TestCase):
 
             ds = xr.open_dataset(link.href)
             self.assertIsInstance(ds, xr.Dataset)
+            self.assertEqual({"time": 2, "lat": 15, "lon": 15}, ds.sizes)
+            self.assertEqual({"time", "lat", "lon"}, set(ds.coords.keys()))
+            self.assertEqual({"a", "b"}, set(ds.data_vars.keys()))
         except ImportError:
             pass
 
@@ -48,12 +51,12 @@ class TestingServiceTest(IsolatedAsyncioTestCase):
         self.assertEqual(3, len(process_dict))
 
         self.assertEqual(
-            {"create_datacube", "sleep_a_while", "primes_between"},
+            {"sleep_a_while", "primes_between", "simulate_scene"},
             set(process_dict.keys()),
         )
 
     async def test_get_process(self):
-        process = await testing_service.get_process(process_id="create_datacube")
+        process = await testing_service.get_process(process_id="simulate_scene")
         self.assertIsInstance(process, ProcessDescription)
         self.assertIsInstance(process.inputs, dict)
 

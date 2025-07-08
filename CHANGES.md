@@ -8,11 +8,18 @@
   - Using `httpx` package instead of `requests`.
   - Dedicated GUI widgets for given JSON schemas can now be registered in
     global registry `registry` of `s2gos_client.gui.component.ComponentContainer`.
+  - Better widget selection for schema types `integer` and `number`.
 
 - `s2gos-server` package:
   - `LocalService` in `s2gos_server.services.local` now reports links to `self`
     and reports absolute capability URLs.
+  - `LocalService` now supports to more arguments for its `@process()` decorator:
+    - `inline_inputs: bool | str | list[str] = False` - allows inlining all or named 
+      object arguments, so that object properties become process inputs at top-level.
+    - `inline_sep: str | None = "."` - In separator to used to create the top-level
+      input names: `{arg}{sep}{prop}`. If `None`, the property names will be used.
   - Now using `fastapi.Depends()` feature
+  - Renamed test process `create_datacube` into `simulate_scene`.
 
 - `s2gos-common` package:
   - Updated `tools/openapi.yaml` to rename some unintuitive names.
