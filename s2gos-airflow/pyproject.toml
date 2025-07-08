@@ -20,7 +20,7 @@ isort = "*"
 ruff = "*"
 pytest = "*"
 
-[tool.pixi.pip.dependencies]
+[tool.pixi.pypi-dependencies]
 # minimal Airflow install (uses sqlite, good enough for dev)
 apache-airflow = "3.0.2"
 
