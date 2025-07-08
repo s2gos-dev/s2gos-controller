@@ -7,7 +7,7 @@ from concurrent.futures.process import ProcessPoolExecutor
 from typing import Callable, Optional
 
 import fastapi
-from pydantic.fields import FieldInfo
+import pydantic
 from starlette.routing import Route
 
 from s2gos_common.models import (
@@ -57,7 +57,7 @@ class LocalService(Service):
         executor: Optional[ThreadPoolExecutor | ProcessPoolExecutor] = None,
     ):
         self.title = title
-        self.description = description = description
+        self.description = description
         self.executor = executor or ThreadPoolExecutor(max_workers=3)
         self.process_registry = ProcessRegistry()
         self.jobs: dict[str, Job] = {}
@@ -183,10 +183,10 @@ class LocalService(Service):
         version: Optional[str] = None,
         title: Optional[str] = None,
         description: Optional[str] = None,
-        expand_inputs: bool | list[str] = False,
-        expand_with_prefix: bool = False,
-        input_fields: dict[str, FieldInfo] = None,
-        output_fields: dict[str, FieldInfo] = None,
+        inline_inputs: bool | str | list[str] = False,
+        inline_sep: str | None = ".",
+        input_fields: dict[str, pydantic.fields.FieldInfo] = None,
+        output_fields: dict[str, pydantic.fields.FieldInfo] = None,
     ) -> Callable[[Callable], Callable]:
         """A decorator for user functions to be registered as processes."""
 
@@ -197,8 +197,8 @@ class LocalService(Service):
                 version=version,
                 title=title,
                 description=description,
-                expand_inputs=expand_inputs,
-                expand_with_prefix=expand_with_prefix,
+                inline_inputs=inline_inputs,
+                inline_sep=inline_sep,
                 input_fields=input_fields,
                 output_fields=output_fields,
             )

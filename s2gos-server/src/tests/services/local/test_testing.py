@@ -59,19 +59,16 @@ class TestingServiceTest(IsolatedAsyncioTestCase):
 
         bbox_input = process.inputs.get("bbox")
         self.assertIsInstance(bbox_input, InputDescription)
+        self.assertEqual("Bounding box", bbox_input.title)
+        self.assertEqual(
+            "Bounding box in geographical coordinates.", bbox_input.description
+        )
         self.assertEqual(
             {
                 "type": "array",
-                "title": "Bounding box",
-                "description": "Bounding box in geographical coordinates.",
                 "default": [-180, -90, 180, 90],
                 "format": "bbox",
-                "items": [
-                    {"type": "number"},
-                    {"type": "number"},
-                    {"type": "number"},
-                    {"type": "number"},
-                ],
+                "items": {"type": "number"},
                 "minItems": 4,
                 "maxItems": 4,
             },
@@ -84,10 +81,11 @@ class TestingServiceTest(IsolatedAsyncioTestCase):
 
         start_date_input = process.inputs.get("start_date")
         self.assertIsInstance(start_date_input, InputDescription)
+        self.assertEqual("Start date", start_date_input.title)
+        self.assertEqual(None, start_date_input.description)
         self.assertEqual(
             {
                 "type": "string",
-                "title": "Start date",
                 "format": "date",
                 "default": "2025-01-01",
             },

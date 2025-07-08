@@ -33,27 +33,27 @@ service = LocalService(
         "bbox": Field(
             title="Bounding box",
             description="Bounding box in geographical coordinates.",
-            format="bbox",
+            json_schema_extra=dict(format="bbox"),
         ),
         "resolution": Field(
             title="Spatial resolution",
             description="Spatial resolution in degree.",
-            minimum=0.01,
-            maximum=10,
+            le=0.01,
+            ge=10,
         ),
         "start_date": Field(
             title="Start date",
-            format="date",
+            json_schema_extra=dict(format="date"),
         ),
         "end_date": Field(
             title="End date",
-            format="date",
+            json_schema_extra=dict(format="date"),
         ),
         "periodicity": Field(
             title="Periodicity",
             description="Size of time steps in days.",
-            minimum=1,
-            maximum=10,
+            le=1,
+            ge=10,
         ),
         "output_path": Field(
             title="Output path",
@@ -157,7 +157,7 @@ def sleep_a_while(
         "Returns the list of prime numbers between a `min_val` and `max_val`. "
     ),
 )
-def primes_between(min_val: int, max_val: int) -> list[int]:
+def primes_between(min_val: int = 0, max_val: int = 100) -> list[int]:
     ctx = get_job_context()
 
     if max_val < 2 or max_val <= min_val:
