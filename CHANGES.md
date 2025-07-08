@@ -1,4 +1,4 @@
-## Changes in version 0.0.2 (in development)
+## Changes in version 0.0.2
 
 - `s2gos-client` package:
   - Moved top-level module in `s2gos_client` into package `s2gos_client.api`.
