@@ -2,6 +2,7 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 import datetime
+import math
 from typing import Any, Callable
 
 import panel as pn
@@ -32,34 +33,49 @@ class IntegerComponentFactory(ComponentFactoryBase):
         self, value: int, title: str, schema: JsonSchemaDict
     ) -> Component:
         value = value if value is not None else 0
-        return WidgetComponent(
-            pn.widgets.IntSlider(
+        minimum = schema.get("minimum")
+        maximum = schema.get("maximum")
+        if (
+            isinstance(minimum, (int, float))
+            and isinstance(maximum, (int, float))
+            and minimum < maximum
+        ):
+            widget = pn.widgets.EditableIntSlider(
                 name=title,
-                start=int(schema.get("minimum", 0)),
-                end=int(schema.get("maximum", 100)),
-                value=value,
-                step=1,
+                start=int(minimum),
+                end=int(maximum),
+                value=int(value),
+                step=max(1, pow(10, int(math.log10(maximum - minimum)) - 1) // 10),
             )
-        )
+        else:
+            widget = pn.widgets.IntInput(name=title, value=int(value))
+        return WidgetComponent(widget)
 
 
 class NumberComponentFactory(ComponentFactoryBase):
     type = "number"
 
     def create_component(
-        self, value: int | float, title: str, schema: JsonSchemaDict
+        self, value: int, title: str, schema: JsonSchemaDict
     ) -> Component:
-        value = value if value is not None else 0.0
-        # noinspection PyTypeChecker
-        return WidgetComponent(
-            pn.widgets.FloatSlider(
+        value = value if value is not None else 0
+        minimum = schema.get("minimum")
+        maximum = schema.get("maximum")
+        if (
+            isinstance(minimum, (int, float))
+            and isinstance(maximum, (int, float))
+            and minimum < maximum
+        ):
+            widget = pn.widgets.EditableFloatSlider(
                 name=title,
-                start=float(schema.get("minimum", 0)),
-                end=float(schema.get("maximum", 100)),
-                value=float(value),
-                step=1,
+                start=minimum,
+                end=maximum,
+                value=value,
+                step=pow(10.0, int(math.log10(maximum - minimum)) - 1.0),
             )
-        )
+        else:
+            widget = pn.widgets.FloatInput(name=title, value=value)
+        return WidgetComponent(widget)
 
 
 class StringComponentFactory(ComponentFactoryBase):

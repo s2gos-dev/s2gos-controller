@@ -1,6 +1,6 @@
 [project]
 name = "s2gos-controller"
-version = "0.0.2.dev0"
+version = "0.0.3.dev"
 description = "S2GOS control layer comprising a server and client"
 requires-python = ">=3.10"
 

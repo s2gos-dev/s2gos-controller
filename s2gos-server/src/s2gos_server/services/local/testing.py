@@ -19,114 +19,6 @@ service = LocalService(
 
 
 @service.process(
-    id="create_datacube",
-    title="Generate a dummy datacube for testing",
-    description=(
-        "Creates an xarray dataset and writes it as Zarr into a temporary location. "
-        "Requires installed dask, xarray, and zarr packages."
-    ),
-    input_fields={
-        "var_names": Field(
-            title="Variable names",
-            description="Comma-separated list of variable names.",
-        ),
-        "bbox": Field(
-            title="Bounding box",
-            description="Bounding box in geographical coordinates.",
-            json_schema_extra=dict(format="bbox"),
-        ),
-        "resolution": Field(
-            title="Spatial resolution",
-            description="Spatial resolution in degree.",
-            le=0.01,
-            ge=10,
-        ),
-        "start_date": Field(
-            title="Start date",
-            json_schema_extra=dict(format="date"),
-        ),
-        "end_date": Field(
-            title="End date",
-            json_schema_extra=dict(format="date"),
-        ),
-        "periodicity": Field(
-            title="Periodicity",
-            description="Size of time steps in days.",
-            le=1,
-            ge=10,
-        ),
-        "output_path": Field(
-            title="Output path",
-            description="Local output path or URI.",
-        ),
-    },
-)
-def create_datacube(
-    var_names: str = "a, b, c",
-    bbox: tuple[float, float, float, float] = (-180, -90, 180, 90),
-    resolution: float = 0.5,
-    start_date: str = "2025-01-01",
-    end_date: str = "2025-02-01",
-    periodicity: int = 1,
-    output_path: Optional[str] = None,
-) -> Link:
-    # dependencies only required for this operation
-    import dask.array as da
-    import numpy as np
-    import xarray as xr
-
-    # print(
-    #     dict(
-    #         var_names=var_names,
-    #         bbox=bbox,
-    #         resolution=resolution,
-    #         start_date=start_date,
-    #         end_date=end_date,
-    #         periodicity=periodicity,
-    #     )
-    # )
-
-    var_names = [name.strip() for name in var_names.split(",")]
-    start_date = datetime.date.fromisoformat(start_date)
-    end_date = datetime.date.fromisoformat(end_date)
-
-    x1, y1, x2, y2 = bbox
-    x_size = round((x2 - x1) / resolution)
-    y_size = round((y2 - y1) / resolution)
-    time_size = round((end_date - start_date).days / periodicity)
-    r05 = resolution / 2
-
-    dataset = xr.Dataset()
-    dataset.coords["lon"] = xr.DataArray(
-        np.linspace(x1 + r05, x2 - r05, x_size), dims="lon"
-    )
-    dataset.coords["lat"] = xr.DataArray(
-        np.linspace(y1 + r05, y2 - r05, y_size), dims="lat"
-    )
-    dataset.coords["time"] = xr.DataArray(
-        np.array(
-            [start_date + datetime.timedelta(days=days) for days in range(time_size)],
-            dtype=np.datetime64,
-        ),
-        dims="time",
-    )
-    for var_name in var_names:
-        dataset[var_name] = xr.DataArray(
-            da.zeros(shape=(time_size, y_size, x_size)), dims=("time", "lat", "lon")
-        )
-
-    if not output_path:
-        output_path = "memory://datacube.zarr"
-
-    dataset.to_zarr(output_path, mode="w")
-    if "://" in output_path:
-        href = output_path
-    else:
-        href = Path(output_path).resolve().as_uri()
-    return Link(href=href, type="application/zarr")
-
-
-@service.process(
     id="sleep_a_while",
     title="Sleep Processor",
     description=(
@@ -191,3 +83,114 @@ def primes_between(min_val: int = 0, max_val: int = 100) -> list[int]:
 
     ctx.report_progress(message="Done")
     return [min_val + i for i, prime in enumerate(is_prime) if prime]
+
+
+@service.process(
+    id="simulate_scene",
+    title="Generate scene for testing",
+    description=(
+        "Simulate a set scene images slices for testing. "
+        "Creates an xarray dataset with `periodicity` time slices "
+        "and writes it as Zarr into a temporary location. "
+        "Requires installed `dask`, `xarray`, and `zarr` packages."
+    ),
+    input_fields={
+        "var_names": Field(
+            title="Variable names",
+            description="Comma-separated list of variable names.",
+        ),
+        "bbox": Field(
+            title="Bounding box",
+            description="Bounding box in geographical coordinates.",
+            json_schema_extra=dict(format="bbox"),
+        ),
+        "resolution": Field(
+            title="Spatial resolution",
+            description="Spatial resolution in degree.",
+            ge=0.01,
+            le=1.0,
+        ),
+        "start_date": Field(
+            title="Start date",
+            json_schema_extra=dict(format="date"),
+        ),
+        "end_date": Field(
+            title="End date",
+            json_schema_extra=dict(format="date"),
+        ),
+        "periodicity": Field(
+            title="Periodicity",
+            description="Size of time steps in days.",
+            ge=1,
+            le=10,
+        ),
+        "output_path": Field(
+            title="Output path",
+            description="Local output path or URI.",
+        ),
+    },
+)
+def simulate_scene(
+    var_names: str = "a, b, c",
+    bbox: tuple[float, float, float, float] = (-180, -90, 180, 90),
+    resolution: float = 0.5,
+    start_date: str = "2025-01-01",
+    end_date: str = "2025-02-01",
+    periodicity: int = 1,
+    output_path: Optional[str] = None,
+) -> Link:
+    # dependencies only required for this operation
+    import dask.array as da
+    import numpy as np
+    import xarray as xr
+
+    # print(
+    #     dict(
+    #         var_names=var_names,
+    #         bbox=bbox,
+    #         resolution=resolution,
+    #         start_date=start_date,
+    #         end_date=end_date,
+    #         periodicity=periodicity,
+    #     )
+    # )
+
+    var_names = [name.strip() for name in var_names.split(",")]
+    start_date = datetime.date.fromisoformat(start_date)
+    end_date = datetime.date.fromisoformat(end_date)
+
+    x1, y1, x2, y2 = bbox
+    x_size = round((x2 - x1) / resolution)
+    y_size = round((y2 - y1) / resolution)
+    time_size = round((end_date - start_date).days / periodicity)
+    r05 = resolution / 2
+
+    dataset = xr.Dataset()
+    dataset.coords["lon"] = xr.DataArray(
+        np.linspace(x1 + r05, x2 - r05, x_size), dims="lon"
+    )
+    dataset.coords["lat"] = xr.DataArray(
+        np.linspace(y1 + r05, y2 - r05, y_size), dims="lat"
+    )
+    dataset.coords["time"] = xr.DataArray(
+        np.array(
+            [start_date + datetime.timedelta(days=days) for days in range(time_size)],
+            dtype=np.datetime64,
+        ),
+        dims="time",
+    )
+    for var_name in var_names:
+        dataset[var_name] = xr.DataArray(
+            da.zeros(shape=(time_size, y_size, x_size)), dims=("time", "lat", "lon")
+        )
+
+    if not output_path:
+        output_path = "memory://datacube.zarr"
+
+    dataset.to_zarr(output_path, mode="w")
+    if "://" in output_path:
+        href = output_path
+    else:
+        href = Path(output_path).resolve().as_uri()
+    # noinspection PyArgumentList
+    return Link(href=href, type="application/zarr")

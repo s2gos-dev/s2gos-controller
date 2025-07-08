@@ -119,7 +119,7 @@ def _get_schema_from_input_description(
     schema = v.schema_.model_dump(
         mode="json", exclude_defaults=True, exclude_none=True, by_alias=True
     )
-    is_scalar = v.minOccurs == 1 and (v.maxOccurs is None or v.maxOccurs == 1)
+    is_scalar = v.minOccurs in (0, 1) and v.maxOccurs in (None, 1)
     if not is_scalar:
         schema = {
             "type": "array",
