@@ -26,7 +26,7 @@ pixi install
 pixi run install-airflow
 ```
 
-## Start coding
+## Code
 
 ```bash
 pixi shell
@@ -43,12 +43,13 @@ WSL users, see [VS Code with WSL](https://learn.microsoft.com/en-us/windows/wsl/
 ## Develop
 
 ```bash
+pixi run format
 pixi run test
 pixi run lint
 pixi run typecheck
 ```
 
-## Airflow
+## Run Airflow
 
 ```bash
 pixi run airflow db migrate
@@ -57,6 +58,5 @@ pixi run airflow scheduler
 pixi run airflow api-server
 ```
 
-The Airflow API Server runs at URL http://localhost:8080.
-To find login credentials search for the log entry:
-```Simple auth manager | Password for user 'admin':```
+The Airflow API Server runs at URL http://localhost:8080. To find login credentials, 
+search for the log entry `Simple auth manager | Password for user 'admin':`
