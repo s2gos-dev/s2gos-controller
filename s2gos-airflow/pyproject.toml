@@ -6,27 +6,36 @@ requires-python = "==3.12"
 
 #### pixi ###################
 
+[tool.pixi.activation.env]
+# Set local Airflow-home
+AIRFLOW_HOME="$PIXI_PROJECT_ROOT/.airflow"
+# Optional
+AIRFLOW__CORE__LOAD_EXAMPLES="False"  
+AIRFLOW__CORE__DAGS_FOLDER="$PIXI_PROJECT_ROOT/dags"
+
 [tool.pixi.project]
 channels = ["conda-forge"]
 platforms = ["linux-64"]
 
 [tool.pixi.dependencies]
 python = "3.12.*"
-# build
-pip = "*"
-hatch = "*"
-# formatters & qa
-isort = "*"
-ruff = "*"
-pytest = "*"
 
 [tool.pixi.pypi-dependencies]
-# minimal Airflow install (uses sqlite, good enough for dev)
+# Airflow
 apache-airflow = "==3.0.2"
+# Other
+pip = "*"
+pytest = "*"
+mypy = "*"
+ruff = "*"
 
-#### other tools ###################
-
-[build-system]
-requires = ["hatch"]
-build-backend = "hatchling.build"
-
+[tool.pixi.tasks]
+install-airflow = """
+export AIRFLOW_VERSION=3.0.2
+export PYTHON_VERSION=$(python -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+pip install "apache-airflow==$AIRFLOW_VERSION" \\
+  --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-$AIRFLOW_VERSION/constraints-no-providers-$PYTHON_VERSION.txt"
+"""
+lint = "ruff dags"
+typecheck = "mypy dags"
+test = "pytest tests"
