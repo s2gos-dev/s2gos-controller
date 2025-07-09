@@ -2,18 +2,43 @@
 
 Airflow DAGs for the ESA DTE-S2GOS synthetic scene generator service
 
-A minimal local Airflow development environment using [pixi](https://pixi.sh).
-
 ## Setup
 
-**THIS DOESN'T WORK! WHY?**
-Copy file `.env-template.txt` and rename it to `.env`. Check it and optionally adjust it.
+This setup creates a minimal local Airflow development environment 
+using [pixi](https://pixi.sh).
+All packages are currently installed from PyPI as this is the only reliable
+way to install Airflow 3.0.
+Also, all Airflow configuration is local, namely in `./.airflow`, 
+see `AIRFLOW_HOME` variable in `pyproject.toml`.
+
+Windows users: this setup has been successfully tested with 
+[WSL2](https://learn.microsoft.com/de-de/windows/wsl/) 2.4.11 
+using Ubuntu 24.04.2 LTS. Airflow has no official Windows support. 
 
 ```bash
-mv .env-template.txt .env
+cd projects
+git clone https://github.com/s2gos-dev/s2gos-controller.git
+cd s2gos-controller/s2gos-airflow 
+```
+
+```bash
 pixi install
 pixi run install-airflow
 ```
+
+## Start coding
+
+```bash
+pixi shell
+```
+
+Given that [VS Code](https://code.visualstudio.com/download) is installed 
+
+```bash
+code .
+```
+
+WSL users, see [VS Code with WSL](https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-vscode).
 
 ## Run Airflow
 
