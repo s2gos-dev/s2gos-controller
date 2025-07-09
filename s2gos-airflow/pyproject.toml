@@ -23,7 +23,12 @@ python = "3.12.*"
 [tool.pixi.pypi-dependencies]
 # Airflow
 apache-airflow = "==3.0.2"
-# Other
+# DAG testing
+jupyter = "*"
+pandas = "*"
+xarray = "*"
+zarr = "*"
+# Dev tools
 pip = "*"
 pytest = "*"
 mypy = "*"
