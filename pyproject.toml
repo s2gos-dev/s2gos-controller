@@ -90,6 +90,19 @@ omit = [
     "s2gos-client/src/s2gos_client/gui/**/*"
 ]
 
+[tool.mypy]
+python_version = "3.10"
+packages = [
+    "s2gos_client",
+    "s2gos_common",
+    "s2gos_server",
+]
+exclude = [
+    "s2gos-client/src/test",
+    "s2gos-common/src/test",
+    "s2gos-server/src/test",
+]
+
 ########################## Tasks ###############################
 
 # pixi run test
