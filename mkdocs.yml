@@ -2,16 +2,17 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-site_name: ESA DTE-S2GOS Client
-repo_url: https://github.com/s2gos-dev/s2gos-client
-repo_name: s2gos-dev/s2gos-client
+site_name: ESA DTE-S2GOS Controller
+repo_url: https://github.com/s2gos-dev/s2gos-controller
+repo_name: s2gos-dev/s2gos-controller
 
 copyright: Copyright &copy; 2025 ESA DTE-S2GOS Team
 
 nav:
   - Overview: index.md
-  - CLI: cli.md
-  - About: about.md
+  - Architecture: architecture.md
+  - Client-CLI: client-cli.md
+  - Contributing: contributing.md
 
 theme:
   name: material
@@ -35,21 +36,29 @@ markdown_extensions:
   - attr_list
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      # make exceptions to highlighting of code:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
+  # - pymdownx.highlight
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra:
+  mermaid: true
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/s2gos-dev/s2gos-client
+      link: https://github.com/s2gos-dev/s2gos-controller
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/s2gos/
 
 plugins:
   - search
   - autorefs
+  - mermaid2
   - mkdocstrings:
       handlers:
         python:

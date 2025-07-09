@@ -28,6 +28,7 @@ hatch = "*"
 # Code style & linting
 isort = "*"
 ruff = "*"
+mypy = "*"
 # Unit-testing
 pytest = "*"
 pytest-cov = "*"
@@ -52,7 +53,8 @@ mkdocs-autorefs = "*"
 mkdocs-material = "*"
 mkdocstrings = "*"
 mkdocstrings-python = "*"
-mypy = ">=1.16.1,<2"
+# For mermaid diagrams
+pymdown-extensions = "*"
 
 [tool.pixi.pypi-dependencies]
 # I wished we could have "no-deps=true" here,
@@ -61,6 +63,9 @@ mypy = ">=1.16.1,<2"
 s2gos-common = { path = "s2gos-common", editable = true }
 s2gos-client = { path = "s2gos-client", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
+# Documentation
+# For mermaid diagrams
+mkdocs-mermaid2-plugin = "*"
 
 [tool.isort]
 skip = [".idea", ".github", ".pixi", "htmlcov", "site"]
