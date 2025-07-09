@@ -1,5 +1,7 @@
 ## Changes in version 0.0.3 (in development)
 
+- Added a starting point for the documentation of the S2GOS control layer's 
+  architecture. 
 
 ## Changes in version 0.0.2
 

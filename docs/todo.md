@@ -37,7 +37,7 @@ Enhance the API Client
 
 - Consider generating a higher-level client from the 
   OGC API Processes descriptions
-- Address the user-facing issues given under [Code generation](#code_generation)
+- Address the user-facing issues given under [Code generation](#code-generation)
 
 Enhance the GUI Client
 
