@@ -10,7 +10,9 @@ copyright: Copyright &copy; 2025 ESA DTE-S2GOS Team
 
 nav:
   - Overview: index.md
+  - Architecture: architecture.md
   - CLI: cli.md
+  - TODO: todo.md
   - About: about.md
 
 theme:
@@ -35,12 +37,19 @@ markdown_extensions:
   - attr_list
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      # make exceptions to highlighting of code:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid_custom
+  # - pymdownx.highlight
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra:
+  mermaid: true
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/s2gos-dev/s2gos-client
@@ -50,6 +59,7 @@ extra:
 plugins:
   - search
   - autorefs
+  - mermaid2
   - mkdocstrings:
       handlers:
         python:
