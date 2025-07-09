@@ -1,4 +1,4 @@
-# About the DTE-S2GOS client project
+# Contributing to the project
 
 ## Changelog
 

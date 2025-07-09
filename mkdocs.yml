@@ -2,18 +2,17 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-site_name: ESA DTE-S2GOS Client
-repo_url: https://github.com/s2gos-dev/s2gos-client
-repo_name: s2gos-dev/s2gos-client
+site_name: ESA DTE-S2GOS Controller
+repo_url: https://github.com/s2gos-dev/s2gos-controller
+repo_name: s2gos-dev/s2gos-controller
 
 copyright: Copyright &copy; 2025 ESA DTE-S2GOS Team
 
 nav:
   - Overview: index.md
   - Architecture: architecture.md
-  - CLI: cli.md
-  - TODO: todo.md
-  - About: about.md
+  - Client-CLI: client-cli.md
+  - Contributing: contributing.md
 
 theme:
   name: material
@@ -52,7 +51,7 @@ extra:
   mermaid: true
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/s2gos-dev/s2gos-client
+      link: https://github.com/s2gos-dev/s2gos-controller
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/s2gos/
 

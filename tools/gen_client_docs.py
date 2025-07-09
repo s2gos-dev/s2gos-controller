@@ -11,7 +11,7 @@ from s2gos_client.cli.cli import cli
 from tools.common import S2GOS_PATH
 
 DOCS_PATH: Final = S2GOS_PATH / "docs"
-OUTPUT_FILE: Final = DOCS_PATH / "cli.md"
+OUTPUT_FILE: Final = DOCS_PATH / "client-cli.md"
 
 
 def generate_docs(app: typer.Typer):
@@ -22,7 +22,7 @@ def generate_docs(app: typer.Typer):
 
     # Add main command help
     result = runner.invoke(cli_group, ["--help"])
-    output_lines.append("# CLI Reference\n")
+    output_lines.append("# Client CLI Reference\n")
     output_lines.append("## Main Command\n")
     output_lines.append(f"```\n{result.output.strip()}\n```\n")
 
