@@ -138,9 +138,7 @@ def _generate_outputs(
     annotation: type,
     output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] | None,
 ) -> dict[str, OutputDescription]:
-    model_field_definitions: dict[
-        str, type | tuple[type, pydantic.fields.FieldInfo]
-    ] = {}
+    model_field_definitions: dict[str, Any] = {}
     if not output_fields:
         model_field_definitions = {"return_value": annotation}
     elif len(output_fields) == 1:
@@ -228,8 +226,8 @@ def inline_object_properties(
                 if k2 in required:
                     new_required.append(new_key)
             schema_properties.update(new_properties)
-            schema_required = list({*schema_required, *new_required})
-        schema: dict[str, Any] = dict(schema)
+            schema_required = sorted(list({*schema_required, *new_required}))
+        schema = dict(schema)
         schema["properties"] = schema_properties
         schema["required"] = schema_required
     return schema

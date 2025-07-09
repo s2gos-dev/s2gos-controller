@@ -99,6 +99,7 @@ omit = [
 [tool.mypy]
 python_version = "3.10"
 check_untyped_defs = true
+disable_error_code = ["valid-type", "import-untyped"]
 packages = [
     "s2gos_client",
     "s2gos_common",

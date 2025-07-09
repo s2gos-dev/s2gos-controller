@@ -187,10 +187,12 @@ class JobsPanel(pn.viewable.Viewer):
 
     def _run_action_on_selected_jobs(
         self,
-        action: JobAction,
+        action: JobAction | None,
         success_format: str | Callable[[str, Any], str] | None,
         error_format: str,
     ):
+        if action is None:
+            return
         messages = []
         for job in self.get_selected_jobs():
             job_id = job.jobID
@@ -281,4 +283,4 @@ def _job_to_dataframe_row(job: JobInfo):
 def _job_requirements_fulfilled(
     jobs: list[JobInfo], requirements: set[JobStatus]
 ) -> bool:
-    return jobs and all(j.status in requirements for j in jobs)
+    return bool(jobs) and all(j.status in requirements for j in jobs)
