@@ -14,7 +14,7 @@ from .json import JsonDateCodec, JsonSchemaDict
 from .registry import ComponentFactoryRegistry
 
 
-class BooleanComponentFactory(ComponentFactoryBase):
+class BooleanCF(ComponentFactoryBase):
     type = "boolean"
 
     def create_component(
@@ -26,7 +26,7 @@ class BooleanComponentFactory(ComponentFactoryBase):
         )
 
 
-class IntegerComponentFactory(ComponentFactoryBase):
+class IntegerCF(ComponentFactoryBase):
     type = "integer"
 
     def create_component(
@@ -52,7 +52,7 @@ class IntegerComponentFactory(ComponentFactoryBase):
         return WidgetComponent(widget)
 
 
-class NumberComponentFactory(ComponentFactoryBase):
+class NumberCF(ComponentFactoryBase):
     type = "number"
 
     def create_component(
@@ -78,7 +78,7 @@ class NumberComponentFactory(ComponentFactoryBase):
         return WidgetComponent(widget)
 
 
-class StringComponentFactory(ComponentFactoryBase):
+class StringCF(ComponentFactoryBase):
     type = "string"
 
     def create_component(self, value, title, schema: JsonSchemaDict) -> Component:
@@ -90,7 +90,7 @@ class StringComponentFactory(ComponentFactoryBase):
         return WidgetComponent(widget)
 
 
-class DateComponentFactory(ComponentFactoryBase):
+class DateCF(ComponentFactoryBase):
     type = "string"
     format = "date"
 
@@ -104,7 +104,7 @@ class DateComponentFactory(ComponentFactoryBase):
         )
 
 
-class BboxComponentFactory(ComponentFactoryBase):
+class BboxCF(ComponentFactoryBase):
     type = "array"
     format = "bbox"
 
@@ -134,9 +134,9 @@ class BboxComponent(Component):
 
 
 def register_all(registry: ComponentFactoryRegistry):
-    BooleanComponentFactory.register_in(registry)
-    IntegerComponentFactory.register_in(registry)
-    NumberComponentFactory.register_in(registry)
-    StringComponentFactory.register_in(registry)
-    DateComponentFactory.register_in(registry)
-    BboxComponentFactory.register_in(registry)
+    BooleanCF.register_in(registry)
+    IntegerCF.register_in(registry)
+    NumberCF.register_in(registry)
+    StringCF.register_in(registry)
+    DateCF.register_in(registry)
+    BboxCF.register_in(registry)
