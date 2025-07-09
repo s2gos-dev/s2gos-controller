@@ -98,7 +98,7 @@ class DateCF(ComponentFactoryBase):
         self, value: str, title: str, schema: JsonSchemaDict
     ) -> Component:
         json_codec = JsonDateCodec()
-        date = json_codec.to_json(value) or datetime.date.today()
+        date = json_codec.from_json(value) or datetime.date.today()
         return WidgetComponent(
             pn.widgets.DatePicker(name=title, value=date), json_codec=json_codec
         )

@@ -47,14 +47,15 @@ class Client:
         _transport: Optional[Transport] = None,
     ):
         default_config = ClientConfig.read(config_path=config_path)
+        server_url = server_url or default_config.server_url or DEFAULT_SERVER_URL
         config = ClientConfig(
             user_name=user_name or default_config.user_name,
             access_token=access_token or default_config.access_token,
-            server_url=server_url or default_config.server_url or DEFAULT_SERVER_URL,
+            server_url=server_url,
         )
         self._config = config
         self._transport = (
-            HttpxTransport(server_url=config.server_url, debug=debug)
+            HttpxTransport(server_url=server_url, debug=debug)
             if _transport is None
             else _transport
         )

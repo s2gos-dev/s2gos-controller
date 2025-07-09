@@ -53,8 +53,8 @@ class TransportArgs:
     # noinspection PyMethodMayBeStatic
     def get_error_for_json(
         self,
-        status_code: Optional[int] = None,
-        message: Optional[str] = None,
+        status_code: int,
+        message: str,
         json_data: Optional[Any] = None,
     ) -> ClientError:
         kwargs = {}

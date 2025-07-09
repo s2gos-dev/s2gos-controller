@@ -22,32 +22,32 @@ class JsonCodec(ABC):
     """Convert component values to/from JSON values."""
 
     @abstractmethod
-    def from_json(self, value: Any) -> JsonValue:
-        """Return a JSON value from given value."""
+    def to_json(self, value: Any) -> JsonValue:
+        """Return a JSON value from given Python value."""
 
     @abstractmethod
-    def to_json(self, json_value: JsonValue) -> Any:
-        """Return a value from given JSON value."""
+    def from_json(self, json_value: JsonValue) -> Any:
+        """Return a Python value from given JSON value."""
 
 
 class JsonIdentityCodec(JsonCodec):
-    def from_json(self, value: Any) -> JsonValue:
+    def to_json(self, value: Any) -> JsonValue:
         assert isinstance(value, (bool, int, float, str, list, dict, NoneType))
         return value
 
-    def to_json(self, json_value: JsonValue) -> Any:
+    def from_json(self, json_value: JsonValue) -> Any:
         assert isinstance(json_value, (bool, int, float, str, list, dict, NoneType))
         return json_value
 
 
 class JsonDateCodec(JsonCodec):
-    def from_json(self, value: datetime.date | None) -> str | None:
+    def to_json(self, value: Any) -> JsonValue:
         if not value:
             return None
         assert isinstance(value, datetime.date)
         return datetime.date.isoformat(value)
 
-    def to_json(self, json_value: str | None) -> datetime.date | None:
+    def from_json(self, json_value: JsonValue) -> Any:
         if not json_value:
             return None
         assert isinstance(json_value, str)

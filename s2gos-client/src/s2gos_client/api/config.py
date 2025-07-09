@@ -29,7 +29,7 @@ class ClientConfig(BaseModel):
         return self.model_dump(mode="json", by_alias=True), dict(root="Configuration:")
 
     @classmethod
-    def read(cls, config_path: Optional[str | Path] = None) -> Optional["ClientConfig"]:
+    def read(cls, config_path: Optional[str | Path] = None) -> "ClientConfig":
         config_path = cls.normalize_config_path(config_path)
 
         default_config_dict = {}

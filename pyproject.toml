@@ -52,6 +52,7 @@ mkdocs-autorefs = "*"
 mkdocs-material = "*"
 mkdocstrings = "*"
 mkdocstrings-python = "*"
+mypy = ">=1.16.1,<2"
 
 [tool.pixi.pypi-dependencies]
 # I wished we could have "no-deps=true" here,
@@ -92,6 +93,7 @@ omit = [
 
 [tool.mypy]
 python_version = "3.10"
+check_untyped_defs = true
 packages = [
     "s2gos_client",
     "s2gos_common",
@@ -102,6 +104,9 @@ exclude = [
     "s2gos-common/src/test",
     "s2gos-server/src/test",
 ]
+[[tool.mypy.overrides]]
+module = "s2gos_common.models"
+disable_error_code = ["valid-type"]
 
 ########################## Tasks ###############################
 
