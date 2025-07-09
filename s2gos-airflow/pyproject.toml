@@ -1,0 +1,46 @@
+[project]
+name = "s2gos-airflow"
+version = "0.0.3.dev"
+description = "Airflow DAGs for the ESA DTE-S2GOS synthetic scene generator service"
+requires-python = "==3.12"
+
+#### pixi ###################
+
+[tool.pixi.activation.env]
+# Set local Airflow-home
+AIRFLOW_HOME="$PIXI_PROJECT_ROOT/.airflow"
+# Optional
+AIRFLOW__CORE__LOAD_EXAMPLES="False"  
+AIRFLOW__CORE__DAGS_FOLDER="$PIXI_PROJECT_ROOT/dags"
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tool.pixi.dependencies]
+python = "3.12.*"
+
+[tool.pixi.pypi-dependencies]
+# Airflow
+apache-airflow = "==3.0.2"
+# DAG testing
+jupyter = "*"
+pandas = "*"
+xarray = "*"
+zarr = "*"
+# Dev tools
+pip = "*"
+pytest = "*"
+mypy = "*"
+ruff = "*"
+
+[tool.pixi.tasks]
+install-airflow = """
+export AIRFLOW_VERSION=3.0.2
+export PYTHON_VERSION=$(python -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+pip install "apache-airflow==$AIRFLOW_VERSION" \\
+  --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-$AIRFLOW_VERSION/constraints-no-providers-$PYTHON_VERSION.txt"
+"""
+lint = "ruff dags"
+typecheck = "mypy dags"
+test = "pytest tests"
