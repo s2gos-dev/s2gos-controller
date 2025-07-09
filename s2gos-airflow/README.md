@@ -40,12 +40,6 @@ code .
 
 WSL users, see [VS Code with WSL](https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-vscode).
 
-## Run Airflow
-
-```bash
-pixi run webserver
-```
-
 ## Develop
 
 ```bash
