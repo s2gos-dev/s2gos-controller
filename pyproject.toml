@@ -62,6 +62,9 @@ pymdown-extensions = "*"
 s2gos-common = { path = "s2gos-common", editable = true }
 s2gos-client = { path = "s2gos-client", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
+# Documentation
+# For mermaid diagrams
+mkdocs-mermaid2-plugin = "*"
 
 [tool.isort]
 skip = [".idea", ".github", ".pixi", "htmlcov", "site"]
