@@ -2,6 +2,7 @@
 
 - Added a starting point for the documentation of the S2GOS control layer's 
   architecture. 
+- Model class `Schema` now contains `ref`; removed `Reference` model. 
 
 ## Changes in version 0.0.2
 
