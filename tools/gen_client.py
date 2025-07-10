@@ -2,6 +2,7 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+import textwrap
 from pathlib import Path
 from typing import Literal
 
@@ -25,7 +26,7 @@ ASYNC_CLIENT_PATH = S2GOS_PATH / "s2gos-client/src/s2gos_client/api/async_client
 
 code_header = """
 
-from typing import Optional
+from typing import Any, Optional
 
 from s2gos_common.models import {{ model_imports }}
 
@@ -59,14 +60,15 @@ class {{ uc_async }}Client:
         _transport: Optional[{{ uc_async }}Transport] = None,
     ):
         default_config = ClientConfig.read(config_path=config_path)
+        server_url = server_url or default_config.server_url or DEFAULT_SERVER_URL
         config = ClientConfig(
             user_name=user_name or default_config.user_name,
             access_token=access_token or default_config.access_token,
-            server_url=server_url or default_config.server_url or DEFAULT_SERVER_URL,
+            server_url=server_url,
         )
         self._config = config
         self._transport = (
-            HttpxTransport(server_url=config.server_url, debug=debug)
+            HttpxTransport(server_url=server_url, debug=debug)
             if _transport is None
             else _transport
         )
@@ -183,7 +185,7 @@ def generate_function_code(
         else:
             param_kwargs.append(f"request: Optional[{request_type}] = None")
 
-    param_list = ", ".join([*param_args, *param_kwargs, "**kwargs"])
+    param_list = ", ".join([*param_args, *param_kwargs, "**kwargs: Any"])
     path_param_dict = "{" + ", ".join(path_param_mappings) + "}"
     query_param_dict = "{" + ", ".join(query_param_mappings) + "}"
 
@@ -249,7 +251,7 @@ def generate_function_doc(method: OAMethod) -> str:
     if method.parameters:
         if doc_lines and doc_lines[-1] != "":
             doc_lines.append("")
-        doc_lines.append("Params:")
+        doc_lines.append("Args:")
         for parameter in method.parameters:
             param_name = camel_to_snake(parameter.name)
             if parameter.description:
@@ -262,8 +264,6 @@ def generate_function_doc(method: OAMethod) -> str:
                 doc_lines.append(f"{D_TAB}{param_name}:")
         doc_lines.append(f"{D_TAB}kwargs: Optional keyword arguments that may be")
         doc_lines.append(f"{D_TAB}{D_TAB}used by the underlying transport.")
-
-    # TODO: split long lines that exceed 80 characters
 
     if method.requestBody:
         json_content = method.requestBody.content.get("application/json")
@@ -283,7 +283,7 @@ def generate_function_doc(method: OAMethod) -> str:
         resp_types: dict[str, tuple[str, list[str]]], lines: list[str]
     ):
         lines.append("")
-        lines.append("Returns")
+        lines.append("Returns:")
         for resp_code, (resp_type, desc_lines) in resp_types.items():
             if desc_lines:
                 lines.append(f"{D_TAB}{resp_type}: {desc_lines[0]}")
@@ -313,11 +313,15 @@ def generate_function_doc(method: OAMethod) -> str:
 
     append_error_types(error_types, doc_lines)
 
-    doc_lines = [
-        '"""',
-        *doc_lines,
-        '"""',
-    ]
+    wrapped_doc_lines = []
+    for line in doc_lines:
+        if line and not line.startswith("|"):
+            for subline in textwrap.wrap(line, 72):
+                # TODO: prefix `subline` 1..N with leading whitespaces from `line`
+                wrapped_doc_lines.append(subline)
+        else:
+            wrapped_doc_lines.append(line)
+    doc_lines = ['"""', *wrapped_doc_lines, '"""']
     doc_lines = [f"{2 * C_TAB}{line}" for line in doc_lines]
     return "\n".join(doc_lines) + "\n"
 

@@ -7,11 +7,6 @@ from unittest import TestCase
 import pydantic
 import pytest
 from pydantic import BaseModel, Field
-
-from s2gos_server.services.local.process_registry import (
-    create_schema_instance,
-    inline_schema_refs,
-)
 from tests.helpers import BaseModelMixin
 
 from s2gos_common.models import (
@@ -22,6 +17,10 @@ from s2gos_common.models import (
     Schema,
 )
 from s2gos_server.services.local import ProcessRegistry
+from s2gos_server.services.local.process_registry import (
+    create_schema_instance,
+    inline_schema_refs,
+)
 
 
 def f1(x: bool, y: int) -> float:

@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 from airflow.providers.standard.operators.bash import BashOperator
 from airflow.sdk import DAG
 
-
 with DAG(
     "S2GOS-Tutorial",
     # These args will get passed on to each operator

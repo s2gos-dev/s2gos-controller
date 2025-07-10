@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from airflow.providers.standard.operators.python import PythonOperator
 from airflow.sdk import DAG
 
+
 def hello():
     print("Hello from Airflow!")
 

@@ -34,7 +34,6 @@ REQUIRED_CLASSES = {
     "ProcessList",
     "ProcessRequest",
     "ProcessSummary",
-    "Reference",
     "Schema",
 }
 

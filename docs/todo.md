@@ -123,7 +123,7 @@ The output of `generators/gen_models` is not satisfying:
 1. Many generated classes are `RootModels` which are inconvenient for users, e.g.,
    `Input` requires passing values with `root` attributes.
 2. Basic openAPI constructs like `Schema` or `Reference` should not be  
-   generated but reused from predefined ` BaseModel`s.
+   generated but reused from predefined `BaseModel`s.
 3. **DONE**: Generated class names like `Exception` clash with predefined Python names.
 4. **DONE**: Some generated class names are rather unintuitive, e.g., 
    `Execute` instead of `Request`.
