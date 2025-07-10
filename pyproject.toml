@@ -100,15 +100,12 @@ omit = [
 python_version = "3.10"
 check_untyped_defs = true
 disable_error_code = ["valid-type", "import-untyped"]
-packages = [
-    "s2gos_client",
-    "s2gos_common",
-    "s2gos_server",
-]
 exclude = [
     "s2gos-client/src/test",
     "s2gos-common/src/test",
     "s2gos-server/src/test",
+    "s2gos-airflow",
+    "tools",
 ]
 [[tool.mypy.overrides]]
 module = "s2gos_common.models"
@@ -153,19 +150,22 @@ cmd = "pytest --cov s2gos-server/src/s2gos_server --cov-report= --cov-append s2g
 [tool.pixi.tasks.cov-client]
 cmd = "pytest --cov s2gos-client/src/s2gos_client --cov-report= --cov-append s2gos-client/src/tests"
 
-# pixi run lint
+# pixi run check
 
-[tool.pixi.tasks.lint]
-depends-on = ["lint-common", "lint-server", "lint-client"]
+[tool.pixi.tasks.check]
+depends-on = ["check-common", "check-server", "check-client", "typecheck"]
 
-[tool.pixi.tasks.lint-common]
+[tool.pixi.tasks.check-common]
 cmd = "ruff check s2gos-common/src"
 
-[tool.pixi.tasks.lint-server]
+[tool.pixi.tasks.check-server]
 cmd = "ruff check s2gos-server/src"
 
-[tool.pixi.tasks.lint-client]
+[tool.pixi.tasks.check-client]
 cmd = "ruff check s2gos-client/src"
+
+[tool.pixi.tasks.typecheck]
+cmd = "mypy ."
 
 # pixi run generate
 

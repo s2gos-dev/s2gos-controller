@@ -155,14 +155,14 @@ def simulate_scene(
     #     )
     # )
 
-    var_names = [name.strip() for name in var_names.split(",")]
-    start_date = datetime.date.fromisoformat(start_date)
-    end_date = datetime.date.fromisoformat(end_date)
+    var_names_: list[str] = [name.strip() for name in var_names.split(",")]
+    start_date_: datetime.date = datetime.date.fromisoformat(start_date)
+    end_date_: datetime.date = datetime.date.fromisoformat(end_date)
 
     x1, y1, x2, y2 = bbox
     x_size = round((x2 - x1) / resolution)
     y_size = round((y2 - y1) / resolution)
-    time_size = round((end_date - start_date).days / periodicity)
+    time_size = round((end_date_ - start_date_).days / periodicity)
     r05 = resolution / 2
 
     dataset = xr.Dataset()
@@ -174,12 +174,12 @@ def simulate_scene(
     )
     dataset.coords["time"] = xr.DataArray(
         np.array(
-            [start_date + datetime.timedelta(days=days) for days in range(time_size)],
+            [start_date_ + datetime.timedelta(days=days) for days in range(time_size)],
             dtype=np.datetime64,
         ),
         dims="time",
     )
-    for var_name in var_names:
+    for var_name in var_names_:
         dataset[var_name] = xr.DataArray(
             da.zeros(shape=(time_size, y_size, x_size)), dims=("time", "lat", "lon")
         )
@@ -193,4 +193,4 @@ def simulate_scene(
     else:
         href = Path(output_path).resolve().as_uri()
     # noinspection PyArgumentList
-    return Link(href=href, type="application/zarr")
+    return Link(href=href, hreflang=None, type="application/zarr", rel=None)

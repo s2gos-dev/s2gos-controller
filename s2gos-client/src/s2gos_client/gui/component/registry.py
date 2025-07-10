@@ -30,8 +30,8 @@ class ComponentFactoryRegistry:
         self._factories[(type, format)].append(factory)
 
     def find_factory(self, schema: JsonSchemaDict) -> ComponentFactory | None:
-        schema_type: str | None = schema.get("type")
-        schema_format: str | None = schema.get("format")
+        schema_type: str | None = schema.get("type")  # type: ignore[assignment]
+        schema_format: str | None = schema.get("format")  # type: ignore[assignment]
         for t, f in (
             (schema_type, schema_format),
             (schema_type, "*"),

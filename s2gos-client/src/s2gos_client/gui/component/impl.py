@@ -4,6 +4,7 @@
 
 import datetime
 import math
+from types import NoneType
 from typing import Any, Callable
 
 import panel as pn
@@ -34,6 +35,7 @@ class IntegerCF(ComponentFactoryBase):
         self, value: JsonValue, title: str, schema: JsonSchemaDict
     ) -> Component:
         value = value if value is not None else 0
+        assert isinstance(value, (int, float))
         minimum = schema.get("minimum")
         maximum = schema.get("maximum")
         if (
@@ -134,7 +136,7 @@ class BboxComponent(Component):
     def set_value(self, value: Any):
         self.bbox_selector.value = value
 
-    def watch_value(self, callback: Callable[[Any, Any], Any]):
+    def watch_value(self, callback: Callable[[Any], Any]):
         self.bbox_selector.param.watch(callback, "value")
 
 

@@ -84,9 +84,10 @@ def generate_method_code(
     models: set[str],
 ) -> tuple[str, str]:
     pos_params: list[str] = []
-    kw_params: list[str] = []
+    kwargs_params: list[str] = []
     pos_service_params: list[str] = []
-    kw_service_params: list[str] = []
+    args_service_params: list[str] = []
+    kwargs_service_params: list[str] = []
     service_args: list[str] = []
     service_kwargs: list[str] = []
     for parameter in method.parameters:
@@ -107,8 +108,8 @@ def generate_method_code(
             pos_service_params.append(f"{param_name}: {param_type}")
             service_args.append(f"{param_name}={parameter.name}")
         else:
-            kw_params.append(f"{parameter.name}: {param_type} = {param_default}")
-            kw_service_params.append(f"{param_name}: {param_type}")
+            kwargs_params.append(f"{parameter.name}: {param_type} = {param_default}")
+            args_service_params.append(f"{param_name}: {param_type}")
             service_kwargs.append(f"{param_name}={parameter.name}")
 
     if method.requestBody:
@@ -125,8 +126,8 @@ def generate_method_code(
             pos_service_params.append(request_pos_param)
         else:
             request_kw_param = f"{request_param_name}: Optional[{request_type}] = None"
-            kw_params.append(request_kw_param)
-            kw_service_params.append(request_kw_param)
+            kwargs_params.append(request_kw_param)
+            kwargs_service_params.append(request_kw_param)
         service_args.append(f"{request_param_name}={request_param_name}")
 
     extra_status_code = ""
@@ -138,14 +139,16 @@ def generate_method_code(
             *pos_params,
             *[f"{k}: {v}" for k, v in magic_param_list],
             "service: Service = fastapi.Depends(get_service)",
-            *kw_params,
+            *kwargs_params,
         ]
     )
     service_param_list = ", ".join(
         [
             "self",
             *pos_service_params,
-            *kw_service_params,
+            *args_service_params,
+            "*args",
+            *kwargs_service_params,
             "**kwargs",
         ]
     )

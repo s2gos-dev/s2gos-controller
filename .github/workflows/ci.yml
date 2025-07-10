@@ -21,7 +21,7 @@ jobs:
           auth-token: ${{ secrets.PREFIXDEV_AUTH_TOKEN }}
 
       - name: Run checks
-        run: pixi run lint
+        run: pixi run check
 
       - name: Run test & coverage
         run: pixi run coverage-ci

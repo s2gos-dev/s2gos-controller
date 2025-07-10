@@ -165,18 +165,19 @@ class JobsPanel(pn.viewable.Viewer):
             # noinspection PyProtectedMember
             from IPython import get_ipython
 
-            if isinstance(results, JobResults):
-                results = results.root
-            if isinstance(results, dict):
-                results = JsonDict(
+            results_value: Any = results
+            if isinstance(results_value, JobResults):
+                results_value = results_value.root
+            if isinstance(results_value, dict):
+                results_value = JsonDict(
                     "Results",
                     {
                         k: (v.model_dump() if isinstance(v, BaseModel) else v)
-                        for k, v in results.items()
+                        for k, v in results_value.items()
                     },
                 )
             var_name = "_results"
-            get_ipython().user_ns[var_name] = results
+            get_ipython().user_ns[var_name] = results_value
             return "✅ Stored results of {job} " + f"in variable **`{var_name}`**"
 
         self._run_action_on_selected_jobs(

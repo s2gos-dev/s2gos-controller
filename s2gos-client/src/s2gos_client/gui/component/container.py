@@ -35,7 +35,7 @@ class ComponentContainer:
         json_values: dict[str, JsonValue],
         fail_mode: FailMode = "warn",
     ) -> "ComponentContainer":
-        schemas: JsonSchemaDict = {}
+        schemas: dict[str, JsonSchemaDict] = {}
         for k, v in input_descriptions.items():
             schema = _get_schema_from_input_description(v)
             if schema is not None:
@@ -59,8 +59,8 @@ class ComponentContainer:
         for name, schema in schemas.items():
             factory = self.registry.find_factory(schema)
             if factory is not None:
-                value = json_values.get(name, schema.get("default"))
-                title = schema.get("title") or _get_title_from_name(name)
+                value: JsonValue = json_values.get(name, schema.get("default"))
+                title: str = schema.get("title") or _get_title_from_name(name)  # type: ignore[assignment]
                 component = factory.create_component(value, title, schema)
                 # TODO: check if we need this
                 component.watch_value(self._get_on_value_changed(name, component))

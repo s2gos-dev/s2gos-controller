@@ -22,6 +22,7 @@ from s2gos_common.models import (
     ProcessList,
     ProcessRequest,
     ProcessSummary,
+    Schema,
 )
 from s2gos_common.service import Service
 from s2gos_server.exceptions import JSONContentException
@@ -97,7 +98,7 @@ class LocalService(Service):
         self, process_id: str, process_request: ProcessRequest, **_kwargs
     ) -> JobInfo:
         process_entry = self._get_process_entry(process_id)
-        process_info = process_entry.process
+        process_desc = process_entry.process
 
         input_params = (
             process_request.model_dump(mode="json", include={"inputs"}).get("inputs")
@@ -105,11 +106,12 @@ class LocalService(Service):
         )
         input_default_params = {
             input_name: input_info.schema_.default
-            for input_name, input_info in process_info.inputs.items()
-            if input_info.schema_.default is not None
+            for input_name, input_info in (process_desc.inputs or {}).items()
+            if isinstance(input_info.schema_, Schema)
+            and input_info.schema_.default is not None
         }
         function_kwargs = {}
-        for input_name in process_info.inputs.keys():
+        for input_name in (process_desc.inputs or {}).keys():
             if input_name in input_params:
                 function_kwargs[input_name] = input_params[input_name]
             elif input_name in input_default_params:
@@ -123,7 +125,7 @@ class LocalService(Service):
 
         job_id = f"job_{len(self.jobs)}"
         job = Job(
-            process_id=process_info.id,
+            process_id=process_desc.id,
             job_id=job_id,
             function=process_entry.function,
             function_kwargs=function_kwargs,
@@ -139,11 +141,11 @@ class LocalService(Service):
             links=[_get_self_link(request, "get_jobs")],
         )
 
-    async def get_job(self, job_id: str, **kwargs) -> JobInfo:
+    async def get_job(self, job_id: str, *args, **kwargs) -> JobInfo:
         job = self._get_job(job_id, forbidden_status_codes={})
         return job.job_info
 
-    async def dismiss_job(self, job_id: str, **_kwargs) -> JobInfo:
+    async def dismiss_job(self, job_id: str, *args, **_kwargs) -> JobInfo:
         job = self._get_job(job_id, forbidden_status_codes={})
         if job.job_info.status in (JobStatus.accepted, JobStatus.running):
             job.cancel()
@@ -155,7 +157,7 @@ class LocalService(Service):
             del self.jobs[job_id]
         return job.job_info
 
-    async def get_job_results(self, job_id: str, **_kwargs) -> JobResults:
+    async def get_job_results(self, job_id: str, *args, **_kwargs) -> JobResults:
         job = self._get_job(
             job_id,
             forbidden_status_codes={
@@ -165,8 +167,11 @@ class LocalService(Service):
                 JobStatus.failed: "has failed",
             },
         )
+        assert job.future is not None
+        assert job.job_info.processID is not None
         result = job.future.result()
         entry = self.process_registry.get_entry(job.job_info.processID)
+        assert entry is not None
         outputs = entry.process.outputs or {}
         output_count = len(outputs)
         return JobResults.model_validate(
@@ -185,8 +190,8 @@ class LocalService(Service):
         description: Optional[str] = None,
         inline_inputs: bool | str | list[str] = False,
         inline_sep: str | None = ".",
-        input_fields: dict[str, pydantic.fields.FieldInfo] = None,
-        output_fields: dict[str, pydantic.fields.FieldInfo] = None,
+        input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
+        output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
     ) -> Callable[[Callable], Callable]:
         """A decorator for user functions to be registered as processes."""
 
