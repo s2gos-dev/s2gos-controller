@@ -18,7 +18,7 @@ from .models import (
 
 class Service(ABC):
     @abstractmethod
-    async def get_capabilities(self, **kwargs) -> Capabilities:
+    async def get_capabilities(self, *args, **kwargs) -> Capabilities:
         """The landing page provides links to the:
           * The OpenAPI-definition (no fixed path),
           * The Conformance statements (path /conformance),
@@ -28,7 +28,7 @@ class Service(ABC):
         For more information, see [Section 7.2](https://docs.ogc.org/is/18-062/18-062.html#sc_landing_page)."""
 
     @abstractmethod
-    async def get_conformance(self, **kwargs) -> ConformanceDeclaration:
+    async def get_conformance(self, *args, **kwargs) -> ConformanceDeclaration:
         """A list of all conformance classes, specified in a standard, that the server conforms to.
 
         | Conformance class | URI |
@@ -46,14 +46,14 @@ class Service(ABC):
         """
 
     @abstractmethod
-    async def get_processes(self, **kwargs) -> ProcessList:
+    async def get_processes(self, *args, **kwargs) -> ProcessList:
         """The list of processes contains a summary of each process the OGC API - Processes offers, including the link to a more detailed description of the process.
 
         For more information, see [Section 7.9](https://docs.ogc.org/is/18-062/18-062.html#sc_process_list).
         """
 
     @abstractmethod
-    async def get_process(self, process_id: str, **kwargs) -> ProcessDescription:
+    async def get_process(self, process_id: str, *args, **kwargs) -> ProcessDescription:
         """The process description contains information about inputs and outputs and a link to the execution-endpoint for the process. The Core does not mandate the use of a specific process description to specify the interface of a process. That said, the Core requirements class makes the following recommendation:
 
         Implementations SHOULD consider supporting the OGC process description.
@@ -63,7 +63,7 @@ class Service(ABC):
 
     @abstractmethod
     async def execute_process(
-        self, process_id: str, process_request: ProcessRequest, **kwargs
+        self, process_id: str, process_request: ProcessRequest, *args, **kwargs
     ) -> JobInfo:
         """Create a new job.
 
@@ -71,28 +71,28 @@ class Service(ABC):
         """
 
     @abstractmethod
-    async def get_jobs(self, **kwargs) -> JobList:
+    async def get_jobs(self, *args, **kwargs) -> JobList:
         """Lists available jobs.
 
         For more information, see [Section 11](https://docs.ogc.org/is/18-062/18-062.html#sc_job_list).
         """
 
     @abstractmethod
-    async def get_job(self, job_id: str, **kwargs) -> JobInfo:
+    async def get_job(self, job_id: str, *args, **kwargs) -> JobInfo:
         """Shows the status of a job.
 
         For more information, see [Section 7.12](https://docs.ogc.org/is/18-062/18-062.html#sc_retrieve_status_info).
         """
 
     @abstractmethod
-    async def dismiss_job(self, job_id: str, **kwargs) -> JobInfo:
+    async def dismiss_job(self, job_id: str, *args, **kwargs) -> JobInfo:
         """Cancel a job execution and remove it from the jobs list.
 
         For more information, see [Section 13](https://docs.ogc.org/is/18-062/18-062.html#Dismiss).
         """
 
     @abstractmethod
-    async def get_job_results(self, job_id: str, **kwargs) -> JobResults:
+    async def get_job_results(self, job_id: str, *args, **kwargs) -> JobResults:
         """Lists available results of a job. In case of a failure, lists errors instead.
 
         For more information, see [Section 7.13](https://docs.ogc.org/is/18-062/18-062.html#sc_retrieve_job_results).

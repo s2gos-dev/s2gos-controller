@@ -1,6 +1,7 @@
 #  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
+
 import datetime
 import math
 from typing import Any, Callable
@@ -10,7 +11,7 @@ import panel as pn
 from .bbox import BboxSelector
 from .component import Component, WidgetComponent
 from .factory import ComponentFactoryBase
-from .json import JsonDateCodec, JsonSchemaDict
+from .json import JsonDateCodec, JsonSchemaDict, JsonValue
 from .registry import ComponentFactoryRegistry
 
 
@@ -18,7 +19,7 @@ class BooleanCF(ComponentFactoryBase):
     type = "boolean"
 
     def create_component(
-        self, value: bool, title: str, schema: JsonSchemaDict
+        self, value: JsonValue, title: str, schema: JsonSchemaDict
     ) -> Component:
         value = value if value is not None else False
         return WidgetComponent(
@@ -30,9 +31,10 @@ class IntegerCF(ComponentFactoryBase):
     type = "integer"
 
     def create_component(
-        self, value: int, title: str, schema: JsonSchemaDict
+        self, value: JsonValue, title: str, schema: JsonSchemaDict
     ) -> Component:
         value = value if value is not None else 0
+        assert isinstance(value, (int, float))
         minimum = schema.get("minimum")
         maximum = schema.get("maximum")
         if (
@@ -56,7 +58,7 @@ class NumberCF(ComponentFactoryBase):
     type = "number"
 
     def create_component(
-        self, value: int, title: str, schema: JsonSchemaDict
+        self, value: JsonValue, title: str, schema: JsonSchemaDict
     ) -> Component:
         value = value if value is not None else 0
         minimum = schema.get("minimum")
@@ -81,7 +83,9 @@ class NumberCF(ComponentFactoryBase):
 class StringCF(ComponentFactoryBase):
     type = "string"
 
-    def create_component(self, value, title, schema: JsonSchemaDict) -> Component:
+    def create_component(
+        self, value: JsonValue, title: str, schema: JsonSchemaDict
+    ) -> Component:
         value = value or ""
         if "enum" in schema:
             widget = pn.widgets.Select(name=title, options=schema["enum"], value=value)
@@ -95,10 +99,10 @@ class DateCF(ComponentFactoryBase):
     format = "date"
 
     def create_component(
-        self, value: str, title: str, schema: JsonSchemaDict
+        self, value: JsonValue, title: str, schema: JsonSchemaDict
     ) -> Component:
         json_codec = JsonDateCodec()
-        date = json_codec.to_json(value) or datetime.date.today()
+        date = json_codec.from_json(value) or datetime.date.today()
         return WidgetComponent(
             pn.widgets.DatePicker(name=title, value=date), json_codec=json_codec
         )
@@ -108,7 +112,9 @@ class BboxCF(ComponentFactoryBase):
     type = "array"
     format = "bbox"
 
-    def create_component(self, value, title, schema: JsonSchemaDict) -> Component:
+    def create_component(
+        self, value: JsonValue, title: str, schema: JsonSchemaDict
+    ) -> Component:
         selector = BboxSelector()
         # TODO: set value & title
         return BboxComponent(selector)
@@ -129,7 +135,7 @@ class BboxComponent(Component):
     def set_value(self, value: Any):
         self.bbox_selector.value = value
 
-    def watch_value(self, callback: Callable[[Any, Any], Any]):
+    def watch_value(self, callback: Callable[[Any], Any]):
         self.bbox_selector.param.watch(callback, "value")
 
 

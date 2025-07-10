@@ -47,8 +47,8 @@ class ProcessRegistry:
         description: Optional[str] = None,
         inline_inputs: bool | str | list[str] = False,
         inline_sep: str | None = ".",
-        input_fields: dict[str, pydantic.fields.FieldInfo] = None,
-        output_fields: dict[str, pydantic.fields.FieldInfo] = None,
+        input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
+        output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
     ) -> "ProcessRegistry.Entry":
         if not inspect.isfunction(function):
             raise ValueError("function argument must be callable")
@@ -116,9 +116,7 @@ def _generate_inputs(
                         old_field_info, field_info
                     ),
                 )
-        model_class: type[pydantic.BaseModel] = pydantic.create_model(
-            "Inputs", **model_field_definitions
-        )
+        model_class = pydantic.create_model("Inputs", **model_field_definitions)
     inputs_schema = create_json_schema(
         model_class, inline_objects=inline_inputs, inline_sep=inline_sep
     )
@@ -140,7 +138,7 @@ def _generate_outputs(
     annotation: type,
     output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] | None,
 ) -> dict[str, OutputDescription]:
-    model_field_definitions = {}
+    model_field_definitions: dict[str, Any] = {}
     if not output_fields:
         model_field_definitions = {"return_value": annotation}
     elif len(output_fields) == 1:
@@ -218,8 +216,8 @@ def inline_object_properties(
         schema_required: list[str] = list(schema.get("required", []))
         for obj_key in obj_keys_to_be_inlined:
             obj_schema: dict[str, Any] = schema_properties.pop(obj_key)
-            properties = obj_schema.get("properties")
-            required = obj_schema.get("required", [])
+            properties = obj_schema.get("properties") or {}
+            required = obj_schema.get("required") or []
             new_properties: dict[str, Any] = {}
             new_required: list[str] = []
             for k2, s2 in properties.items():
@@ -228,8 +226,8 @@ def inline_object_properties(
                 if k2 in required:
                     new_required.append(new_key)
             schema_properties.update(new_properties)
-            schema_required = list({*schema_required, *new_required})
-        schema: dict[str, Any] = dict(schema)
+            schema_required = sorted(list({*schema_required, *new_required}))
+        schema = dict(schema)
         schema["properties"] = schema_properties
         schema["required"] = schema_required
     return schema

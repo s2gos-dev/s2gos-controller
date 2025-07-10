@@ -3,6 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 from pathlib import Path
+from typing import Any
 
 import tomlkit
 
@@ -13,7 +14,7 @@ workspace_names = ["s2gos-common", "s2gos-server", "s2gos-client"]
 def main():
     # Get version from root pyproject.toml
     root_path = Path("pyproject.toml")
-    root_data = tomlkit.parse(root_path.read_text())
+    root_data: dict[str, Any] = tomlkit.parse(root_path.read_text())
     try:
         root_version = root_data["project"]["version"]
     except KeyError:

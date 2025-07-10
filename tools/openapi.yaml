@@ -591,9 +591,7 @@ components:
               default: 1
             - $ref: '#/components/schemas/maxOccurs'
           schema:
-            oneOf:
-            - $ref: '#/components/schemas/schema'
-            - $ref: '#/components/schemas/reference'
+            $ref: '#/components/schemas/schema'
     outputDescription:
       allOf:
       - $ref: '#/components/schemas/descriptionType'
@@ -602,9 +600,7 @@ components:
         type: object
         properties:
           schema:
-            oneOf:
-            - $ref: '#/components/schemas/schema'
-            - $ref: '#/components/schemas/reference'
+            $ref: '#/components/schemas/schema'
     maxOccurs:
       type: string
       enum:
@@ -708,6 +704,9 @@ components:
     schema:
       type: object
       properties:
+        $ref:
+          type: string
+          format: uri-reference
         title:
           type: string
         multipleOf:
@@ -766,46 +765,32 @@ components:
         type:
           $ref: '#/components/schemas/dataType'
         not:
-          oneOf:
-          - $ref: '#/components/schemas/schema'
-          - $ref: '#/components/schemas/reference'
+          $ref: '#/components/schemas/schema'
         allOf:
           type: array
           items:
-            oneOf:
-            - $ref: '#/components/schemas/schema'
-            - $ref: '#/components/schemas/reference'
+            $ref: '#/components/schemas/schema'
         oneOf:
           type: array
           items:
-            oneOf:
-            - $ref: '#/components/schemas/schema'
-            - $ref: '#/components/schemas/reference'
+            $ref: '#/components/schemas/schema'
         anyOf:
           type: array
           items:
-            oneOf:
-            - $ref: '#/components/schemas/schema'
-            - $ref: '#/components/schemas/reference'
+            $ref: '#/components/schemas/schema'
         items:
           oneOf:
           - type: array
             items:
-              oneOf:
-              - $ref: '#/components/schemas/schema'
-              - $ref: '#/components/schemas/reference'
+              $ref: '#/components/schemas/schema'
           - $ref: '#/components/schemas/schema'
-          - $ref: '#/components/schemas/reference'
         properties:
           type: object
           additionalProperties:
-            oneOf:
-            - $ref: '#/components/schemas/schema'
-            - $ref: '#/components/schemas/reference'
+            $ref: '#/components/schemas/schema'
         additionalProperties:
           oneOf:
           - $ref: '#/components/schemas/schema'
-          - $ref: '#/components/schemas/reference'
           - type: boolean
           default: true
         description:
@@ -883,14 +868,6 @@ components:
               items:
                 type: object
             - type: object
-    reference:
-      required:
-      - $ref
-      type: object
-      properties:
-        $ref:
-          type: string
-          format: uri-reference
     bbox:
       type: object
       required:

@@ -36,10 +36,15 @@ class AliasedGroup(typer.core.TyperGroup):
 
         ctx.fail(f"Too many matches: {', '.join(sorted(matches))}")
 
-    def resolve_command(self, ctx, args):
+    def resolve_command(
+        self, ctx, args
+    ) -> tuple[str | None, click.Command | None, list[str]]:
         # always return the full command name
         _, cmd, args = super().resolve_command(ctx, args)
-        return cmd.name, cmd, args
+        if cmd is not None:
+            return cmd.name, cmd, args
+        else:
+            return None, None, args
 
     def list_commands(self, ctx):
         # prevent alphabetical ordering

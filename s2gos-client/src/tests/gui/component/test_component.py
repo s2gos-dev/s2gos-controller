@@ -34,14 +34,14 @@ class WidgetComponentTest(TestCase):
 
     def test_with_codec(self):
         json_codec = JsonDateCodec()
-        value = json_codec.to_json("2025-06-07")
+        value = json_codec.from_json("2025-06-07")
         widget = pn.widgets.DatePicker(name="Test", value=value)
         component = WidgetComponent(widget, json_codec=json_codec)
         self.assertEqual("2025-06-07", component.get_json_value())
         self.assertEqual(value, component.get_value())
         component.set_json_value("2025-06-08")
         self.assertEqual("2025-06-08", component.get_json_value())
-        self.assertEqual(json_codec.to_json("2025-06-08"), component.get_value())
+        self.assertEqual(json_codec.from_json("2025-06-08"), component.get_value())
 
     def test_can_watch(self):
         widget = pn.widgets.TextInput(name="Test", value="output.zarr")
