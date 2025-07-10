@@ -157,7 +157,7 @@ def sleep_a_while(
         "Returns the list of prime numbers between a `min_val` and `max_val`. "
     ),
 )
-def primes_between(min_val: int, max_val: int) -> list[int]:
+def primes_between(min_val: int = 0, max_val: int = 100) -> list[int]:
     ctx = get_job_context()
 
     if max_val < 2 or max_val <= min_val:

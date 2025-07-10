@@ -2,40 +2,139 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from unittest import TestCase
+import os
+from unittest import IsolatedAsyncioTestCase, TestCase
 
-from s2gos_common.models import ProcessDescription
+import fastapi
+
+from s2gos_common.models import (
+    Capabilities,
+    ConformanceDeclaration,
+    JobInfo,
+    JobList,
+    JobResults,
+    JobStatus,
+    ProcessDescription,
+    ProcessList,
+    ProcessRequest,
+)
 from s2gos_server.services.local import LocalService, ProcessRegistry
 
 
-class LocalServiceTest(TestCase):
-    def test_process_registration(self):
+class LocalServiceSetupTest(TestCase):
+    def setUp(self):
         service = LocalService(title="OGC API - Processes - Test Service")
 
-        self.assertIsNone(service.process_registry.get_entry("foo"))
-        self.assertIsNone(service.process_registry.get_entry("bar"))
-
+        @service.process(id="foo", version="1.0.1")
         def foo(x: bool, y: int) -> float:
             return 2 * y if x else y / 2
-
-        service.process_registry.register_function(foo, id="foo", version="1.0.0")
 
         @service.process(id="bar", version="1.4.2")
         def bar(x: bool, y: int) -> float:
             return 2 * y if x else y / 2
 
+        self.service = service
+
+    def test_server_setup_ok(self):
+        service = self.service
+
         foo_entry = service.process_registry.get_entry("foo")
         self.assertIsInstance(foo_entry, ProcessRegistry.Entry)
-        self.assertIs(foo, foo_entry.function)
+        self.assertTrue(callable(foo_entry.function))
         foo_process = foo_entry.process
         self.assertIsInstance(foo_process, ProcessDescription)
         self.assertEqual("foo", foo_process.id)
-        self.assertEqual("1.0.0", foo_process.version)
+        self.assertEqual("1.0.1", foo_process.version)
 
         bar_entry = service.process_registry.get_entry("bar")
         self.assertIsInstance(bar_entry, ProcessRegistry.Entry)
-        self.assertIs(bar, bar_entry.function)
+        self.assertTrue(callable(bar_entry.function))
         bar_process = bar_entry.process
         self.assertIsInstance(bar_process, ProcessDescription)
         self.assertEqual("bar", bar_process.id)
         self.assertEqual("1.4.2", bar_process.version)
+
+
+class LocalServiceTest(IsolatedAsyncioTestCase):
+    async def asyncSetUp(self):
+        self.old_env_value = os.environ.get("S2GOS_SERVICE")
+        os.environ["S2GOS_SERVICE"] = "s2gos_server.services.local.testing:service"
+        from s2gos_server.main import app
+
+        self.app = app
+        from s2gos_server.provider import get_service
+
+        self.service = get_service()
+
+    async def asyncTearDown(self):
+        if self.old_env_value is None:
+            del os.environ["S2GOS_SERVICE"]
+        else:
+            os.environ["S2GOS_SERVICE"] = self.old_env_value
+
+    def get_request(self) -> fastapi.Request:
+        return fastapi.Request({"type": "http", "app": self.app, "headers": {}})
+
+    async def test_get_capabilities(self):
+        caps = await self.service.get_capabilities(request=self.get_request())
+        self.assertIsInstance(caps, Capabilities)
+
+    async def test_get_conformance(self):
+        conf = await self.service.get_conformance(request=self.get_request())
+        self.assertIsInstance(conf, ConformanceDeclaration)
+
+    async def test_get_processes(self):
+        processes = await self.service.get_processes(request=self.get_request())
+        self.assertIsInstance(processes, ProcessList)
+
+    async def test_get_process(self):
+        process = await self.service.get_process(
+            process_id="primes_between", request=self.get_request()
+        )
+        self.assertIsInstance(process, ProcessDescription)
+
+    async def test_execute_process(self):
+        job_info = await self.service.execute_process(
+            process_id="primes_between",
+            process_request=ProcessRequest(),
+            request=self.get_request(),
+        )
+        self.assertIsInstance(job_info, JobInfo)
+
+    async def test_get_jobs(self):
+        job_list = await self.service.get_jobs(request=self.get_request())
+        self.assertIsInstance(job_list, JobList)
+
+    async def test_get_job(self):
+        job_info_0 = await self.service.execute_process(
+            process_id="primes_between",
+            process_request=ProcessRequest(),
+            request=self.get_request(),
+        )
+        job_info = await self.service.get_job(
+            job_id=job_info_0.jobID, request=self.get_request()
+        )
+        self.assertIsInstance(job_info, JobInfo)
+        self.assertEqual("primes_between", job_info.processID)
+        self.assertEqual(job_info_0.jobID, job_info.jobID)
+
+    async def test_get_job_results(self):
+        job_info = await self.service.execute_process(
+            process_id="primes_between",
+            process_request=ProcessRequest(inputs={"max_val": 20}),
+            request=self.get_request(),
+        )
+        job_id = job_info.jobID
+        while job_info.status in (JobStatus.accepted, JobStatus.running):
+            job_info = await self.service.get_job(
+                job_id=job_id, request=self.get_request()
+            )
+        self.assertEqual(JobStatus.successful, job_info.status)
+        job_results = await self.service.get_job_results(
+            job_id=job_id, request=self.get_request()
+        )
+        self.assertIsInstance(job_results, JobResults)
+        self.assertEqual(
+            {"return_value": [2, 3, 5, 7, 11, 13, 17, 19]},
+            job_results.model_dump(mode="python"),
+        )
