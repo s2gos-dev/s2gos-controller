@@ -4,7 +4,6 @@
 
 import datetime
 import math
-from types import NoneType
 from typing import Any, Callable
 
 import panel as pn
