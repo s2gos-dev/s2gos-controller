@@ -3,6 +3,8 @@
 - Added a starting point for the documentation of the S2GOS control layer's 
   architecture. 
 - Model class `Schema` now contains `ref`; removed `Reference` model. 
+- Introduced `s2gos_server.services.base.ServiceBase` to serve as base 
+  class for local and Airflow service implementations.
 
 ## Changes in version 0.0.2
 

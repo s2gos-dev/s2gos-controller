@@ -60,8 +60,8 @@ pymdown-extensions = "*"
 # I wished we could have "no-deps=true" here,
 # or even better "[tool.pixi.workspaces]".
 # See https://github.com/prefix-dev/pixi/issues/1417.
-s2gos-common = { path = "s2gos-common", editable = true }
 s2gos-client = { path = "s2gos-client", editable = true }
+s2gos-common = { path = "s2gos-common", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
 # Documentation
 # For mermaid diagrams

@@ -8,73 +8,36 @@ from typing import Callable, Optional
 
 import fastapi
 import pydantic
-from starlette.routing import Route
 
 from s2gos_common.models import (
-    Capabilities,
-    ConformanceDeclaration,
     JobInfo,
     JobList,
     JobResults,
     JobStatus,
-    Link,
     ProcessDescription,
     ProcessList,
     ProcessRequest,
     ProcessSummary,
     Schema,
 )
-from s2gos_common.service import Service
+from s2gos_server.services.base import ServiceBase
 from s2gos_server.exceptions import JSONContentException
 
 from .job import Job
 from .process_registry import ProcessRegistry
 
-model_dump_config = dict(
-    exclude_none=True,
-    exclude_unset=True,
-    exclude_defaults=True,
-)
 
-html_names = ("swagger_ui_html", "swagger_ui_redirect", "redoc_html")
-
-conforms_to = [
-    "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/core",
-    "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/ogc-process-description",
-    "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/json",
-    # "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/html",
-    "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/oas30",
-    "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/job-list",
-    # "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/callback",
-    "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/dismiss",
-]
-
-
-class LocalService(Service):
+class LocalService(ServiceBase):
     def __init__(
         self,
         title: str,
         description: Optional[str] = None,
         executor: Optional[ThreadPoolExecutor | ProcessPoolExecutor] = None,
     ):
-        self.title = title
-        self.description = description
+        super().__init__(title=title, description=description)
         self.executor = executor or ThreadPoolExecutor(max_workers=3)
         self.process_registry = ProcessRegistry()
         self.jobs: dict[str, Job] = {}
-
-    async def get_capabilities(
-        self, request: fastapi.Request, **kwargs
-    ) -> Capabilities:
-        links = _get_capabilities(request)
-        return Capabilities(
-            title=self.title,
-            description=self.description,
-            links=links,
-        )
-
-    async def get_conformance(self, **_kwargs) -> ConformanceDeclaration:
-        return ConformanceDeclaration(conformsTo=conforms_to)
 
     async def get_processes(self, request: fastapi.Request, **_kwargs) -> ProcessList:
         return ProcessList(
@@ -87,7 +50,7 @@ class LocalService(Service):
                 )
                 for p in self.process_registry.get_process_list()
             ],
-            links=[_get_self_link(request, "get_processes")],
+            links=[self._get_self_link(request, "get_processes")],
         )
 
     async def get_process(self, process_id: str, **kwargs) -> ProcessDescription:
@@ -138,7 +101,7 @@ class LocalService(Service):
     async def get_jobs(self, request: fastapi.Request, **_kwargs) -> JobList:
         return JobList(
             jobs=[job.job_info for job in self.jobs.values()],
-            links=[_get_self_link(request, "get_jobs")],
+            links=[self._get_self_link(request, "get_jobs")],
         )
 
     async def get_job(self, job_id: str, *args, **kwargs) -> JobInfo:
@@ -229,36 +192,3 @@ class LocalService(Service):
         if message:
             raise JSONContentException(403, detail=f"Job {job_id!r} {message}")
         return job
-
-
-def _get_self_link(request: fastapi.Request, name: str, **path_params) -> Link:
-    return Link(
-        href=str(request.url_for(name, **path_params)),
-        rel="self",
-        title=name,
-        type=_get_link_type(name),
-        hreflang="en",
-    )
-
-
-def _get_capabilities(request: fastapi.Request):
-    app: fastapi.FastAPI = request.app
-    return [_get_self_link(request, "get_capabilities")] + [
-        Link(
-            href=_get_url(request, r.path),
-            title=r.name,
-            rel="service",
-            type=_get_link_type(r.name),
-            hreflang="en",
-        )
-        for r in app.routes
-        if isinstance(r, Route)
-    ]
-
-
-def _get_link_type(name: str) -> str:
-    return "text/html" if name in html_names else "application/json"
-
-
-def _get_url(request: fastapi.Request, path: str):
-    return str(request.base_url.replace(path=path))
