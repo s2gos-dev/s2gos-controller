@@ -34,6 +34,8 @@ def f2(a: bool | None, b: float | bool) -> tuple[float, float]:
 
 
 class Point(BaseModel):
+    """A 2-D point."""
+
     x: float = Field(0.0, title="X-coordinate")
     y: float = Field(0.0, title="Y-coordinate")
 
@@ -276,35 +278,37 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         self.assertIsInstance(p1.inputs, dict)
         self.assertIsInstance(p1.outputs, dict)
 
-    def test_register_f3_with_inline_base_model(self):
+    def test_register_f3(self):
         registry = ProcessRegistry()
 
-        entry = registry.register_function(
-            f3, id="f3-1", flatten_inputs=["point1", "point2"]
-        )
+        entry = registry.register_function(f3, id="f3")
         self.assertEqual(
-            {"point1.x", "point1.y", "point2.x", "point2.y"},
+            {"point1", "point2"},
             set(entry.process.inputs.keys()),
         )
         self.assertBaseModelEqual(
             InputDescription(
-                minOccurs=0,
-                title="X-coordinate",
-                schema=Schema(type="number", default=0.0),
+                title="Point",
+                description="A 2-D point.",
+                schema=Schema(
+                    **{
+                        "type": "object",
+                        "properties": {
+                            "x": {
+                                "type": "number",
+                                "default": 0.0,
+                                "title": "X-coordinate",
+                            },
+                            "y": {
+                                "type": "number",
+                                "default": 0.0,
+                                "title": "Y-coordinate",
+                            },
+                        },
+                    }
+                ),
             ),
-            entry.process.inputs["point1.x"],
-        )
-
-        entry = registry.register_function(f3, id="f3-2", flatten_inputs="point2")
-        self.assertEqual(
-            {"point1", "point2.x", "point2.y"},
-            set(entry.process.inputs.keys()),
-        )
-
-        entry = registry.register_function(f3, id="f3-3", flatten_inputs=["point1"])
-        self.assertEqual(
-            {"point1.x", "point1.y", "point2"},
-            set(entry.process.inputs.keys()),
+            entry.process.inputs["point1"],
         )
 
     def test_register_multiple(self):

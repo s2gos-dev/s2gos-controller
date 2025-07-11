@@ -46,12 +46,14 @@ class TestingServiceTest(IsolatedAsyncioTestCase):
 
         process_list = await testing_service.get_processes(request=MockRequest())
         self.assertIsInstance(process_list, ProcessList)
-        self.assertEqual(3, len(process_list.processes))
         process_dict = {v.id: v for v in process_list.processes}
-        self.assertEqual(3, len(process_dict))
-
         self.assertEqual(
-            {"sleep_a_while", "primes_between", "simulate_scene"},
+            {
+                "sleep_a_while",
+                "primes_between",
+                "simulate_scene",
+                "return_base_model",
+            },
             set(process_dict.keys()),
         )
 

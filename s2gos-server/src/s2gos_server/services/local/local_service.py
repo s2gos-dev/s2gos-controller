@@ -1,11 +1,11 @@
 #  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
+
 import traceback
-from collections.abc import Sequence
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures.process import ProcessPoolExecutor
-from typing import Callable, Optional, Any
+from typing import Any, Callable, Optional
 
 import fastapi
 import pydantic
@@ -16,6 +16,7 @@ from s2gos_common.models import (
     ConformanceDeclaration,
     JobInfo,
     JobList,
+    JobResults,
     JobStatus,
     Link,
     ProcessDescription,
@@ -23,11 +24,9 @@ from s2gos_common.models import (
     ProcessRequest,
     ProcessSummary,
     Schema,
-    JobResults,
 )
 from s2gos_common.service import Service
 from s2gos_server.exceptions import JSONContentException
-from .flatten_props import unflatten_1st_level_dict_properties
 
 from .job import Job
 from .process_registry import ProcessRegistry
@@ -101,8 +100,7 @@ class LocalService(Service):
     ) -> JobInfo:
         process_entry = self._get_process_entry(process_id)
         process_desc = process_entry.process
-
-        input_params = process_request.inputs or {}
+        input_params = _nest_dict(process_request.inputs or {})
         input_default_params = {
             input_name: input_info.schema_.default
             for input_name, input_info in (process_desc.inputs or {}).items()
@@ -115,11 +113,6 @@ class LocalService(Service):
                 input_values[input_name] = input_params[input_name]
             elif input_name in input_default_params:
                 input_values[input_name] = input_default_params[input_name]
-
-        if process_entry.flattened_inputs:
-            input_values = unflatten_1st_level_dict_properties(
-                input_values, property_names=process_entry.flattened_inputs
-            )
 
         model_instance: pydantic.BaseModel
         try:
@@ -206,7 +199,6 @@ class LocalService(Service):
         version: Optional[str] = None,
         title: Optional[str] = None,
         description: Optional[str] = None,
-        flatten_inputs: Optional[str | Sequence[str]] = None,
         input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
     ) -> Callable[[Callable], Callable]:
@@ -219,7 +211,6 @@ class LocalService(Service):
                 version=version,
                 title=title,
                 description=description,
-                flatten_inputs=flatten_inputs,
                 input_fields=input_fields,
                 output_fields=output_fields,
             )
@@ -278,3 +269,14 @@ def _get_link_type(name: str) -> str:
 
 def _get_url(request: fastapi.Request, path: str):
     return str(request.base_url.replace(path=path))
+
+
+def _nest_dict(flat_dict: dict[str, Any]) -> dict[str, Any]:
+    nested_dict: dict[str, Any] = {}
+    for key, value in flat_dict.items():
+        path = key.split(".")
+        current = nested_dict
+        for name in path[:-1]:
+            current = current.setdefault(name, {})
+        current[path[-1]] = value
+    return nested_dict

@@ -6,6 +6,7 @@ import os
 from unittest import IsolatedAsyncioTestCase, TestCase
 
 import fastapi
+import pytest
 
 from s2gos_common.models import (
     Capabilities,
@@ -18,6 +19,7 @@ from s2gos_common.models import (
     ProcessList,
     ProcessRequest,
 )
+from s2gos_server.exceptions import JSONContentException
 from s2gos_server.services.local import LocalService, ProcessRegistry
 
 
@@ -97,6 +99,36 @@ class LocalServiceTest(IsolatedAsyncioTestCase):
         job_info = await self.service.execute_process(
             process_id="primes_between",
             process_request=ProcessRequest(inputs=dict(min_val=10, max_val=30)),
+            request=self.get_request(),
+        )
+        self.assertIsInstance(job_info, JobInfo)
+
+    async def test_execute_process_fail(self):
+        with pytest.raises(
+            JSONContentException,
+            match=(
+                r"400: Invalid parameterization for process 'primes_between': "
+                r"1 validation error for Inputs\nmin_val"
+            ),
+        ):
+            await self.service.execute_process(
+                process_id="primes_between",
+                process_request=ProcessRequest(inputs=dict(min_val=-1, max_val=30)),
+                request=self.get_request(),
+            )
+
+    async def test_execute_process_base_model_input(self):
+        job_info = await self.service.execute_process(
+            process_id="return_base_model",
+            process_request=ProcessRequest(inputs={"scene_spec": {"threshold": 0.12}}),
+            request=self.get_request(),
+        )
+        self.assertIsInstance(job_info, JobInfo)
+
+    async def test_execute_process_base_model_input_flat(self):
+        job_info = await self.service.execute_process(
+            process_id="return_base_model",
+            process_request=ProcessRequest(inputs={"scene_spec.threshold": 0.13}),
             request=self.get_request(),
         )
         self.assertIsInstance(job_info, JobInfo)

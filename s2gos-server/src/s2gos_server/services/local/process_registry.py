@@ -6,7 +6,6 @@ import copy
 import dataclasses
 import inspect
 import json
-from collections.abc import Sequence
 from typing import Any, Callable, Optional, get_args, get_origin
 
 import pydantic
@@ -17,7 +16,6 @@ from s2gos_common.models import (
     ProcessDescription,
     Schema,
 )
-from .flatten_props import flatten_1st_level_schema_properties
 
 
 class ProcessRegistry:
@@ -27,7 +25,6 @@ class ProcessRegistry:
         signature: inspect.Signature
         process: ProcessDescription
         model_class: type[pydantic.BaseModel]
-        flattened_inputs: Optional[str | Sequence[str]] = None
 
     def __init__(self):
         self._dict: dict[str, ProcessRegistry.Entry] = {}
@@ -50,7 +47,6 @@ class ProcessRegistry:
         version: Optional[str] = None,
         title: Optional[str] = None,
         description: Optional[str] = None,
-        flatten_inputs: Optional[str | Sequence[str]] = None,
         input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
     ) -> "ProcessRegistry.Entry":
@@ -61,9 +57,7 @@ class ProcessRegistry:
         version = version or "0.0.0"
         description = description or inspect.getdoc(function)
         signature = inspect.signature(function)
-        inputs, model_class = _generate_inputs(
-            fn_name, signature, input_fields, flatten_inputs
-        )
+        inputs, model_class = _generate_inputs(fn_name, signature, input_fields)
         outputs = _generate_outputs(fn_name, signature.return_annotation, output_fields)
         entry = ProcessRegistry.Entry(
             function,
@@ -77,7 +71,6 @@ class ProcessRegistry:
                 outputs=outputs,
             ),
             model_class,
-            flattened_inputs=flatten_inputs,
         )
         self._dict[id] = entry
         return entry
@@ -87,7 +80,6 @@ def _generate_inputs(
     fn_name: str,
     signature: inspect.Signature,
     input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] | None,
-    flatten_inputs: bool | str | list[str],
 ) -> tuple[dict[str, InputDescription], type[pydantic.BaseModel]]:
     model_field_definitions = {}
     for param_name, parameter in signature.parameters.items():
@@ -122,7 +114,7 @@ def _generate_inputs(
                     ),
                 )
         model_class = pydantic.create_model("Inputs", **model_field_definitions)
-    inputs_schema = create_json_schema(model_class, flatten_objects=flatten_inputs)
+    inputs_schema = create_json_schema(model_class)
 
     input_descriptions = {}
     for input_name, schema in inputs_schema.get("properties", {}).items():
@@ -187,14 +179,9 @@ def create_schema_instance(name: str, schema: dict[str, Any]) -> Schema:
 
 def create_json_schema(
     model_class: type[pydantic.BaseModel],
-    flatten_objects: Optional[str | Sequence[str]] = None,
 ) -> dict[str, Any]:
     schema = model_class.model_json_schema(mode="serialization")
     schema = inline_schema_refs(schema)
-    if flatten_objects and isinstance(schema.get("properties"), dict):
-        schema = flatten_1st_level_schema_properties(
-            schema, property_names=flatten_objects
-        )
     return backport_schema_to_openapi_3_0(schema)
 
 

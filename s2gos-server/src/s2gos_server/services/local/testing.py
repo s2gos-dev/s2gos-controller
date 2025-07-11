@@ -7,6 +7,7 @@ import time
 from pathlib import Path
 from typing import Optional
 
+import pydantic
 from pydantic import Field
 
 from s2gos_common.models import Link
@@ -49,7 +50,9 @@ def sleep_a_while(
         "Returns the list of prime numbers between a `min_val` and `max_val`. "
     ),
 )
-def primes_between(min_val: int = 0, max_val: int = 100) -> list[int]:
+def primes_between(
+    min_val: int = pydantic.Field(0, ge=0), max_val: int = pydantic.Field(100, le=100)
+) -> list[int]:
     ctx = get_job_context()
 
     if max_val < 2 or max_val <= min_val:
@@ -194,3 +197,16 @@ def simulate_scene(
         href = Path(output_path).resolve().as_uri()
     # noinspection PyArgumentList
     return Link(href=href, hreflang=None, type="application/zarr", rel=None)
+
+
+class SceneSpec(pydantic.BaseModel):
+    threshold: float
+    # TODO: uncomment and see tests fail!
+    # bbox: Optional[Bbox] = None
+
+
+@service.process(id="return_base_model", title="BaseModel Test")
+def return_base_model_1(
+    scene_spec: SceneSpec,
+) -> SceneSpec:
+    return scene_spec
