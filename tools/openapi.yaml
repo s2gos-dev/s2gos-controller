@@ -415,6 +415,11 @@ components:
           type: string
         instance:
           type: string
+        # Extension of OGC API / Processes core v1
+        traceback:
+          type: array
+          items:
+            type: string
       additionalProperties: true
       description: API error based on RFC 7807
     conformanceDeclaration:
