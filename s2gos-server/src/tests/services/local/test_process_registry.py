@@ -279,7 +279,9 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
     def test_register_f3_with_inline_base_model(self):
         registry = ProcessRegistry()
 
-        entry = registry.register_function(f3, id="f3-1", inline_inputs=True)
+        entry = registry.register_function(
+            f3, id="f3-1", flatten_inputs=["point1", "point2"]
+        )
         self.assertEqual(
             {"point1.x", "point1.y", "point2.x", "point2.y"},
             set(entry.process.inputs.keys()),
@@ -293,13 +295,13 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
             entry.process.inputs["point1.x"],
         )
 
-        entry = registry.register_function(f3, id="f3-2", inline_inputs="point2")
+        entry = registry.register_function(f3, id="f3-2", flatten_inputs="point2")
         self.assertEqual(
             {"point1", "point2.x", "point2.y"},
             set(entry.process.inputs.keys()),
         )
 
-        entry = registry.register_function(f3, id="f3-3", inline_inputs=["point1"])
+        entry = registry.register_function(f3, id="f3-3", flatten_inputs=["point1"])
         self.assertEqual(
             {"point1.x", "point1.y", "point2"},
             set(entry.process.inputs.keys()),

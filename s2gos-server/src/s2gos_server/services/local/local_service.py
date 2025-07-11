@@ -1,10 +1,11 @@
 #  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
-
+import traceback
+from collections.abc import Sequence
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures.process import ProcessPoolExecutor
-from typing import Callable, Optional
+from typing import Callable, Optional, Any
 
 import fastapi
 import pydantic
@@ -15,7 +16,6 @@ from s2gos_common.models import (
     ConformanceDeclaration,
     JobInfo,
     JobList,
-    JobResults,
     JobStatus,
     Link,
     ProcessDescription,
@@ -26,6 +26,7 @@ from s2gos_common.models import (
 )
 from s2gos_common.service import Service
 from s2gos_server.exceptions import JSONContentException
+from .flatten_props import unflatten_1st_level_dict_properties
 
 from .job import Job
 from .process_registry import ProcessRegistry
@@ -100,24 +101,40 @@ class LocalService(Service):
         process_entry = self._get_process_entry(process_id)
         process_desc = process_entry.process
 
-        input_params = (
-            process_request.model_dump(mode="json", include={"inputs"}).get("inputs")
-            or {}
-        )
+        input_params = process_request.inputs or {}
         input_default_params = {
             input_name: input_info.schema_.default
             for input_name, input_info in (process_desc.inputs or {}).items()
             if isinstance(input_info.schema_, Schema)
             and input_info.schema_.default is not None
         }
-        function_kwargs = {}
+        input_values: dict[str, Any] = {}
         for input_name in (process_desc.inputs or {}).keys():
             if input_name in input_params:
-                function_kwargs[input_name] = input_params[input_name]
+                input_values[input_name] = input_params[input_name]
             elif input_name in input_default_params:
-                function_kwargs[input_name] = input_default_params[input_name]
+                input_values[input_name] = input_default_params[input_name]
 
-        # TODO: validate function_kwargs
+        if process_entry.flattened_inputs:
+            input_values = unflatten_1st_level_dict_properties(
+                input_values, property_names=process_entry.flattened_inputs
+            )
+
+        model_instance: pydantic.BaseModel
+        try:
+            model_instance = process_entry.model_class(**input_values)
+        except pydantic.ValidationError as e:
+            raise JSONContentException(
+                400,
+                detail=f"Invalid parameterization for process {process_id!r}: {e}",
+                traceback=traceback.format_exception(type(e), e, e.__traceback__),
+            )
+
+        function_kwargs = {
+            k: getattr(model_instance, k)
+            for k in model_instance.model_fields.keys()
+            if k in input_values
+        }
 
         # print("input_params:", input_params)
         # print("input_default_params:", input_default_params)
@@ -157,7 +174,7 @@ class LocalService(Service):
             del self.jobs[job_id]
         return job.job_info
 
-    async def get_job_results(self, job_id: str, *args, **_kwargs) -> JobResults:
+    async def get_job_results(self, job_id: str, *args, **_kwargs) -> dict[str, Any]:
         job = self._get_job(
             job_id,
             forbidden_status_codes={
@@ -188,8 +205,7 @@ class LocalService(Service):
         version: Optional[str] = None,
         title: Optional[str] = None,
         description: Optional[str] = None,
-        inline_inputs: bool | str | list[str] = False,
-        inline_sep: str | None = ".",
+        flatten_inputs: Optional[str | Sequence[str]] = None,
         input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
     ) -> Callable[[Callable], Callable]:
@@ -202,8 +218,7 @@ class LocalService(Service):
                 version=version,
                 title=title,
                 description=description,
-                inline_inputs=inline_inputs,
-                inline_sep=inline_sep,
+                flatten_inputs=flatten_inputs,
                 input_fields=input_fields,
                 output_fields=output_fields,
             )
