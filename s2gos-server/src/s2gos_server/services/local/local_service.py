@@ -23,6 +23,7 @@ from s2gos_common.models import (
     ProcessRequest,
     ProcessSummary,
     Schema,
+    JobResults,
 )
 from s2gos_common.service import Service
 from s2gos_server.exceptions import JSONContentException
@@ -174,7 +175,7 @@ class LocalService(Service):
             del self.jobs[job_id]
         return job.job_info
 
-    async def get_job_results(self, job_id: str, *args, **_kwargs) -> dict[str, Any]:
+    async def get_job_results(self, job_id: str, *args, **_kwargs) -> JobResults:
         job = self._get_job(
             job_id,
             forbidden_status_codes={

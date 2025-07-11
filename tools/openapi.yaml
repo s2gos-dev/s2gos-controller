@@ -478,12 +478,7 @@ components:
       properties:
         inputs:
           type: object
-          additionalProperties:
-            oneOf:
-            - $ref: '#/components/schemas/inlineOrRefValue'
-            - type: array
-              items:
-                $ref: '#/components/schemas/inlineOrRefValue'
+          additionalProperties:  {}
         outputs:
           type: object
           additionalProperties:

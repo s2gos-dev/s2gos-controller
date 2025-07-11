@@ -96,7 +96,7 @@ class LocalServiceTest(IsolatedAsyncioTestCase):
     async def test_execute_process(self):
         job_info = await self.service.execute_process(
             process_id="primes_between",
-            process_request=ProcessRequest(),
+            process_request=ProcessRequest(inputs=dict(min_val=10, max_val=30)),
             request=self.get_request(),
         )
         self.assertIsInstance(job_info, JobInfo)
