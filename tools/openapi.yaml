@@ -415,6 +415,11 @@ components:
           type: string
         instance:
           type: string
+        # Extension of OGC API / Processes core v1
+        traceback:
+          type: array
+          items:
+            type: string
       additionalProperties: true
       description: API error based on RFC 7807
     conformanceDeclaration:
@@ -473,12 +478,7 @@ components:
       properties:
         inputs:
           type: object
-          additionalProperties:
-            oneOf:
-            - $ref: '#/components/schemas/inlineOrRefValue'
-            - type: array
-              items:
-                $ref: '#/components/schemas/inlineOrRefValue'
+          additionalProperties:  {}
         outputs:
           type: object
           additionalProperties:
