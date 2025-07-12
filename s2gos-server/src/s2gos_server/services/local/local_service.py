@@ -21,8 +21,8 @@ from s2gos_common.models import (
     ProcessSummary,
     Schema,
 )
-from s2gos_server.services.base import ServiceBase
 from s2gos_server.exceptions import JSONContentException
+from s2gos_server.services.base import ServiceBase
 
 from .job import Job
 from .process_registry import ProcessRegistry

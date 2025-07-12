@@ -2,8 +2,7 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from .service_base import ServiceBase
-from .service_base import DEFAULT_CONFORMANCES
+from .service_base import DEFAULT_CONFORMANCES, ServiceBase
 
 __all__ = [
     "ServiceBase",

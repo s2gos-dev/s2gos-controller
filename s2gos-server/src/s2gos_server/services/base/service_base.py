@@ -15,7 +15,6 @@ from s2gos_common.models import (
 )
 from s2gos_common.service import Service
 
-
 DEFAULT_CONFORMANCES = [
     "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/core",
     "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/ogc-process-description",
