@@ -2,7 +2,6 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-import traceback
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures.process import ProcessPoolExecutor
 from typing import Any, Callable, Optional
@@ -84,7 +83,7 @@ class LocalService(ServiceBase):
             raise JSONContentException(
                 400,
                 detail=f"Invalid parameterization for process {process_id!r}: {e}",
-                traceback=traceback.format_exception(type(e), e, e.__traceback__),
+                exception=e,
             )
 
         function_kwargs = {

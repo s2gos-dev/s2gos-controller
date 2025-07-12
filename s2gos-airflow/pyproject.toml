@@ -1,36 +1,15 @@
 [project]
 name = "s2gos-airflow"
-version = "0.0.3.dev"
+version = "0.0.0"
 description = "Airflow DAGs for the ESA DTE-S2GOS synthetic scene generator service"
 requires-python = "==3.12"
-
-[build-system]
-requires = ["hatch"]
-build-backend = "hatchling.build"
-
-[tool.hatch.build]
-sources = ["src"]
-exclude = ["src/tests/**/*", "src/dags/**/*"]
-
-[tool.hatch.build.targets.sdist]
-include = [
-  "src/s2gos_airflow/**/*",
-  "pyproject.toml",
-  "README.md",
-  "LICENSE",
-]
-
-[tool.hatch.build.targets.wheel]
-include = [
-  "src/s2gos_airflow/**/*"
-]
 
 #### pixi ###################
 
 [tool.pixi.activation.env]
 AIRFLOW_HOME="$PIXI_PROJECT_ROOT/.airflow"
 AIRFLOW__CORE__LOAD_EXAMPLES="False"  
-AIRFLOW__CORE__DAGS_FOLDER="$PIXI_PROJECT_ROOT/src/dags"
+AIRFLOW__CORE__DAGS_FOLDER="$PIXI_PROJECT_ROOT/dags"
 
 [tool.pixi.project]
 channels = ["conda-forge"]
@@ -42,7 +21,6 @@ python = "3.12.*"
 [tool.pixi.pypi-dependencies]
 # Airflow
 apache-airflow = "==3.0.2"
-apache-airflow-client = "==3.0.2"
 # S2GOS service implementation
 s2gos-common = { path = "../s2gos-common", editable = true }
 s2gos-server = { path = "../s2gos-server", editable = true }
