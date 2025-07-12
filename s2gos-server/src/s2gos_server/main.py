@@ -4,7 +4,6 @@
 
 from . import routes
 from .app import app
-from .provider import get_service
 
 """
 This module imports both, the FastAPI `app` instance and the application's 
@@ -14,5 +13,3 @@ the `app` module attribute.
 """
 
 __all__ = ["app", "routes"]
-
-print(f"Using service of type {type(get_service()).__class__}")

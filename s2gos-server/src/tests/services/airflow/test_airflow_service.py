@@ -4,6 +4,7 @@
 
 import os
 import unittest
+import warnings
 from unittest import IsolatedAsyncioTestCase
 
 import fastapi
@@ -15,6 +16,8 @@ from s2gos_common.models import (
     ProcessDescription,
     ProcessList,
 )
+from s2gos_server.main import app
+from s2gos_server.provider import ServiceProvider, get_service
 from s2gos_server.services.airflow import DEFAULT_AIRFLOW_BASE_URL, AirflowService
 
 airflow_base_url = DEFAULT_AIRFLOW_BASE_URL
@@ -35,12 +38,9 @@ def is_airflow_running(url: str, timeout: float = 1.0) -> bool:
 class LocalServiceTest(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         self.old_env_value = os.environ.get("S2GOS_SERVICE")
-        os.environ["S2GOS_SERVICE"] = "s2gos_server.services.airflow.testing:service"
-        from s2gos_server.main import app
-
         self.app = app
-        from s2gos_server.provider import get_service
-
+        os.environ["S2GOS_SERVICE"] = "s2gos_server.services.airflow.testing:service"
+        ServiceProvider._service = None
         self.service = get_service()
         self.assertIsInstance(self.service, AirflowService)
 
@@ -66,7 +66,13 @@ class LocalServiceTest(IsolatedAsyncioTestCase):
         self.assertIsInstance(processes, ProcessList)
 
     async def test_get_process(self):
+        process_list = await self.service.get_processes(request=self.get_request())
+        processes = process_list.processes
+        if not processes:
+            warnings.warn("Skipping test; no Airflow processes found")
+            return
+
         process = await self.service.get_process(
-            process_id="primes_between", request=self.get_request()
+            process_id=processes[0].id, request=self.get_request()
         )
         self.assertIsInstance(process, ProcessDescription)

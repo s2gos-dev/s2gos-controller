@@ -49,7 +49,7 @@ class AirflowService(ServiceBase):
         processes: list[ProcessSummary] = []
         try:
             list_dags_response = self.airflow_dag_api.get_dags(
-                only_active=True, limit=None
+                exclude_stale=True, limit=None
             )
         except Exception as e:
             raise JSONContentException(
@@ -140,9 +140,11 @@ class AirflowService(ServiceBase):
         airflow_username = self._airflow_username or os.getenv(
             "AIRFLOW_USERNAME", "admin"
         )
-        airflow_password = self._airflow_password or os.getenv(
-            "AIRFLOW_PASSWORD", "admin"
-        )
+        airflow_password = self._airflow_password or os.getenv("AIRFLOW_PASSWORD")
+        if not airflow_password:
+            raise RuntimeError(
+                "missing Airflow password; please set env var AIRFLOW_PASSWORD"
+            )
         access_token = self.fetch_access_token(
             airflow_base_url,
             username=airflow_username,

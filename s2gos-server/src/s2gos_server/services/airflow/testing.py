@@ -5,5 +5,7 @@
 from .airflow_service import DEFAULT_AIRFLOW_BASE_URL, AirflowService
 
 service = AirflowService(
-    title="Airflow Dev Service", airflow_base_url=DEFAULT_AIRFLOW_BASE_URL
+    title="Airflow Dev Service",
+    airflow_base_url=DEFAULT_AIRFLOW_BASE_URL,
+    airflow_username="admin",
 )

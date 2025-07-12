@@ -20,6 +20,8 @@ from s2gos_common.models import (
     ProcessRequest,
 )
 from s2gos_server.exceptions import JSONContentException
+from s2gos_server.main import app
+from s2gos_server.provider import ServiceProvider, get_service
 from s2gos_server.services.local import LocalService, ProcessRegistry
 
 
@@ -59,14 +61,12 @@ class LocalServiceSetupTest(TestCase):
 
 class LocalServiceTest(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
+        self.app = app
         self.old_env_value = os.environ.get("S2GOS_SERVICE")
         os.environ["S2GOS_SERVICE"] = "s2gos_server.services.local.testing:service"
-        from s2gos_server.main import app
-
-        self.app = app
-        from s2gos_server.provider import get_service
-
+        ServiceProvider._service = None
         self.service = get_service()
+        self.assertIsInstance(self.service, LocalService)
 
     async def asyncTearDown(self):
         if self.old_env_value is None:
