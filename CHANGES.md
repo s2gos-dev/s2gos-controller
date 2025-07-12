@@ -3,6 +3,10 @@
 - Added a starting point for the documentation of the S2GOS control layer's 
   architecture. 
 - Model class `Schema` now contains `ref`; removed `Reference` model. 
+- Reverted addition of `inline_inputs` and `inline_sep` arguments to 
+  `LocalService.process()` decorator. Instead, one can simply 
+  use dotted property names to set values of nested objects in a 
+  process request.
 - Introduced `s2gos_server.services.base.ServiceBase` to serve as base 
   class for local and Airflow service implementations.
 

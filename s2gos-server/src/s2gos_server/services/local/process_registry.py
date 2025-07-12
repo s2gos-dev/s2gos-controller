@@ -1,6 +1,7 @@
 #  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
+
 import copy
 import dataclasses
 import inspect
@@ -23,6 +24,7 @@ class ProcessRegistry:
         function: Callable
         signature: inspect.Signature
         process: ProcessDescription
+        model_class: type[pydantic.BaseModel]
 
     def __init__(self):
         self._dict: dict[str, ProcessRegistry.Entry] = {}
@@ -45,8 +47,6 @@ class ProcessRegistry:
         version: Optional[str] = None,
         title: Optional[str] = None,
         description: Optional[str] = None,
-        inline_inputs: bool | str | list[str] = False,
-        inline_sep: str | None = ".",
         input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
     ) -> "ProcessRegistry.Entry":
@@ -57,9 +57,7 @@ class ProcessRegistry:
         version = version or "0.0.0"
         description = description or inspect.getdoc(function)
         signature = inspect.signature(function)
-        inputs = _generate_inputs(
-            fn_name, signature, input_fields, inline_inputs, inline_sep
-        )
+        inputs, model_class = _generate_inputs(fn_name, signature, input_fields)
         outputs = _generate_outputs(fn_name, signature.return_annotation, output_fields)
         entry = ProcessRegistry.Entry(
             function,
@@ -72,6 +70,7 @@ class ProcessRegistry:
                 inputs=inputs,
                 outputs=outputs,
             ),
+            model_class,
         )
         self._dict[id] = entry
         return entry
@@ -81,9 +80,7 @@ def _generate_inputs(
     fn_name: str,
     signature: inspect.Signature,
     input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] | None,
-    inline_inputs: bool | str | list[str],
-    inline_sep: str | None,
-) -> dict[str, InputDescription]:
+) -> tuple[dict[str, InputDescription], type[pydantic.BaseModel]]:
     model_field_definitions = {}
     for param_name, parameter in signature.parameters.items():
         if parameter.default is inspect.Parameter.empty:
@@ -117,9 +114,7 @@ def _generate_inputs(
                     ),
                 )
         model_class = pydantic.create_model("Inputs", **model_field_definitions)
-    inputs_schema = create_json_schema(
-        model_class, inline_objects=inline_inputs, inline_sep=inline_sep
-    )
+    inputs_schema = create_json_schema(model_class)
 
     input_descriptions = {}
     for input_name, schema in inputs_schema.get("properties", {}).items():
@@ -130,7 +125,8 @@ def _generate_inputs(
             description=schema.pop("description", None),
             schema=create_schema_instance(input_name, schema),
         )
-    return input_descriptions
+
+    return input_descriptions, model_class
 
 
 def _generate_outputs(
@@ -183,54 +179,10 @@ def create_schema_instance(name: str, schema: dict[str, Any]) -> Schema:
 
 def create_json_schema(
     model_class: type[pydantic.BaseModel],
-    inline_objects: bool | str | list[str] = False,
-    inline_sep: str | None = ".",
 ) -> dict[str, Any]:
     schema = model_class.model_json_schema(mode="serialization")
     schema = inline_schema_refs(schema)
-    if inline_objects and isinstance(schema.get("properties"), dict):
-        schema = inline_object_properties(schema, inline_objects, inline_sep)
     return backport_schema_to_openapi_3_0(schema)
-
-
-def inline_object_properties(
-    schema: dict[str, Any],
-    inline_objects: bool | str | list[str],
-    inline_sep: str | None,
-):
-    if isinstance(inline_objects, str):
-        inline_names = {inline_objects}
-    elif isinstance(inline_objects, list):
-        inline_names = set(inline_objects)
-    else:
-        inline_names = set()
-    obj_keys_to_be_inlined = [
-        obj_key
-        for obj_key, obj_schema in schema["properties"].items()
-        if obj_schema.get("type") == "object"
-        and isinstance(obj_schema.get("properties"), dict)
-        and (inline_objects is True or obj_key in inline_names)
-    ]
-    if obj_keys_to_be_inlined:
-        schema_properties: dict[str, Any] = dict(schema["properties"])
-        schema_required: list[str] = list(schema.get("required", []))
-        for obj_key in obj_keys_to_be_inlined:
-            obj_schema: dict[str, Any] = schema_properties.pop(obj_key)
-            properties = obj_schema.get("properties") or {}
-            required = obj_schema.get("required") or []
-            new_properties: dict[str, Any] = {}
-            new_required: list[str] = []
-            for k2, s2 in properties.items():
-                new_key = f"{obj_key}{inline_sep}{k2}" if inline_sep else k2
-                new_properties[new_key] = s2
-                if k2 in required:
-                    new_required.append(new_key)
-            schema_properties.update(new_properties)
-            schema_required = sorted(list({*schema_required, *new_required}))
-        schema = dict(schema)
-        schema["properties"] = schema_properties
-        schema["required"] = schema_required
-    return schema
 
 
 def inline_schema_refs(schema: dict[str, Any]):

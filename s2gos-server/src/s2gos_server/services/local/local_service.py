@@ -2,9 +2,10 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+import traceback
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures.process import ProcessPoolExecutor
-from typing import Callable, Optional
+from typing import Any, Callable, Optional
 
 import fastapi
 import pydantic
@@ -62,25 +63,35 @@ class LocalService(ServiceBase):
     ) -> JobInfo:
         process_entry = self._get_process_entry(process_id)
         process_desc = process_entry.process
-
-        input_params = (
-            process_request.model_dump(mode="json", include={"inputs"}).get("inputs")
-            or {}
-        )
+        input_params = _nest_dict(process_request.inputs or {})
         input_default_params = {
             input_name: input_info.schema_.default
             for input_name, input_info in (process_desc.inputs or {}).items()
             if isinstance(input_info.schema_, Schema)
             and input_info.schema_.default is not None
         }
-        function_kwargs = {}
+        input_values: dict[str, Any] = {}
         for input_name in (process_desc.inputs or {}).keys():
             if input_name in input_params:
-                function_kwargs[input_name] = input_params[input_name]
+                input_values[input_name] = input_params[input_name]
             elif input_name in input_default_params:
-                function_kwargs[input_name] = input_default_params[input_name]
+                input_values[input_name] = input_default_params[input_name]
 
-        # TODO: validate function_kwargs
+        model_instance: pydantic.BaseModel
+        try:
+            model_instance = process_entry.model_class(**input_values)
+        except pydantic.ValidationError as e:
+            raise JSONContentException(
+                400,
+                detail=f"Invalid parameterization for process {process_id!r}: {e}",
+                traceback=traceback.format_exception(type(e), e, e.__traceback__),
+            )
+
+        function_kwargs = {
+            k: getattr(model_instance, k)
+            for k in model_instance.model_fields.keys()
+            if k in input_values
+        }
 
         # print("input_params:", input_params)
         # print("input_default_params:", input_default_params)
@@ -151,8 +162,6 @@ class LocalService(ServiceBase):
         version: Optional[str] = None,
         title: Optional[str] = None,
         description: Optional[str] = None,
-        inline_inputs: bool | str | list[str] = False,
-        inline_sep: str | None = ".",
         input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
     ) -> Callable[[Callable], Callable]:
@@ -165,8 +174,6 @@ class LocalService(ServiceBase):
                 version=version,
                 title=title,
                 description=description,
-                inline_inputs=inline_inputs,
-                inline_sep=inline_sep,
                 input_fields=input_fields,
                 output_fields=output_fields,
             )
@@ -192,3 +199,14 @@ class LocalService(ServiceBase):
         if message:
             raise JSONContentException(403, detail=f"Job {job_id!r} {message}")
         return job
+
+
+def _nest_dict(flat_dict: dict[str, Any]) -> dict[str, Any]:
+    nested_dict: dict[str, Any] = {}
+    for key, value in flat_dict.items():
+        path = key.split(".")
+        current = nested_dict
+        for name in path[:-1]:
+            current = current.setdefault(name, {})
+        current[path[-1]] = value
+    return nested_dict
