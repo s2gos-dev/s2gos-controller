@@ -7,6 +7,8 @@
   `LocalService.process()` decorator. Instead, one can simply 
   use dotted property names to set values of nested objects in a 
   process request.
+- Introduced `s2gos_server.services.base.ServiceBase` to serve as base 
+  class for local and Airflow service implementations.
 
 ## Changes in version 0.0.2
 
