@@ -3,20 +3,33 @@
 #  https://opensource.org/license/apache-2-0.
 
 import os
+from datetime import datetime
 from functools import cached_property
-from pprint import pprint
 from typing import Optional
 
 import fastapi
 import requests
-from airflow_client.client import ApiClient, Configuration
+from airflow_client.client import (
+    ApiClient,
+    ApiException,
+    Configuration,
+    DAGRunPatchBody,
+    DAGRunPatchStates,
+    DAGRunResponse,
+    DagRunState,
+    TriggerDAGRunPostBody,
+)
 from airflow_client.client.api import DAGApi
+from airflow_client.client.api import DagRunApi as DAGRunApi
+from airflow_client.client.api import XComApi
 
 from s2gos_common.models import (
     InputDescription,
     JobInfo,
     JobList,
     JobResults,
+    JobStatus,
+    JobType,
     OutputDescription,
     ProcessDescription,
     ProcessList,
@@ -42,50 +55,41 @@ class AirflowService(ServiceBase):
         self._airflow_base_url = airflow_base_url
         self._airflow_username = airflow_username
         self._airflow_password = airflow_password
+        self._exec_count: int = 0
 
     async def get_processes(
         self, request: fastapi.Request, *args, **kwargs
     ) -> ProcessList:
         processes: list[ProcessSummary] = []
         try:
-            list_dags_response = self.airflow_dag_api.get_dags(
-                exclude_stale=True, limit=None
+            dag_collection = self.airflow_dag_api.get_dags(
+                exclude_stale=True,
+                limit=None,
+                owners=None,  # TODO important, get for current user only
             )
-        except Exception as e:
-            raise JSONContentException(
-                500, detail=f"Error getting Airflow DAGs: {e}", exception=e
-            )
-        if list_dags_response and list_dags_response.dags:
-            print(f"Found {len(list_dags_response.dags)} active DAGs:")
-            for dag in list_dags_response.dags:
-                print(
-                    f"  - DAG ID: {dag.dag_id}, "
-                    f"Is Paused: {dag.is_paused}, "
-                    f"File Location: {dag.fileloc}"
-                )
+        except ApiException as e:
+            raise JSONContentException(e.status, detail=e.reason, exception=e) from e
+        if dag_collection and dag_collection.dags:
+            for dag in dag_collection.dags:
                 # https://github.com/apache/airflow-client-python/blob/main/airflow_client/client/models/dag_response.py
                 processes.append(
                     ProcessSummary(
                         id=dag.dag_id,
-                        version="0.0.0",  # TODO
+                        version="0.0.0",  # TODO: get version
                         title=dag.dag_display_name,
                         description=dag.description,
                     )
                 )
         return ProcessList(
             processes=processes,
-            links=[self._get_self_link(request, "get_processes")],
+            links=[self.get_self_link(request, "get_processes")],
         )
 
     async def get_process(self, process_id: str, *args, **kwargs) -> ProcessDescription:
         try:
             dag_details = self.airflow_dag_api.get_dag_details(dag_id=process_id)
-        except Exception as e:
-            raise JSONContentException(
-                500,
-                detail=f"Error getting details for Airflow DAG {process_id!r}: {e}",
-                exception=e,
-            )
+        except ApiException as e:
+            raise JSONContentException(e.status, detail=e.reason, exception=e) from e
 
         inputs: dict[str, InputDescription] = {}
         if dag_details.params:
@@ -99,12 +103,9 @@ class AirflowService(ServiceBase):
         # TODO: where to get outputs from?
         outputs: dict[str, OutputDescription] = {}
 
-        print("\nFull DAG details (as dictionary):")
-        pprint(dag_details.to_dict())
-        # https://github.com/apache/airflow-client-python/blob/main/airflow_client/client/models/dag_details_response.py
         return ProcessDescription(
             id=dag_details.dag_id,
-            version="0.0.0",  # TODO
+            version="0.0.0",  # TODO: get version
             title=dag_details.dag_display_name,
             description=dag_details.doc_md or dag_details.description,
             inputs=inputs,
@@ -114,23 +115,121 @@ class AirflowService(ServiceBase):
     async def execute_process(
         self, process_id: str, process_request: ProcessRequest, *args, **kwargs
     ) -> JobInfo:
-        raise NotImplementedError
+        logical_date = datetime.now()
+        dag_run_id = self.new_dag_run_id(process_id, logical_date)
+        dag_run_body = TriggerDAGRunPostBody(
+            dag_run_id=dag_run_id,
+            conf=process_request.inputs,
+            logical_date=logical_date,
+        )
+        try:
+            dag_run = self.airflow_dag_run_api.trigger_dag_run(process_id, dag_run_body)
+        except ApiException as e:
+            raise JSONContentException(e.status, e.reason, exception=e) from e
+        return self.dag_run_to_job_info(dag_run)
 
-    async def get_jobs(self, *args, **kwargs) -> JobList:
-        raise NotImplementedError
+    async def get_jobs(self, request: fastapi.Request, *args, **kwargs) -> JobList:
+        try:
+            dag_collection = self.airflow_dag_api.get_dags(
+                exclude_stale=True,
+                limit=None,
+                owners=None,  # TODO important, get for current user only
+            )
+        except ApiException as e:
+            raise JSONContentException(e.status, detail=e.reason, exception=e) from e
+
+        jobs: list[JobInfo] = []
+        for dag in dag_collection.dags:
+            try:
+                dag_run_collection = self.airflow_dag_run_api.get_dag_runs(dag.dag_id)
+            except ApiException as e:
+                raise JSONContentException(e.status, e.reason, exception=e) from e
+            jobs.extend(
+                self.dag_run_to_job_info(dag_run)
+                for dag_run in dag_run_collection.dag_runs
+            )
+        return JobList(jobs=jobs, links=[self.get_self_link(request, name="get_jobs")])
 
     async def get_job(self, job_id: str, *args, **kwargs) -> JobInfo:
-        raise NotImplementedError
+        dag_id = self.get_dag_id_from_job_id(job_id)
+        try:
+            dag_run = self.airflow_dag_run_api.get_dag_run(dag_id, job_id)
+        except ApiException as e:
+            raise JSONContentException(e.status, e.reason, exception=e) from e
+        return self.dag_run_to_job_info(dag_run)
 
     async def dismiss_job(self, job_id: str, *args, **kwargs) -> JobInfo:
-        raise NotImplementedError
+        dag_id = self.get_dag_id_from_job_id(job_id)
+        dag_run_patch = DAGRunPatchBody(
+            note="Cancelled", state=DAGRunPatchStates.FAILED
+        )
+        try:
+            # TODO: check if this really works
+            dag_run = self.airflow_dag_run_api.patch_dag_run(
+                dag_id, job_id, dag_run_patch
+            )
+        except ApiException as e:
+            raise JSONContentException(e.status, e.reason, exception=e) from e
+        return self.dag_run_to_job_info(dag_run)
 
     async def get_job_results(self, job_id: str, *args, **kwargs) -> JobResults:
-        raise NotImplementedError
+        dag_id = await self.get_dag_id_from_job_id(job_id)
+        try:
+            xcom_entry = self.airflow_xcom_api.get_xcom_entry(
+                dag_id=dag_id,
+                dag_run_id=job_id,
+                # TODO: check how to use task_id / xcom_key correctly
+                task_id="compute_result",
+                xcom_key="result",
+            )
+        except ApiException as e:
+            raise JSONContentException(e.status, e.reason, exception=e) from e
+        return JobResults(**xcom_entry.model_dump(mode="json"))
+
+    def new_dag_run_id(self, dag_id: str, logical_time: datetime):
+        self._exec_count += 1
+        return f"{dag_id}__{logical_time.strftime('%Y%m%d%H%M%S')}_{self._exec_count}"
+
+    @classmethod
+    def get_dag_id_from_job_id(cls, job_id):
+        return job_id.split("__", maxsplit=1)[0]
+
+    @classmethod
+    def dag_run_to_job_info(cls, dag_run: DAGRunResponse) -> JobInfo:
+        return JobInfo(
+            type=JobType.process,
+            processID=dag_run.dag_id,
+            jobID=dag_run.dag_run_id,
+            status=cls.dag_run_state_to_job_status(dag_run.state),
+            progress=None,  # check, it seems we have no good option here
+            message=dag_run.note,  # check
+            created=dag_run.queued_at,
+            started=dag_run.start_date,
+            updated=dag_run.last_scheduling_decision,
+            finished=dag_run.end_date,
+        )
+
+    @classmethod
+    def dag_run_state_to_job_status(cls, dag_run_state: DagRunState) -> JobStatus:
+        mapping = {
+            DagRunState.RUNNING: JobStatus.running,
+            DagRunState.FAILED: JobStatus.failed,
+            DagRunState.QUEUED: JobStatus.accepted,
+            DagRunState.SUCCESS: JobStatus.successful,
+        }
+        return mapping[dag_run_state]
 
     @cached_property
     def airflow_dag_api(self) -> DAGApi:
         return DAGApi(self.airflow_client)
+
+    @cached_property
+    def airflow_dag_run_api(self) -> DAGRunApi:
+        return DAGRunApi(self.airflow_client)
+
+    @cached_property
+    def airflow_xcom_api(self) -> XComApi:
+        return XComApi(self.airflow_client)
 
     @cached_property
     def airflow_client(self) -> ApiClient:

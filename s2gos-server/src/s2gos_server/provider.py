@@ -3,6 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 import importlib
+import logging
 import os
 
 from s2gos_common.service import Service
@@ -20,12 +21,14 @@ class ServiceProvider:
     @classmethod
     def get_instance(cls) -> Service:
         if cls._service is None:
-            cls._service = cls._load_service()
+            cls.set_instance(cls._load_service())
         return cls._service
 
     @classmethod
     def set_instance(cls, service: Service):
         cls._service = service
+        logger = logging.getLogger("uvicorn")
+        logger.info(f"Using service instance of type {type(service).__name__}")
 
     @classmethod
     def _load_service(cls) -> Service:

@@ -50,7 +50,7 @@ class LocalService(ServiceBase):
                 )
                 for p in self.process_registry.get_process_list()
             ],
-            links=[self._get_self_link(request, "get_processes")],
+            links=[self.get_self_link(request, "get_processes")],
         )
 
     async def get_process(self, process_id: str, **kwargs) -> ProcessDescription:
@@ -111,7 +111,7 @@ class LocalService(ServiceBase):
     async def get_jobs(self, request: fastapi.Request, **_kwargs) -> JobList:
         return JobList(
             jobs=[job.job_info for job in self.jobs.values()],
-            links=[self._get_self_link(request, "get_jobs")],
+            links=[self.get_self_link(request, "get_jobs")],
         )
 
     async def get_job(self, job_id: str, *args, **kwargs) -> JobInfo:

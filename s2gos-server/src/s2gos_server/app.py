@@ -24,9 +24,6 @@ async def json_http_exception_handler(
     )
 
 
-logger = logging.getLogger("uvicorn.request_duration")
-
-
 @app.middleware("http")
 async def log_request_duration(
     request: Request, call_next: Callable[[Request], Awaitable[Response]]
@@ -40,6 +37,7 @@ async def log_request_duration(
     duration = time.perf_counter() - start_time
 
     # Log info (method, URL path, duration in ms)
+    logger = logging.getLogger("uvicorn.request_duration")
     logger.debug(
         f"{request.method} {request.url.path} completed in {duration * 1000:.2f} ms"
     )

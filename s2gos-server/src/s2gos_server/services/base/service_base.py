@@ -42,12 +42,12 @@ class ServiceBase(Service, ABC):
         self, request: fastapi.Request, **kwargs
     ) -> Capabilities:
         app: fastapi.FastAPI = request.app
-        links = [self._get_self_link(request, "get_capabilities")] + [
+        links = [self.get_self_link(request, "get_capabilities")] + [
             Link(
-                href=self._get_url(request, r.path),
+                href=self.get_url(request, r.path),
                 title=r.name,
                 rel="service",
-                type=self._get_link_type(r.name),
+                type=self.get_link_type(r.name),
                 hreflang="en",
             )
             for r in app.routes
@@ -63,20 +63,20 @@ class ServiceBase(Service, ABC):
         return ConformanceDeclaration(conformsTo=self.conformances)
 
     @classmethod
-    def _get_self_link(cls, request: fastapi.Request, name: str, **path_params) -> Link:
+    def get_self_link(cls, request: fastapi.Request, name: str, **path_params) -> Link:
         return Link(
             href=str(request.url_for(name, **path_params)),
             rel="self",
             title=name,
-            type=cls._get_link_type(name),
+            type=cls.get_link_type(name),
             hreflang="en",
         )
 
     @classmethod
-    def _get_link_type(cls, name: str) -> str:
+    def get_link_type(cls, name: str) -> str:
         html_names = ("swagger_ui_html", "swagger_ui_redirect", "redoc_html")
         return "text/html" if name in html_names else "application/json"
 
     @classmethod
-    def _get_url(cls, request: fastapi.Request, path: str):
+    def get_url(cls, request: fastapi.Request, path: str):
         return str(request.base_url.replace(path=path))
