@@ -1,20 +1,36 @@
-from datetime import datetime, timedelta
-
-from airflow.providers.standard.operators.python import PythonOperator
-from airflow.sdk import DAG
+from airflow.sdk import DAG, task
+#from airflow.providers.standard.operators.python import PythonOperator
 
 
-def hello():
-    print("Hello from Airflow!")
+def run_python_processor(params):
+    print("task params:", params)
+    return params
+
 
 with DAG(
-    "S2GOS-Example-DAG",
-    start_date=datetime(2025, 1, 1),
-    schedule=timedelta(days=1),
+    "s2gos_example_processor",
     catchup=False,
+    params={
+        "b_param": False,
+        "i_param": 0,
+        "f_param": 0.0,
+        "s_param": "",
+        "a_param": [1, 2, 3],
+        "o_param": {"a": 0, "b": 1},
+    },
     tags=["example"]
 ) as dag:
-    task = PythonOperator(
-        task_id="say_hello",
-        python_callable=hello
-    )
+
+    print("dag params:", dag.params)
+
+    @task
+    def s2gos_example_processor_task(params):
+        print("task params:", params)
+        return params
+    
+    s2gos_example_processor = s2gos_example_processor_task()
+
+    #PythonOperator(
+    #    task_id="s2gos_example_processor_task", 
+    #    python_callable=run_python_processor
+    #)

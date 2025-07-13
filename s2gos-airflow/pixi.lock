@@ -36,7 +36,6 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/78/b6/6307fbef88d9b5ee7421e68d78a9f162e0da4900bc5f5793f6d3d0e34fb8/annotated_types-0.7.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/a1/ee/48ca1a7c89ffec8b6a0c5d02b89c305671d5ffd8d3c94acf8b8c408575bb/anyio-4.9.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e7/c8/e5135ee8e263d9f1eae5c9258b4f35924eb5d8f8b883b03a4923453ae9af/apache_airflow-3.0.2-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/53/c7/d168dd2e2120b1a61ffdcf6eaa6d992620a793d3bf7e12a59704eda1d83b/apache_airflow_client-3.0.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/7b/fe/6efbbb6f07fd4031d19a2894d51ca6210cc5ae9365e21e4e5d92817bef63/apache_airflow_core-3.0.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/9d/06/5705308c34a368f1146f4920945f620f3b69ba82fa52ea34464e3a9f74ab/apache_airflow_providers_common_compat-1.7.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e7/ef/b1e3503c2d8e9b1e9e351315426f5d94a5cd3a2cb344b74f3cbdbf0e2b6f/apache_airflow_providers_common_io-1.6.1-py3-none-any.whl
@@ -594,15 +593,6 @@ packages:
   - apache-airflow-providers-ydb>=1.4.0 ; extra == 'ydb'
   - apache-airflow-providers-zendesk>=4.9.0 ; extra == 'zendesk'
   requires_python: ~=3.9,<3.13
-- pypi: https://files.pythonhosted.org/packages/53/c7/d168dd2e2120b1a61ffdcf6eaa6d992620a793d3bf7e12a59704eda1d83b/apache_airflow_client-3.0.2-py3-none-any.whl
-  name: apache-airflow-client
-  version: 3.0.2
-  sha256: c9f2ff55f320717a2164b3a3e7653ab2d2bf1618557fa69421e3215575bc529d
-  requires_dist:
-  - pydantic>=2.11.0
-  - python-dateutil
-  - urllib3>=2.1.0
-  requires_python: ~=3.9
 - pypi: https://files.pythonhosted.org/packages/7b/fe/6efbbb6f07fd4031d19a2894d51ca6210cc5ae9365e21e4e5d92817bef63/apache_airflow_core-3.0.2-py3-none-any.whl
   name: apache-airflow-core
   version: 3.0.2

@@ -45,11 +45,19 @@ WSL users, see [VS Code with WSL](https://learn.microsoft.com/en-us/windows/wsl/
 ```bash
 pixi run format
 pixi run test
-pixi run lint
+pixi run check
 pixi run typecheck
 ```
 
 ## Run Airflow
+
+Either run all services at once
+
+```bash
+pixi run airflow standalone
+```
+
+or individually
 
 ```bash
 pixi run airflow db migrate
@@ -59,4 +67,8 @@ pixi run airflow api-server
 ```
 
 The Airflow API Server runs at URL http://localhost:8080. To find login credentials, 
-search for the log entry `Simple auth manager | Password for user 'admin':`
+search for the log entry `Simple auth manager | Password for user 'admin'`.
+
+If you forgot the username/password, you can look it up in 
+`.airflow/simple_auth_manager_passwords.json.generated`.
+You can savely delete the file to force creation of a new password.

@@ -6,7 +6,7 @@ from airflow.providers.standard.operators.bash import BashOperator
 from airflow.sdk import DAG
 
 with DAG(
-    "S2GOS-Tutorial",
+    "s2gos_tutorial",
     # These args will get passed on to each operator
     # You can override them on a per-task basis during operator initialization
     default_args={
