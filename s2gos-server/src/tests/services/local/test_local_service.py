@@ -2,11 +2,11 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-import os
 from unittest import IsolatedAsyncioTestCase, TestCase
 
 import fastapi
 import pytest
+from tests.helpers import set_env
 
 from s2gos_common.models import (
     Capabilities,
@@ -22,7 +22,8 @@ from s2gos_common.models import (
 from s2gos_server.exceptions import JSONContentException
 from s2gos_server.main import app
 from s2gos_server.provider import ServiceProvider, get_service
-from s2gos_server.services.local import LocalService, ProcessRegistry
+from s2gos_server.services.base import FunctionProcess
+from s2gos_server.services.local import LocalService
 
 
 class LocalServiceSetupTest(TestCase):
@@ -42,16 +43,16 @@ class LocalServiceSetupTest(TestCase):
     def test_server_setup_ok(self):
         service = self.service
 
-        foo_entry = service.process_registry.get_entry("foo")
-        self.assertIsInstance(foo_entry, ProcessRegistry.Entry)
+        foo_entry = service.process_registry.get_process_entry("foo")
+        self.assertIsInstance(foo_entry, FunctionProcess)
         self.assertTrue(callable(foo_entry.function))
         foo_process = foo_entry.process
         self.assertIsInstance(foo_process, ProcessDescription)
         self.assertEqual("foo", foo_process.id)
         self.assertEqual("1.0.1", foo_process.version)
 
-        bar_entry = service.process_registry.get_entry("bar")
-        self.assertIsInstance(bar_entry, ProcessRegistry.Entry)
+        bar_entry = service.process_registry.get_process_entry("bar")
+        self.assertIsInstance(bar_entry, FunctionProcess)
         self.assertTrue(callable(bar_entry.function))
         bar_process = bar_entry.process
         self.assertIsInstance(bar_process, ProcessDescription)
@@ -62,17 +63,15 @@ class LocalServiceSetupTest(TestCase):
 class LocalServiceTest(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         self.app = app
-        self.old_env_value = os.environ.get("S2GOS_SERVICE")
-        os.environ["S2GOS_SERVICE"] = "s2gos_server.services.local.testing:service"
+        self.restore_env = set_env(
+            S2GOS_SERVICE="s2gos_server.services.local.testing:service"
+        )
         ServiceProvider._service = None
         self.service = get_service()
         self.assertIsInstance(self.service, LocalService)
 
     async def asyncTearDown(self):
-        if self.old_env_value is None:
-            del os.environ["S2GOS_SERVICE"]
-        else:
-            os.environ["S2GOS_SERVICE"] = self.old_env_value
+        self.restore_env()
 
     def get_request(self) -> fastapi.Request:
         return fastapi.Request({"type": "http", "app": self.app, "headers": {}})

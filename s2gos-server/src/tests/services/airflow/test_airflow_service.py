@@ -2,13 +2,15 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-import os
+# import shutil
 import unittest
 import warnings
+from pathlib import Path
 from unittest import IsolatedAsyncioTestCase
 
 import fastapi
 import requests
+from tests.helpers import set_env
 
 from s2gos_common.models import (
     Capabilities,
@@ -20,7 +22,7 @@ from s2gos_server.main import app
 from s2gos_server.provider import ServiceProvider, get_service
 from s2gos_server.services.airflow import DEFAULT_AIRFLOW_BASE_URL, AirflowService
 
-airflow_base_url = DEFAULT_AIRFLOW_BASE_URL
+S2GOS_AIRFLOW_DAGS_FOLDER = "test_dags"
 
 
 def is_airflow_running(url: str, timeout: float = 1.0) -> bool:
@@ -32,23 +34,25 @@ def is_airflow_running(url: str, timeout: float = 1.0) -> bool:
 
 
 @unittest.skipUnless(
-    is_airflow_running(airflow_base_url),
-    reason=f"No Airflow server running on {airflow_base_url}",
+    is_airflow_running(DEFAULT_AIRFLOW_BASE_URL),
+    reason=f"No Airflow server running on {DEFAULT_AIRFLOW_BASE_URL}",
 )
-class LocalServiceTest(IsolatedAsyncioTestCase):
+class AirflowServiceTest(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
-        self.old_env_value = os.environ.get("S2GOS_SERVICE")
+        Path(S2GOS_AIRFLOW_DAGS_FOLDER).mkdir(exist_ok=True)
         self.app = app
-        os.environ["S2GOS_SERVICE"] = "s2gos_server.services.airflow.testing:service"
+        self.restore_env = set_env(
+            S2GOS_SERVICE="s2gos_server.services.airflow.testing:service",
+            S2GOS_AIRFLOW_DAGS_FOLDER=S2GOS_AIRFLOW_DAGS_FOLDER,
+        )
         ServiceProvider._service = None
         self.service = get_service()
         self.assertIsInstance(self.service, AirflowService)
 
     async def asyncTearDown(self):
-        if self.old_env_value is None:
-            del os.environ["S2GOS_SERVICE"]
-        else:
-            os.environ["S2GOS_SERVICE"] = self.old_env_value
+        self.restore_env()
+        # comment out to check generated DAGs
+        # shutil.rmtree(S2GOS_AIRFLOW_DAGS_FOLDER, ignore_errors=True)
 
     def get_request(self) -> fastapi.Request:
         return fastapi.Request({"type": "http", "app": self.app, "headers": {}})

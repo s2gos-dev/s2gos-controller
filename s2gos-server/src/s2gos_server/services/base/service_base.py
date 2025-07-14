@@ -3,9 +3,10 @@
 #  https://opensource.org/license/apache-2-0.
 
 from abc import ABC
-from typing import Optional
+from typing import Callable, Optional
 
 import fastapi
+import pydantic
 from starlette.routing import Route
 
 from s2gos_common.models import (
@@ -15,7 +16,7 @@ from s2gos_common.models import (
 )
 from s2gos_common.service import Service
 
-DEFAULT_CONFORMANCES = [
+DEFAULT_CONFORMS_TO = [
     "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/core",
     "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/ogc-process-description",
     "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/json",
@@ -32,11 +33,28 @@ class ServiceBase(Service, ABC):
         self,
         title: str,
         description: Optional[str] = None,
-        conformances: Optional[list[str]] = None,
+        conforms_to: Optional[list[str]] = None,
     ):
         self.title = title
         self.description = description
-        self.conformances = conformances or DEFAULT_CONFORMANCES
+        self.conforms_to = conforms_to or DEFAULT_CONFORMS_TO
+
+    # noinspection PyShadowingBuiltins
+    def process(
+        self,
+        id: Optional[str] = None,
+        version: Optional[str] = None,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
+        input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
+        output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
+    ) -> Callable[[Callable], Callable]:
+        """A decorator that registers a user function as a process.
+
+        Raises:
+            NotImplementedError: if not otherwise overridden by subclasses
+        """
+        raise NotImplementedError
 
     async def get_capabilities(
         self, request: fastapi.Request, **kwargs
@@ -60,7 +78,7 @@ class ServiceBase(Service, ABC):
         )
 
     async def get_conformance(self, **_kwargs) -> ConformanceDeclaration:
-        return ConformanceDeclaration(conformsTo=self.conformances)
+        return ConformanceDeclaration(conformsTo=self.conforms_to)
 
     @classmethod
     def get_self_link(cls, request: fastapi.Request, name: str, **path_params) -> Link:

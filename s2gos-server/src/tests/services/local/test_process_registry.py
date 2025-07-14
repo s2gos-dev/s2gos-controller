@@ -4,7 +4,6 @@
 
 from unittest import TestCase
 
-import pydantic
 import pytest
 from pydantic import BaseModel, Field
 from tests.helpers import BaseModelMixin
@@ -16,11 +15,8 @@ from s2gos_common.models import (
     ProcessDescription,
     Schema,
 )
+from s2gos_server.services.base import FunctionProcess
 from s2gos_server.services.local import ProcessRegistry
-from s2gos_server.services.local.process_registry import (
-    create_schema_instance,
-    inline_schema_refs,
-)
 
 
 def f1(x: bool, y: int) -> float:
@@ -50,11 +46,11 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         registry = ProcessRegistry()
 
         entry = registry.register_function(f1)
-        self.assertIsInstance(entry, ProcessRegistry.Entry)
+        self.assertIsInstance(entry, FunctionProcess)
         self.assertIs(f1, entry.function)
         process = entry.process
         self.assertIsInstance(process, ProcessDescription)
-        self.assertEqual("tests.services.local.test_process_registry:f1", process.id)
+        self.assertEqual("f1", process.id)
         self.assertEqual("0.0.0", process.version)
         self.assertEqual(None, process.title)
         self.assertEqual("This is f1.", process.description)
@@ -84,11 +80,11 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         registry = ProcessRegistry()
 
         entry = registry.register_function(f2)
-        self.assertIsInstance(entry, ProcessRegistry.Entry)
+        self.assertIsInstance(entry, FunctionProcess)
         self.assertIs(f2, entry.function)
         process = entry.process
         self.assertIsInstance(process, ProcessDescription)
-        self.assertEqual("tests.services.local.test_process_registry:f2", process.id)
+        self.assertEqual("f2", process.id)
         self.assertEqual("0.0.0", process.version)
         self.assertEqual(None, process.title)
         self.assertEqual("This is f2.", process.description)
@@ -139,11 +135,11 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
                 "point": Field(title="A point (x, y)"),
             },
         )
-        self.assertIsInstance(entry, ProcessRegistry.Entry)
+        self.assertIsInstance(entry, FunctionProcess)
         self.assertIs(f2, entry.function)
         process = entry.process
         self.assertIsInstance(process, ProcessDescription)
-        self.assertEqual("tests.services.local.test_process_registry:f2", process.id)
+        self.assertEqual("f2", process.id)
         self.assertEqual("0.0.0", process.version)
         self.assertEqual(None, process.title)
         self.assertEqual("This is f2.", process.description)
@@ -176,11 +172,11 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
                 "y": Field(title="The Y", lt=1.0),
             },
         )
-        self.assertIsInstance(entry, ProcessRegistry.Entry)
+        self.assertIsInstance(entry, FunctionProcess)
         self.assertIs(f2, entry.function)
         process = entry.process
         self.assertIsInstance(process, ProcessDescription)
-        self.assertEqual("tests.services.local.test_process_registry:f2", process.id)
+        self.assertEqual("f2", process.id)
         self.assertEqual("0.0.0", process.version)
         self.assertEqual(None, process.title)
         self.assertEqual("This is f2.", process.description)
@@ -267,7 +263,7 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         registry = ProcessRegistry()
 
         e1 = registry.register_function(f1, id="foo", version="1.0.2", title="My Foo")
-        self.assertIsInstance(e1, ProcessRegistry.Entry)
+        self.assertIsInstance(e1, FunctionProcess)
         self.assertIs(f1, e1.function)
         p1 = e1.process
         self.assertIsInstance(p1, ProcessDescription)
@@ -330,68 +326,3 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         self.assertIsInstance(p2, ProcessDescription)
         self.assertIs(p1, registry.get_process(p1.id))
         self.assertIs(p2, registry.get_process(p2.id))
-
-    def test_create_schema_instance(self):
-        self.assertEqual(
-            Schema(type="number"),
-            create_schema_instance("x", {"type": "number"}),
-        )
-
-        with pytest.raises(pydantic.ValidationError):
-            create_schema_instance("x", {"tüp": "number"})
-
-
-class InlineRefsTest(TestCase):
-    def test_inline_schema_refs(self):
-        schema = inline_schema_refs(
-            {
-                "type": "array",
-                "items": {"$ref": "#/$defs/Line"},
-                "$defs": {
-                    "Line": {
-                        "type": "object",
-                        "properties": {
-                            "p1": {"$ref": "#/$defs/Point"},
-                            "p2": {"$ref": "#/$defs/Point"},
-                        },
-                        "required": ["p1", "p2"],
-                    },
-                    "Point": {
-                        "type": "object",
-                        "properties": {
-                            "x": {"type": "number"},
-                            "y": {"type": "number"},
-                        },
-                        "required": ["x", "y"],
-                    },
-                },
-            }
-        )
-        self.assertEqual(
-            {
-                "type": "array",
-                "items": {
-                    "type": "object",
-                    "required": ["p1", "p2"],
-                    "properties": {
-                        "p1": {
-                            "type": "object",
-                            "required": ["x", "y"],
-                            "properties": {
-                                "x": {"type": "number"},
-                                "y": {"type": "number"},
-                            },
-                        },
-                        "p2": {
-                            "type": "object",
-                            "required": ["x", "y"],
-                            "properties": {
-                                "x": {"type": "number"},
-                                "y": {"type": "number"},
-                            },
-                        },
-                    },
-                },
-            },
-            schema,
-        )

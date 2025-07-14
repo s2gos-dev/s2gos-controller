@@ -21,7 +21,7 @@ from s2gos_common.models import (
     Schema,
 )
 from s2gos_server.exceptions import JSONContentException
-from s2gos_server.services.base import ServiceBase
+from s2gos_server.services.base import FunctionProcess, ServiceBase
 
 from .job import Job
 from .process_registry import ProcessRegistry
@@ -143,7 +143,7 @@ class LocalService(ServiceBase):
         assert job.future is not None
         assert job.job_info.processID is not None
         result = job.future.result()
-        entry = self.process_registry.get_entry(job.job_info.processID)
+        entry = self.process_registry.get_process_entry(job.job_info.processID)
         assert entry is not None
         outputs = entry.process.outputs or {}
         output_count = len(outputs)
@@ -164,7 +164,7 @@ class LocalService(ServiceBase):
         input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
     ) -> Callable[[Callable], Callable]:
-        """A decorator for user functions to be registered as processes."""
+        """A decorator that registers a user function as a process."""
 
         def _factory(function: Callable):
             self.process_registry.register_function(
@@ -180,8 +180,8 @@ class LocalService(ServiceBase):
 
         return _factory
 
-    def _get_process_entry(self, process_id: str) -> ProcessRegistry.Entry:
-        process_entry = self.process_registry.get_entry(process_id)
+    def _get_process_entry(self, process_id: str) -> FunctionProcess:
+        process_entry = self.process_registry.get_process_entry(process_id)
         if process_entry is None:
             raise JSONContentException(
                 404, detail=f"Process {process_id!r} does not exist"
