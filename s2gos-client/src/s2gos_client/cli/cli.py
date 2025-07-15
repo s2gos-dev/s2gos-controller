@@ -3,6 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 import os
+from pathlib import Path
 from typing import Optional
 
 import click
@@ -71,105 +72,86 @@ def configure(
     server_url: Optional[str] = typer.Option(None, "--url"),
 ):
     """Configure the S2GOS client."""
-    from s2gos_client.api.config import ClientConfig
+    from .impl import configure_client
 
-    config = ClientConfig.read()
-    if not user_name:
-        user_name = click.prompt(
-            "User name",
-            default=(config and config.user_name)
-            or os.environ.get("USER", os.environ.get("USERNAME")),
-        )
-    if not access_token:
-        prev_access_token = config and config.access_token
-        _access_token = click.prompt(
-            "Access token",
-            type=str,
-            hide_input=True,
-            default="*****" if prev_access_token else None,
-        )
-        if _access_token == "*****" and prev_access_token:
-            access_token = prev_access_token
-        else:
-            access_token = _access_token
-    if not server_url:
-        server_url = click.prompt(
-            "Server URL",
-            default=(config and config.server_url) or DEFAULT_SERVER_URL,
-        )
-    config_path = ClientConfig(
+    configure_client(
         user_name=user_name, access_token=access_token, server_url=server_url
-    ).write()
-    click.echo(f"Configuration written to {config_path}")
+    )
 
 
 @cli.command()
-def get_template(
-    template_name: str,
-    request_file: str = typer.Option(DEFAULT_REQUEST_FILE, "--request"),
-):
-    """Get a processing request template."""
-    click.echo(f"Fetching template {template_name} and writing to {request_file}")
+def list_processes():
+    """List available processes."""
+    from .impl import get_client, render_process_list
+
+    process_list = get_client().get_processes()
+    render_process_list(process_list)
 
 
 @cli.command()
-def list_templates():
-    """List available processing request templates."""
-    click.echo("Listing available processing request templates")
+def get_process(process_id: str):
+    """Get process details."""
+    from .impl import get_client, render_process_description
+
+    process_description = get_client().get_process(process_id)
+    render_process_description(process_description)
 
 
 @cli.command()
-def validate_request(name: str = typer.Option(DEFAULT_REQUEST_FILE)):
+def validate_request(request_file: str = typer.Option(DEFAULT_REQUEST_FILE)):
     """Validate a processing request."""
-    click.echo(f"Validating {name}")
+    from .impl import read_request
+
+    _request = read_request(request_file)
+    click.echo(f"Request {request_file} is valid.")
 
 
 @cli.command()
-def submit_request(name: str = typer.Option(DEFAULT_REQUEST_FILE)):
-    """Submit a processing request."""
-    config = _get_config()
-    click.echo(f"Submitting request {name} for {config.user_name}")
+def execute_process(request_file: str = typer.Option(DEFAULT_REQUEST_FILE)):
+    """Execute a process."""
+    from .impl import read_request, get_client, render_job
+
+    request = read_request(request_file)
+    job = get_client().execute_process(
+        process_id=request.process_id, request=request.request
+    )
+    render_job(job)
 
 
 @cli.command()
-def cancel_jobs(job_ids: list[str]):
+def list_jobs():
+    """List jobs."""
+    from .impl import get_client, render_job_list
+
+    job_list = get_client().get_jobs()
+    render_job_list(job_list)
+
+
+@cli.command()
+def get_job(job_id: str):
     """Cancel running processing jobs."""
-    config = _get_config()
-    click.echo(
-        f"Cancelling all jobs of {config.user_name}"
-        if not job_ids
-        else f"Cancelling jobs {job_ids} of {config.user_name}"
-    )
+    from .impl import get_client, render_job
+
+    job = get_client().get_job(job_id)
+    render_job(job)
 
 
 @cli.command()
-def poll_jobs(job_ids: list[str]):
-    """Poll the status of processing jobs."""
-    config = _get_config()
-    click.echo(
-        f"Polling all jobs of user {config.user_name}"
-        if not job_ids
-        else f"Polling jobs {job_ids} of {config.user_name}"
-    )
+def dismiss_job(job_id: str):
+    """Cancel a running or delete a finished job."""
+    from .impl import get_client, render_job
+
+    job = get_client().dismiss_job(job_id)
+    render_job(job)
 
 
 @cli.command()
-def get_results(job_ids: list[str]):
+def get_job_results(job_id: str):
     """Get processing results."""
-    config = _get_config()
-    click.echo(f"Getting result of job {job_ids!r} for {config.user_name}")
+    from .impl import get_client, render_job_results
 
-
-def _get_config():
-    from s2gos_client.api.config import ClientConfig
-
-    config = ClientConfig.read()
-    if config is None:
-        raise click.ClickException(
-            "Tool is not yet configured,"
-            " please use the 'configure' command to set it up."
-        )
-    return config
+    job_results = get_client().get_job_results(job_id)
+    render_job_results(job_results)
 
 
 if __name__ == "__main__":  # pragma: no cover
