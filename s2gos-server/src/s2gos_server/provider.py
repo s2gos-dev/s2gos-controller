@@ -22,6 +22,7 @@ class ServiceProvider:
     def get_instance(cls) -> Service:
         if cls._service is None:
             cls.set_instance(cls._load_service())
+        assert cls._service is not None
         return cls._service
 
     @classmethod

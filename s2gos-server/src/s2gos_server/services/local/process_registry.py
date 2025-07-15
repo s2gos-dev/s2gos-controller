@@ -14,9 +14,6 @@ class ProcessRegistry(Mapping[str, RegisteredProcess]):
     def __init__(self):
         self._processes: dict[str, RegisteredProcess] = {}
 
-    def get(self, process_id: str) -> RegisteredProcess | None:
-        return self._processes.get(process_id)
-
     def __getitem__(self, process_id: str, /) -> RegisteredProcess:
         return self._processes[process_id]
 

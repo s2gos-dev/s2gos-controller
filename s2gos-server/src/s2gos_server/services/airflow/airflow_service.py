@@ -236,11 +236,13 @@ class AirflowService(ServiceBase):
 
     @cached_property
     def airflow_client(self) -> ApiClient:
-        airflow_base_url = self._airflow_base_url or os.getenv(
-            "AIRFLOW_API_BASE_URL", DEFAULT_AIRFLOW_BASE_URL
+        airflow_base_url: str = (
+            self._airflow_base_url
+            or os.getenv("AIRFLOW_API_BASE_URL")
+            or DEFAULT_AIRFLOW_BASE_URL
         )
-        airflow_username = self._airflow_username or os.getenv(
-            "AIRFLOW_USERNAME", "admin"
+        airflow_username: str = (
+            self._airflow_username or os.getenv("AIRFLOW_USERNAME") or "admin"
         )
         airflow_password = self._airflow_password or os.getenv("AIRFLOW_PASSWORD")
         if not airflow_password:
