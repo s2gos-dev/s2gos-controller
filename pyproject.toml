@@ -60,9 +60,11 @@ pymdown-extensions = "*"
 # I wished we could have "no-deps=true" here,
 # or even better "[tool.pixi.workspaces]".
 # See https://github.com/prefix-dev/pixi/issues/1417.
-s2gos-common = { path = "s2gos-common", editable = true }
 s2gos-client = { path = "s2gos-client", editable = true }
+s2gos-common = { path = "s2gos-common", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
+# Airflow is only available on PyPI
+apache-airflow-client = "==3.0.2"
 # Documentation
 # For mermaid diagrams
 mkdocs-mermaid2-plugin = "*"
@@ -93,7 +95,8 @@ select = ["I", "F", "E"]
 
 [tool.coverage.report]
 omit = [
-    "s2gos-client/src/s2gos_client/gui/**/*"
+    "s2gos-client/src/s2gos_client/gui/**/*",
+    "s2gos-server/src/s2gos_server/services/airflow/**/*",
 ]
 
 [tool.mypy]
@@ -180,6 +183,9 @@ cmd = "python -m tools.gen_server"
 
 [tool.pixi.tasks.gen-client]
 cmd = "python -m tools.gen_client && python -m tools.gen_client_docs"
+
+[tool.pixi.tasks.gen-dags]
+cmd = "python -m tools.gen_dags"
 
 # pixi run sync-versions
 

@@ -1,8 +1,10 @@
 #  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
-import contextlib
 import os
+from collections.abc import Generator
+from contextlib import contextmanager
+from typing import Callable
 
 from pydantic import BaseModel
 
@@ -23,17 +25,29 @@ class BaseModelMixin:
         self.assertDictEqual(a_dict, b_dict)
 
 
-@contextlib.contextmanager
-def set_env_var(name: str, value: str | None):
-    old_value = os.environ.get(name)
+@contextmanager
+def set_env_cm(**new_env: str) -> Generator[dict[str, str]]:
+    restore_env = set_env(**new_env)
     try:
-        if value is None:
-            os.environ.pop(name, None)
-        else:
-            os.environ[name] = value
-        yield
+        yield new_env
     finally:
-        if old_value is None:
-            os.environ.pop(name, None)
-        else:
-            os.environ[name] = old_value
+        restore_env()
+
+
+def set_env(**new_env: str) -> Callable[[], None]:
+    old_env = {k: os.environ.get(k) for k in new_env.keys()}
+
+    def restore_env():
+        for ko, vo in old_env.items():
+            if vo is not None:
+                os.environ[ko] = vo
+            elif ko in os.environ:
+                del os.environ[ko]
+
+    for kn, vn in new_env.items():
+        if vn is not None:
+            os.environ[kn] = vn
+        elif kn in os.environ:
+            del os.environ[kn]
+
+    return restore_env

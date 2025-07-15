@@ -7,7 +7,7 @@ from unittest import TestCase
 
 import pytest
 from fastapi import FastAPI
-from tests.helpers import set_env_var
+from tests.helpers import set_env_cm
 
 from s2gos_server.provider import ServiceProvider
 from s2gos_server.services.local.testing import service as test_service
@@ -19,9 +19,7 @@ class MainTest(TestCase):
 
     # noinspection PyMethodMayBeStatic
     def test_service_provider_init_ok(self):
-        with set_env_var(
-            "S2GOS_SERVICE", "s2gos_server.services.local.testing:service"
-        ):
+        with set_env_cm(S2GOS_SERVICE="s2gos_server.services.local.testing:service"):
             module = importlib.import_module("s2gos_server.main")
             self.assertTrue(hasattr(module, "app"))
             self.assertIsInstance(getattr(module, "app"), FastAPI)
@@ -38,5 +36,5 @@ class MainTest(TestCase):
                 "Please set environment variable 'S2GOS_SERVICE'."
             ),
         ):
-            with set_env_var("S2GOS_SERVICE", None):
+            with set_env_cm(S2GOS_SERVICE=None):
                 ServiceProvider.get_instance()

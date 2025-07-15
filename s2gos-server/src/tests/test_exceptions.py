@@ -15,3 +15,11 @@ class JSONContentExceptionTest(TestCase):
             ApiError(type="error", status=401, detail="Bibo not authorized"),
             exc.content,
         )
+
+    def test_includes_traceback(self):
+        try:
+            raise RuntimeError("Argh!")
+        except Exception as e:
+            exc = JSONContentException(500, "Internal error", exception=e)
+            self.assertIsInstance(exc.content, ApiError)
+            self.assertIsInstance(exc.content.traceback, list)

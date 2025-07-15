@@ -20,7 +20,6 @@ service = LocalService(
 
 
 @service.process(
-    id="sleep_a_while",
     title="Sleep Processor",
     description=(
         "Sleeps for `duration` seconds. "
@@ -44,7 +43,6 @@ def sleep_a_while(
 
 
 @service.process(
-    id="primes_between",
     title="Prime Processor",
     description=(
         "Returns the list of prime numbers between a `min_val` and `max_val`. "
@@ -89,7 +87,6 @@ def primes_between(
 
 
 @service.process(
-    id="simulate_scene",
     title="Generate scene for testing",
     description=(
         "Simulate a set scene images slices for testing. "
@@ -205,8 +202,8 @@ class SceneSpec(pydantic.BaseModel):
     # bbox: Optional[Bbox] = None
 
 
-@service.process(id="return_base_model", title="BaseModel Test")
-def return_base_model_1(
+@service.process(title="BaseModel Test")
+def return_base_model(
     scene_spec: SceneSpec,
 ) -> SceneSpec:
     return scene_spec
