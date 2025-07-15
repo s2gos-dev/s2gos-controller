@@ -23,9 +23,9 @@ from s2gos_common.models import (
 from s2gos_server.exceptions import JSONContentException
 from s2gos_server.services.base import ServiceBase
 
+from .job import Job
 from .process_registry import ProcessRegistry
 from .registered_process import RegisteredProcess
-from .job import Job
 
 
 class LocalService(ServiceBase):

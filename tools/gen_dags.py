@@ -4,6 +4,8 @@
 
 import importlib
 from pathlib import Path
+from typing import Any
+
 import typer
 
 from s2gos_server.services.local import LocalService, RegisteredProcess
@@ -39,17 +41,10 @@ def gen_dag(process: RegisteredProcess) -> str:
     function_name = process_description.id
     input_descriptions = process_description.inputs
 
-    param_specs = []
-    for param_name, input_description in input_descriptions.items():
-        schema = input_description.schema_.model_dump(
-            mode="json",
-            by_alias=True,
-            exclude_defaults=True,
-            exclude_none=True,
-            exclude_unset=True,
-        )
-        param_args = ", ".join(f"{sk}={sv!r}" for sk, sv in schema.items())
-        param_specs.append(f"{param_name!r}: Param({param_args})")
+    param_specs = [
+        f"{param_name!r}: Param({get_param_args(input_description)})"
+        for param_name, input_description in input_descriptions.items()
+    ]
 
     tab = "    "
     num_outputs = len(process_description.outputs or [])
@@ -63,7 +58,7 @@ def gen_dag(process: RegisteredProcess) -> str:
         "",
         "@dag(",
         f"{tab}{function_name!r},",
-        # f"{tab}title={process.description.title!r},",
+        f"{tab}dag_display_name={process.description.title!r},",
         f"{tab}description={process_description.description!r},",
         f"{tab}multiple_outputs={(num_outputs > 1)!r},",
         f"{tab}params=" + "{",
@@ -79,6 +74,31 @@ def gen_dag(process: RegisteredProcess) -> str:
         f"{tab}task_instance = {function_name}_task()  # noqa: F841",
     ]
     return "\n".join(lines) + "\n"
+
+
+def get_param_args(input_description):
+    schema = dict(
+        input_description.schema_.model_dump(
+            mode="json",
+            by_alias=True,
+            exclude_defaults=True,
+            exclude_none=True,
+            exclude_unset=True,
+        )
+    )
+    param_args: list[tuple[str, Any]] = []
+    if "default" in schema:
+        param_args.append(("default", schema.pop("default")))
+    if "type" in schema:
+        param_args.append(("type", schema.pop("type")))
+    if input_description.title:
+        schema.pop("title", None)
+        param_args.append(("title", input_description.title))
+    if input_description.description:
+        schema.pop("description", None)
+        param_args.append(("description", input_description.description))
+    param_args.extend(sorted(schema.items(), key=lambda item: item[0]))
+    return ", ".join(f"{sk}={sv!r}" for sk, sv in param_args)
 
 
 if __name__ == "__main__":

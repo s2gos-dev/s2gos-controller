@@ -195,3 +195,32 @@ direction TB
     ProcessExecutor ..> JobResult : obtain   
     ProcessExecutor ..> ProcessRequest : use      
 ```
+
+## Code generation
+
+```mermaid
+---
+config:
+  theme: default
+---
+flowchart LR
+    openapi@{ shape: lean-r, label: "openapi.yaml" }
+    local_service@{ shape: stadium, label: "s2gos_server.services.local.testing:service" }
+    dags@{ shape: stadium, label: "s2gos_airflow/dags" }
+    sync_client@{ shape: stadium, label: "s2gos_client.api.Client" }
+    async_client@{ shape: stadium, label: "s2gos_client.api.AsyncClient" }
+    models@{ shape: stadium, label: "s2gos_common.models.*" }
+    service@{ shape: stadium, label: "s2gos_common.service.Service" }
+    routes@{ shape: stadium, label: "s2gos_server.routes" }
+    openapi --> generate
+    generate --> gen-client
+    generate --> gen-common
+    generate --> gen-server
+    gen-client --> sync_client
+    gen-client --> async_client
+    gen-common --> models
+    gen-common --> service
+    gen-server --> routes
+    local_service --> gen-dags
+    gen-dags --> dags
+```

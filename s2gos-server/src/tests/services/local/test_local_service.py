@@ -22,8 +22,7 @@ from s2gos_common.models import (
 from s2gos_server.exceptions import JSONContentException
 from s2gos_server.main import app
 from s2gos_server.provider import ServiceProvider, get_service
-from s2gos_server.services.local import LocalService
-from s2gos_server.services.local import RegisteredProcess
+from s2gos_server.services.local import LocalService, RegisteredProcess
 
 
 class LocalServiceSetupTest(TestCase):
