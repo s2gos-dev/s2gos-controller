@@ -128,9 +128,10 @@ direction TB
     class ProcessDescription {
     }
     class ProcessRequest {
-        process_id
         inputs
         outputs
+        response
+        subscriber
     }
     class JobList {
     }
