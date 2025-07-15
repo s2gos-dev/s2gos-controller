@@ -71,4 +71,4 @@ search for the log entry `Simple auth manager | Password for user 'admin'`.
 
 If you forgot the username/password, you can look it up in 
 `.airflow/simple_auth_manager_passwords.json.generated`.
-You can savely delete the file to force creation of a new password.
+You can safely delete the file to force creation of a new password.

@@ -36,8 +36,8 @@ def write_file(generator_name: str, file_path: Path, code_parts: list[str]):
         stream.write(f"#   filename:  {file_path.name}:\n")
         stream.write(f"#   timestamp: {datetime.datetime.now().isoformat()}\n")
         stream.write("\n")
-        for line in code_parts:
-            stream.write(line)
+        for code_part in code_parts:
+            stream.write(code_part)
 
     print(f"✔ Generated {file_path}")
     subprocess.run(["isort", str(file_path)])

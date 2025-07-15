@@ -1,0 +1,85 @@
+#  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
+#  Permissions are hereby granted under the terms of the Apache 2.0 License:
+#  https://opensource.org/license/apache-2-0.
+
+import importlib
+from pathlib import Path
+import typer
+
+from s2gos_server.services.local import LocalService, RegisteredProcess
+from tools.common import S2GOS_PATH, write_file
+
+GENERATOR_NAME = str(Path(__file__).name)
+
+SERVICE_SPEC = "s2gos_server.services.local.testing:service"
+DAGS_FOLDER = S2GOS_PATH / "s2gos-airflow/dags"
+
+
+def main(service_spec: str = SERVICE_SPEC, dags_folder: Path = DAGS_FOLDER):
+    service = load_service(service_spec)
+    dags_folder.mkdir(exist_ok=True)
+    for process_id, process in service.process_registry.items():
+        write_file(
+            GENERATOR_NAME,
+            dags_folder / f"{process_id}.py",
+            [gen_dag(process)],
+        )
+
+
+def load_service(service_spec: str) -> LocalService:
+    module_name, attr_name = service_spec.rsplit(":", maxsplit=1)
+    module = importlib.import_module(module_name)
+    service = getattr(module, attr_name)
+    assert isinstance(service, LocalService)
+    return service
+
+
+def gen_dag(process: RegisteredProcess) -> str:
+    process_description = process.description
+    function_name = process_description.id
+    input_descriptions = process_description.inputs
+
+    param_specs = []
+    for param_name, input_description in input_descriptions.items():
+        schema = input_description.schema_.model_dump(
+            mode="json",
+            by_alias=True,
+            exclude_defaults=True,
+            exclude_none=True,
+            exclude_unset=True,
+        )
+        param_args = ", ".join(f"{sk}={sv!r}" for sk, sv in schema.items())
+        param_specs.append(f"{param_name!r}: Param({param_args})")
+
+    tab = "    "
+    num_outputs = len(process_description.outputs or [])
+    # noinspection PyUnresolvedReferences
+    function_module = process.function.__module__
+    lines = [
+        "from airflow.sdk import Param, dag, task",
+        "",
+        f"from {function_module} import {function_name}",
+        "",
+        "",
+        "@dag(",
+        f"{tab}{function_name!r},",
+        # f"{tab}title={process.description.title!r},",
+        f"{tab}description={process_description.description!r},",
+        f"{tab}multiple_outputs={(num_outputs > 1)!r},",
+        f"{tab}params=" + "{",
+        *[f"{tab}{tab}{p}," for p in param_specs],
+        f"{tab}" + "},",
+        ")",
+        f"def {function_name}_dag():",
+        "",
+        f"{tab}@task",
+        f"{tab}def {function_name}_task(params):",
+        f"{tab}{tab}return {function_name}(**params)",
+        "",
+        f"{tab}task_instance = {function_name}_task()  # noqa: F841",
+    ]
+    return "\n".join(lines) + "\n"
+
+
+if __name__ == "__main__":
+    typer.run(main)

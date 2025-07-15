@@ -183,6 +183,9 @@ cmd = "python -m tools.gen_server"
 [tool.pixi.tasks.gen-client]
 cmd = "python -m tools.gen_client && python -m tools.gen_client_docs"
 
+[tool.pixi.tasks.gen-dags]
+cmd = "python -m tools.gen_dags"
+
 # pixi run sync-versions
 
 [tool.pixi.tasks.sync-versions]
