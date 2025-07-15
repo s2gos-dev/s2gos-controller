@@ -95,7 +95,8 @@ select = ["I", "F", "E"]
 
 [tool.coverage.report]
 omit = [
-    "s2gos-client/src/s2gos_client/gui/**/*"
+    "s2gos-client/src/s2gos_client/gui/**/*",
+    "s2gos-server/src/s2gos_server/services/airflow/**/*",
 ]
 
 [tool.mypy]
@@ -106,7 +107,6 @@ exclude = [
     "s2gos-client/src/test",
     "s2gos-common/src/test",
     "s2gos-server/src/test",
-    "s2gos-server/src/s2gos_server/services/airflow",
     "s2gos-airflow",
     "tools",
 ]
