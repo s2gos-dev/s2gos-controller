@@ -19,10 +19,10 @@ from s2gos_common.models import (
 
 
 @dataclass
-class FunctionProcess:
+class RegisteredProcess:
     function: Callable
     signature: inspect.Signature
-    process: ProcessDescription
+    description: ProcessDescription
     model_class: type[pydantic.BaseModel]
 
     # noinspection PyShadowingBuiltins
@@ -36,7 +36,7 @@ class FunctionProcess:
         description: Optional[str] = None,
         input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
-    ) -> "FunctionProcess":
+    ) -> "RegisteredProcess":
         if not inspect.isfunction(function):
             raise ValueError("function argument must be callable")
         fn_name = f"{function.__module__}:{function.__qualname__}"
@@ -46,10 +46,10 @@ class FunctionProcess:
         signature = inspect.signature(function)
         inputs, model_class = _generate_inputs(fn_name, signature, input_fields)
         outputs = _generate_outputs(fn_name, signature.return_annotation, output_fields)
-        return FunctionProcess(
-            function,
-            signature,
-            ProcessDescription(
+        return RegisteredProcess(
+            function=function,
+            signature=signature,
+            description=ProcessDescription(
                 id=id,
                 version=version,
                 title=title,
@@ -57,7 +57,7 @@ class FunctionProcess:
                 inputs=inputs,
                 outputs=outputs,
             ),
-            model_class,
+            model_class=model_class,
         )
 
 

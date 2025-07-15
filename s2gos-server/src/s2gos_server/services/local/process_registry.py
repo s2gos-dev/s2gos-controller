@@ -2,27 +2,32 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+from collections.abc import Mapping, Iterator
 from typing import Callable, Optional
 
 import pydantic
 
-from s2gos_common.models import ProcessDescription
-from s2gos_server.services.base.function_process import FunctionProcess
+from s2gos_server.services.local.registered_process import RegisteredProcess
 
 
-class ProcessRegistry:
+class ProcessRegistry(Mapping[str, RegisteredProcess]):
     def __init__(self):
-        self._processes: dict[str, FunctionProcess] = {}
+        self._processes: dict[str, RegisteredProcess] = {}
 
-    def get_process_list(self) -> list[ProcessDescription]:
-        return [v.process for v in self._processes.values()]
-
-    def get_process(self, process_id: str) -> Optional[ProcessDescription]:
-        entry = self._processes.get(process_id)
-        return entry.process if entry is not None else None
-
-    def get_process_entry(self, process_id: str) -> Optional[FunctionProcess]:
+    def get(self, process_id: str) -> RegisteredProcess | None:
         return self._processes.get(process_id)
+
+    def __getitem__(self, process_id: str, /) -> RegisteredProcess:
+        return self._processes[process_id]
+
+    def __len__(self) -> int:
+        return len(self._processes)
+
+    def __iter__(self) -> Iterator[str]:
+        return iter(self._processes)
+
+    def get_process_entries(self) -> list[RegisteredProcess]:
+        return list(self._processes.values())
 
     # noinspection PyShadowingBuiltins
     def register_function(
@@ -34,8 +39,8 @@ class ProcessRegistry:
         description: Optional[str] = None,
         input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
-    ) -> FunctionProcess:
-        process = FunctionProcess.from_function(
+    ) -> RegisteredProcess:
+        process = RegisteredProcess.from_function(
             function,
             id=id,
             version=version,
@@ -44,5 +49,5 @@ class ProcessRegistry:
             input_fields=input_fields,
             output_fields=output_fields,
         )
-        self._processes[process.process.id] = process
+        self._processes[process.description.id] = process
         return process

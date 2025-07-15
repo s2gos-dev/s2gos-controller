@@ -5,10 +5,9 @@
 import os
 from datetime import datetime
 from functools import cached_property
-from typing import Callable, Optional
+from typing import Optional
 
 import fastapi
-import pydantic
 import requests
 from airflow_client.client import (
     ApiClient,
@@ -39,9 +38,6 @@ from s2gos_common.models import (
 )
 from s2gos_server.exceptions import JSONContentException
 from s2gos_server.services.base import ServiceBase
-from s2gos_server.services.base.function_process import FunctionProcess
-
-from .dag_writer import DagWriter
 
 DEFAULT_AIRFLOW_BASE_URL = "http://localhost:8080"
 
@@ -57,43 +53,12 @@ class AirflowService(ServiceBase):
         airflow_base_url: Optional[str] = None,
         airflow_username: Optional[str] = None,
         airflow_password: Optional[str] = None,
-        airflow_dags_dir: Optional[str] = None,
-        airflow_user_package: Optional[str] = None,
     ):
         super().__init__(title=title, description=description)
         self._airflow_base_url = airflow_base_url
         self._airflow_username = airflow_username
         self._airflow_password = airflow_password
-        self._airflow_dags_folder = airflow_dags_dir
-        self._airflow_user_package = airflow_user_package
         self._exec_count: int = 0
-
-    # noinspection PyShadowingBuiltins
-    def process(
-        self,
-        id: Optional[str] = None,
-        version: Optional[str] = None,
-        title: Optional[str] = None,
-        description: Optional[str] = None,
-        input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
-        output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
-    ) -> Callable[[Callable], Callable]:
-        """A decorator that registers a user function as a process."""
-
-        def write_dag(function: Callable):
-            process = FunctionProcess.from_function(
-                function,
-                id=id,
-                version=version,
-                title=title,
-                description=description,
-                input_fields=input_fields,
-                output_fields=output_fields,
-            )
-            self._write_dag(process)
-            return function
-
-        return write_dag
 
     async def get_processes(
         self, request: fastapi.Request, *args, **kwargs
@@ -309,27 +274,3 @@ class AirflowService(ServiceBase):
             raise JSONContentException(
                 response.status_code, detail=response.reason, exception=e
             )
-
-    def _write_dag(self, process: FunctionProcess):
-        airflow_dags_folder = self._airflow_dags_folder or os.getenv(
-            ENV_VAR_AIRFLOW_DAGS_FOLDER
-        )
-        if not airflow_dags_folder:
-            raise RuntimeError(
-                "Missing configuration of Airflow DAGs folder; "
-                f"please set environment variable {ENV_VAR_AIRFLOW_DAGS_FOLDER}"
-            )
-
-        airflow_user_package = self._airflow_user_package or os.getenv(
-            ENV_VAR_AIRFLOW_USER_PACKAGE
-        )
-        if not airflow_user_package:
-            raise RuntimeError(
-                "Missing configuration for the package to import user functions; "
-                f"please set environment variable {ENV_VAR_AIRFLOW_USER_PACKAGE}"
-            )
-
-        DagWriter(
-            airflow_dags_folder=airflow_dags_folder,
-            airflow_user_package=airflow_user_package,
-        ).write_dag(process)

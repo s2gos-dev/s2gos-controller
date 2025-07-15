@@ -21,10 +21,11 @@ from s2gos_common.models import (
     Schema,
 )
 from s2gos_server.exceptions import JSONContentException
-from s2gos_server.services.base import FunctionProcess, ServiceBase
+from s2gos_server.services.base import ServiceBase
 
-from .job import Job
 from .process_registry import ProcessRegistry
+from .registered_process import RegisteredProcess
+from .job import Job
 
 
 class LocalService(ServiceBase):
@@ -43,25 +44,25 @@ class LocalService(ServiceBase):
         return ProcessList(
             processes=[
                 ProcessSummary(
-                    **p.model_dump(
+                    **p.description.model_dump(
                         mode="python",
                         exclude={"inputs", "outputs"},
                     )
                 )
-                for p in self.process_registry.get_process_list()
+                for p in self.process_registry.values()
             ],
             links=[self.get_self_link(request, "get_processes")],
         )
 
     async def get_process(self, process_id: str, **kwargs) -> ProcessDescription:
-        process_entry = self._get_process_entry(process_id)
-        return process_entry.process
+        process = self._get_process(process_id)
+        return process.description
 
     async def execute_process(
         self, process_id: str, process_request: ProcessRequest, **_kwargs
     ) -> JobInfo:
-        process_entry = self._get_process_entry(process_id)
-        process_desc = process_entry.process
+        process = self._get_process(process_id)
+        process_desc = process.description
         input_params = _nest_dict(process_request.inputs or {})
         input_default_params = {
             input_name: input_info.schema_.default
@@ -78,7 +79,7 @@ class LocalService(ServiceBase):
 
         model_instance: pydantic.BaseModel
         try:
-            model_instance = process_entry.model_class(**input_values)
+            model_instance = process.model_class(**input_values)
         except pydantic.ValidationError as e:
             raise JSONContentException(
                 400,
@@ -100,7 +101,7 @@ class LocalService(ServiceBase):
         job = Job(
             process_id=process_desc.id,
             job_id=job_id,
-            function=process_entry.function,
+            function=process.function,
             function_kwargs=function_kwargs,
         )
         self.jobs[job_id] = job
@@ -143,9 +144,9 @@ class LocalService(ServiceBase):
         assert job.future is not None
         assert job.job_info.processID is not None
         result = job.future.result()
-        entry = self.process_registry.get_process_entry(job.job_info.processID)
-        assert entry is not None
-        outputs = entry.process.outputs or {}
+        process = self.process_registry.get(job.job_info.processID)
+        assert process is not None
+        outputs = process.description.outputs or {}
         output_count = len(outputs)
         return JobResults.model_validate(
             {
@@ -180,13 +181,13 @@ class LocalService(ServiceBase):
 
         return _factory
 
-    def _get_process_entry(self, process_id: str) -> FunctionProcess:
-        process_entry = self.process_registry.get_process_entry(process_id)
-        if process_entry is None:
+    def _get_process(self, process_id: str) -> RegisteredProcess:
+        process = self.process_registry.get(process_id)
+        if process is None:
             raise JSONContentException(
                 404, detail=f"Process {process_id!r} does not exist"
             )
-        return process_entry
+        return process
 
     def _get_job(
         self, job_id: str, forbidden_status_codes: dict[JobStatus, str]

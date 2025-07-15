@@ -3,10 +3,9 @@
 #  https://opensource.org/license/apache-2-0.
 
 from abc import ABC
-from typing import Callable, Optional
+from typing import Optional
 
 import fastapi
-import pydantic
 from starlette.routing import Route
 
 from s2gos_common.models import (
@@ -38,23 +37,6 @@ class ServiceBase(Service, ABC):
         self.title = title
         self.description = description
         self.conforms_to = conforms_to or DEFAULT_CONFORMS_TO
-
-    # noinspection PyShadowingBuiltins
-    def process(
-        self,
-        id: Optional[str] = None,
-        version: Optional[str] = None,
-        title: Optional[str] = None,
-        description: Optional[str] = None,
-        input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
-        output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
-    ) -> Callable[[Callable], Callable]:
-        """A decorator that registers a user function as a process.
-
-        Raises:
-            NotImplementedError: if not otherwise overridden by subclasses
-        """
-        raise NotImplementedError
 
     async def get_capabilities(
         self, request: fastapi.Request, **kwargs

@@ -22,8 +22,8 @@ from s2gos_common.models import (
 from s2gos_server.exceptions import JSONContentException
 from s2gos_server.main import app
 from s2gos_server.provider import ServiceProvider, get_service
-from s2gos_server.services.base import FunctionProcess
 from s2gos_server.services.local import LocalService
+from s2gos_server.services.local import RegisteredProcess
 
 
 class LocalServiceSetupTest(TestCase):
@@ -43,18 +43,18 @@ class LocalServiceSetupTest(TestCase):
     def test_server_setup_ok(self):
         service = self.service
 
-        foo_entry = service.process_registry.get_process_entry("foo")
-        self.assertIsInstance(foo_entry, FunctionProcess)
+        foo_entry = service.process_registry.get("foo")
+        self.assertIsInstance(foo_entry, RegisteredProcess)
         self.assertTrue(callable(foo_entry.function))
-        foo_process = foo_entry.process
+        foo_process = foo_entry.description
         self.assertIsInstance(foo_process, ProcessDescription)
         self.assertEqual("foo", foo_process.id)
         self.assertEqual("1.0.1", foo_process.version)
 
-        bar_entry = service.process_registry.get_process_entry("bar")
-        self.assertIsInstance(bar_entry, FunctionProcess)
+        bar_entry = service.process_registry.get("bar")
+        self.assertIsInstance(bar_entry, RegisteredProcess)
         self.assertTrue(callable(bar_entry.function))
-        bar_process = bar_entry.process
+        bar_process = bar_entry.description
         self.assertIsInstance(bar_process, ProcessDescription)
         self.assertEqual("bar", bar_process.id)
         self.assertEqual("1.4.2", bar_process.version)
