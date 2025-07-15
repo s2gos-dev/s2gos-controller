@@ -28,14 +28,6 @@ def main(service_spec: str = SERVICE_SPEC, dags_folder: Path = DAGS_FOLDER):
         )
 
 
-def load_service(service_spec: str) -> LocalService:
-    module_name, attr_name = service_spec.rsplit(":", maxsplit=1)
-    module = importlib.import_module(module_name)
-    service = getattr(module, attr_name)
-    assert isinstance(service, LocalService)
-    return service
-
-
 def gen_dag(process: RegisteredProcess) -> str:
     process_description = process.description
     function_name = process_description.id
@@ -60,18 +52,19 @@ def gen_dag(process: RegisteredProcess) -> str:
         f"{tab}{function_name!r},",
         f"{tab}dag_display_name={process.description.title!r},",
         f"{tab}description={process_description.description!r},",
-        f"{tab}multiple_outputs={(num_outputs > 1)!r},",
         f"{tab}params=" + "{",
         *[f"{tab}{tab}{p}," for p in param_specs],
         f"{tab}" + "},",
         ")",
         f"def {function_name}_dag():",
         "",
-        f"{tab}@task",
+        f"{tab}@task(multiple_outputs={(num_outputs > 1)!r})",
         f"{tab}def {function_name}_task(params):",
         f"{tab}{tab}return {function_name}(**params)",
         "",
         f"{tab}task_instance = {function_name}_task()  # noqa: F841",
+        "",
+        f"dag_instance = {function_name}_dag()  # noqa: F841",
     ]
     return "\n".join(lines) + "\n"
 
@@ -99,6 +92,14 @@ def get_param_args(input_description):
         param_args.append(("description", input_description.description))
     param_args.extend(sorted(schema.items(), key=lambda item: item[0]))
     return ", ".join(f"{sk}={sv!r}" for sk, sv in param_args)
+
+
+def load_service(service_spec: str) -> LocalService:
+    module_name, attr_name = service_spec.rsplit(":", maxsplit=1)
+    module = importlib.import_module(module_name)
+    service = getattr(module, attr_name)
+    assert isinstance(service, LocalService)
+    return service
 
 
 if __name__ == "__main__":
