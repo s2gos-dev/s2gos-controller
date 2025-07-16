@@ -1,7 +1,7 @@
 #  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
-
+import os
 from pathlib import Path
 
 import click
@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 
 from s2gos_client import Client
 from s2gos_client.api.config import ClientConfig
+from s2gos_client.api.defaults import DEFAULT_SERVER_URL
 from s2gos_common.models import (
     ProcessRequest,
     JobInfo,
@@ -32,8 +33,6 @@ def configure_client(
     access_token: str | None = None,
     server_url: str | None = None,
 ):
-    from s2gos_client.api.config import ClientConfig
-
     config = ClientConfig.read()
     if not user_name:
         user_name = click.prompt(
@@ -65,7 +64,8 @@ def configure_client(
 
 
 def get_client(config_path: Path | str | None = None) -> Client:
-    return Client(config_path=config_path)
+    config = read_config(config_path=config_path)
+    return Client(config)
 
 
 def read_config(config_path: Path | str | None = None) -> ClientConfig:

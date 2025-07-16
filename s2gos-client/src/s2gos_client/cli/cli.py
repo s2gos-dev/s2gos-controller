@@ -2,14 +2,12 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-import os
-from pathlib import Path
 from typing import Optional
 
 import click
 import typer.core
 
-from s2gos_client.api.defaults import DEFAULT_REQUEST_FILE, DEFAULT_SERVER_URL
+from s2gos_client.api.defaults import DEFAULT_REQUEST_FILE
 
 
 class AliasedGroup(typer.core.TyperGroup):
@@ -63,6 +61,14 @@ instead of "validate-request", or "lt" instead of "list-templates".
 """
 
 cli = typer.Typer(name="s2gos-client", cls=AliasedGroup, help=HELP)
+
+
+@cli.command()
+def version():
+    """Show version and exit."""
+    from importlib.metadata import version
+
+    click.echo(version("s2gos-client"))
 
 
 @cli.command()
