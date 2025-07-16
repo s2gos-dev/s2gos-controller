@@ -65,7 +65,7 @@ def configure_client(
 
 def get_client(config_path: Path | str | None = None) -> Client:
     config = read_config(config_path=config_path)
-    return Client(config)
+    return Client(config=config)
 
 
 def read_config(config_path: Path | str | None = None) -> ClientConfig:

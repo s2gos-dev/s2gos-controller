@@ -38,8 +38,8 @@ class Client:
 
     def __init__(
         self,
-        config: Optional[ClientConfig] = None,
         *,
+        config: Optional[ClientConfig] = None,
         config_path: Optional[str] = None,
         server_url: Optional[str] = None,
         user_name: Optional[str] = None,

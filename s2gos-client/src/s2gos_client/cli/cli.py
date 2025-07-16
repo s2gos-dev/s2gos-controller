@@ -2,7 +2,7 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from typing import Optional
+from typing import Optional, Callable
 
 import click
 import typer.core
@@ -11,8 +11,15 @@ from s2gos_client.api.defaults import DEFAULT_REQUEST_FILE
 
 
 class AliasedGroup(typer.core.TyperGroup):
+    """
+    A group that accepts command aliases created from the
+    first letters of the words after splitting a command name
+    at hyphens.
+    """
+
     @staticmethod
     def to_alias(name: str):
+        """Create a short alias for given command name."""
         return "".join(map(lambda n: n[0], name.split("-")))
 
     def get_command(self, ctx, cmd_name):
@@ -63,6 +70,26 @@ instead of "validate-request", or "lt" instead of "list-templates".
 cli = typer.Typer(name="s2gos-client", cls=AliasedGroup, help=HELP)
 
 
+def _get_client():
+    # defer importing
+    from s2gos_client.cli.impl import get_client
+
+    return get_client()
+
+
+@cli.callback()
+def main(
+    ctx: typer.Context,
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output"),
+):
+    ctx.ensure_object(dict)
+    # ONLY set context values if they haven't already been set,
+    # e.g., by a test
+    for k, v in dict(get_client=_get_client, verbose=verbose).items():
+        if k not in ctx.obj:
+            ctx.obj[k] = v
+
+
 @cli.command()
 def version():
     """Show version and exit."""
@@ -86,19 +113,21 @@ def configure(
 
 
 @cli.command()
-def list_processes():
+def list_processes(ctx: typer.Context):
     """List available processes."""
-    from .impl import get_client, render_process_list
+    from .impl import render_process_list
 
+    get_client: Callable = ctx.obj["get_client"]
     process_list = get_client().get_processes()
     render_process_list(process_list)
 
 
 @cli.command()
-def get_process(process_id: str):
+def get_process(ctx: typer.Context, process_id: str):
     """Get process details."""
-    from .impl import get_client, render_process_description
+    from .impl import render_process_description
 
+    get_client: Callable = ctx.obj["get_client"]
     process_description = get_client().get_process(process_id)
     render_process_description(process_description)
 
@@ -113,10 +142,13 @@ def validate_request(request_file: str = typer.Option(DEFAULT_REQUEST_FILE)):
 
 
 @cli.command()
-def execute_process(request_file: str = typer.Option(DEFAULT_REQUEST_FILE)):
+def execute_process(
+    ctx: typer.Context, request_file: str = typer.Option(DEFAULT_REQUEST_FILE)
+):
     """Execute a process."""
-    from .impl import read_request, get_client, render_job
+    from .impl import read_request, render_job
 
+    get_client: Callable = ctx.obj["get_client"]
     request = read_request(request_file)
     job = get_client().execute_process(
         process_id=request.process_id, request=request.request
@@ -125,37 +157,41 @@ def execute_process(request_file: str = typer.Option(DEFAULT_REQUEST_FILE)):
 
 
 @cli.command()
-def list_jobs():
-    """List jobs."""
-    from .impl import get_client, render_job_list
+def list_jobs(ctx: typer.Context):
+    """List all jobs."""
+    from .impl import render_job_list
 
+    get_client: Callable = ctx.obj["get_client"]
     job_list = get_client().get_jobs()
     render_job_list(job_list)
 
 
 @cli.command()
-def get_job(job_id: str):
-    """Cancel running processing jobs."""
-    from .impl import get_client, render_job
+def get_job(ctx: typer.Context, job_id: str):
+    """Get job details."""
+    from .impl import render_job
 
+    get_client: Callable = ctx.obj["get_client"]
     job = get_client().get_job(job_id)
     render_job(job)
 
 
 @cli.command()
-def dismiss_job(job_id: str):
+def dismiss_job(ctx: typer.Context, job_id: str):
     """Cancel a running or delete a finished job."""
-    from .impl import get_client, render_job
+    from .impl import render_job
 
+    get_client: Callable = ctx.obj["get_client"]
     job = get_client().dismiss_job(job_id)
     render_job(job)
 
 
 @cli.command()
-def get_job_results(job_id: str):
-    """Get processing results."""
-    from .impl import get_client, render_job_results
+def get_job_results(ctx: typer.Context, job_id: str):
+    """Get job results."""
+    from .impl import render_job_results
 
+    get_client: Callable = ctx.obj["get_client"]
     job_results = get_client().get_job_results(job_id)
     render_job_results(job_results)
 
