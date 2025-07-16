@@ -1,13 +1,102 @@
 # DTE-S2GOS client To-Dos
 
 The DTE-S2GOS client is currently under development.
+
+## Next
+
 Given here are the issues that will be addressed next.
 
-## Repo/package setup
+### General design
 
-* Setup CI with `pixi`
-  - pixi run sync-versions
-  - pixi run generate
+- Clarify data i/o, formats, and protocols (also check OGC spec):
+  - user files --> **scene generator** --> OBJ
+  - OBJ --> **scene simulator** --> Zarr 
+
+### Enhance the API Client
+
+- Consider generating a higher-level client from the 
+  OGC API Processes descriptions
+- Address the user-facing issues given under [Code generation](#code-generation)
+
+### Enhance the GUI Client
+
+- Use the async API client version in the GUI Client.
+  `panel` widget handler that use the client can and should be async.
+- `show()` - show the main form where users can select a process 
+  and submit process requests with inputs and outputs
+  - Actions
+    - open request 
+    - save request 
+    - save-as request
+    - show success/failure
+  - bug: process `gen_datacube`: if no bbox selected, client receives an error 
+  - optional enhancements
+    - integrate job status panel
+    - show request as JSON
+- `show_jobs()` - show all jobs in a table and provide actions on job selection: 
+  - Actions:
+    - ♻️️ restart dismissed/failed job(s)
+- `show_processes()` - get a nicely rendered overview of all processes 
+- `show_process(process_id: str = None, job_id: str = None, editable: bool = True)`
+
+### Implement CLI commands
+
+- `list_processes`
+- `get_process process_id`
+- `list_jobs`
+- `get_job job_id`
+- `dismiss_job job_id`
+- `get_job_results job_id --output <path>` 
+
+### Local Service
+
+- Path `/`:
+  - Also provide a HTML version, support mimetype `text/html`
+
+### Airflow Service
+
+- Test the Airflow-based service that connects to the Airflow web API
+
+### Authentication
+
+* Implement basic authentication using OAuth2 from FastAPI, 
+  use user_name/access_token from ClientConfig in
+  - client 
+  - server
+
+### Authorisation
+
+* Define roles & scopes
+* Implement accordingly in
+  - client 
+  - server
+
+### Error handling
+
+* We currently have only little error management in client. 
+  Handle ClientException so users understand what went wrong:
+  - Python API
+  - CLI
+  - GUI
+
+## Code generation
+
+The output of `generators/gen_models` is not satisfying: 
+
+- Consider code generation from templates with `jinja2`
+- Use [openapi-pydantic](https://github.com/mike-oakley/openapi-pydantic)
+  - Use `openapi_pydantic.Schema`, `openapi_pydantic.Reference`, etc. in generated code
+  - Use `openapi_pydantic.OpenAPI` for representing `s2gos/common/openapi.yaml` in 
+    the generators
+
+
+## Completed
+
+### Repo/package setup
+
+* **DONE** Setup CI with `pixi`
+  - **DONE** pixi run sync-versions
+  - **DONE** pixi run generate
   - **DONE** pixi run coverage
 * **DONE** Move all source code into `src` folder.
 * **DONE** Use either `uv` or `pixi` for package and environment management. <-- We use `pixi`
@@ -21,67 +110,38 @@ Given here are the issues that will be addressed next.
   - Three repositories 
 * **DONE**: Align `ruff` settings with other [S2GOS repos](https://github.com/s2gos-dev).
 
-## Client implementation
-
-General design
+### General design
 
 - **DOING**: We need two API client versions: sync and async
   - **DONE**: Generate `AsyncClient`, next to `Client` 
   - **DONE**: Generate them using [`httpx`](https://github.com/encode/httpx), which 
     should replace currently used `requests`
-  - Use the async API client version in the GUI Client.
-    `panel` widget handler that use the client can and should be async.
-  - Use the sync API client version in the CLI Client. 
 
-Enhance the API Client
+### Enhance the GUI Client
 
-- Consider generating a higher-level client from the 
-  OGC API Processes descriptions
-- Address the user-facing issues given under [Code generation](#code-generation)
-
-Enhance the GUI Client
-
--  **DOING**: `show()` - show the main form where users can select a process 
+-  `show()` - show the main form where users can select a process 
   and submit process requests with inputs and outputs
   - **DONE**: select process
   - **DONE**: render input widgets
   - **DONE**: submit request
   - Actions
     - **DONE*: execute request 
-    - open request 
-    - save request 
-    - save-as request
     - **DONE*: get request 
-    - show success/failure
-  - bug: process `gen_datacube`: if no bbox selected, client receives an error 
-  - optional enhancements
-    - integrate job status panel
-    - show request as JSON
--  **DONE**: `show_jobs()` - show all jobs in a table and provide actions on job selection: 
+-  `show_jobs()` - show all jobs in a table and provide actions on job selection: 
   - **DONE**: use `Tabulator`
   - **DONE** Add an action row with actions applicable to the current table selection
   - Actions:
     - **DONE**: ✖️ cancel accepted/running job(s)
     - **DONE**: ❌ delete successful/dismissed/failed job(s)
-    - ♻️️ restart dismissed/failed job(s)
     - **DONE**: ⬇️ get job result(s)
-- `show_processes()` - get a nicely rendered overview of all processes 
-- `show_process(process_id: str = None, job_id: str = None, editable: bool = True)`
-- `show_job(job_id: str = None)`
+- `show_job(job_id: str)` - show a dedicated job
 
-Implement CLI commands
-- `show_processes()`
-- `show_process(process_id: str = None, job_id: str = None, editable: bool = True)`
-- `show_jobs()` with cancel option
-- `show_job(job_id: str = None)`
+### Server implementation
 
-## Server implementation
-
-Local service
+### Local service
 
 - **DONE**: Implement local service that can invoke any Python function
 - Path `/`:
-  - Also provide a HTML version, support mimetype `text/html`
   - **DONE**: The landing page provides links to the:
     * **DONE**: The APIDefinition (no fixed path),
     * **DONE**: The Conformance statements (path `/conformance`),
@@ -89,51 +149,22 @@ Local service
     * **DONE**: The endpoint for job monitoring (path `/jobs`).
   - **DONE**: Links should be absolute URL, hence we need `request: Request` as 1st function arg
 
-Airflow-based service
+### Error handling
 
-- Implement Airflow-based service that connects to the Airflow web API
+* **TODO**: Include server traceback on internal server errors with 500 status
 
-## Authentication
+### Code generation
 
-* Implement basic authentication using OAuth2, 
-  use user_name/access_token from ClientConfig in
-  - client 
-  - server
+Because the output of `generators/gen_models` is not satisfying: 
 
-## Authorisation
-
-* Define roles & scopes
-* Implement accordingly in
-  - client 
-  - server
-
-## Error handling
-
-* We currently have no error management in client. 
-  Handle ClientException so users understand what went wrong:
-  - Python API
-  - CLI
-  - GUI
-* Include server traceback on internal server errors with 500 status
-
-## Code generation
-
-The output of `generators/gen_models` is not satisfying: 
-
-1. Many generated classes are `RootModels` which are inconvenient for users, e.g.,
-   `Input` requires passing values with `root` attributes.
-2. Basic openAPI constructs like `Schema` or `Reference` should not be  
-   generated but reused from predefined `BaseModel`s.
-3. **DONE**: Generated class names like `Exception` clash with predefined Python names.
-4. **DONE**: Some generated class names are rather unintuitive, e.g., 
+- **DONE**: Many generated classes are `RootModels` which are inconvenient for users, e.g.,
+  `Input` requires passing values with `root` attributes.
+- **DONE**: Basic openAPI constructs like `Schema` or `Reference` should not be  
+  generated but reused from predefined `BaseModel`s.
+- **DONE**: JSON generated from models is too verbose. Avoid including `None` fields and 
+  fields that have default values.
+- **DONE**: Generated class names like `Exception` clash with predefined Python names.
+- **DONE**: Some generated class names are rather unintuitive, e.g., 
    `Execute` instead of `Request`.
-5. JSON generated from models is too verbose. Avoid including `None` fields and 
-   fields that have default values.
-6. Consider code generation from templates with `jinja2`
-
 - **DONE**: Adjust `s2gos/common/openapi.yaml` to fix the above and/or
 - **DONE**: Configure `datamodel-code-generator` to fix the above and/or
-- Use [openapi-pydantic](https://github.com/mike-oakley/openapi-pydantic)
-  - Use `openapi_pydantic.Schema`, `openapi_pydantic.Reference`, etc. in generated code
-  - Use `openapi_pydantic.OpenAPI` for representing `s2gos/common/openapi.yaml` in 
-    the generators
