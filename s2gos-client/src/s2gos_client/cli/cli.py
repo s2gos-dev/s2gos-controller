@@ -9,6 +9,18 @@ import typer.core
 
 from s2gos_client.api.defaults import DEFAULT_REQUEST_FILE
 
+SERVICE_NAME = "S2GOS service"
+CLI_NAME = "s2gos-client"
+CLI_HELP = """
+Client tool for the {service_name}.
+
+The tool provides commands for managing processing request templates,
+processing requests, processing jobs, and gets processing results.
+
+You can use shorter command name aliases, e.g., use command name "vr"
+for "validate-request", or "lp" for "list-processes".
+""".format(service_name=SERVICE_NAME)
+
 
 class AliasedGroup(typer.core.TyperGroup):
     """
@@ -57,17 +69,7 @@ class AliasedGroup(typer.core.TyperGroup):
         return list(self.commands)
 
 
-HELP = """
-Client tool for the ESA synthetic scene generator service DTE-S2GOS.
-
-The tool provides commands for managing processing request templates,
-processing requests, processing jobs, and gets processing results.
-
-You can use shorter command name aliases, e.g., use command name "vr"
-instead of "validate-request", or "lt" instead of "list-templates".
-"""
-
-cli = typer.Typer(name="s2gos-client", cls=AliasedGroup, help=HELP)
+cli = typer.Typer(name=CLI_NAME, cls=AliasedGroup, help=CLI_HELP)
 
 
 def _get_client():
@@ -104,6 +106,8 @@ def configure(
     access_token: Optional[str] = typer.Option(None, "--token"),
     server_url: Optional[str] = typer.Option(None, "--url"),
 ):
+    """Configure the client tool."""
+    from s2gos_client.api.config import ClientConfig
     """Configure the S2GOS client."""
     from .impl import configure_client
 
