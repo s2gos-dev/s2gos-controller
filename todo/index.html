@@ -380,33 +380,70 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#repopackage-setup" class="md-nav__link">
+  <a href="#next" class="md-nav__link">
     <span class="md-ellipsis">
-      Repo/package setup
+      Next
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Next">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#general-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      General design
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#client-implementation" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#enhance-the-api-client" class="md-nav__link">
     <span class="md-ellipsis">
-      Client implementation
+      Enhance the API Client
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#server-implementation" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#enhance-the-gui-client" class="md-nav__link">
     <span class="md-ellipsis">
-      Server implementation
+      Enhance the GUI Client
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
+  <a href="#implement-cli-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implement CLI commands
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Service
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#airflow-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      Airflow Service
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#authentication" class="md-nav__link">
     <span class="md-ellipsis">
       Authentication
@@ -414,8 +451,8 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#authorisation" class="md-nav__link">
     <span class="md-ellipsis">
       Authorisation
@@ -423,13 +460,18 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#error-handling" class="md-nav__link">
     <span class="md-ellipsis">
       Error handling
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -439,6 +481,84 @@
       Code generation
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#completed" class="md-nav__link">
+    <span class="md-ellipsis">
+      Completed
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Completed">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#repopackage-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Repo/package setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#general-design_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      General design
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enhance-the-gui-client_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enhance the GUI Client
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#server-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Server implementation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-service_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local service
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-handling_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error handling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code-generation_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code generation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -462,13 +582,103 @@
 
 
 <h1 id="dte-s2gos-client-to-dos">DTE-S2GOS client To-Dos</h1>
-<p>The DTE-S2GOS client is currently under development.
-Given here are the issues that will be addressed next.</p>
-<h2 id="repopackage-setup">Repo/package setup</h2>
+<p>The DTE-S2GOS client is currently under development.</p>
+<h2 id="next">Next</h2>
+<p>Given here are the issues that will be addressed next.</p>
+<h3 id="general-design">General design</h3>
 <ul>
-<li>Setup CI with <code>pixi</code></li>
-<li>pixi run sync-versions</li>
-<li>pixi run generate</li>
+<li>Clarify data i/o, formats, and protocols (also check OGC spec):</li>
+<li>user files --&gt; <strong>scene generator</strong> --&gt; OBJ</li>
+<li>OBJ --&gt; <strong>scene simulator</strong> --&gt; Zarr </li>
+</ul>
+<h3 id="enhance-the-api-client">Enhance the API Client</h3>
+<ul>
+<li>Consider generating a higher-level client from the 
+  OGC API Processes descriptions</li>
+<li>Address the user-facing issues given under <a href="#code-generation">Code generation</a></li>
+</ul>
+<h3 id="enhance-the-gui-client">Enhance the GUI Client</h3>
+<ul>
+<li>Use the async API client version in the GUI Client.
+  <code>panel</code> widget handler that use the client can and should be async.</li>
+<li><code>show()</code> - show the main form where users can select a process 
+  and submit process requests with inputs and outputs</li>
+<li>Actions<ul>
+<li>open request </li>
+<li>save request </li>
+<li>save-as request</li>
+<li>show success/failure</li>
+</ul>
+</li>
+<li>bug: process <code>gen_datacube</code>: if no bbox selected, client receives an error </li>
+<li>optional enhancements<ul>
+<li>integrate job status panel</li>
+<li>show request as JSON</li>
+</ul>
+</li>
+<li><code>show_jobs()</code> - show all jobs in a table and provide actions on job selection: </li>
+<li>Actions:<ul>
+<li>♻️️ restart dismissed/failed job(s)</li>
+</ul>
+</li>
+<li><code>show_processes()</code> - get a nicely rendered overview of all processes </li>
+<li><code>show_process(process_id: str = None, job_id: str = None, editable: bool = True)</code></li>
+</ul>
+<h3 id="implement-cli-commands">Implement CLI commands</h3>
+<ul>
+<li><code>list_processes</code></li>
+<li><code>get_process process_id</code></li>
+<li><code>list_jobs</code></li>
+<li><code>get_job job_id</code></li>
+<li><code>dismiss_job job_id</code></li>
+<li><code>get_job_results job_id --output &lt;path&gt;</code> </li>
+</ul>
+<h3 id="local-service">Local Service</h3>
+<ul>
+<li>Path <code>/</code>:</li>
+<li>Also provide a HTML version, support mimetype <code>text/html</code></li>
+</ul>
+<h3 id="airflow-service">Airflow Service</h3>
+<ul>
+<li>Test the Airflow-based service that connects to the Airflow web API</li>
+</ul>
+<h3 id="authentication">Authentication</h3>
+<ul>
+<li>Implement basic authentication using OAuth2 from FastAPI, 
+  use user_name/access_token from ClientConfig in</li>
+<li>client </li>
+<li>server</li>
+</ul>
+<h3 id="authorisation">Authorisation</h3>
+<ul>
+<li>Define roles &amp; scopes</li>
+<li>Implement accordingly in</li>
+<li>client </li>
+<li>server</li>
+</ul>
+<h3 id="error-handling">Error handling</h3>
+<ul>
+<li>We currently have only little error management in client. 
+  Handle ClientException so users understand what went wrong:</li>
+<li>Python API</li>
+<li>CLI</li>
+<li>GUI</li>
+</ul>
+<h2 id="code-generation">Code generation</h2>
+<p>The output of <code>generators/gen_models</code> is not satisfying: </p>
+<ul>
+<li>Consider code generation from templates with <code>jinja2</code></li>
+<li>Use <a href="https://github.com/mike-oakley/openapi-pydantic">openapi-pydantic</a></li>
+<li>Use <code>openapi_pydantic.Schema</code>, <code>openapi_pydantic.Reference</code>, etc. in generated code</li>
+<li>Use <code>openapi_pydantic.OpenAPI</code> for representing <code>s2gos/common/openapi.yaml</code> in 
+    the generators</li>
+</ul>
+<h2 id="completed">Completed</h2>
+<h3 id="repopackage-setup">Repo/package setup</h3>
+<ul>
+<li><strong>DONE</strong> Setup CI with <code>pixi</code></li>
+<li><strong>DONE</strong> pixi run sync-versions</li>
+<li><strong>DONE</strong> pixi run generate</li>
 <li><strong>DONE</strong> pixi run coverage</li>
 <li><strong>DONE</strong> Move all source code into <code>src</code> folder.</li>
 <li><strong>DONE</strong> Use either <code>uv</code> or <code>pixi</code> for package and environment management. &lt;-- We use <code>pixi</code></li>
@@ -482,70 +692,41 @@ Given here are the issues that will be addressed next.</p>
 <li>Three repositories </li>
 <li><strong>DONE</strong>: Align <code>ruff</code> settings with other <a href="https://github.com/s2gos-dev">S2GOS repos</a>.</li>
 </ul>
-<h2 id="client-implementation">Client implementation</h2>
-<p>General design</p>
+<h3 id="general-design_1">General design</h3>
 <ul>
 <li><strong>DOING</strong>: We need two API client versions: sync and async</li>
 <li><strong>DONE</strong>: Generate <code>AsyncClient</code>, next to <code>Client</code> </li>
 <li><strong>DONE</strong>: Generate them using <a href="https://github.com/encode/httpx"><code>httpx</code></a>, which 
     should replace currently used <code>requests</code></li>
-<li>Use the async API client version in the GUI Client.
-    <code>panel</code> widget handler that use the client can and should be async.</li>
-<li>Use the sync API client version in the CLI Client. </li>
 </ul>
-<p>Enhance the API Client</p>
+<h3 id="enhance-the-gui-client_1">Enhance the GUI Client</h3>
 <ul>
-<li>Consider generating a higher-level client from the 
-  OGC API Processes descriptions</li>
-<li>Address the user-facing issues given under <a href="#code-generation">Code generation</a></li>
-</ul>
-<p>Enhance the GUI Client</p>
-<ul>
-<li><strong>DOING</strong>: <code>show()</code> - show the main form where users can select a process 
+<li><code>show()</code> - show the main form where users can select a process 
   and submit process requests with inputs and outputs</li>
 <li><strong>DONE</strong>: select process</li>
 <li><strong>DONE</strong>: render input widgets</li>
 <li><strong>DONE</strong>: submit request</li>
 <li>Actions<ul>
 <li>*<em>DONE</em>: execute request </li>
-<li>open request </li>
-<li>save request </li>
-<li>save-as request</li>
 <li>*<em>DONE</em>: get request </li>
-<li>show success/failure</li>
 </ul>
 </li>
-<li>bug: process <code>gen_datacube</code>: if no bbox selected, client receives an error </li>
-<li>optional enhancements<ul>
-<li>integrate job status panel</li>
-<li>show request as JSON</li>
-</ul>
-</li>
-<li><strong>DONE</strong>: <code>show_jobs()</code> - show all jobs in a table and provide actions on job selection: </li>
+<li><code>show_jobs()</code> - show all jobs in a table and provide actions on job selection: </li>
 <li><strong>DONE</strong>: use <code>Tabulator</code></li>
 <li><strong>DONE</strong> Add an action row with actions applicable to the current table selection</li>
 <li>Actions:<ul>
 <li><strong>DONE</strong>: ✖️ cancel accepted/running job(s)</li>
 <li><strong>DONE</strong>: ❌ delete successful/dismissed/failed job(s)</li>
-<li>♻️️ restart dismissed/failed job(s)</li>
 <li><strong>DONE</strong>: ⬇️ get job result(s)</li>
 </ul>
 </li>
-<li><code>show_processes()</code> - get a nicely rendered overview of all processes </li>
-<li><code>show_process(process_id: str = None, job_id: str = None, editable: bool = True)</code></li>
-<li><code>show_job(job_id: str = None)</code></li>
+<li><code>show_job(job_id: str)</code> - show a dedicated job</li>
 </ul>
-<p>Implement CLI commands
-- <code>show_processes()</code>
-- <code>show_process(process_id: str = None, job_id: str = None, editable: bool = True)</code>
-- <code>show_jobs()</code> with cancel option
-- <code>show_job(job_id: str = None)</code></p>
-<h2 id="server-implementation">Server implementation</h2>
-<p>Local service</p>
+<h3 id="server-implementation">Server implementation</h3>
+<h3 id="local-service_1">Local service</h3>
 <ul>
 <li><strong>DONE</strong>: Implement local service that can invoke any Python function</li>
 <li>Path <code>/</code>:</li>
-<li>Also provide a HTML version, support mimetype <code>text/html</code></li>
 <li><strong>DONE</strong>: The landing page provides links to the:<ul>
 <li><strong>DONE</strong>: The APIDefinition (no fixed path),</li>
 <li><strong>DONE</strong>: The Conformance statements (path <code>/conformance</code>),</li>
@@ -555,57 +736,25 @@ Given here are the issues that will be addressed next.</p>
 </li>
 <li><strong>DONE</strong>: Links should be absolute URL, hence we need <code>request: Request</code> as 1st function arg</li>
 </ul>
-<p>Airflow-based service</p>
+<h3 id="error-handling_1">Error handling</h3>
 <ul>
-<li>Implement Airflow-based service that connects to the Airflow web API</li>
+<li><strong>TODO</strong>: Include server traceback on internal server errors with 500 status</li>
 </ul>
-<h2 id="authentication">Authentication</h2>
+<h3 id="code-generation_1">Code generation</h3>
+<p>Because the output of <code>generators/gen_models</code> is not satisfying: </p>
 <ul>
-<li>Implement basic authentication using OAuth2, 
-  use user_name/access_token from ClientConfig in</li>
-<li>client </li>
-<li>server</li>
-</ul>
-<h2 id="authorisation">Authorisation</h2>
-<ul>
-<li>Define roles &amp; scopes</li>
-<li>Implement accordingly in</li>
-<li>client </li>
-<li>server</li>
-</ul>
-<h2 id="error-handling">Error handling</h2>
-<ul>
-<li>We currently have no error management in client. 
-  Handle ClientException so users understand what went wrong:</li>
-<li>Python API</li>
-<li>CLI</li>
-<li>GUI</li>
-<li>Include server traceback on internal server errors with 500 status</li>
-</ul>
-<h2 id="code-generation">Code generation</h2>
-<p>The output of <code>generators/gen_models</code> is not satisfying: </p>
-<ol>
-<li>Many generated classes are <code>RootModels</code> which are inconvenient for users, e.g.,
-   <code>Input</code> requires passing values with <code>root</code> attributes.</li>
-<li>Basic openAPI constructs like <code>Schema</code> or <code>Reference</code> should not be<br />
-   generated but reused from predefined <code>BaseModel</code>s.</li>
+<li><strong>DONE</strong>: Many generated classes are <code>RootModels</code> which are inconvenient for users, e.g.,
+  <code>Input</code> requires passing values with <code>root</code> attributes.</li>
+<li><strong>DONE</strong>: Basic openAPI constructs like <code>Schema</code> or <code>Reference</code> should not be<br />
+  generated but reused from predefined <code>BaseModel</code>s.</li>
+<li><strong>DONE</strong>: JSON generated from models is too verbose. Avoid including <code>None</code> fields and 
+  fields that have default values.</li>
 <li><strong>DONE</strong>: Generated class names like <code>Exception</code> clash with predefined Python names.</li>
 <li><strong>DONE</strong>: Some generated class names are rather unintuitive, e.g., 
    <code>Execute</code> instead of <code>Request</code>.</li>
-<li>JSON generated from models is too verbose. Avoid including <code>None</code> fields and 
-   fields that have default values.</li>
-<li>
-<p>Consider code generation from templates with <code>jinja2</code></p>
-</li>
-<li>
-<p><strong>DONE</strong>: Adjust <code>s2gos/common/openapi.yaml</code> to fix the above and/or</p>
-</li>
+<li><strong>DONE</strong>: Adjust <code>s2gos/common/openapi.yaml</code> to fix the above and/or</li>
 <li><strong>DONE</strong>: Configure <code>datamodel-code-generator</code> to fix the above and/or</li>
-<li>Use <a href="https://github.com/mike-oakley/openapi-pydantic">openapi-pydantic</a></li>
-<li>Use <code>openapi_pydantic.Schema</code>, <code>openapi_pydantic.Reference</code>, etc. in generated code</li>
-<li>Use <code>openapi_pydantic.OpenAPI</code> for representing <code>s2gos/common/openapi.yaml</code> in 
-    the generators</li>
-</ol>
+</ul>
 
 
 

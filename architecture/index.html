@@ -160,6 +160,13 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      Overview
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#s2gos-client-gui">
 <span class="md-ellipsis">
       S2GOS Client - GUI
@@ -170,6 +177,13 @@
 <a class="md-nav__link" href="#s2gos-common">
 <span class="md-ellipsis">
       S2GOS Common
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#code-generation">
+<span class="md-ellipsis">
+      Code generation
     </span>
 </a>
 </li>
@@ -215,6 +229,13 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      Overview
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
 <a class="md-nav__link" href="#s2gos-client-gui">
 <span class="md-ellipsis">
       S2GOS Client - GUI
@@ -228,6 +249,13 @@
     </span>
 </a>
 </li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#code-generation">
+<span class="md-ellipsis">
+      Code generation
+    </span>
+</a>
+</li>
 </ul>
 </nav>
 </div>
@@ -238,6 +266,43 @@
 <h1 id="architecture">Architecture</h1>
 <p><em>Note, should the following diagram code not render, copy it 
 into the <a href="https://www.mermaidchart.com/">mermaid</a> editor.</em></p>
+<h2 id="overview">Overview</h2>
+<pre class="mermaid"><code>---
+config:
+    class:
+        hideEmptyMembersBox: true
+    theme: default
+---
+classDiagram
+direction TB
+    namespace s2gos_client {
+        class api.AsyncClient
+        class api.Client
+        class gui.Client
+        class cli
+    }
+    namespace s2gos_common {
+        class models
+        class service.Service
+    }
+    namespace s2gos_server {
+        class server
+        class routes
+        class services.local.LocalService
+    }
+
+    cli ..&gt; api.Client : use
+    gui.Client ..|&gt; api.Client : inherits
+    api.Client ..&gt; service.Service : uses
+    api.AsyncClient ..&gt; service.Service : uses
+    service.Service ..&gt; models : uses
+    services.local.LocalService --|&gt; service.Service : implements
+    routes ..&gt; service.Service : uses
+    server ..&gt; routes : uses
+    server ..&gt; services.local.LocalService : configured to use
+
+    note for gui.Client "will later inherit from AsyncClient"
+</code></pre>
 <h2 id="s2gos-client-gui">S2GOS Client - GUI</h2>
 <p>Given here is the design used in package <code>s2gos_client.gui.component</code>.
 The package contains the code to generate widgets and panels from the 
@@ -352,9 +417,10 @@ direction TB
     class ProcessDescription {
     }
     class ProcessRequest {
-        process_id
         inputs
         outputs
+        response
+        subscriber
     }
     class JobList {
     }
@@ -388,33 +454,38 @@ direction TB
     Service ..&gt; JobResult : obtain   
     Service ..&gt; ProcessRequest : use      
 </code></pre>
-<p>which may be refined like so:</p>
-<pre class="mermaid"><code>classDiagram
-direction TB
-    class Service {
-        get_conformance()
-        get_capabilities()
-    }
-    class ProcessCatalog {
-        get_processes()
-        get_process(process_id)
-    }
-    class ProcessExecutor {
-        execute_process(process_id, process_request)
-        get_jobs()
-        get_job(job_id)
-        get_job_result(job_id)
-    }
-    Service o--&gt; ProcessCatalog
-    Service --|&gt; ProcessCatalog
-    ProcessCatalog ..&gt; ProcessList : obtain
-    ProcessCatalog ..&gt; ProcessDescription : obtain
-    Service o--&gt; ProcessExecutor
-    Service --|&gt; ProcessExecutor
-    ProcessExecutor ..&gt; JobList : obtain
-    ProcessExecutor ..&gt; JobInfo : obtain
-    ProcessExecutor ..&gt; JobResult : obtain   
-    ProcessExecutor ..&gt; ProcessRequest : use      
+<h2 id="code-generation">Code generation</h2>
+<pre class="mermaid"><code>---
+config:
+  theme: default
+---
+flowchart LR
+    openapi@{ shape: lean-r, label: "OpenAPI.yaml" }
+    sync_client@{ shape: stadium, label: "s2gos_client.api.Client" }
+    async_client@{ shape: stadium, label: "s2gos_client.api.AsyncClient" }
+    models@{ shape: stadium, label: "s2gos_common.models.*" }
+    service@{ shape: stadium, label: "s2gos_common.service.Service" }
+    routes@{ shape: stadium, label: "s2gos_server.routes" }
+    openapi --&gt; generate
+    generate --&gt; gen-client
+    generate --&gt; gen-common
+    generate --&gt; gen-server
+    gen-client --&gt; sync_client
+    gen-client --&gt; async_client
+    gen-common --&gt; models
+    gen-common --&gt; service
+    gen-server --&gt; routes
+</code></pre>
+<p>Generating Airflow DAGs:</p>
+<pre class="mermaid"><code>---
+config:
+  theme: default
+---
+flowchart LR
+    local_service@{ shape: stadium, label: "s2gos_server.services.local.testing:service" }
+    dags@{ shape: stadium, label: "s2gos_airflow/dags" }
+    local_service --&gt; gen-dags
+    gen-dags --&gt; dags
 </code></pre>
 </article>
 </div>
