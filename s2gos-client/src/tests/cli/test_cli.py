@@ -25,7 +25,7 @@ class CliTest(TestCase):
             ["--help"],
         )
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
-        self.assertIn("Client tool for the ESA synthetic", result.output)
+        self.assertIn("Client tool for the S2GOS service.", result.output)
 
     def test_version(self):
         result = runner.invoke(

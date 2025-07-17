@@ -22,6 +22,23 @@ for "validate-request", or "lp" for "list-processes".
 """.format(service_name=SERVICE_NAME)
 
 
+request_option = typer.Option(
+    DEFAULT_REQUEST_FILE,
+    "-r",
+    "--request",
+    help="Processing request file",
+)
+
+format_option = typer.Option(
+    "yaml",
+    "-f",
+    "--format",
+    click_type=click.Choice(["yaml", "json", "plain"]),
+    show_choices=True,
+    help="Output format",
+)
+
+
 class AliasedGroup(typer.core.TyperGroup):
     """
     A group that accepts command aliases created from the
@@ -107,8 +124,6 @@ def configure(
     server_url: Optional[str] = typer.Option(None, "--url"),
 ):
     """Configure the client tool."""
-    from s2gos_client.api.config import ClientConfig
-    """Configure the S2GOS client."""
     from .impl import configure_client
 
     configure_client(
@@ -117,27 +132,29 @@ def configure(
 
 
 @cli.command()
-def list_processes(ctx: typer.Context):
+def list_processes(ctx: typer.Context, fmt: format_option):
     """List available processes."""
-    from .impl import render_process_list
+    from .renderer import Renderer
 
     get_client: Callable = ctx.obj["get_client"]
     process_list = get_client().get_processes()
-    render_process_list(process_list)
+    Renderer.get(fmt).render_process_list(process_list)
 
 
 @cli.command()
-def get_process(ctx: typer.Context, process_id: str):
+def get_process(ctx: typer.Context, process_id: str, fmt: str = format_option):
     """Get process details."""
-    from .impl import render_process_description
+    from .renderer import Renderer
 
     get_client: Callable = ctx.obj["get_client"]
     process_description = get_client().get_process(process_id)
-    render_process_description(process_description)
+    Renderer.get(fmt).render_process_description(process_description)
 
 
 @cli.command()
-def validate_request(request_file: str = typer.Option(DEFAULT_REQUEST_FILE)):
+def validate_request(
+    request_file: str = request_option,
+):
     """Validate a processing request."""
     from .impl import read_request
 
@@ -147,57 +164,60 @@ def validate_request(request_file: str = typer.Option(DEFAULT_REQUEST_FILE)):
 
 @cli.command()
 def execute_process(
-    ctx: typer.Context, request_file: str = typer.Option(DEFAULT_REQUEST_FILE)
+    ctx: typer.Context,
+    request_file: str = request_option,
+    fmt: str = format_option,
 ):
     """Execute a process."""
-    from .impl import read_request, render_job
+    from .impl import read_request
+    from .renderer import Renderer
 
     get_client: Callable = ctx.obj["get_client"]
     request = read_request(request_file)
     job = get_client().execute_process(
         process_id=request.process_id, request=request.request
     )
-    render_job(job)
+    Renderer.get(fmt).render_job(job)
 
 
 @cli.command()
-def list_jobs(ctx: typer.Context):
+def list_jobs(ctx: typer.Context, fmt: str = format_option):
     """List all jobs."""
-    from .impl import render_job_list
+    from .renderer import Renderer
 
     get_client: Callable = ctx.obj["get_client"]
     job_list = get_client().get_jobs()
-    render_job_list(job_list)
+    Renderer.get(fmt).render_job_list(job_list)
 
 
 @cli.command()
-def get_job(ctx: typer.Context, job_id: str):
+def get_job(ctx: typer.Context, job_id: str, fmt: str = format_option):
     """Get job details."""
-    from .impl import render_job
+    from .renderer import Renderer
 
     get_client: Callable = ctx.obj["get_client"]
     job = get_client().get_job(job_id)
-    render_job(job)
+    Renderer.get(fmt).render_job(job)
 
 
 @cli.command()
-def dismiss_job(ctx: typer.Context, job_id: str):
+def dismiss_job(ctx: typer.Context, job_id: str, fmt: str = format_option):
     """Cancel a running or delete a finished job."""
-    from .impl import render_job
+    from .renderer import Renderer
 
     get_client: Callable = ctx.obj["get_client"]
     job = get_client().dismiss_job(job_id)
-    render_job(job)
+    Renderer.get(fmt).render_job(job)
 
 
 @cli.command()
-def get_job_results(ctx: typer.Context, job_id: str):
+def get_job_results(ctx: typer.Context, job_id: str, fmt: str = format_option):
     """Get job results."""
-    from .impl import render_job_results
+    from .renderer import Renderer
 
     get_client: Callable = ctx.obj["get_client"]
     job_results = get_client().get_job_results(job_id)
-    render_job_results(job_results)
+    Renderer.get(fmt).render_job_results(job_results)
 
 
 if __name__ == "__main__":  # pragma: no cover

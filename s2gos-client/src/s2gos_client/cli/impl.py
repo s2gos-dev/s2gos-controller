@@ -1,6 +1,7 @@
 #  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
+
 import os
 from pathlib import Path
 
@@ -13,14 +14,7 @@ from pydantic import BaseModel, Field
 from s2gos_client import Client
 from s2gos_client.api.config import ClientConfig
 from s2gos_client.api.defaults import DEFAULT_SERVER_URL
-from s2gos_common.models import (
-    ProcessRequest,
-    JobInfo,
-    JobList,
-    JobResults,
-    ProcessDescription,
-    ProcessList,
-)
+from s2gos_common.models import ProcessRequest
 
 
 class Request(BaseModel):
@@ -89,55 +83,3 @@ def read_request(request_path: Path | str):
         return Request(**request_dict)
     except pydantic.ValidationError as e:
         raise click.ClickException(f"Request {request_path} is invalid: {e}")
-
-
-def render_process_list(process_list: ProcessList):
-    if not process_list.processes:
-        click.echo(f"No processes available.")
-    else:
-        for i, process in enumerate(process_list.processes):
-            click.echo(f"{i + 1}: {process.id} - {process.title}")
-
-
-def render_process_description(process_description: ProcessDescription):
-    click.echo(f"{process_description.id} - {process_description.title}:")
-    if process_description.description:
-        click.echo("")
-        click.echo("Description")
-        click.echo("-----------")
-        click.echo(process_description.description)
-    if process_description.inputs:
-        click.echo("")
-        click.echo("Inputs")
-        click.echo("------")
-    if process_description.outputs:
-        click.echo("")
-        click.echo("Outputs")
-        click.echo("------")
-
-
-def render_job_list(job_list: JobList):
-    if not job_list.jobs:
-        click.echo(f"No jobs available.")
-    else:
-        for i, job in enumerate(job_list.jobs):
-            click.echo(
-                f"{i + 1}: {job.id} - {job.status} - {job.progress} - {job.message}"
-            )
-
-
-def render_job(job: JobInfo):
-    click.echo(f"Job ID:      {job.jobID}")
-    click.echo(f"Process ID:  {job.processID}")
-    click.echo(f"Status:      {job.status}")
-    click.echo(f"Progress:    {job.progress}")
-    click.echo(f"Message:     {job.message}")
-    click.echo(f"Created at:  {job.created}")
-    click.echo(f"Started at:  {job.started}")
-    click.echo(f"Updated at:  {job.updated}")
-    click.echo(f"Ended at:    {job.finished}")
-
-
-def render_job_results(job_results: JobResults):
-    results = job_results.model_dump_json(by_alias=True)
-    click.echo(results)
