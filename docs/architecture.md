@@ -3,6 +3,46 @@
 _Note, should the following diagram code not render, copy it 
 into the [mermaid](https://www.mermaidchart.com/) editor._
 
+## Overview
+
+```mermaid
+---
+config:
+    class:
+        hideEmptyMembersBox: true
+    theme: default
+---
+classDiagram
+direction TB
+    namespace s2gos_client {
+        class api.AsyncClient
+        class api.Client
+        class gui.Client
+        class cli
+    }
+    namespace s2gos_common {
+        class models
+        class service.Service
+    }
+    namespace s2gos_server {
+        class server
+        class routes
+        class services.local.LocalService
+    }
+
+    cli ..> api.Client : use
+    gui.Client ..|> api.Client : inherits
+    api.Client ..> service.Service : uses
+    api.AsyncClient ..> service.Service : uses
+    service.Service ..> models : uses
+    services.local.LocalService --|> service.Service : implements
+    routes ..> service.Service : uses
+    server ..> routes : uses
+    server ..> services.local.LocalService : configured to use
+    
+    note for gui.Client "will later inherit from AsyncClient"
+```
+
 ## S2GOS Client - GUI
 
 Given here is the design used in package `s2gos_client.gui.component`.
@@ -166,37 +206,6 @@ direction TB
     Service ..> ProcessRequest : use      
 ```
 
-which may be refined like so:
-
-```mermaid
-classDiagram
-direction TB
-    class Service {
-        get_conformance()
-        get_capabilities()
-    }
-    class ProcessCatalog {
-        get_processes()
-        get_process(process_id)
-    }
-    class ProcessExecutor {
-        execute_process(process_id, process_request)
-        get_jobs()
-        get_job(job_id)
-        get_job_result(job_id)
-    }
-    Service o--> ProcessCatalog
-    Service --|> ProcessCatalog
-    ProcessCatalog ..> ProcessList : obtain
-    ProcessCatalog ..> ProcessDescription : obtain
-    Service o--> ProcessExecutor
-    Service --|> ProcessExecutor
-    ProcessExecutor ..> JobList : obtain
-    ProcessExecutor ..> JobInfo : obtain
-    ProcessExecutor ..> JobResult : obtain   
-    ProcessExecutor ..> ProcessRequest : use      
-```
-
 ## Code generation
 
 ```mermaid
@@ -205,9 +214,7 @@ config:
   theme: default
 ---
 flowchart LR
-    openapi@{ shape: lean-r, label: "openapi.yaml" }
-    local_service@{ shape: stadium, label: "s2gos_server.services.local.testing:service" }
-    dags@{ shape: stadium, label: "s2gos_airflow/dags" }
+    openapi@{ shape: lean-r, label: "OpenAPI.yaml" }
     sync_client@{ shape: stadium, label: "s2gos_client.api.Client" }
     async_client@{ shape: stadium, label: "s2gos_client.api.AsyncClient" }
     models@{ shape: stadium, label: "s2gos_common.models.*" }
@@ -222,6 +229,19 @@ flowchart LR
     gen-common --> models
     gen-common --> service
     gen-server --> routes
+```
+
+
+Generating Airflow DAGs:
+
+```mermaid
+---
+config:
+  theme: default
+---
+flowchart LR
+    local_service@{ shape: stadium, label: "s2gos_server.services.local.testing:service" }
+    dags@{ shape: stadium, label: "s2gos_airflow/dags" }
     local_service --> gen-dags
     gen-dags --> dags
 ```
