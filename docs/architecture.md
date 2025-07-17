@@ -199,15 +199,40 @@ direction TB
 
 ## Code generation
 
+Sen4CAP:
+
 ```mermaid
 ---
 config:
   theme: default
 ---
 flowchart LR
-    openapi@{ shape: lean-r, label: "openapi.yaml" }
-    local_service@{ shape: stadium, label: "s2gos_server.services.local.testing:service" }
-    dags@{ shape: stadium, label: "s2gos_airflow/dags" }
+    openapi@{ shape: lean-r, label: "OpenAPI.yaml" }
+    sync_client@{ shape: stadium, label: "sen4cap.client.api.Client" }
+    async_client@{ shape: stadium, label: "sen4cap.client.api.AsyncClient" }
+    models@{ shape: stadium, label: "sen4cap.common.models.*" }
+    service@{ shape: stadium, label: "sen4cap.common.service.Service" }
+    routes@{ shape: stadium, label: "sen4cap.server.routes" }
+    openapi --> generate
+    generate --> gen-client
+    generate --> gen-models
+    generate --> gen-server
+    gen-client --> sync_client
+    gen-client --> async_client
+    gen-models --> models
+    gen-server --> service
+    gen-server --> routes
+```
+
+S2GOS:
+
+```mermaid
+---
+config:
+  theme: default
+---
+flowchart LR
+    openapi@{ shape: lean-r, label: "OpenAPI.yaml" }
     sync_client@{ shape: stadium, label: "s2gos_client.api.Client" }
     async_client@{ shape: stadium, label: "s2gos_client.api.AsyncClient" }
     models@{ shape: stadium, label: "s2gos_common.models.*" }
@@ -222,6 +247,57 @@ flowchart LR
     gen-common --> models
     gen-common --> service
     gen-server --> routes
+```
+
+
+Airflow DAGs:
+
+```mermaid
+---
+config:
+  theme: default
+---
+flowchart LR
+    local_service@{ shape: stadium, label: "s2gos_server.services.local.testing:service" }
+    dags@{ shape: stadium, label: "s2gos_airflow/dags" }
     local_service --> gen-dags
     gen-dags --> dags
+```
+
+
+
+
+
+```mermaid
+---
+config:
+    class:
+        hideEmptyMembersBox: true
+    theme: default
+---
+classDiagram
+direction TB
+    namespace sen4cap.client {
+        class api.Client
+        class gui.Client
+        class cli
+    }
+    namespace sen4cap.common {
+        class models
+        class service.Service
+    }
+    namespace sen4cap.server {
+        class server
+        class routes
+        class services.local.LocalService
+    }
+
+    cli ..> api.Client : use
+    gui.Client ..|> api.Client : inherits
+    api.Client ..> service.Service : uses
+    service.Service ..> models : uses
+    services.local.LocalService --|> service.Service : implements
+    routes ..> service.Service : uses
+    server ..> routes : uses
+    server ..> services.local.LocalService : configured to use
 ```
