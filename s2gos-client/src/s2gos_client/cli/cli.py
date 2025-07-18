@@ -7,12 +7,14 @@ from typing import Optional, Callable, Annotated
 import click
 import typer.core
 
-from s2gos_client.cli.renderer import OutputFormat
+from s2gos_client.cli.aliased_group import AliasedGroup
 from s2gos_client.cli.defaults import DEFAULT_OUTPUT_FORMAT
 from s2gos_client.cli.defaults import DEFAULT_REQUEST_FILE
+from s2gos_client.cli.defaults import OutputFormat
 
 
 SERVICE_NAME = "S2GOS service"
+
 CLI_NAME = "s2gos-client"
 CLI_HELP = """
 Client tool for the {service_name}.
@@ -24,20 +26,23 @@ You can use shorter command name aliases, e.g., use command name "vr"
 for "validate-request", or "lp" for "list-processes".
 """.format(service_name=SERVICE_NAME)
 
+process_id_arg = typer.Argument(
+    help="Process identifier",
+)
 
 job_id_arg = typer.Argument(
     help="Job identifier",
 )
 
 request_option = typer.Option(
-    DEFAULT_REQUEST_FILE,
+    ...,
     "--request",
     "-r",
     help="Processing request file",
 )
 
 format_option = typer.Option(
-    DEFAULT_OUTPUT_FORMAT,
+    ...,
     "--format",
     "-f",
     show_choices=True,
@@ -45,82 +50,42 @@ format_option = typer.Option(
 )
 
 
-class AliasedGroup(typer.core.TyperGroup):
-    """
-    A group that accepts command aliases created from the
-    first letters of the words after splitting a command name
-    at hyphens.
-    """
-
-    @staticmethod
-    def to_alias(name: str):
-        """Create a short alias for given command name."""
-        return "".join(map(lambda n: n[0], name.split("-")))
-
-    def get_command(self, ctx, cmd_name):
-        rv = super().get_command(ctx, cmd_name)
-
-        if rv is not None:
-            return rv
-
-        matches = [
-            x
-            for x in self.list_commands(ctx)
-            if cmd_name == x or cmd_name == self.to_alias(x)
-        ]
-
-        if not matches:
-            return None
-
-        if len(matches) == 1:
-            return click.Group.get_command(self, ctx, matches[0])
-
-        ctx.fail(f"Too many matches: {', '.join(sorted(matches))}")
-
-    def resolve_command(
-        self, ctx, args
-    ) -> tuple[str | None, click.Command | None, list[str]]:
-        # always return the full command name
-        _, cmd, args = super().resolve_command(ctx, args)
-        if cmd is not None:
-            return cmd.name, cmd, args
-        else:
-            return None, None, args
-
-    def list_commands(self, ctx):
-        # prevent alphabetical ordering
-        return list(self.commands)
-
-
-cli = typer.Typer(name=CLI_NAME, cls=AliasedGroup, help=CLI_HELP)
-
-
-def _get_client():
-    # defer importing
-    from s2gos_client.cli.impl import get_client
-
-    return get_client()
+cli = typer.Typer(
+    name=CLI_NAME, cls=AliasedGroup, help=CLI_HELP, invoke_without_command=True
+)
 
 
 @cli.callback()
 def main(
     ctx: typer.Context,
-    verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output"),
+    version: Annotated[
+        bool, typer.Option("--version", help="Show version and exit")
+    ] = False,
+    # add global options here...
+    # verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output"),
 ):
+    if version:
+        from importlib.metadata import version
+
+        click.echo(version("s2gos-client"))
+        return
+
+    def _get_client():
+        # defer importing
+        from s2gos_client.cli.impl import get_client
+
+        return get_client()
+
     ctx.ensure_object(dict)
     # ONLY set context values if they haven't already been set,
     # e.g., by a test
-    for k, v in dict(get_client=_get_client, verbose=verbose).items():
+    for k, v in dict(
+        get_client=_get_client,
+        # add global options here...
+        # verbose=verbose,
+    ).items():
         if k not in ctx.obj:
             ctx.obj[k] = v
-
-
-@cli.command()
-def version():
-    """Show version and exit."""
-    from importlib.metadata import version
-
-    click.echo(version("s2gos-client"))
 
 
 @cli.command()
@@ -139,7 +104,8 @@ def configure(
 
 @cli.command()
 def list_processes(
-    ctx: typer.Context, output_format: Annotated[OutputFormat, format_option]
+    ctx: typer.Context,
+    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """List available processes."""
     from .renderer import OutputRenderer
@@ -152,8 +118,8 @@ def list_processes(
 @cli.command()
 def get_process(
     ctx: typer.Context,
-    process_id: str,
-    output_format: Annotated[OutputFormat, format_option],
+    process_id: Annotated[str, process_id_arg],
+    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Get process details."""
     from .renderer import OutputRenderer
@@ -165,7 +131,7 @@ def get_process(
 
 @cli.command()
 def validate_request(
-    request_file: Annotated[str, request_option],
+    request_file: Annotated[str, request_option] = DEFAULT_REQUEST_FILE,
 ):
     """Validate a processing request."""
     from .impl import read_request
@@ -177,8 +143,8 @@ def validate_request(
 @cli.command()
 def execute_process(
     ctx: typer.Context,
-    request_file: Annotated[str, request_option],
-    output_format: Annotated[OutputFormat, format_option],
+    request_file: Annotated[str, request_option] = DEFAULT_REQUEST_FILE,
+    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Execute a process."""
     from .impl import read_request
@@ -194,7 +160,8 @@ def execute_process(
 
 @cli.command()
 def list_jobs(
-    ctx: typer.Context, output_format: Annotated[OutputFormat, format_option]
+    ctx: typer.Context,
+    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """List all jobs."""
     from .renderer import OutputRenderer
@@ -207,8 +174,8 @@ def list_jobs(
 @cli.command()
 def get_job(
     ctx: typer.Context,
-    job_id: str,
-    output_format: Annotated[OutputFormat, format_option],
+    job_id: Annotated[str, job_id_arg],
+    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Get job details."""
     from .renderer import OutputRenderer
@@ -221,8 +188,8 @@ def get_job(
 @cli.command()
 def dismiss_job(
     ctx: typer.Context,
-    job_id: str,
-    output_format: Annotated[OutputFormat, format_option],
+    job_id: Annotated[str, job_id_arg],
+    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Cancel a running or delete a finished job."""
     from .renderer import OutputRenderer
@@ -235,8 +202,8 @@ def dismiss_job(
 @cli.command()
 def get_job_results(
     ctx: typer.Context,
-    job_id: str,
-    output_format: Annotated[OutputFormat, format_option],
+    job_id: Annotated[str, job_id_arg],
+    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Get job results."""
     from .renderer import OutputRenderer
