@@ -2,12 +2,15 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from typing import Optional, Callable
+from typing import Optional, Callable, Annotated
 
 import click
 import typer.core
 
-from s2gos_client.api.defaults import DEFAULT_REQUEST_FILE
+from s2gos_client.cli.renderer import OutputFormat
+from s2gos_client.cli.defaults import DEFAULT_OUTPUT_FORMAT
+from s2gos_client.cli.defaults import DEFAULT_REQUEST_FILE
+
 
 SERVICE_NAME = "S2GOS service"
 CLI_NAME = "s2gos-client"
@@ -22,18 +25,21 @@ for "validate-request", or "lp" for "list-processes".
 """.format(service_name=SERVICE_NAME)
 
 
+job_id_arg = typer.Argument(
+    help="Job identifier",
+)
+
 request_option = typer.Option(
     DEFAULT_REQUEST_FILE,
-    "-r",
     "--request",
+    "-r",
     help="Processing request file",
 )
 
 format_option = typer.Option(
-    "yaml",
-    "-f",
+    DEFAULT_OUTPUT_FORMAT,
     "--format",
-    click_type=click.Choice(["yaml", "json", "plain"]),
+    "-f",
     show_choices=True,
     help="Output format",
 )
@@ -132,28 +138,34 @@ def configure(
 
 
 @cli.command()
-def list_processes(ctx: typer.Context, fmt: format_option):
+def list_processes(
+    ctx: typer.Context, output_format: Annotated[OutputFormat, format_option]
+):
     """List available processes."""
-    from .renderer import Renderer
+    from .renderer import OutputRenderer
 
     get_client: Callable = ctx.obj["get_client"]
     process_list = get_client().get_processes()
-    Renderer.get(fmt).render_process_list(process_list)
+    OutputRenderer.get(output_format).render_process_list(process_list)
 
 
 @cli.command()
-def get_process(ctx: typer.Context, process_id: str, fmt: str = format_option):
+def get_process(
+    ctx: typer.Context,
+    process_id: str,
+    output_format: Annotated[OutputFormat, format_option],
+):
     """Get process details."""
-    from .renderer import Renderer
+    from .renderer import OutputRenderer
 
     get_client: Callable = ctx.obj["get_client"]
     process_description = get_client().get_process(process_id)
-    Renderer.get(fmt).render_process_description(process_description)
+    OutputRenderer.get(output_format).render_process_description(process_description)
 
 
 @cli.command()
 def validate_request(
-    request_file: str = request_option,
+    request_file: Annotated[str, request_option],
 ):
     """Validate a processing request."""
     from .impl import read_request
@@ -165,59 +177,73 @@ def validate_request(
 @cli.command()
 def execute_process(
     ctx: typer.Context,
-    request_file: str = request_option,
-    fmt: str = format_option,
+    request_file: Annotated[str, request_option],
+    output_format: Annotated[OutputFormat, format_option],
 ):
     """Execute a process."""
     from .impl import read_request
-    from .renderer import Renderer
+    from .renderer import OutputRenderer
 
     get_client: Callable = ctx.obj["get_client"]
     request = read_request(request_file)
     job = get_client().execute_process(
         process_id=request.process_id, request=request.request
     )
-    Renderer.get(fmt).render_job(job)
+    OutputRenderer.get(output_format).render_job(job)
 
 
 @cli.command()
-def list_jobs(ctx: typer.Context, fmt: str = format_option):
+def list_jobs(
+    ctx: typer.Context, output_format: Annotated[OutputFormat, format_option]
+):
     """List all jobs."""
-    from .renderer import Renderer
+    from .renderer import OutputRenderer
 
     get_client: Callable = ctx.obj["get_client"]
     job_list = get_client().get_jobs()
-    Renderer.get(fmt).render_job_list(job_list)
+    OutputRenderer.get(output_format).render_job_list(job_list)
 
 
 @cli.command()
-def get_job(ctx: typer.Context, job_id: str, fmt: str = format_option):
+def get_job(
+    ctx: typer.Context,
+    job_id: str,
+    output_format: Annotated[OutputFormat, format_option],
+):
     """Get job details."""
-    from .renderer import Renderer
+    from .renderer import OutputRenderer
 
     get_client: Callable = ctx.obj["get_client"]
     job = get_client().get_job(job_id)
-    Renderer.get(fmt).render_job(job)
+    OutputRenderer.get(output_format).render_job(job)
 
 
 @cli.command()
-def dismiss_job(ctx: typer.Context, job_id: str, fmt: str = format_option):
+def dismiss_job(
+    ctx: typer.Context,
+    job_id: str,
+    output_format: Annotated[OutputFormat, format_option],
+):
     """Cancel a running or delete a finished job."""
-    from .renderer import Renderer
+    from .renderer import OutputRenderer
 
     get_client: Callable = ctx.obj["get_client"]
     job = get_client().dismiss_job(job_id)
-    Renderer.get(fmt).render_job(job)
+    OutputRenderer.get(output_format).render_job(job)
 
 
 @cli.command()
-def get_job_results(ctx: typer.Context, job_id: str, fmt: str = format_option):
+def get_job_results(
+    ctx: typer.Context,
+    job_id: str,
+    output_format: Annotated[OutputFormat, format_option],
+):
     """Get job results."""
-    from .renderer import Renderer
+    from .renderer import OutputRenderer
 
     get_client: Callable = ctx.obj["get_client"]
     job_results = get_client().get_job_results(job_id)
-    Renderer.get(fmt).render_job_results(job_results)
+    OutputRenderer.get(output_format).render_job_results(job_results)
 
 
 if __name__ == "__main__":  # pragma: no cover

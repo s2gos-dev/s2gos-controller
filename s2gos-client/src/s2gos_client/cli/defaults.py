@@ -2,12 +2,17 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-# Important: this module shall have no s2gos dependencies
-
-from pathlib import Path
+from enum import Enum
 from typing import Final
 
-DEFAULT_USER_PATH: Final = Path("~").expanduser() / ".s2gos"
-DEFAULT_CONFIG_PATH: Final = DEFAULT_USER_PATH / "config"
+# Important: this module shall have no s2gos dependencies
 
-DEFAULT_SERVER_URL: Final = "http://127.0.0.1:8008"
+
+class OutputFormat(str, Enum):
+    simple = "simple"
+    json = "json"
+    yaml = "yaml"
+
+
+DEFAULT_OUTPUT_FORMAT = OutputFormat.yaml
+DEFAULT_REQUEST_FILE: Final = "process-request.yaml"

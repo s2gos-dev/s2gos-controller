@@ -18,17 +18,17 @@ from s2gos_common.models import (
     ProcessDescription,
     ProcessList,
 )
+from .defaults import OutputFormat
 
 
-class Renderer(ABC):
+class OutputRenderer(ABC):
     @classmethod
-    def get(cls, fmt: str) -> "Renderer":
-        assert fmt in ("plain", "json", "yaml")
+    def get(cls, output_format: OutputFormat) -> "OutputRenderer":
         return {
-            "plain": PlainRenderer,
-            "json": JsonRenderer,
-            "yaml": YamlRenderer,
-        }[fmt]()
+            OutputFormat.simple: SimpleOutputRenderer,
+            OutputFormat.json: JsonOutputRenderer,
+            OutputFormat.yaml: YamlOutputRenderer,
+        }[output_format]()
 
     @abstractmethod
     def render_process_list(self, process_list: ProcessList):
@@ -59,7 +59,9 @@ class Renderer(ABC):
 
         io = StringIO()
         with io as stream:
-            yaml.safe_dump(Renderer._model_to_dict(base_model), stream=stream, indent=2)
+            yaml.safe_dump(
+                OutputRenderer._model_to_dict(base_model), stream=stream, indent=2
+            )
         click.echo(io.getvalue())
 
     @classmethod
@@ -68,7 +70,9 @@ class Renderer(ABC):
 
         io = StringIO()
         with io as stream:
-            yaml.safe_dump(Renderer._model_to_dict(base_model), stream=stream, indent=2)
+            yaml.safe_dump(
+                OutputRenderer._model_to_dict(base_model), stream=stream, indent=2
+            )
         click.echo(io.getvalue())
 
     @classmethod
@@ -82,10 +86,10 @@ class Renderer(ABC):
         )
 
 
-class PlainRenderer(Renderer):
+class SimpleOutputRenderer(OutputRenderer):
     def render_process_list(self, process_list: ProcessList):
         if not process_list.processes:
-            click.echo(f"No processes available.")
+            click.echo("No processes available.")
         else:
             for i, process in enumerate(process_list.processes):
                 click.echo(f"{i + 1}: {process.id} - {process.title}")
@@ -98,11 +102,14 @@ class PlainRenderer(Renderer):
 
     def render_job_list(self, job_list: JobList):
         if not job_list.jobs:
-            click.echo(f"No jobs available.")
+            click.echo("No jobs available.")
         else:
             for i, job in enumerate(job_list.jobs):
                 click.echo(
-                    f"{i + 1}: {job.id} - {job.status} - {job.progress} - {job.message}"
+                    f"{i + 1}: {job.jobID} "
+                    f"- {job.status} "
+                    f"- {job.progress} "
+                    f"- {job.message}"
                 )
 
     def render_job(self, job: JobInfo):
@@ -120,7 +127,7 @@ class PlainRenderer(Renderer):
         self._render_as_yaml(job_results)
 
 
-class StructuredRenderer(Renderer):
+class StructuredOutputRenderer(OutputRenderer):
     def __init__(self, fmt: Literal["json", "yaml"]):
         self.fmt = fmt
 
@@ -157,11 +164,11 @@ class StructuredRenderer(Renderer):
         self._render_as_yaml(job_results)
 
 
-class YamlRenderer(StructuredRenderer):
+class YamlOutputRenderer(StructuredOutputRenderer):
     def __init__(self):
         super().__init__("yaml")
 
 
-class JsonRenderer(StructuredRenderer):
+class JsonOutputRenderer(StructuredOutputRenderer):
     def __init__(self):
         super().__init__("json")
