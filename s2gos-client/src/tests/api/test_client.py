@@ -23,7 +23,7 @@ from s2gos_common.models import (
 class ClientTest(TestCase):
     def setUp(self):
         self.transport = MockTransport()
-        self.client = Client(_transport=self.transport)
+        self.client = Client(config=ClientConfig(), _transport=self.transport)
 
     def test_config(self):
         self.assertIsInstance(self.client.config, ClientConfig)

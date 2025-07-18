@@ -1,5 +1,8 @@
 ## Changes in version 0.0.3 (in development)
 
+- The client's CLI is now fully operable.
+- Simplified generation of CLI reference documentation and improved general 
+  styling significantly.
 - Added a starting point for the documentation of the S2GOS control layer's 
   architecture. 
 - Model class `Schema` now contains `ref`; removed `Reference` model. 

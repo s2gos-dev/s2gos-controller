@@ -26,6 +26,12 @@ class ClientConfigTest(TestCase):
         for k, v in self.saved_environ.items():
             os.environ[k] = v
 
+    def test_ctor(self):
+        config = ClientConfig()
+        self.assertEqual(None, config.user_name)
+        self.assertEqual(None, config.access_token)
+        self.assertEqual(None, config.server_url)
+
     def test_read_plain(self):
         with tempfile.TemporaryDirectory() as tmp_dir_name:
             config_path = Path(tmp_dir_name) / "config"

@@ -8627,7 +8627,7 @@ packages:
 - pypi: ./s2gos-client
   name: s2gos-client
   version: 0.0.3.dev0
-  sha256: 5240beb35c60085186d61aa060f85de721402a160b22548bb214d927157eeb2b
+  sha256: 0e2348ba99787110a1d57a4d69879fd050a4465ef737912c7ed9d6285eb634f1
   requires_dist:
   - click
   - pydantic

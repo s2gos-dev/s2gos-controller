@@ -1,150 +1,208 @@
 # Client CLI Reference
 
-## Main Command
+`s2gos-client` is the client shell tool for the S2GOS service.
 
-```
-Usage: s2gos-client [OPTIONS] COMMAND [ARGS]...                                                                                                
-                                                                                                                                                
- Client tool for the ESA synthetic scene generator service DTE-S2GOS.                                                                           
-                                                                                                                                                
- The tool provides commands for managing processing request templates, processing requests, processing jobs, and gets processing results.       
- You can use shorter command name aliases, e.g., use command name "vr" instead of "validate-request", or "lt" instead of "list-templates".      
-                                                                                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                                                                                  │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ configure          Configure the S2GOS client.                                                                                               │
-│ get-template       Get a processing request template.                                                                                        │
-│ list-templates     List available processing request templates.                                                                              │
-│ validate-request   Validate a processing request.                                                                                            │
-│ submit-request     Submit a processing request.                                                                                              │
-│ cancel-jobs        Cancel running processing jobs.                                                                                           │
-│ poll-jobs          Poll the status of processing jobs.                                                                                       │
-│ get-results        Get processing results.                                                                                                   │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+The tool provides commands for managing processing request templates,
+processing requests, processing jobs, and gets processing results.
+
+You can use shorter command name aliases, e.g., use command name `vr`
+for `validate-request`, or `lp` for `list-processes`.
+
+**Usage**:
+
+```console
+$ s2gos-client [OPTIONS] COMMAND [ARGS]...
 ```
 
-## Commands
+**Options**:
 
-### `configure`
+* `--version`: Show version and exit
+* `--install-completion`: Install completion for the current shell.
+* `--show-completion`: Show completion for the current shell, to copy it or customize the installation.
+* `--help`: Show this message and exit.
 
-```
-Usage: s2gos-client configure [OPTIONS]                                                                                                        
-                                                                                                                                                
- Configure the S2GOS client.                                                                                                                    
-                                                                                                                                                
-                                                                                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --user         TEXT  [default: None]                                                                                                         │
-│ --token        TEXT  [default: None]                                                                                                         │
-│ --url          TEXT  [default: None]                                                                                                         │
-│ --help               Show this message and exit.                                                                                             │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-```
+**Commands**:
 
-### `get-template`
+* `configure`: Configure the client tool.
+* `list-processes`: List available processes.
+* `get-process`: Get process details.
+* `validate-request`: Validate a processing request.
+* `execute-process`: Execute a process.
+* `list-jobs`: List all jobs.
+* `get-job`: Get job details.
+* `dismiss-job`: Cancel a running or delete a finished job.
+* `get-job-results`: Get job results.
 
-```
-Usage: s2gos-client get-template [OPTIONS] TEMPLATE_NAME                                                                                       
-                                                                                                                                                
- Get a processing request template.                                                                                                             
-                                                                                                                                                
-                                                                                                                                                
-╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *    template_name      TEXT  [default: None] [required]                                                                                     │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --request        TEXT  [default: s2gos-request.yaml]                                                                                         │
-│ --help                 Show this message and exit.                                                                                           │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+## `s2gos-client configure`
+
+Configure the client tool.
+
+**Usage**:
+
+```console
+$ s2gos-client configure [OPTIONS]
 ```
 
-### `list-templates`
+**Options**:
 
-```
-Usage: s2gos-client list-templates [OPTIONS]                                                                                                   
-                                                                                                                                                
- List available processing request templates.                                                                                                   
-                                                                                                                                                
-                                                                                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                                                                                  │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-```
+* `--user TEXT`
+* `--token TEXT`
+* `--url TEXT`
+* `--help`: Show this message and exit.
 
-### `validate-request`
+## `s2gos-client list-processes`
 
-```
-Usage: s2gos-client validate-request [OPTIONS]                                                                                                 
-                                                                                                                                                
- Validate a processing request.                                                                                                                 
-                                                                                                                                                
-                                                                                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --name        TEXT  [default: s2gos-request.yaml]                                                                                            │
-│ --help              Show this message and exit.                                                                                              │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+List available processes.
+
+**Usage**:
+
+```console
+$ s2gos-client list-processes [OPTIONS]
 ```
 
-### `submit-request`
+**Options**:
 
-```
-Usage: s2gos-client submit-request [OPTIONS]                                                                                                   
-                                                                                                                                                
- Submit a processing request.                                                                                                                   
-                                                                                                                                                
-                                                                                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --name        TEXT  [default: s2gos-request.yaml]                                                                                            │
-│ --help              Show this message and exit.                                                                                              │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-```
+* `-c, --config PATH`: Client configuration file
+* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `--help`: Show this message and exit.
 
-### `cancel-jobs`
+## `s2gos-client get-process`
 
-```
-Usage: s2gos-client cancel-jobs [OPTIONS] JOB_IDS...                                                                                           
-                                                                                                                                                
- Cancel running processing jobs.                                                                                                                
-                                                                                                                                                
-                                                                                                                                                
-╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *    job_ids      JOB_IDS...  [default: None] [required]                                                                                     │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                                                                                  │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+Get process details.
+
+**Usage**:
+
+```console
+$ s2gos-client get-process [OPTIONS] PROCESS_ID
 ```
 
-### `poll-jobs`
+**Arguments**:
 
-```
-Usage: s2gos-client poll-jobs [OPTIONS] JOB_IDS...                                                                                             
-                                                                                                                                                
- Poll the status of processing jobs.                                                                                                            
-                                                                                                                                                
-                                                                                                                                                
-╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *    job_ids      JOB_IDS...  [default: None] [required]                                                                                     │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                                                                                  │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+* `PROCESS_ID`: Process identifier  [required]
+
+**Options**:
+
+* `-c, --config PATH`: Client configuration file
+* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `--help`: Show this message and exit.
+
+## `s2gos-client validate-request`
+
+Validate a processing request.
+
+The `--request` option and the `process_id` argument are mutually exclusive.
+
+**Usage**:
+
+```console
+$ s2gos-client validate-request [OPTIONS] [PROCESS_ID] [NAME=VALUE]...
 ```
 
-### `get-results`
+**Arguments**:
 
+* `[PROCESS_ID]`: Process identifier
+* `[NAME=VALUE]...`: Parameters
+
+**Options**:
+
+* `-r, --request PATH`: Processing request file
+* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `--help`: Show this message and exit.
+
+## `s2gos-client execute-process`
+
+Execute a process.
+
+**Usage**:
+
+```console
+$ s2gos-client execute-process [OPTIONS] [PROCESS_ID] [NAME=VALUE]...
 ```
-Usage: s2gos-client get-results [OPTIONS] JOB_IDS...                                                                                           
-                                                                                                                                                
- Get processing results.                                                                                                                        
-                                                                                                                                                
-                                                                                                                                                
-╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *    job_ids      JOB_IDS...  [default: None] [required]                                                                                     │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --help          Show this message and exit.                                                                                                  │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+**Arguments**:
+
+* `[PROCESS_ID]`: Process identifier
+* `[NAME=VALUE]...`: Parameters
+
+**Options**:
+
+* `-r, --request PATH`: Processing request file
+* `-c, --config PATH`: Client configuration file
+* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `--help`: Show this message and exit.
+
+## `s2gos-client list-jobs`
+
+List all jobs.
+
+**Usage**:
+
+```console
+$ s2gos-client list-jobs [OPTIONS]
 ```
+
+**Options**:
+
+* `-c, --config PATH`: Client configuration file
+* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `--help`: Show this message and exit.
+
+## `s2gos-client get-job`
+
+Get job details.
+
+**Usage**:
+
+```console
+$ s2gos-client get-job [OPTIONS] JOB_ID
+```
+
+**Arguments**:
+
+* `JOB_ID`: Job identifier  [required]
+
+**Options**:
+
+* `-c, --config PATH`: Client configuration file
+* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `--help`: Show this message and exit.
+
+## `s2gos-client dismiss-job`
+
+Cancel a running or delete a finished job.
+
+**Usage**:
+
+```console
+$ s2gos-client dismiss-job [OPTIONS] JOB_ID
+```
+
+**Arguments**:
+
+* `JOB_ID`: Job identifier  [required]
+
+**Options**:
+
+* `-c, --config PATH`: Client configuration file
+* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `--help`: Show this message and exit.
+
+## `s2gos-client get-job-results`
+
+Get job results.
+
+**Usage**:
+
+```console
+$ s2gos-client get-job-results [OPTIONS] JOB_ID
+```
+
+**Arguments**:
+
+* `JOB_ID`: Job identifier  [required]
+
+**Options**:
+
+* `-c, --config PATH`: Client configuration file
+* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `--help`: Show this message and exit.
