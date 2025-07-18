@@ -3,7 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 from types import TracebackType
-from typing import Callable, Optional, TypeAlias
+from typing import Callable, Literal, Optional, TypeAlias
 
 import click
 import typer
@@ -39,9 +39,10 @@ class UseClient:
         exc_type: Optional[type[BaseException]],
         exc_value: Optional[BaseException],
         exc_tb: Optional[TracebackType],
-    ) -> Optional[bool]:
-        self.client.close()
-        self.client = None
+    ) -> Literal[False]:
+        if self.client is not None:
+            self.client.close()
+            self.client = None
         if isinstance(exc_value, ClientError):
             client_error: ClientError = exc_value
             message: str | None = client_error.detail or client_error.title

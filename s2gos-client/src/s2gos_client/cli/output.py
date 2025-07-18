@@ -4,7 +4,7 @@
 
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Literal
+from typing import Callable, Literal
 
 import pydantic
 import typer
@@ -29,11 +29,12 @@ class OutputFormat(str, Enum):
 def get_renderer(
     output_format: OutputFormat, verbose: bool = False
 ) -> "OutputRenderer":
-    return {
+    renderers: dict[OutputFormat, Callable[[bool], OutputRenderer]] = {
         OutputFormat.simple: SimpleOutputRenderer,
         OutputFormat.json: JsonOutputRenderer,
         OutputFormat.yaml: YamlOutputRenderer,
-    }[output_format](verbose)
+    }
+    return renderers[output_format](verbose)
 
 
 class OutputRenderer(ABC):
@@ -44,9 +45,6 @@ class OutputRenderer(ABC):
     @abstractmethod
     def render_process_description(self, process_description: ProcessDescription):
         """Render a process description."""
-
-    def render_processing_request(self, process_request: ProcessingRequest):
-        """Render a processing request."""
 
     def render_processing_request_valid(self, process_request: ProcessingRequest):
         """Render a processing request is valid."""
@@ -104,9 +102,6 @@ class SimpleOutputRenderer(OutputRenderer):
     def render_process_description(self, process_description: ProcessDescription):
         self._render_base_model(process_description)
 
-    def render_processing_request(self, processing_request: ProcessingRequest):
-        self._render_base_model(processing_request)
-
     def render_processing_request_valid(self, processing_request: ProcessingRequest):
         typer.echo("Processing request is valid:")
         self._render_base_model(processing_request)
@@ -148,9 +143,6 @@ class StructuredOutputRenderer(OutputRenderer):
 
     def render_process_description(self, process_description: ProcessDescription):
         self._render_base_model(process_description, self.format_name)
-
-    def render_processing_request(self, processing_request: ProcessingRequest):
-        self._render_base_model(processing_request, self.format_name)
 
     def render_processing_request_valid(self, processing_request: ProcessingRequest):
         self._render_base_model(processing_request, self.format_name)

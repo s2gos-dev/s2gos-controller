@@ -71,7 +71,7 @@ def read_processing_request_from_args(
 
 
 def read_processing_request_from_file(
-    request_path: Path | str | None = None,
+    request_path: str | None = None,
 ) -> ProcessingRequest:
     if request_path:
         path = Path(request_path)
@@ -92,7 +92,7 @@ def read_processing_request_from_file(
 
         string_io = StringIO(content)
         request_dict = yaml.safe_load(string_io)
-    return new_processing_request(request_dict, source=request_path)
+    return new_processing_request(request_dict, source=str(request_path))
 
 
 def new_processing_request(

@@ -72,14 +72,14 @@ app = typer.Typer(
 @app.callback()
 def main(
     ctx: typer.Context,
-    version: Annotated[
+    version_: Annotated[
         bool, typer.Option("--version", help="Show version and exit")
     ] = False,
     # add global options here...
     # verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output"),
     # traceback: bool = typer.Option(False, "--traceback", "--tb", help="Output exception traceback"),
 ):
-    if version:
+    if version_:
         from importlib.metadata import version
 
         click.echo(version("s2gos-client"))
@@ -122,7 +122,7 @@ def configure(
 @app.command()
 def list_processes(
     ctx: typer.Context,
-    config_file: Annotated[str, config_option] = None,
+    config_file: Annotated[Optional[str], config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """List available processes."""
@@ -184,8 +184,8 @@ def execute_process(
         Optional[list[str]],
         typer.Argument(help="Parameters", metavar="[NAME=VALUE]..."),
     ] = None,
-    request_file: Annotated[str, request_option] = None,
-    config_file: Annotated[str, config_option] = None,
+    request_file: Annotated[Optional[str], request_option] = None,
+    config_file: Annotated[Optional[str], config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Execute a process."""
@@ -204,7 +204,7 @@ def execute_process(
 @app.command()
 def list_jobs(
     ctx: typer.Context,
-    config_file: Annotated[str, config_option] = None,
+    config_file: Annotated[Optional[str], config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """List all jobs."""
@@ -236,7 +236,7 @@ def get_job(
 def dismiss_job(
     ctx: typer.Context,
     job_id: Annotated[str, job_id_arg],
-    config_file: Annotated[str, config_option] = None,
+    config_file: Annotated[Optional[str], config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Cancel a running or delete a finished job."""
@@ -252,7 +252,7 @@ def dismiss_job(
 def get_job_results(
     ctx: typer.Context,
     job_id: Annotated[str, job_id_arg],
-    config_file: Annotated[str, config_option] = None,
+    config_file: Annotated[Optional[str], config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Get job results."""
