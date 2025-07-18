@@ -23,7 +23,7 @@ class AppTest(TestCase):
     def test_help(self):
         result = invoke_app("--help")
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
-        self.assertIn("Client tool for the S2GOS service.", result.output)
+        self.assertIn("tool for the S2GOS service.", result.output)
 
     def test_version(self):
         result = invoke_app("--version")
