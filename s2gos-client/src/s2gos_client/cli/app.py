@@ -14,14 +14,14 @@ SERVICE_NAME = "S2GOS service"
 
 APP_NAME = "s2gos-client"
 APP_HELP = """
-Client tool for the {service_name}.
+`{app_name}` is the client shell tool for the {service_name}.
 
 The tool provides commands for managing processing request templates,
 processing requests, processing jobs, and gets processing results.
 
-You can use shorter command name aliases, e.g., use command name "vr"
-for "validate-request", or "lp" for "list-processes".
-""".format(service_name=SERVICE_NAME)
+You can use shorter command name aliases, e.g., use command name `vr`
+for `validate-request`, or `lp` for `list-processes`.
+""".format(app_name=APP_NAME, service_name=SERVICE_NAME)
 
 DEFAULT_OUTPUT_FORMAT: Final = OutputFormat.yaml
 
@@ -63,6 +63,8 @@ app = typer.Typer(
     cls=AliasedGroup,
     help=APP_HELP,
     invoke_without_command=True,
+    # rich_markup_mode="rich",  # doesn't work
+    # # but should, see https://github.com/fastapi/typer/discussions/818
     # no_args_is_help=True,  # check: it shows empty error msg
 )
 
