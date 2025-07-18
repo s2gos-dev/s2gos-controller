@@ -2,16 +2,13 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from typing import Optional, Callable, Annotated
+from typing import Annotated, Final, Optional
 
 import click
 import typer.core
 
 from s2gos_client.cli.aliased_group import AliasedGroup
-from s2gos_client.cli.defaults import DEFAULT_OUTPUT_FORMAT
-from s2gos_client.cli.defaults import DEFAULT_REQUEST_FILE
-from s2gos_client.cli.defaults import OutputFormat
-
+from s2gos_client.cli.output import OutputFormat
 
 SERVICE_NAME = "S2GOS service"
 
@@ -26,6 +23,9 @@ You can use shorter command name aliases, e.g., use command name "vr"
 for "validate-request", or "lp" for "list-processes".
 """.format(service_name=SERVICE_NAME)
 
+DEFAULT_OUTPUT_FORMAT: Final = OutputFormat.yaml
+DEFAULT_REQUEST_FILE: Final = "process-request.yaml"
+
 process_id_arg = typer.Argument(
     help="Process identifier",
 )
@@ -34,11 +34,19 @@ job_id_arg = typer.Argument(
     help="Job identifier",
 )
 
+config_option = typer.Option(
+    ...,
+    "--config",
+    "-c",
+    help="Client configuration file",
+    metavar="PATH",
+)
+
 request_option = typer.Option(
     ...,
     "--request",
     "-r",
-    help="Process request file",
+    help="Processing request file",
     metavar="PATH",
 )
 
@@ -48,9 +56,8 @@ format_option = typer.Option(
     "-f",
     show_choices=True,
     help="Output format",
-    metavar="FORMAT",
+    # metavar="FORMAT",
 )
-
 
 cli = typer.Typer(
     name=CLI_NAME,
@@ -76,17 +83,19 @@ def main(
         click.echo(version("s2gos-client"))
         return
 
-    def _get_client():
+    def get_client(config_path: str | None):
         # defer importing
-        from s2gos_client.cli.impl import get_client
+        from s2gos_client import Client
+        from s2gos_client.cli.config import read_config
 
-        return get_client()
+        config = read_config(config_path)
+        return Client(config=config)
 
     ctx.ensure_object(dict)
     # ONLY set context values if they haven't already been set,
     # e.g., by a test
     for k, v in dict(
-        get_client=_get_client,
+        get_client=get_client,
         # add global options here...
         # verbose=verbose,
     ).items():
@@ -101,7 +110,7 @@ def configure(
     server_url: Optional[str] = typer.Option(None, "--url"),
 ):
     """Configure the client tool."""
-    from .impl import configure_client
+    from .config import configure_client
 
     configure_client(
         user_name=user_name, access_token=access_token, server_url=server_url
@@ -111,119 +120,141 @@ def configure(
 @cli.command()
 def list_processes(
     ctx: typer.Context,
+    config_file: Annotated[str, config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """List available processes."""
-    from .renderer import OutputRenderer
+    from .client import get_client
+    from .output import get_renderer
 
-    get_client: Callable = ctx.obj["get_client"]
-    process_list = get_client().get_processes()
-    OutputRenderer.get(output_format).render_process_list(process_list)
+    process_list = get_client(ctx, config_file).get_processes()
+    get_renderer(output_format).render_process_list(process_list)
 
 
 @cli.command()
 def get_process(
     ctx: typer.Context,
     process_id: Annotated[str, process_id_arg],
+    config_file: Annotated[Optional[str], config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Get process details."""
-    from .renderer import OutputRenderer
+    from .client import get_client
+    from .output import get_renderer
 
-    get_client: Callable = ctx.obj["get_client"]
-    process_description = get_client().get_process(process_id)
-    OutputRenderer.get(output_format).render_process_description(process_description)
+    process_description = get_client(ctx, config_file).get_process(process_id)
+    get_renderer(output_format).render_process_description(process_description)
 
 
 @cli.command()
 def validate_request(
-    process_id: Annotated[str, typer.Argument(help="Process identifier")] = None,
-    parameters: Annotated[
-        list[str], typer.Argument(help="Parameters", metavar="[NAME=VALUE]...")
+    process_id: Annotated[
+        Optional[str], typer.Argument(help="Process identifier")
     ] = None,
-    request_file: Annotated[str, request_option] = None,
+    parameters: Annotated[
+        Optional[list[str]],
+        typer.Argument(help="Parameters", metavar="[NAME=VALUE]..."),
+    ] = None,
+    request_file: Annotated[Optional[str], request_option] = None,
+    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
-    """Validate a processing request.
+    """
+    Validate a processing request.
 
     The `--request` option and the `process_id` argument are mutually exclusive.
     """
-    from .impl import read_request
+    from .output import get_renderer
+    from .request import read_processing_request
 
-    _request = read_request(request_file)
-    click.echo(f"Request {request_file} is valid.")
+    request = read_processing_request(process_id, parameters, request_file)
+    get_renderer(output_format).render_processing_request_valid(
+        request, source=request_file
+    )
 
 
 @cli.command()
 def execute_process(
     ctx: typer.Context,
+    process_id: Annotated[
+        Optional[str], typer.Argument(help="Process identifier")
+    ] = None,
+    parameters: Annotated[
+        Optional[list[str]],
+        typer.Argument(help="Parameters", metavar="[NAME=VALUE]..."),
+    ] = None,
     request_file: Annotated[str, request_option] = DEFAULT_REQUEST_FILE,
+    config_file: Annotated[str, config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Execute a process."""
-    from .impl import read_request
-    from .renderer import OutputRenderer
+    from .client import get_client
+    from .output import get_renderer
+    from .request import read_processing_request
 
-    get_client: Callable = ctx.obj["get_client"]
-    request = read_request(request_file)
-    job = get_client().execute_process(
-        process_id=request.process_id, request=request.request
+    request = read_processing_request(process_id, parameters, request_file)
+    job = get_client(ctx, config_file).execute_process(
+        process_id=request.process_id, request=request.as_process_request()
     )
-    OutputRenderer.get(output_format).render_job(job)
+    get_renderer(output_format).render_job(job)
 
 
 @cli.command()
 def list_jobs(
     ctx: typer.Context,
+    config_file: Annotated[str, config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """List all jobs."""
-    from .renderer import OutputRenderer
+    from .client import get_client
+    from .output import get_renderer
 
-    get_client: Callable = ctx.obj["get_client"]
-    job_list = get_client().get_jobs()
-    OutputRenderer.get(output_format).render_job_list(job_list)
+    job_list = get_client(ctx, config_file).get_jobs()
+    get_renderer(output_format).render_job_list(job_list)
 
 
 @cli.command()
 def get_job(
     ctx: typer.Context,
     job_id: Annotated[str, job_id_arg],
+    config_file: Annotated[Optional[str], config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Get job details."""
-    from .renderer import OutputRenderer
+    from .client import get_client
+    from .output import get_renderer
 
-    get_client: Callable = ctx.obj["get_client"]
-    job = get_client().get_job(job_id)
-    OutputRenderer.get(output_format).render_job(job)
+    job = get_client(ctx, config_file).get_job(job_id)
+    get_renderer(output_format).render_job(job)
 
 
 @cli.command()
 def dismiss_job(
     ctx: typer.Context,
     job_id: Annotated[str, job_id_arg],
+    config_file: Annotated[str, config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Cancel a running or delete a finished job."""
-    from .renderer import OutputRenderer
+    from .client import get_client
+    from .output import get_renderer
 
-    get_client: Callable = ctx.obj["get_client"]
-    job = get_client().dismiss_job(job_id)
-    OutputRenderer.get(output_format).render_job(job)
+    job = get_client(ctx, config_file).dismiss_job(job_id)
+    get_renderer(output_format).render_job(job)
 
 
 @cli.command()
 def get_job_results(
     ctx: typer.Context,
     job_id: Annotated[str, job_id_arg],
+    config_file: Annotated[str, config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Get job results."""
-    from .renderer import OutputRenderer
+    from .client import get_client
+    from .output import get_renderer
 
-    get_client: Callable = ctx.obj["get_client"]
-    job_results = get_client().get_job_results(job_id)
-    OutputRenderer.get(output_format).render_job_results(job_results)
+    job_results = get_client(ctx, config_file).get_job_results(job_id)
+    get_renderer(output_format).render_job_results(job_results)
 
 
 if __name__ == "__main__":  # pragma: no cover

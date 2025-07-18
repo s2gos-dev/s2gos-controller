@@ -5,7 +5,7 @@
 import inspect
 from enum import Enum
 from types import NoneType
-from typing import Any, get_origin
+from typing import Any
 
 import pydantic
 from pydantic import BaseModel

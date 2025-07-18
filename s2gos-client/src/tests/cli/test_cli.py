@@ -4,17 +4,16 @@
 
 from unittest import TestCase
 
-from typer.testing import Result
-from typer.testing import CliRunner
-
-from s2gos_client import __version__, Client, ClientConfig
-from s2gos_client.cli.cli import cli
 from tests.helpers import MockTransport
+from typer.testing import CliRunner, Result
+
+from s2gos_client import Client, ClientConfig, __version__
+from s2gos_client.cli.cli import cli
 
 runner = CliRunner()
 
 
-def get_mock_client():
+def get_mock_client(_config_path: str | None):
     return Client(config=ClientConfig(), _transport=MockTransport())
 
 
@@ -30,7 +29,7 @@ class CliTest(TestCase):
     def test_version(self):
         result = runner.invoke(
             cli,
-            ["version"],
+            ["--version"],
         )
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertEqual(__version__ + "\n", result.output)
