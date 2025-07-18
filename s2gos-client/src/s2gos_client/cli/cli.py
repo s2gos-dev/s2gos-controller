@@ -38,7 +38,8 @@ request_option = typer.Option(
     ...,
     "--request",
     "-r",
-    help="Processing request file",
+    help="Process request file",
+    metavar="PATH",
 )
 
 format_option = typer.Option(
@@ -47,11 +48,16 @@ format_option = typer.Option(
     "-f",
     show_choices=True,
     help="Output format",
+    metavar="FORMAT",
 )
 
 
 cli = typer.Typer(
-    name=CLI_NAME, cls=AliasedGroup, help=CLI_HELP, invoke_without_command=True
+    name=CLI_NAME,
+    cls=AliasedGroup,
+    help=CLI_HELP,
+    invoke_without_command=True,
+    # no_args_is_help=True,  # check: it shows empty error msg
 )
 
 
@@ -131,9 +137,16 @@ def get_process(
 
 @cli.command()
 def validate_request(
-    request_file: Annotated[str, request_option] = DEFAULT_REQUEST_FILE,
+    process_id: Annotated[str, typer.Argument(help="Process identifier")] = None,
+    parameters: Annotated[
+        list[str], typer.Argument(help="Parameters", metavar="[NAME=VALUE]...")
+    ] = None,
+    request_file: Annotated[str, request_option] = None,
 ):
-    """Validate a processing request."""
+    """Validate a processing request.
+
+    The `--request` option and the `process_id` argument are mutually exclusive.
+    """
     from .impl import read_request
 
     _request = read_request(request_file)
