@@ -49,9 +49,7 @@ class OutputRenderer(ABC):
     def render_processing_request(self, process_request: ProcessingRequest):
         """Render a processing request."""
 
-    def render_processing_request_valid(
-        self, process_request: ProcessingRequest, source: str | None
-    ):
+    def render_processing_request_valid(self, process_request: ProcessingRequest):
         """Render a processing request is valid."""
 
     @abstractmethod
@@ -66,30 +64,24 @@ class OutputRenderer(ABC):
     def render_job_results(self, job_results: JobResults):
         """Render a job results."""
 
-    @classmethod
-    def _render_as_yaml(cls, base_model: pydantic.BaseModel):
-        import yaml
+    def _render_base_model(
+        self,
+        base_model: pydantic.BaseModel,
+        format_name: Literal["json", "yaml"] = "yaml",
+    ):
+        serialized_value = self._serialize_model(base_model)
+        if format_name == "yaml":
+            import yaml
 
-        io = StringIO()
-        with io as stream:
-            yaml.safe_dump(
-                OutputRenderer._model_to_dict(base_model), stream=stream, indent=2
-            )
-        typer.echo(io.getvalue())
+            text_value = yaml.safe_dump(serialized_value, indent=2)
+        else:
+            import json
 
-    @classmethod
-    def _render_as_json(cls, base_model: pydantic.BaseModel):
-        import yaml
-
-        io = StringIO()
-        with io as stream:
-            yaml.safe_dump(
-                OutputRenderer._model_to_dict(base_model), stream=stream, indent=2
-            )
-        typer.echo(io.getvalue())
+            text_value = json.dumps(serialized_value, indent=2)
+        typer.echo(text_value)
 
     @classmethod
-    def _model_to_dict(cls, base_model: pydantic.BaseModel):
+    def _serialize_model(cls, base_model: pydantic.BaseModel):
         return base_model.model_dump(
             mode="json",
             by_alias=True,
@@ -111,16 +103,14 @@ class SimpleOutputRenderer(OutputRenderer):
                 typer.echo(f"{i + 1}: {process.id} - {process.title}")
 
     def render_process_description(self, process_description: ProcessDescription):
-        self._render_as_yaml(process_description)
+        self._render_base_model(process_description)
 
     def render_processing_request(self, processing_request: ProcessingRequest):
-        self._render_as_yaml(processing_request)
+        self._render_base_model(processing_request)
 
-    def render_processing_request_valid(
-        self, processing_request: ProcessingRequest, source: str
-    ):
-        self._render_as_yaml(processing_request)
-        typer.echo(f"\nProcessing request from {source} is valid.")
+    def render_processing_request_valid(self, processing_request: ProcessingRequest):
+        typer.echo("Processing request is valid:")
+        self._render_base_model(processing_request)
 
     def render_job_list(self, job_list: JobList):
         if not job_list.jobs:
@@ -146,7 +136,7 @@ class SimpleOutputRenderer(OutputRenderer):
         typer.echo(f"Ended at:    {job.finished}")
 
     def render_job_results(self, job_results: JobResults):
-        self._render_as_yaml(job_results)
+        self._render_base_model(job_results)
 
 
 class StructuredOutputRenderer(OutputRenderer):
@@ -154,42 +144,26 @@ class StructuredOutputRenderer(OutputRenderer):
         self.format_name = format_name
         self.verbose = verbose
 
-    def _render_base_model(self, base_model: pydantic.BaseModel):
-        io = StringIO()
-        with io as stream:
-            if self.format_name == "yaml":
-                import yaml
-
-                yaml.safe_dump(self._model_to_dict(base_model), stream, indent=2)
-            else:
-                import json
-
-                json.dump(self._model_to_dict(base_model), stream, indent=2)
-
-        typer.echo(io.getvalue())
-
     def render_process_list(self, process_list: ProcessList):
-        self._render_base_model(process_list)
+        self._render_base_model(process_list, self.format_name)
 
     def render_process_description(self, process_description: ProcessDescription):
-        self._render_base_model(process_description)
+        self._render_base_model(process_description, self.format_name)
 
     def render_processing_request(self, processing_request: ProcessingRequest):
-        self._render_base_model(processing_request)
+        self._render_base_model(processing_request, self.format_name)
 
-    def render_processing_request_valid(
-        self, processing_request: ProcessingRequest, source: str | None
-    ):
-        self._render_base_model(processing_request)
+    def render_processing_request_valid(self, processing_request: ProcessingRequest):
+        self._render_base_model(processing_request, self.format_name)
 
     def render_job_list(self, job_list: JobList):
-        self._render_base_model(job_list)
+        self._render_base_model(job_list, self.format_name)
 
     def render_job(self, job: JobInfo):
-        self._render_base_model(job)
+        self._render_base_model(job, self.format_name)
 
     def render_job_results(self, job_results: JobResults):
-        self._render_as_yaml(job_results)
+        self._render_base_model(job_results, self.format_name)
 
 
 class YamlOutputRenderer(StructuredOutputRenderer):

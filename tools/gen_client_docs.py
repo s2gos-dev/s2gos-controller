@@ -5,23 +5,23 @@
 from typing import Final
 
 import typer.core
-from click.testing import CliRunner
+from typer.testing import CliRunner
 
-from s2gos_client.cli.cli import cli
+from s2gos_client.cli import app
 from tools.common import S2GOS_PATH
 
 DOCS_PATH: Final = S2GOS_PATH / "docs"
 OUTPUT_FILE: Final = DOCS_PATH / "client-cli.md"
 
 
-def generate_docs(app: typer.Typer):
+def generate_docs():
     cli_group = typer.main.get_group(app)
 
     runner = CliRunner()
     output_lines = []
 
     # Add main command help
-    result = runner.invoke(cli_group, ["--help"])
+    result = runner.invoke(app, ["--help"])
     output_lines.append("# Client CLI Reference\n")
     output_lines.append("## Main Command\n")
     output_lines.append(f"```\n{result.output.strip()}\n```\n")
@@ -30,7 +30,7 @@ def generate_docs(app: typer.Typer):
 
     # Add each subcommand
     for name, command in cli_group.commands.items():
-        result = runner.invoke(cli_group, [name, "--help"])
+        result = runner.invoke(app, [name, "--help"])
         if result.exit_code != 0:
             print(f"⚠️ Error generating help for `{name}`")
             continue
@@ -47,4 +47,4 @@ def generate_docs(app: typer.Typer):
 
 if __name__ == "__main__":
     # noinspection PyTypeChecker
-    generate_docs(cli)
+    generate_docs()
