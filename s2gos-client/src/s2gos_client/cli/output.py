@@ -4,7 +4,7 @@
 
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Callable, Literal
+from typing import Callable, Literal, Any
 
 import pydantic
 import typer
@@ -26,6 +26,10 @@ class OutputFormat(str, Enum):
     yaml = "yaml"
 
 
+def output(message: str):
+    typer.echo(message)
+
+
 def get_renderer(
     output_format: OutputFormat, verbose: bool = False
 ) -> "OutputRenderer":
@@ -39,33 +43,37 @@ def get_renderer(
 
 class OutputRenderer(ABC):
     @abstractmethod
-    def render_process_list(self, process_list: ProcessList):
+    def render_process_list(self, process_list: ProcessList) -> str:
         """Render a process list."""
 
     @abstractmethod
-    def render_process_description(self, process_description: ProcessDescription):
+    def render_process_description(
+        self, process_description: ProcessDescription
+    ) -> str:
         """Render a process description."""
 
-    def render_processing_request_valid(self, process_request: ProcessingRequest):
+    def render_processing_request_valid(
+        self, process_request: ProcessingRequest
+    ) -> str:
         """Render a processing request is valid."""
 
     @abstractmethod
-    def render_job_list(self, job_list: JobList):
+    def render_job_list(self, job_list: JobList) -> str:
         """Render a job list."""
 
     @abstractmethod
-    def render_job(self, job: JobInfo):
+    def render_job_info(self, job: JobInfo) -> str:
         """Render a job."""
 
     @abstractmethod
-    def render_job_results(self, job_results: JobResults):
+    def render_job_results(self, job_results: JobResults) -> str:
         """Render a job results."""
 
     def _render_base_model(
         self,
         base_model: pydantic.BaseModel,
         format_name: Literal["json", "yaml"] = "yaml",
-    ):
+    ) -> str:
         serialized_value = self._serialize_model(base_model)
         if format_name == "yaml":
             import yaml
@@ -75,10 +83,10 @@ class OutputRenderer(ABC):
             import json
 
             text_value = json.dumps(serialized_value, indent=2)
-        typer.echo(text_value)
+        return text_value
 
     @classmethod
-    def _serialize_model(cls, base_model: pydantic.BaseModel):
+    def _serialize_model(cls, base_model: pydantic.BaseModel) -> Any:
         return base_model.model_dump(
             mode="json",
             by_alias=True,
@@ -92,45 +100,53 @@ class SimpleOutputRenderer(OutputRenderer):
     def __init__(self, verbose: bool):
         self.verbose = verbose
 
-    def render_process_list(self, process_list: ProcessList):
+    def render_process_list(self, process_list: ProcessList) -> str:
         if not process_list.processes:
-            typer.echo("No processes available.")
+            return "No processes available."
         else:
-            for i, process in enumerate(process_list.processes):
-                typer.echo(f"{i + 1}: {process.id} - {process.title}")
+            return "\n".join(
+                f"{i + 1}: {process.id} - {process.title}"
+                for i, process in enumerate(process_list.processes)
+            )
 
-    def render_process_description(self, process_description: ProcessDescription):
-        self._render_base_model(process_description)
+    def render_process_description(
+        self, process_description: ProcessDescription
+    ) -> str:
+        return self._render_base_model(process_description)
 
-    def render_processing_request_valid(self, processing_request: ProcessingRequest):
-        typer.echo("Processing request is valid:")
-        self._render_base_model(processing_request)
+    def render_processing_request_valid(
+        self, processing_request: ProcessingRequest
+    ) -> str:
+        return "Processing request is valid:\n" + self._render_base_model(
+            processing_request
+        )
 
-    def render_job_list(self, job_list: JobList):
+    def render_job_list(self, job_list: JobList) -> str:
         if not job_list.jobs:
-            typer.echo("No jobs available.")
+            return "No jobs available."
         else:
-            for i, job in enumerate(job_list.jobs):
-                typer.echo(
-                    f"{i + 1}: {job.jobID} "
-                    f"- {job.status} "
-                    f"- {job.progress} "
-                    f"- {job.message}"
-                )
+            return "\n".join(
+                f"{i + 1}: {job.jobID} - {job.status} - {job.progress} - {job.message}"
+                for i, job in enumerate(job_list.jobs)
+            )
 
-    def render_job(self, job: JobInfo):
-        typer.echo(f"Job ID:      {job.jobID}")
-        typer.echo(f"Process ID:  {job.processID}")
-        typer.echo(f"Status:      {job.status}")
-        typer.echo(f"Progress:    {job.progress}")
-        typer.echo(f"Message:     {job.message}")
-        typer.echo(f"Created at:  {job.created}")
-        typer.echo(f"Started at:  {job.started}")
-        typer.echo(f"Updated at:  {job.updated}")
-        typer.echo(f"Ended at:    {job.finished}")
+    def render_job_info(self, job: JobInfo) -> str:
+        return "\n".join(
+            [
+                f"Job ID:      {job.jobID}",
+                f"Process ID:  {job.processID}",
+                f"Status:      {job.status}",
+                f"Progress:    {job.progress}",
+                f"Message:     {job.message}",
+                f"Created at:  {job.created}",
+                f"Started at:  {job.started}",
+                f"Updated at:  {job.updated}",
+                f"Ended at:    {job.finished}",
+            ]
+        )
 
-    def render_job_results(self, job_results: JobResults):
-        self._render_base_model(job_results)
+    def render_job_results(self, job_results: JobResults) -> str:
+        return self._render_base_model(job_results)
 
 
 class StructuredOutputRenderer(OutputRenderer):
@@ -138,23 +154,27 @@ class StructuredOutputRenderer(OutputRenderer):
         self.format_name = format_name
         self.verbose = verbose
 
-    def render_process_list(self, process_list: ProcessList):
-        self._render_base_model(process_list, self.format_name)
+    def render_process_list(self, process_list: ProcessList) -> str:
+        return self._render_base_model(process_list, self.format_name)
 
-    def render_process_description(self, process_description: ProcessDescription):
-        self._render_base_model(process_description, self.format_name)
+    def render_process_description(
+        self, process_description: ProcessDescription
+    ) -> str:
+        return self._render_base_model(process_description, self.format_name)
 
-    def render_processing_request_valid(self, processing_request: ProcessingRequest):
-        self._render_base_model(processing_request, self.format_name)
+    def render_processing_request_valid(
+        self, processing_request: ProcessingRequest
+    ) -> str:
+        return self._render_base_model(processing_request, self.format_name)
 
-    def render_job_list(self, job_list: JobList):
-        self._render_base_model(job_list, self.format_name)
+    def render_job_list(self, job_list: JobList) -> str:
+        return self._render_base_model(job_list, self.format_name)
 
-    def render_job(self, job: JobInfo):
-        self._render_base_model(job, self.format_name)
+    def render_job_info(self, job: JobInfo) -> str:
+        return self._render_base_model(job, self.format_name)
 
-    def render_job_results(self, job_results: JobResults):
-        self._render_base_model(job_results, self.format_name)
+    def render_job_results(self, job_results: JobResults) -> str:
+        return self._render_base_model(job_results, self.format_name)
 
 
 class YamlOutputRenderer(StructuredOutputRenderer):

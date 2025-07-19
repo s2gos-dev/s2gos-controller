@@ -27,7 +27,7 @@ $ s2gos-client [OPTIONS] COMMAND [ARGS]...
 * `list-processes`: List available processes.
 * `get-process`: Get process details.
 * `validate-request`: Validate a processing request.
-* `execute-process`: Execute a process.
+* `execute-process`: Execute a process in asynchronous mode.
 * `list-jobs`: List all jobs.
 * `get-job`: Get job details.
 * `dismiss-job`: Cancel a running or delete a finished job.
@@ -45,9 +45,10 @@ $ s2gos-client configure [OPTIONS]
 
 **Options**:
 
-* `--user TEXT`
-* `--token TEXT`
-* `--url TEXT`
+* `-u, --user TEXT`: Your user name.
+* `-t, --token TEXT`: Your personal access token.
+* `-s, --server TEXT`: The S2GOS service API URL.
+* `-c, --config PATH`: Client configuration file
 * `--help`: Show this message and exit.
 
 ## `s2gos-client list-processes`
@@ -90,42 +91,54 @@ $ s2gos-client get-process [OPTIONS] PROCESS_ID
 
 Validate a processing request.
 
-The `--request` option and the `process_id` argument are mutually exclusive.
+The processing request to be validated may be read from a file given
+by `--request`, or from `stdin`, or from the `process_id` argument
+with zero, one, or more `--input` (or `-i`) options.
+
+The `process_id` argument and any given `--input` options will override
+settings with same name found in the given request file or `stdin`, if any.
 
 **Usage**:
 
 ```console
-$ s2gos-client validate-request [OPTIONS] [PROCESS_ID] [NAME=VALUE]...
+$ s2gos-client validate-request [OPTIONS] [PROCESS_ID]
 ```
 
 **Arguments**:
 
 * `[PROCESS_ID]`: Process identifier
-* `[NAME=VALUE]...`: Parameters
 
 **Options**:
 
+* `-i, --input [NAME=VALUE]...`: Processing request input
 * `-r, --request PATH`: Processing request file
 * `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
 * `--help`: Show this message and exit.
 
 ## `s2gos-client execute-process`
 
-Execute a process.
+Execute a process in asynchronous mode.
+
+The processing request to be submitted may be read from a file given
+by `--request`, or from `stdin`, or from the `process_id` argument
+with zero, one, or more `--input` (or `-i`) options.
+
+The `process_id` argument and any given `--input` options will override
+settings with same name found in the given request file or `stdin`, if any.
 
 **Usage**:
 
 ```console
-$ s2gos-client execute-process [OPTIONS] [PROCESS_ID] [NAME=VALUE]...
+$ s2gos-client execute-process [OPTIONS] [PROCESS_ID]
 ```
 
 **Arguments**:
 
 * `[PROCESS_ID]`: Process identifier
-* `[NAME=VALUE]...`: Parameters
 
 **Options**:
 
+* `-i, --input [NAME=VALUE]...`: Processing request input
 * `-r, --request PATH`: Processing request file
 * `-c, --config PATH`: Client configuration file
 * `-f, --format [simple|json|yaml]`: Output format  [default: yaml]

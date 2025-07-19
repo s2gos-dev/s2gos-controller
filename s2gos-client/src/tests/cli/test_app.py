@@ -46,7 +46,7 @@ class AppTest(TestCase):
 
     def test_validate_request(self):
         result = invoke_app(
-            "validate-request", "sleep_a_while", "duration=120", "fail=true"
+            "validate-request", "sleep_a_while", "-i", "duration=120", "-i", "fail=true"
         )
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertEqual(
@@ -56,7 +56,7 @@ class AppTest(TestCase):
 
     def test_execute_process(self):
         result = invoke_app(
-            "execute-process", "sleep_a_while", "duration=120", "fail=true"
+            "execute-process", "sleep_a_while", "-i", "duration=120", "-i", "fail=true"
         )
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertEqual(

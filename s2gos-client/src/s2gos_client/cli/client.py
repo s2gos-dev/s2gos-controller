@@ -14,11 +14,6 @@ from s2gos_client.api.error import ClientError
 GetClient: TypeAlias = Callable[[str | None], Client]
 
 
-def get_client(ctx: typer.Context, config_file: str | None) -> Client:
-    _get_client: GetClient = ctx.obj["get_client"]
-    return _get_client(config_file)
-
-
 def use_client(ctx: typer.Context, config_file: str | None) -> "UseClient":
     return UseClient(ctx, config_file)
 

@@ -29,12 +29,18 @@ process_id_arg = typer.Argument(
     help="Process identifier",
 )
 
+request_input_option = typer.Option(
+    "--input",
+    "-i",
+    help="Processing request input",
+    metavar="[NAME=VALUE]...",
+)
+
 job_id_arg = typer.Argument(
     help="Job identifier",
 )
 
 config_option = typer.Option(
-    ...,
     "--config",
     "-c",
     help="Client configuration file",
@@ -76,8 +82,10 @@ def main(
         bool, typer.Option("--version", help="Show version and exit")
     ] = False,
     # add global options here...
-    # verbose: bool = typer.Option(False, "--verbose", "-v", help="Verbose output"),
-    # traceback: bool = typer.Option(False, "--traceback", "--tb", help="Output exception traceback"),
+    # verbose: bool = typer.Option(False, "--verbose", "-v",
+    #                              help="Verbose output"),
+    # traceback: bool = typer.Option(False, "--traceback", "--tb",
+    #                                help="Output exception traceback"),
 ):
     if version_:
         from importlib.metadata import version
@@ -107,15 +115,34 @@ def main(
 
 @app.command()
 def configure(
-    user_name: Optional[str] = typer.Option(None, "--user"),
-    access_token: Optional[str] = typer.Option(None, "--token"),
-    server_url: Optional[str] = typer.Option(None, "--url"),
+    user_name: Optional[str] = typer.Option(
+        None,
+        "--user",
+        "-u",
+        help="Your user name.",
+    ),
+    access_token: Optional[str] = typer.Option(
+        None,
+        "--token",
+        "-t",
+        help="Your personal access token.",
+    ),
+    server_url: Optional[str] = typer.Option(
+        None,
+        "--server",
+        "-s",
+        help=f"The {SERVICE_NAME} API URL.",
+    ),
+    config_file: Annotated[Optional[str], config_option] = None,
 ):
     """Configure the client tool."""
     from .config import configure_client
 
     configure_client(
-        user_name=user_name, access_token=access_token, server_url=server_url
+        user_name=user_name,
+        access_token=access_token,
+        server_url=server_url,
+        config_path=config_file,
     )
 
 
@@ -127,11 +154,11 @@ def list_processes(
 ):
     """List available processes."""
     from .client import use_client
-    from .output import get_renderer
+    from .output import get_renderer, output
 
     with use_client(ctx, config_file) as client:
         process_list = client.get_processes()
-    get_renderer(output_format).render_process_list(process_list)
+    output(get_renderer(output_format).render_process_list(process_list))
 
 
 @app.command()
@@ -143,62 +170,66 @@ def get_process(
 ):
     """Get process details."""
     from .client import use_client
-    from .output import get_renderer
+    from .output import get_renderer, output
 
     with use_client(ctx, config_file) as client:
         process_description = client.get_process(process_id)
-    get_renderer(output_format).render_process_description(process_description)
+    output(get_renderer(output_format).render_process_description(process_description))
 
 
 @app.command()
 def validate_request(
-    process_id: Annotated[
-        Optional[str], typer.Argument(help="Process identifier")
-    ] = None,
-    parameters: Annotated[
-        Optional[list[str]],
-        typer.Argument(help="Parameters", metavar="[NAME=VALUE]..."),
-    ] = None,
+    process_id: Annotated[Optional[str], process_id_arg] = None,
+    request_inputs: Annotated[Optional[list[str]], request_input_option] = None,
     request_file: Annotated[Optional[str], request_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """
     Validate a processing request.
 
-    The `--request` option and the `process_id` argument are mutually exclusive.
+    The processing request to be validated may be read from a file given
+    by `--request`, or from `stdin`, or from the `process_id` argument
+    with zero, one, or more `--input` (or `-i`) options.
+
+    The `process_id` argument and any given `--input` options will override
+    settings with same name found in the given request file or `stdin`, if any.
     """
-    from .output import get_renderer
+    from .output import get_renderer, output
     from .request import read_processing_request
 
-    request = read_processing_request(process_id, parameters, request_file)
-    get_renderer(output_format).render_processing_request_valid(request)
+    request = read_processing_request(process_id, request_inputs, request_file)
+    output(get_renderer(output_format).render_processing_request_valid(request))
 
 
 @app.command()
 def execute_process(
     ctx: typer.Context,
-    process_id: Annotated[
-        Optional[str], typer.Argument(help="Process identifier")
-    ] = None,
-    parameters: Annotated[
-        Optional[list[str]],
-        typer.Argument(help="Parameters", metavar="[NAME=VALUE]..."),
-    ] = None,
+    process_id: Annotated[Optional[str], process_id_arg] = None,
+    request_inputs: Annotated[Optional[list[str]], request_input_option] = None,
     request_file: Annotated[Optional[str], request_option] = None,
     config_file: Annotated[Optional[str], config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
-    """Execute a process."""
+    """
+    Execute a process in asynchronous mode.
+
+    The processing request to be submitted may be read from a file given
+    by `--request`, or from `stdin`, or from the `process_id` argument
+    with zero, one, or more `--input` (or `-i`) options.
+
+    The `process_id` argument and any given `--input` options will override
+    settings with same name found in the given request file or `stdin`, if any.
+    """
     from .client import use_client
-    from .output import get_renderer
+    from .output import get_renderer, output
     from .request import read_processing_request
 
-    request = read_processing_request(process_id, parameters, request_file)
+    request = read_processing_request(process_id, request_inputs, request_file)
     with use_client(ctx, config_file) as client:
         job = client.execute_process(
             process_id=request.process_id, request=request.as_process_request()
         )
-    get_renderer(output_format).render_job(job)
+    output(get_renderer(output_format).render_job_info(job))
 
 
 @app.command()
@@ -209,11 +240,11 @@ def list_jobs(
 ):
     """List all jobs."""
     from .client import use_client
-    from .output import get_renderer
+    from .output import get_renderer, output
 
     with use_client(ctx, config_file) as client:
         job_list = client.get_jobs()
-    get_renderer(output_format).render_job_list(job_list)
+    output(get_renderer(output_format).render_job_list(job_list))
 
 
 @app.command()
@@ -225,11 +256,11 @@ def get_job(
 ):
     """Get job details."""
     from .client import use_client
-    from .output import get_renderer
+    from .output import get_renderer, output
 
     with use_client(ctx, config_file) as client:
         job = client.get_job(job_id)
-    get_renderer(output_format).render_job(job)
+    output(get_renderer(output_format).render_job_info(job))
 
 
 @app.command()
@@ -241,11 +272,11 @@ def dismiss_job(
 ):
     """Cancel a running or delete a finished job."""
     from .client import use_client
-    from .output import get_renderer
+    from .output import get_renderer, output
 
     with use_client(ctx, config_file) as client:
         job = client.dismiss_job(job_id)
-    get_renderer(output_format).render_job(job)
+    output(get_renderer(output_format).render_job_info(job))
 
 
 @app.command()
@@ -257,11 +288,11 @@ def get_job_results(
 ):
     """Get job results."""
     from .client import use_client
-    from .output import get_renderer
+    from .output import get_renderer, output
 
     with use_client(ctx, config_file) as client:
         job_results = client.get_job_results(job_id)
-    get_renderer(output_format).render_job_results(job_results)
+    output(get_renderer(output_format).render_job_results(job_results))
 
 
 if __name__ == "__main__":  # pragma: no cover
