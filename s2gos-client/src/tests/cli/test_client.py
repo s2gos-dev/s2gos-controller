@@ -10,8 +10,8 @@ import typer
 
 from s2gos_client import ClientError
 from s2gos_client.api.client import Client
-from s2gos_client.cli.client import use_client
 from s2gos_client.cli.app import app
+from s2gos_client.cli.client import use_client
 
 
 class UseClientTest(TestCase):

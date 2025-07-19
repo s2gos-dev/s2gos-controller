@@ -4,6 +4,7 @@
 import os
 import unittest
 from unittest.mock import patch
+
 from s2gos_client.cli.config import configure_client
 
 CONFIG_PATH = "test.cfg"

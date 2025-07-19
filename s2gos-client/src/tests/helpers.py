@@ -12,7 +12,6 @@ from pydantic import BaseModel
 from pydantic.fields import FieldInfo
 from pydantic_core import PydanticUndefined
 
-from s2gos_client import ClientError
 from s2gos_client.api.transport import AsyncTransport, Transport, TransportArgs
 
 
