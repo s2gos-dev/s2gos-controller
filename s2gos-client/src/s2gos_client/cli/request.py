@@ -77,7 +77,7 @@ def parse_request_inputs(request_inputs: list[str] | None) -> dict[str, Any]:
     import json
 
     inputs_dict: dict[str, Any] = {}
-    for parameter in request_inputs:
+    for parameter in request_inputs or []:
         try:
             name, value = parameter.split("=", maxsplit=1)
             try:

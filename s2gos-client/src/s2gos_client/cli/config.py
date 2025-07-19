@@ -27,7 +27,7 @@ def configure_client(
     access_token: str | None = None,
     server_url: str | None = None,
     config_path: str | None = None,
-):
+) -> Path:
     config = ClientConfig.read(config_path=config_path)
     if not user_name:
         user_name = typer.prompt(
@@ -52,7 +52,6 @@ def configure_client(
             "Server URL",
             default=(config and config.server_url) or DEFAULT_SERVER_URL,
         )
-    config_path = ClientConfig(
+    return ClientConfig(
         user_name=user_name, access_token=access_token, server_url=server_url
     ).write(config_path=config_path)
-    typer.echo(f"Client configuration written to {config_path}")

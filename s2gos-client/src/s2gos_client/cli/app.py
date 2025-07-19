@@ -138,12 +138,13 @@ def configure(
     """Configure the client tool."""
     from .config import configure_client
 
-    configure_client(
+    config_path = configure_client(
         user_name=user_name,
         access_token=access_token,
         server_url=server_url,
         config_path=config_file,
     )
+    typer.echo(f"Client configuration written to {config_path}")
 
 
 @app.command()

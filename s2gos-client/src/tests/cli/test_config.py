@@ -3,6 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 import os
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 
 from s2gos_client.cli.config import configure_client
@@ -18,7 +19,13 @@ class ConfigTest(unittest.TestCase):
     def test_configure_client(self, mock_prompt):
         # Simulate sequential responses to typer.prompt
         mock_prompt.side_effect = ["test-user", "s3cr3t", "http://localhorst:9090"]
-        configure_client(
-            user_name=None, access_token=None, server_url=None, config_path="test.cfg"
+        self.assertEqual(
+            Path(CONFIG_PATH),
+            configure_client(
+                user_name=None,
+                access_token=None,
+                server_url=None,
+                config_path=CONFIG_PATH,
+            ),
         )
         self.assertTrue(os.path.exists(CONFIG_PATH))

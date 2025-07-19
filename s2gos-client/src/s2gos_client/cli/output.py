@@ -52,6 +52,7 @@ class OutputRenderer(ABC):
     ) -> str:
         """Render a process description."""
 
+    @abstractmethod
     def render_processing_request_valid(
         self, process_request: ProcessingRequest
     ) -> str:
