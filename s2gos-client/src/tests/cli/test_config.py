@@ -11,9 +11,8 @@ import pytest
 
 from s2gos_client import ClientConfig
 from s2gos_client.api.defaults import DEFAULT_CONFIG_PATH
-from s2gos_client.cli.config import configure_client, read_config
+from s2gos_client.cli.config import configure_client, get_config
 from s2gos_common.testing import set_env
-
 
 DEFAULT_CONFIG_BACKUP_PATH = DEFAULT_CONFIG_PATH.parent / (
     str(DEFAULT_CONFIG_PATH.name) + ".backup"
@@ -44,20 +43,23 @@ class ReadConfigTest(unittest.TestCase):
             DEFAULT_CONFIG_BACKUP_PATH.rename(DEFAULT_CONFIG_PATH)
 
     # noinspection PyMethodMayBeStatic
-    def test_read_config_custom(self):
+    def test_get_config_custom(self):
         with pytest.raises(
             click.ClickException,
             match="Configuration file fantasia.cfg not found or empty.",
         ):
-            read_config("fantasia.cfg")
+            get_config("fantasia.cfg")
 
     # noinspection PyMethodMayBeStatic
-    def test_read_config_no_default(self):
+    def test_get_config_no_default(self):
         with pytest.raises(
             click.ClickException,
-            match="The client tool is not yet configured, please use the",
+            match=(
+                r"The client tool has not yet been configured; "
+                r"please use the 'configure' command to set it up\."
+            ),
         ):
-            read_config(None)
+            get_config(None)
 
     @patch("typer.prompt")
     def test_configure_client_default(self, mock_prompt):
@@ -65,7 +67,7 @@ class ReadConfigTest(unittest.TestCase):
         actual_config_path = configure_client()
         self.assertEqual(DEFAULT_CONFIG_PATH, actual_config_path)
         self.assertTrue(DEFAULT_CONFIG_PATH.exists())
-        config = read_config(None)
+        config = get_config(None)
         self.assertEqual(
             ClientConfig(
                 user_name="bibo",
@@ -84,7 +86,7 @@ class ReadConfigTest(unittest.TestCase):
             actual_config_path = configure_client(config_path=custom_config_path)
             self.assertEqual(custom_config_path, actual_config_path)
             self.assertTrue(custom_config_path.exists())
-            config = read_config(custom_config_path)
+            config = get_config(custom_config_path)
             self.assertEqual(
                 ClientConfig(
                     user_name="bert",

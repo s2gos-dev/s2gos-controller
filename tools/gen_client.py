@@ -47,8 +47,6 @@ class {{ uc_async }}Client:
       server_url: Optional server URL
       user_name: Optional username
       access_token: Optional private access token
-      debug: Whether to output debug logs
-      _transport: Optional web API transport (for testing only).
     \"\"\"
 
     def __init__(
@@ -59,26 +57,22 @@ class {{ uc_async }}Client:
         server_url: Optional[str] = None,
         user_name: Optional[str] = None,
         access_token: Optional[str] = None,
-        debug: bool = False,
+        _debug: bool = False,
         _transport: Optional[{{ uc_async }}Transport] = None,
     ):
-        default_config = ClientConfig.read(config_path=config_path)
-        if config is not None:
-            user_name = user_name or config.user_name
-            access_token = access_token or config.access_token
-            server_url = server_url or config.server_url
-        if default_config:
-            user_name = user_name or default_config.user_name
-            access_token = access_token or default_config.access_token
-            server_url = server_url or default_config.server_url
-        server_url_: str = server_url or DEFAULT_SERVER_URL
-        self._config = ClientConfig(
+        self._config = ClientConfig.get(
+            config=config,
+            config_path=config_path,
+            server_url=server_url,
             user_name=user_name,
             access_token=access_token,
-            server_url=server_url_,
         )
+        assert self._config.server_url is not None
         self._transport = (
-            HttpxTransport(server_url=server_url_, debug=debug)
+            HttpxTransport(
+                server_url=self._config.server_url, 
+                debug=_debug,
+            )
             if _transport is None
             else _transport
         )

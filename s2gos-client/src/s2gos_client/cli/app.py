@@ -96,9 +96,9 @@ def main(
     def get_client(config_path: str | None):
         # defer importing
         from s2gos_client import Client
-        from s2gos_client.cli.config import read_config
+        from s2gos_client.cli.config import get_config
 
-        config = read_config(config_path)
+        config = get_config(config_path)
         return Client(config=config)
 
     ctx.ensure_object(dict)
