@@ -6,7 +6,6 @@ from unittest import TestCase
 
 import pytest
 from pydantic import BaseModel, Field
-from tests.helpers import BaseModelMixin
 
 from s2gos_common.models import (
     DataType,
@@ -15,6 +14,7 @@ from s2gos_common.models import (
     ProcessDescription,
     Schema,
 )
+from s2gos_common.testing import BaseModelMixin
 from s2gos_server.services.local import ProcessRegistry, RegisteredProcess
 
 

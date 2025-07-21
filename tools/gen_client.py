@@ -41,10 +41,12 @@ class {{ uc_async }}Client:
     The client API for the web service ({{ hr_async }} mode).
 
     Args:
+      config: Optional client configuration object. If given,
+        other configuration arguments are ignored.
       config_path: Optional path of the configuration file to be loaded
       server_url: Optional server URL
       user_name: Optional username
-      user_name: Optional user access token
+      access_token: Optional private access token
       debug: Whether to output debug logs
       _transport: Optional web API transport (for testing only).
     \"\"\"
@@ -52,6 +54,7 @@ class {{ uc_async }}Client:
     def __init__(
         self,
         *,
+        config: Optional[ClientConfig] = None,
         config_path: Optional[str] = None,
         server_url: Optional[str] = None,
         user_name: Optional[str] = None,
@@ -60,15 +63,22 @@ class {{ uc_async }}Client:
         _transport: Optional[{{ uc_async }}Transport] = None,
     ):
         default_config = ClientConfig.read(config_path=config_path)
-        server_url = server_url or default_config.server_url or DEFAULT_SERVER_URL
-        config = ClientConfig(
-            user_name=user_name or default_config.user_name,
-            access_token=access_token or default_config.access_token,
-            server_url=server_url,
+        if config is not None:
+            user_name = user_name or config.user_name
+            access_token = access_token or config.access_token
+            server_url = server_url or config.server_url
+        if default_config:
+            user_name = user_name or default_config.user_name
+            access_token = access_token or default_config.access_token
+            server_url = server_url or default_config.server_url
+        server_url_: str = server_url or DEFAULT_SERVER_URL
+        self._config = ClientConfig(
+            user_name=user_name,
+            access_token=access_token,
+            server_url=server_url_,
         )
-        self._config = config
         self._transport = (
-            HttpxTransport(server_url=server_url, debug=debug)
+            HttpxTransport(server_url=server_url_, debug=debug)
             if _transport is None
             else _transport
         )

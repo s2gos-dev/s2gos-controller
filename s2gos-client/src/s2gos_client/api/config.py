@@ -26,28 +26,28 @@ class ClientConfig(BaseModel):
     server_url: Optional[str] = None
 
     def _repr_json_(self):
-        return self.model_dump(mode="json", by_alias=True), dict(root="Configuration:")
+        return self.model_dump(mode="json", by_alias=True), dict(
+            root="Client configuration:"
+        )
 
     @classmethod
-    def read(cls, config_path: Optional[str | Path] = None) -> "ClientConfig":
+    def read(cls, config_path: Optional[str | Path] = None) -> Optional["ClientConfig"]:
         config_path = cls.normalize_config_path(config_path)
 
-        default_config_dict = {}
+        env_config_dict = {}
         for field_name, _field_info in ClientConfig.model_fields.items():
             env_var_name = "S2GOS_" + field_name.upper()
             if env_var_name in os.environ:
-                default_config_dict[field_name] = os.environ[env_var_name]
+                env_config_dict[field_name] = os.environ[env_var_name]
 
         config_dict = {}
-        if not config_path.exists():
-            config_dict = default_config_dict
-        else:
+        if config_path and config_path.exists():
             with config_path.open("rt") as stream:
-                config_dict = yaml.load(stream, Loader=yaml.SafeLoader)
-                for k, v in default_config_dict.items():
-                    if k not in config_dict:
-                        config_dict[k] = v
-        return ClientConfig.model_validate(config_dict)
+                config_dict = yaml.safe_load(stream)
+        config_dict.update(env_config_dict)
+        if not config_dict:
+            return None
+        return ClientConfig(**config_dict)
 
     def write(self, config_path: Optional[str | Path] = None) -> Path:
         config_path = self.normalize_config_path(config_path)

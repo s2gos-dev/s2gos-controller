@@ -36,7 +36,7 @@ class AsyncClientTest(IsolatedAsyncioTestCase):
         data, metadata = result
         self.assertIsInstance(data, dict)
         self.assertIsInstance(metadata, dict)
-        self.assertEqual({"root": "Configuration:"}, metadata)
+        self.assertEqual({"root": "Client configuration:"}, metadata)
 
     async def test_get_capabilities(self):
         result = await self.client.get_capabilities()

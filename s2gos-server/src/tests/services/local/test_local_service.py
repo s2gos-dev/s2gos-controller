@@ -6,7 +6,6 @@ from unittest import IsolatedAsyncioTestCase, TestCase
 
 import fastapi
 import pytest
-from tests.helpers import set_env
 
 from s2gos_common.models import (
     Capabilities,
@@ -19,6 +18,7 @@ from s2gos_common.models import (
     ProcessList,
     ProcessRequest,
 )
+from s2gos_common.testing import set_env
 from s2gos_server.exceptions import JSONContentException
 from s2gos_server.main import app
 from s2gos_server.provider import ServiceProvider, get_service

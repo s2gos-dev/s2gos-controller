@@ -6,9 +6,59 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from s2gos_client.cli.config import configure_client
+import click
+import pytest
+
+from s2gos_client import ClientConfig
+from s2gos_client.api.defaults import DEFAULT_CONFIG_PATH
+from s2gos_client.cli.config import configure_client, read_config
+from s2gos_common.testing import set_env
 
 CONFIG_PATH = "test.cfg"
+
+DEFAULT_CONFIG_BACKUP_PATH = DEFAULT_CONFIG_PATH.parent / (
+    str(DEFAULT_CONFIG_PATH.name) + ".backup"
+)
+
+
+class ReadConfigTest(unittest.TestCase):
+    def setUp(self):
+        self.restore_env = set_env(
+            **{k: None for k, v in os.environ.items() if k.startswith("S2GOS_")}
+        )
+        if DEFAULT_CONFIG_BACKUP_PATH.exists():
+            os.remove(DEFAULT_CONFIG_BACKUP_PATH)
+        if DEFAULT_CONFIG_PATH.exists():
+            DEFAULT_CONFIG_PATH.rename(DEFAULT_CONFIG_BACKUP_PATH)
+
+    def tearDown(self):
+        self.restore_env()
+        if DEFAULT_CONFIG_BACKUP_PATH.exists():
+            if DEFAULT_CONFIG_PATH.exists():
+                os.remove(DEFAULT_CONFIG_BACKUP_PATH)
+            else:
+                DEFAULT_CONFIG_BACKUP_PATH.rename(DEFAULT_CONFIG_PATH)
+
+    def test_read_config_custom(self):
+        with pytest.raises(
+            click.ClickException,
+            match="Configuration file fantasia.cfg not found or empty.",
+        ):
+            read_config("fantasia.cfg")
+
+    def test_read_config_no_default(self):
+        with pytest.raises(
+            click.ClickException,
+            match="The client tool is not yet configured, please use the",
+        ):
+            read_config(None)
+
+    def test_read_config_default(self):
+        with DEFAULT_CONFIG_PATH.open("wt") as stream:
+            stream.write("server_url: https://test.api.com")
+
+        config = read_config(None)
+        self.assertEqual(ClientConfig(server_url="https://test.api.com"), config)
 
 
 class ConfigTest(unittest.TestCase):

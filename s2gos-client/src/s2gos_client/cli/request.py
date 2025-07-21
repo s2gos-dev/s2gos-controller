@@ -27,9 +27,9 @@ class ProcessingRequest(ProcessRequest):
 
 
 def read_processing_request(
-    process_id: str | None,
-    request_inputs: list[str] | None,
-    request_file: str | None,
+    request_file: str | None = None,
+    process_id: str | None = None,
+    request_inputs: list[str] | None = None,
 ) -> ProcessingRequest:
     request_dict, request_file = read_processing_request_from_file(request_file)
     if process_id:
@@ -38,7 +38,10 @@ def read_processing_request(
     if input_dict:
         request_dict["inputs"] = dict(request_dict.get("inputs") or {})
         request_dict["inputs"].update(input_dict)
-    return new_processing_request(request_dict, source=request_file)
+    try:
+        return ProcessingRequest(**request_dict)
+    except pydantic.ValidationError as e:
+        raise click.ClickException(f"Processing request is invalid: {e}")
 
 
 def read_processing_request_from_file(
@@ -49,7 +52,8 @@ def read_processing_request_from_file(
 
     if request_path == "-":
         request_path = "<stdin>"
-        content = "\n".join(line for line in sys.stdin).strip()
+        # content = "\n".join(line for line in sys.stdin).strip()
+        content = sys.stdin.read().strip()
         file_format = "json" if content.startswith("{") else "yaml"
     else:
         path = Path(request_path)
@@ -67,7 +71,7 @@ def read_processing_request_from_file(
 
     if not isinstance(request_dict, dict):
         raise click.ClickException(
-            f"Request must be an object, but was {type(request_dict).__name__}"
+            f"Request must be an object, but was type {type(request_dict).__name__}"
         )
 
     return request_dict, request_path
@@ -88,12 +92,3 @@ def parse_request_inputs(request_inputs: list[str] | None) -> dict[str, Any]:
             raise click.ClickException(f"Invalid request input argument: {parameter}")
         inputs_dict[name] = data
     return inputs_dict
-
-
-def new_processing_request(
-    request_dict: dict[str, Any], source: str
-) -> ProcessingRequest:
-    try:
-        return ProcessingRequest(**request_dict)
-    except pydantic.ValidationError as e:
-        raise click.ClickException(f"Processing request from {source} is invalid: {e}")

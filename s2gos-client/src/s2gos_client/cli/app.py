@@ -26,24 +26,24 @@ for `validate-request`, or `lp` for `list-processes`.
 DEFAULT_OUTPUT_FORMAT: Final = OutputFormat.yaml
 
 process_id_arg = typer.Argument(
-    help="Process identifier",
+    help="Process identifier.",
 )
 
 request_input_option = typer.Option(
     "--input",
     "-i",
-    help="Processing request input",
+    help="Processing request input.",
     metavar="[NAME=VALUE]...",
 )
 
 job_id_arg = typer.Argument(
-    help="Job identifier",
+    help="Job identifier.",
 )
 
 config_option = typer.Option(
     "--config",
     "-c",
-    help="Client configuration file",
+    help="Client configuration file.",
     metavar="PATH",
 )
 
@@ -51,7 +51,7 @@ request_option = typer.Option(
     ...,
     "--request",
     "-r",
-    help="Processing request file",
+    help="Processing request file. Use `-` to read from <stdin>.",
     metavar="PATH",
 )
 
@@ -60,7 +60,7 @@ format_option = typer.Option(
     "--format",
     "-f",
     show_choices=True,
-    help="Output format",
+    help="Output format.",
     # metavar="FORMAT",
 )
 
@@ -198,7 +198,7 @@ def validate_request(
     from .output import get_renderer, output
     from .request import read_processing_request
 
-    request = read_processing_request(process_id, request_inputs, request_file)
+    request = read_processing_request(request_file, process_id, request_inputs)
     output(get_renderer(output_format).render_processing_request_valid(request))
 
 
@@ -225,7 +225,7 @@ def execute_process(
     from .output import get_renderer, output
     from .request import read_processing_request
 
-    request = read_processing_request(process_id, request_inputs, request_file)
+    request = read_processing_request(request_file, process_id, request_inputs)
     with use_client(ctx, config_file) as client:
         job = client.execute_process(
             process_id=request.process_id, request=request.as_process_request()

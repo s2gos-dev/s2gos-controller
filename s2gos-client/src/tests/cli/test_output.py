@@ -35,6 +35,7 @@ class OutputTest(TestCase):
                     "Ended at:    None"
                 ),
                 "render_job_list": "1: job_8 - JobStatus.running - None - None",
+                "render_job_list_empty": "No jobs available.",
                 "render_job_results": (
                     "return_value:\n- 2\n- 3\n- 5\n- 7\n- 11\n- 13\n"
                 ),
@@ -52,6 +53,7 @@ class OutputTest(TestCase):
                     "version: 1.4.0\n"
                 ),
                 "render_process_list": "1: primes_between - None",
+                "render_process_list_empty": "No processes available.",
                 "render_processing_request_valid": (
                     "Processing request is valid:\n"
                     "inputs:\n"
@@ -81,6 +83,7 @@ class OutputTest(TestCase):
                     "  type: process\n"
                     "links: []\n"
                 ),
+                "render_job_list_empty": "jobs: []\nlinks: []\n",
                 "render_job_results": (
                     "return_value:\n- 2\n- 3\n- 5\n- 7\n- 11\n- 13\n"
                 ),
@@ -100,6 +103,7 @@ class OutputTest(TestCase):
                 "render_process_list": (
                     "links: []\nprocesses:\n- id: primes_between\n  version: 1.4.0\n"
                 ),
+                "render_process_list_empty": "links: []\nprocesses: []\n",
                 "render_processing_request_valid": (
                     "inputs:\n  max_val: 20\n  min_val: 0\nprocess_id: primes_between\n"
                 ),
@@ -132,6 +136,7 @@ class OutputTest(TestCase):
                     '  "links": []\n'
                     "}"
                 ),
+                "render_job_list_empty": '{\n  "jobs": [],\n  "links": []\n}',
                 "render_job_results": (
                     "{\n"
                     '  "return_value": [\n'
@@ -175,6 +180,7 @@ class OutputTest(TestCase):
                     '  "links": []\n'
                     "}"
                 ),
+                "render_process_list_empty": '{\n  "processes": [],\n  "links": []\n}',
                 "render_processing_request_valid": (
                     "{\n"
                     '  "inputs": {\n'
@@ -194,6 +200,12 @@ def get_outputs(renderer: OutputRenderer) -> dict[str, str]:
         "render_process_list": renderer.render_process_list(
             ProcessList(
                 processes=[ProcessSummary(id="primes_between", version="1.4.0")],
+                links=[],
+            )
+        ),
+        "render_process_list_empty": renderer.render_process_list(
+            ProcessList(
+                processes=[],
                 links=[],
             )
         ),
@@ -228,6 +240,12 @@ def get_outputs(renderer: OutputRenderer) -> dict[str, str]:
                         status=JobStatus.running,
                     )
                 ],
+                links=[],
+            )
+        ),
+        "render_job_list_empty": renderer.render_job_list(
+            JobList(
+                jobs=[],
                 links=[],
             )
         ),

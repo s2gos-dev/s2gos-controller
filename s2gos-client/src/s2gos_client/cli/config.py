@@ -9,12 +9,16 @@ import click
 import typer
 
 from s2gos_client.api.config import ClientConfig
-from s2gos_client.api.defaults import DEFAULT_SERVER_URL
+from s2gos_client.api.defaults import DEFAULT_CONFIG_PATH, DEFAULT_SERVER_URL
 
 
 def read_config(config_path: Path | str | None) -> ClientConfig:
-    config = ClientConfig.read(config_path)
+    config = ClientConfig.read(config_path=config_path)
     if config is None:
+        if config_path and config_path != DEFAULT_CONFIG_PATH:
+            raise click.ClickException(
+                f"Configuration file {config_path} not found or empty."
+            )
         raise click.ClickException(
             "The client tool is not yet configured,"
             " please use the 'configure' command to set it up."
