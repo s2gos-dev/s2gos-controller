@@ -9,7 +9,7 @@ import click
 import typer
 
 from s2gos_client.api.config import ClientConfig
-from s2gos_client.api.defaults import DEFAULT_CONFIG_PATH, DEFAULT_SERVER_URL
+from s2gos_client.api.defaults import DEFAULT_SERVER_URL
 
 
 def get_config(config_path: Path | str | None) -> ClientConfig:
