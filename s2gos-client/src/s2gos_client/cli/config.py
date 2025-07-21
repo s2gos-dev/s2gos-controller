@@ -30,7 +30,7 @@ def configure_client(
     user_name: str | None = None,
     access_token: str | None = None,
     server_url: str | None = None,
-    config_path: str | None = None,
+    config_path: Path | str | None = None,
 ) -> Path:
     config = ClientConfig.read(config_path=config_path)
     if not user_name:
