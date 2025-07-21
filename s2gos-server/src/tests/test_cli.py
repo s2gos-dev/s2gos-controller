@@ -3,6 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 from unittest import TestCase
+from unittest.mock import MagicMock, patch
 
 from typer.testing import CliRunner
 
@@ -16,3 +17,33 @@ class CliTest(TestCase):
         result = runner.invoke(cli, ["--help"])
         self.assertEqual(0, result.exit_code)
         self.assertIn("Server for the ESA synthetic", result.output)
+
+    @patch("uvicorn.run")
+    def test_run(self, mock: MagicMock):
+        result = runner.invoke(
+            cli,
+            [
+                "run",
+                "--service",
+                "s2gos_server.services.local.testing:service",
+            ],
+        )
+        self.assertEqual(0, result.exit_code)
+        mock.assert_called_with(
+            "s2gos_server.main:app", host="127.0.0.1", port=8008, reload=False
+        )
+
+    @patch("uvicorn.run")
+    def test_dev(self, mock: MagicMock):
+        result = runner.invoke(
+            cli,
+            [
+                "dev",
+                "--service",
+                "s2gos_server.services.local.testing:service",
+            ],
+        )
+        self.assertEqual(0, result.exit_code)
+        mock.assert_called_with(
+            "s2gos_server.main:app", host="127.0.0.1", port=8008, reload=True
+        )

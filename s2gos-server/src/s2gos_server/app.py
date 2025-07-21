@@ -20,7 +20,9 @@ async def json_http_exception_handler(
 ) -> JSONResponse:
     return JSONResponse(
         status_code=exc.status_code,
-        content=exc.content.model_dump(mode="json"),
+        content=exc.content.model_dump(
+            mode="json", exclude_defaults=False, exclude_none=True, exclude_unset=True
+        ),
     )
 
 
@@ -45,13 +47,18 @@ async def log_request_duration(
     return response
 
 
-class EndpointFilter(logging.Filter):
+class LogMessageFilter(logging.Filter):
+    def __init__(self, *excludes: str):
+        super().__init__(f"Log message filter: {excludes}")
+        self.excludes = excludes
+
     def filter(self, record: logging.LogRecord) -> bool:
-        # Suppress log if it's an access log for /jobs
-        return not (
-            record.name == "uvicorn.access" and "GET /jobs" in record.getMessage()
-        )
+        if record.name == "uvicorn.access":
+            for exclude in self.excludes:
+                if exclude in record.getMessage():
+                    return False
+        return True
 
 
 # Apply the filter to the uvicorn.access logger
-logging.getLogger("uvicorn.access").addFilter(EndpointFilter())
+logging.getLogger("uvicorn.access").addFilter(LogMessageFilter())

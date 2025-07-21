@@ -41,34 +41,38 @@ class {{ uc_async }}Client:
     The client API for the web service ({{ hr_async }} mode).
 
     Args:
+      config: Optional client configuration object. If given,
+        other configuration arguments are ignored.
       config_path: Optional path of the configuration file to be loaded
       server_url: Optional server URL
       user_name: Optional username
-      user_name: Optional user access token
-      debug: Whether to output debug logs
-      _transport: Optional web API transport (for testing only).
+      access_token: Optional private access token
     \"\"\"
 
     def __init__(
         self,
         *,
+        config: Optional[ClientConfig] = None,
         config_path: Optional[str] = None,
         server_url: Optional[str] = None,
         user_name: Optional[str] = None,
         access_token: Optional[str] = None,
-        debug: bool = False,
+        _debug: bool = False,
         _transport: Optional[{{ uc_async }}Transport] = None,
     ):
-        default_config = ClientConfig.read(config_path=config_path)
-        server_url = server_url or default_config.server_url or DEFAULT_SERVER_URL
-        config = ClientConfig(
-            user_name=user_name or default_config.user_name,
-            access_token=access_token or default_config.access_token,
+        self._config = ClientConfig.get(
+            config=config,
+            config_path=config_path,
             server_url=server_url,
+            user_name=user_name,
+            access_token=access_token,
         )
-        self._config = config
+        assert self._config.server_url is not None
         self._transport = (
-            HttpxTransport(server_url=server_url, debug=debug)
+            HttpxTransport(
+                server_url=self._config.server_url, 
+                debug=_debug,
+            )
             if _transport is None
             else _transport
         )

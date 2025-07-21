@@ -2,6 +2,7 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 import traceback
+from http import HTTPStatus
 from typing import Optional
 
 from fastapi import HTTPException
@@ -20,6 +21,7 @@ class JSONContentException(HTTPException):
         self.content = ApiError(
             type="error",
             status=status_code,
+            title=HTTPStatus(status_code).phrase,
             detail=detail,
             traceback=(
                 traceback.format_exception(

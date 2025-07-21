@@ -12,7 +12,12 @@ class JSONContentExceptionTest(TestCase):
     def test_content_is_api_error_model(self):
         exc = JSONContentException(401, "Bibo not authorized")
         self.assertEqual(
-            ApiError(type="error", status=401, detail="Bibo not authorized"),
+            ApiError(
+                type="error",
+                status=401,
+                title="Unauthorized",
+                detail="Bibo not authorized",
+            ),
             exc.content,
         )
 

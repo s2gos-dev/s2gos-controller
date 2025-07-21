@@ -12,23 +12,28 @@ from s2gos_client.api.config import ClientConfig
 from s2gos_client.api.defaults import DEFAULT_SERVER_URL
 
 
-def read_config(config_path: Path | str | None) -> ClientConfig:
-    config = ClientConfig.read(config_path)
-    if config is None:
-        raise click.ClickException(
-            "The client tool is not yet configured,"
-            " please use the 'configure' command to set it up."
-        )
-    return config
+def get_config(config_path: Path | str | None) -> ClientConfig:
+    file_config = ClientConfig.from_file(config_path=config_path)
+    if file_config is None:
+        if config_path is None:
+            raise click.ClickException(
+                "The client tool has not yet been configured;"
+                " please use the 'configure' command to set it up."
+            )
+        else:
+            raise click.ClickException(
+                f"Configuration file {config_path} not found or empty."
+            )
+    return ClientConfig.get(config=file_config)
 
 
 def configure_client(
     user_name: str | None = None,
     access_token: str | None = None,
     server_url: str | None = None,
-    config_path: str | None = None,
+    config_path: Path | str | None = None,
 ) -> Path:
-    config = ClientConfig.read(config_path=config_path)
+    config = ClientConfig.get(config_path=config_path)
     if not user_name:
         user_name = typer.prompt(
             "User name",

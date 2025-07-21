@@ -7,8 +7,8 @@ from unittest import TestCase
 
 import pytest
 from fastapi import FastAPI
-from tests.helpers import set_env_cm
 
+from s2gos_common.testing import set_env_cm
 from s2gos_server.provider import ServiceProvider
 from s2gos_server.services.local.testing import service as test_service
 

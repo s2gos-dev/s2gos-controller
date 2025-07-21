@@ -35,7 +35,7 @@ class ClientTest(TestCase):
         data, metadata = result
         self.assertIsInstance(data, dict)
         self.assertIsInstance(metadata, dict)
-        self.assertEqual({"root": "Configuration:"}, metadata)
+        self.assertEqual({"root": "Client configuration:"}, metadata)
 
     def test_get_capabilities(self):
         result = self.client.get_capabilities()

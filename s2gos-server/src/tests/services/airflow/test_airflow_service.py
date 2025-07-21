@@ -10,7 +10,6 @@ from unittest import IsolatedAsyncioTestCase
 
 import fastapi
 import requests
-from tests.helpers import set_env
 
 from s2gos_common.models import (
     Capabilities,
@@ -18,6 +17,7 @@ from s2gos_common.models import (
     ProcessDescription,
     ProcessList,
 )
+from s2gos_common.testing import set_env
 from s2gos_server.main import app
 from s2gos_server.provider import ServiceProvider, get_service
 from s2gos_server.services.airflow import DEFAULT_AIRFLOW_BASE_URL, AirflowService
