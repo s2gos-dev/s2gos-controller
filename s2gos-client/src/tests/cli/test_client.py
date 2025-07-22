@@ -12,6 +12,7 @@ from s2gos_client import ClientError
 from s2gos_client.api.client import Client
 from s2gos_client.cli.app import app
 from s2gos_client.cli.client import use_client
+from s2gos_common.models import ApiError
 
 
 class UseClientTest(TestCase):
@@ -25,7 +26,16 @@ class UseClientTest(TestCase):
             click.ClickException, match=r"Something was not found \(not found\)"
         ):
             with use_client(new_cli_context(), None):
-                raise ClientError("not found", 404, detail="Something was not found")
+                raise ClientError(
+                    "Not found",
+                    404,
+                    api_error=ApiError(
+                        type="error",
+                        title="Not found",
+                        status=404,
+                        detail="Something was not found",
+                    ),
+                )
 
     # noinspection PyMethodMayBeStatic
     def test_fail_with_non_client_error(self):

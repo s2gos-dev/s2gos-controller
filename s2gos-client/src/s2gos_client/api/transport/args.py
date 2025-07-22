@@ -7,10 +7,12 @@ from dataclasses import dataclass, field
 from typing import Any, Literal, Optional
 from urllib.parse import urljoin
 
+import pydantic
 import uri_template
 from pydantic import BaseModel
 
 from s2gos_client.api.error import ClientError
+from s2gos_common.models import ApiError
 
 
 @dataclass
@@ -57,10 +59,20 @@ class TransportArgs:
         message: str,
         json_data: Optional[Any] = None,
     ) -> ClientError:
-        kwargs = {}
         if isinstance(json_data, dict):
-            kwargs = dict(
-                title=json_data.get("title"),
-                detail=json_data.get("detail"),
+            try:
+                api_error = ApiError(**json_data)
+            except pydantic.ValidationError as e:
+                api_error = ApiError(
+                    type="unexpected",
+                    status=0,
+                    title="Invalid error body",
+                    detail=f"{e}",
+                )
+        else:
+            api_error = ApiError(
+                type="unexpected",
+                status=0,
+                title="Missing error body",
             )
-        return ClientError(message, status_code=status_code, **kwargs)
+        return ClientError(message, status_code=status_code, api_error=api_error)
