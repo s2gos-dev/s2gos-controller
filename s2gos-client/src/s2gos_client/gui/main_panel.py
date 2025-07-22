@@ -153,10 +153,9 @@ class MainPanel(pn.viewable.Viewer):
                     process_description = self._on_get_process(process_id)
                     self._processes_dict[process_id] = process_description
                 except ClientError as e:
+                    # TODO: also show e.api_error.traceback, when user expands the message
                     process_description = None
-                    process_markdown = (
-                        f"**Error**: {e.title} (status `{e.status_code}`): {e.detail}"
-                    )
+                    process_markdown = f"**Error**: {e} (status `{e.status_code}`): {e.api_error.detail}"
             if process_description:
                 process_markdown = (
                     f"**{process_description.title}**\n\n"

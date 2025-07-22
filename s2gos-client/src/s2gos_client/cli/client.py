@@ -51,7 +51,7 @@ class UseClient:
                 f"  detail: {api_error.detail}",
             ]
             if api_error.traceback and show_traceback:
-                (message_lines.append("  traceback:"),)
+                message_lines.append("  traceback:")
                 message_lines.extend(api_error.traceback)
             raise click.ClickException("\n".join(message_lines))
         return False
