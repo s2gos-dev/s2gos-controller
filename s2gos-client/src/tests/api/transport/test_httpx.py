@@ -110,7 +110,7 @@ class HttpxSyncTransportTest(TestCase):
 
         transport = make_mocked_transport(
             401,
-            {"detail": "So sorry"},
+            {"type": "error", "detail": "So sorry"},
             side_effect=panic,
             reason="Conformance not found",
         )
@@ -124,8 +124,7 @@ class HttpxSyncTransportTest(TestCase):
             transport.call(args)
         ce: ClientError = e.value
         self.assertEqual(401, ce.status_code)
-        self.assertEqual(None, ce.title)
-        self.assertEqual("So sorry", ce.detail)
+        self.assertEqual(ApiError(type="error", detail="So sorry"), ce.api_error)
 
     def test_close(self):
         sync_httpx = MagicMock()

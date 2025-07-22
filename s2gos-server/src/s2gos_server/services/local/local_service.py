@@ -89,7 +89,7 @@ class LocalService(ServiceBase):
 
         function_kwargs = {
             k: getattr(model_instance, k)
-            for k in model_instance.model_fields.keys()
+            for k in process.model_class.model_fields.keys()
             if k in input_values
         }
 
