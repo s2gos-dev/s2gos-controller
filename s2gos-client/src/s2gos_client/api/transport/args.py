@@ -64,15 +64,16 @@ class TransportArgs:
                 api_error = ApiError(**json_data)
             except pydantic.ValidationError as e:
                 api_error = ApiError(
-                    type="unexpected",
+                    type="ValidationError",
                     status=0,
                     title="Invalid error body",
                     detail=f"{e}",
                 )
         else:
             api_error = ApiError(
-                type="unexpected",
+                type="ValidationError",
                 status=0,
                 title="Missing error body",
+                detail=f"JSON object expected, but got {type(json_data).__name__}",
             )
         return ClientError(message, status_code=status_code, api_error=api_error)
