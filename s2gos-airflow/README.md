@@ -49,15 +49,19 @@ pixi run check
 pixi run typecheck
 ```
 
+## Generate DAGs
+
+
+
 ## Run Airflow
 
-Either run all services at once
+Run all Airflow services at once:
 
 ```bash
 pixi run airflow standalone
 ```
 
-or individually
+Or run each Airflow service individually:
 
 ```bash
 pixi run airflow db migrate
