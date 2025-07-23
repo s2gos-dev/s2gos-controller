@@ -19,7 +19,7 @@ class JSONContentException(HTTPException):
     ):
         super().__init__(status_code=status_code, detail=detail)
         self.content = ApiError(
-            type="error",
+            type=type(exception).__name__ if exception is not None else "ApiError",
             status=status_code,
             title=HTTPStatus(status_code).phrase,
             detail=detail,

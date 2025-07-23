@@ -40,7 +40,7 @@ class AppTest(TestCase):
         self.assertEqual(404, response.status_code)
         self.assertEqual(
             {
-                "type": "error",
+                "type": "ApiError",
                 "status": 404,
                 "title": "Not Found",
                 "detail": "Process 'primos_batman' does not exist",

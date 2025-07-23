@@ -79,13 +79,17 @@ app = typer.Typer(
 def main(
     ctx: typer.Context,
     version_: Annotated[
-        bool, typer.Option("--version", help="Show version and exit")
+        bool, typer.Option("--version", help="Show version and exit.")
+    ] = False,
+    traceback: Annotated[
+        bool,
+        typer.Option(
+            "--traceback", "--tb", help="Show server exception traceback, if any."
+        ),
     ] = False,
     # add global options here...
     # verbose: bool = typer.Option(False, "--verbose", "-v",
     #                              help="Verbose output"),
-    # traceback: bool = typer.Option(False, "--traceback", "--tb",
-    #                                help="Output exception traceback"),
 ):
     if version_:
         from importlib.metadata import version
@@ -103,9 +107,10 @@ def main(
 
     ctx.ensure_object(dict)
     # ONLY set context values if they haven't already been set,
-    # e.g., by a test
+    # for example, by a test
     for k, v in dict(
         get_client=get_client,
+        traceback=traceback,
         # add global options here...
         # verbose=verbose,
     ).items():

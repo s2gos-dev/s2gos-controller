@@ -13,7 +13,7 @@ class JSONContentExceptionTest(TestCase):
         exc = JSONContentException(401, "Bibo not authorized")
         self.assertEqual(
             ApiError(
-                type="error",
+                type="ApiError",
                 status=401,
                 title="Unauthorized",
                 detail="Bibo not authorized",

@@ -205,10 +205,13 @@ class JobsPanel(pn.viewable.Viewer):
                 elif callable(success_format):
                     messages.append(success_format(job_id, result).format(job=job_text))
             except ClientError as e:
+                # TODO: also show e.api_error.traceback, when user expands the message
                 messages.append(
                     error_format.format(
                         job=job_text,
-                        message=f"{e.title} (status `{e.status_code}`): {e.detail}",
+                        message=(
+                            f"{e} (status `{e.status_code}`): {e.api_error.detail}"
+                        ),
                     )
                 )
         self._message_md.object = " \n".join(messages)

@@ -12,6 +12,7 @@ from s2gos_client import ClientError
 from s2gos_client.api.client import Client
 from s2gos_client.cli.app import app
 from s2gos_client.cli.client import use_client
+from s2gos_common.models import ApiError
 
 
 class UseClientTest(TestCase):
@@ -22,10 +23,29 @@ class UseClientTest(TestCase):
     # noinspection PyMethodMayBeStatic
     def test_fail_with_client_error(self):
         with pytest.raises(
-            click.ClickException, match=r"Something was not found \(not found\)"
+            click.ClickException,
+            match=(
+                "Not found \\(404\\)\n"
+                "Server-side error details:\n"
+                "  title:  Not found\n"
+                "  status: 404\n"
+                "  type:   error\n"
+                "  detail: Something was not found\n"
+                "  traceback:\n"
+            ),
         ):
-            with use_client(new_cli_context(), None):
-                raise ClientError("not found", 404, detail="Something was not found")
+            with use_client(new_cli_context(traceback=True), None):
+                raise ClientError(
+                    "Not found",
+                    404,
+                    api_error=ApiError(
+                        type="error",
+                        title="Not found",
+                        status=404,
+                        detail="Something was not found",
+                        traceback=["a", "b", "c"],
+                    ),
+                )
 
     # noinspection PyMethodMayBeStatic
     def test_fail_with_non_client_error(self):
@@ -34,10 +54,13 @@ class UseClientTest(TestCase):
                 raise ValueError("path must be given")
 
 
-def new_cli_context():
+def new_cli_context(traceback: bool = False):
     return typer.Context(
         app,
-        obj={"get_client": lambda config_path: Client(config_path=config_path)},
+        obj={
+            "get_client": lambda config_path: Client(config_path=config_path),
+            "traceback": traceback,
+        },
         # the following have no special meaning for the tests,
         # but typer/click wants them to be given.
         allow_extra_args=False,

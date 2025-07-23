@@ -38,12 +38,20 @@ class UseClient:
         if self.client is not None:
             self.client.close()
             self.client = None
+        show_traceback = self.ctx.obj.get("traceback", False)
         if isinstance(exc_value, ClientError):
             client_error: ClientError = exc_value
-            message: str | None = client_error.detail or client_error.title
-            raise click.ClickException(
-                f"{message} ({client_error})"
-                if message
-                else f"Server error ({client_error})"
-            )
+            api_error = client_error.api_error
+            message_lines = [
+                f"{client_error} ({client_error.status_code})",
+                "Server-side error details:",
+                f"  title:  {api_error.title}",
+                f"  status: {api_error.status}",
+                f"  type:   {api_error.type}",
+                f"  detail: {api_error.detail}",
+            ]
+            if api_error.traceback and show_traceback:
+                message_lines.append("  traceback:")
+                message_lines.extend(api_error.traceback)
+            raise click.ClickException("\n".join(message_lines))
         return False

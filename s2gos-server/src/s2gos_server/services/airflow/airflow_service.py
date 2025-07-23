@@ -275,4 +275,4 @@ class AirflowService(ServiceBase):
         except requests.exceptions.HTTPError as e:
             raise JSONContentException(
                 response.status_code, detail=response.reason, exception=e
-            )
+            ) from e

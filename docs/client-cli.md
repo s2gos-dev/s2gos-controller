@@ -48,7 +48,7 @@ $ s2gos-client configure [OPTIONS]
 * `-u, --user TEXT`: Your user name.
 * `-t, --token TEXT`: Your personal access token.
 * `-s, --server TEXT`: The S2GOS service API URL.
-* `-c, --config PATH`: Client configuration file
+* `-c, --config PATH`: Client configuration file.
 * `--help`: Show this message and exit.
 
 ## `s2gos-client list-processes`
@@ -63,8 +63,8 @@ $ s2gos-client list-processes [OPTIONS]
 
 **Options**:
 
-* `-c, --config PATH`: Client configuration file
-* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `-c, --config PATH`: Client configuration file.
+* `-f, --format [simple|json|yaml]`: Output format.  [default: yaml]
 * `--help`: Show this message and exit.
 
 ## `s2gos-client get-process`
@@ -79,12 +79,12 @@ $ s2gos-client get-process [OPTIONS] PROCESS_ID
 
 **Arguments**:
 
-* `PROCESS_ID`: Process identifier  [required]
+* `PROCESS_ID`: Process identifier.  [required]
 
 **Options**:
 
-* `-c, --config PATH`: Client configuration file
-* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `-c, --config PATH`: Client configuration file.
+* `-f, --format [simple|json|yaml]`: Output format.  [default: yaml]
 * `--help`: Show this message and exit.
 
 ## `s2gos-client validate-request`
@@ -106,13 +106,13 @@ $ s2gos-client validate-request [OPTIONS] [PROCESS_ID]
 
 **Arguments**:
 
-* `[PROCESS_ID]`: Process identifier
+* `[PROCESS_ID]`: Process identifier.
 
 **Options**:
 
-* `-i, --input [NAME=VALUE]...`: Processing request input
-* `-r, --request PATH`: Processing request file
-* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `-i, --input [NAME=VALUE]...`: Processing request input.
+* `-r, --request PATH`: Processing request file. Use `-` to read from &lt;stdin&gt;.
+* `-f, --format [simple|json|yaml]`: Output format.  [default: yaml]
 * `--help`: Show this message and exit.
 
 ## `s2gos-client execute-process`
@@ -134,14 +134,14 @@ $ s2gos-client execute-process [OPTIONS] [PROCESS_ID]
 
 **Arguments**:
 
-* `[PROCESS_ID]`: Process identifier
+* `[PROCESS_ID]`: Process identifier.
 
 **Options**:
 
-* `-i, --input [NAME=VALUE]...`: Processing request input
-* `-r, --request PATH`: Processing request file
-* `-c, --config PATH`: Client configuration file
-* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `-i, --input [NAME=VALUE]...`: Processing request input.
+* `-r, --request PATH`: Processing request file. Use `-` to read from &lt;stdin&gt;.
+* `-c, --config PATH`: Client configuration file.
+* `-f, --format [simple|json|yaml]`: Output format.  [default: yaml]
 * `--help`: Show this message and exit.
 
 ## `s2gos-client list-jobs`
@@ -156,8 +156,8 @@ $ s2gos-client list-jobs [OPTIONS]
 
 **Options**:
 
-* `-c, --config PATH`: Client configuration file
-* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `-c, --config PATH`: Client configuration file.
+* `-f, --format [simple|json|yaml]`: Output format.  [default: yaml]
 * `--help`: Show this message and exit.
 
 ## `s2gos-client get-job`
@@ -172,12 +172,12 @@ $ s2gos-client get-job [OPTIONS] JOB_ID
 
 **Arguments**:
 
-* `JOB_ID`: Job identifier  [required]
+* `JOB_ID`: Job identifier.  [required]
 
 **Options**:
 
-* `-c, --config PATH`: Client configuration file
-* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `-c, --config PATH`: Client configuration file.
+* `-f, --format [simple|json|yaml]`: Output format.  [default: yaml]
 * `--help`: Show this message and exit.
 
 ## `s2gos-client dismiss-job`
@@ -192,12 +192,12 @@ $ s2gos-client dismiss-job [OPTIONS] JOB_ID
 
 **Arguments**:
 
-* `JOB_ID`: Job identifier  [required]
+* `JOB_ID`: Job identifier.  [required]
 
 **Options**:
 
-* `-c, --config PATH`: Client configuration file
-* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `-c, --config PATH`: Client configuration file.
+* `-f, --format [simple|json|yaml]`: Output format.  [default: yaml]
 * `--help`: Show this message and exit.
 
 ## `s2gos-client get-job-results`
@@ -212,10 +212,10 @@ $ s2gos-client get-job-results [OPTIONS] JOB_ID
 
 **Arguments**:
 
-* `JOB_ID`: Job identifier  [required]
+* `JOB_ID`: Job identifier.  [required]
 
 **Options**:
 
-* `-c, --config PATH`: Client configuration file
-* `-f, --format [simple|json|yaml]`: Output format  [default: yaml]
+* `-c, --config PATH`: Client configuration file.
+* `-f, --format [simple|json|yaml]`: Output format.  [default: yaml]
 * `--help`: Show this message and exit.
