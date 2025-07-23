@@ -644,7 +644,7 @@ for <code>validate-request</code>, or <code>lp</code> for <code>list-processes</
 <li><code>-u, --user TEXT</code>: Your user name.</li>
 <li><code>-t, --token TEXT</code>: Your personal access token.</li>
 <li><code>-s, --server TEXT</code>: The S2GOS service API URL.</li>
-<li><code>-c, --config PATH</code>: Client configuration file</li>
+<li><code>-c, --config PATH</code>: Client configuration file.</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h2 id="s2gos-client-list-processes"><code>s2gos-client list-processes</code></h2>
@@ -654,8 +654,8 @@ for <code>validate-request</code>, or <code>lp</code> for <code>list-processes</
 </code></pre></div>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-c, --config PATH</code>: Client configuration file</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format  [default: yaml]</li>
+<li><code>-c, --config PATH</code>: Client configuration file.</li>
+<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h2 id="s2gos-client-get-process"><code>s2gos-client get-process</code></h2>
@@ -665,12 +665,12 @@ for <code>validate-request</code>, or <code>lp</code> for <code>list-processes</
 </code></pre></div>
 <p><strong>Arguments</strong>:</p>
 <ul>
-<li><code>PROCESS_ID</code>: Process identifier  [required]</li>
+<li><code>PROCESS_ID</code>: Process identifier.  [required]</li>
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-c, --config PATH</code>: Client configuration file</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format  [default: yaml]</li>
+<li><code>-c, --config PATH</code>: Client configuration file.</li>
+<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h2 id="s2gos-client-validate-request"><code>s2gos-client validate-request</code></h2>
@@ -685,13 +685,13 @@ settings with same name found in the given request file or <code>stdin</code>, i
 </code></pre></div>
 <p><strong>Arguments</strong>:</p>
 <ul>
-<li><code>[PROCESS_ID]</code>: Process identifier</li>
+<li><code>[PROCESS_ID]</code>: Process identifier.</li>
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-i, --input [NAME=VALUE]...</code>: Processing request input</li>
-<li><code>-r, --request PATH</code>: Processing request file</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format  [default: yaml]</li>
+<li><code>-i, --input [NAME=VALUE]...</code>: Processing request input.</li>
+<li><code>-r, --request PATH</code>: Processing request file. Use <code>-</code> to read from &lt;stdin&gt;.</li>
+<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h2 id="s2gos-client-execute-process"><code>s2gos-client execute-process</code></h2>
@@ -706,14 +706,14 @@ settings with same name found in the given request file or <code>stdin</code>, i
 </code></pre></div>
 <p><strong>Arguments</strong>:</p>
 <ul>
-<li><code>[PROCESS_ID]</code>: Process identifier</li>
+<li><code>[PROCESS_ID]</code>: Process identifier.</li>
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-i, --input [NAME=VALUE]...</code>: Processing request input</li>
-<li><code>-r, --request PATH</code>: Processing request file</li>
-<li><code>-c, --config PATH</code>: Client configuration file</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format  [default: yaml]</li>
+<li><code>-i, --input [NAME=VALUE]...</code>: Processing request input.</li>
+<li><code>-r, --request PATH</code>: Processing request file. Use <code>-</code> to read from &lt;stdin&gt;.</li>
+<li><code>-c, --config PATH</code>: Client configuration file.</li>
+<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h2 id="s2gos-client-list-jobs"><code>s2gos-client list-jobs</code></h2>
@@ -723,8 +723,8 @@ settings with same name found in the given request file or <code>stdin</code>, i
 </code></pre></div>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-c, --config PATH</code>: Client configuration file</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format  [default: yaml]</li>
+<li><code>-c, --config PATH</code>: Client configuration file.</li>
+<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h2 id="s2gos-client-get-job"><code>s2gos-client get-job</code></h2>
@@ -734,12 +734,12 @@ settings with same name found in the given request file or <code>stdin</code>, i
 </code></pre></div>
 <p><strong>Arguments</strong>:</p>
 <ul>
-<li><code>JOB_ID</code>: Job identifier  [required]</li>
+<li><code>JOB_ID</code>: Job identifier.  [required]</li>
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-c, --config PATH</code>: Client configuration file</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format  [default: yaml]</li>
+<li><code>-c, --config PATH</code>: Client configuration file.</li>
+<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h2 id="s2gos-client-dismiss-job"><code>s2gos-client dismiss-job</code></h2>
@@ -749,12 +749,12 @@ settings with same name found in the given request file or <code>stdin</code>, i
 </code></pre></div>
 <p><strong>Arguments</strong>:</p>
 <ul>
-<li><code>JOB_ID</code>: Job identifier  [required]</li>
+<li><code>JOB_ID</code>: Job identifier.  [required]</li>
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-c, --config PATH</code>: Client configuration file</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format  [default: yaml]</li>
+<li><code>-c, --config PATH</code>: Client configuration file.</li>
+<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h2 id="s2gos-client-get-job-results"><code>s2gos-client get-job-results</code></h2>
@@ -764,12 +764,12 @@ settings with same name found in the given request file or <code>stdin</code>, i
 </code></pre></div>
 <p><strong>Arguments</strong>:</p>
 <ul>
-<li><code>JOB_ID</code>: Job identifier  [required]</li>
+<li><code>JOB_ID</code>: Job identifier.  [required]</li>
 </ul>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-c, --config PATH</code>: Client configuration file</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format  [default: yaml]</li>
+<li><code>-c, --config PATH</code>: Client configuration file.</li>
+<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 
