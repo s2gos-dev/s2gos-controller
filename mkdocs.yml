@@ -13,6 +13,10 @@ nav:
   - Architecture: architecture.md
   - Client CLI: client-cli.md
   - Client API: client-api.md
+  - Notebooks:
+      - notebooks/client-gui.ipynb
+      - notebooks/client-api.ipynb
+      - notebooks/client-cli.ipynb
   - Contributing: contributing.md
 
 theme:
@@ -60,6 +64,7 @@ plugins:
   - search
   - autorefs
   - mermaid2
+  - mkdocs-jupyter
   - mkdocstrings:
       handlers:
         python:
