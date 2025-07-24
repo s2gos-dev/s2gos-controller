@@ -118,7 +118,7 @@ class AirflowService(ServiceBase):
     async def execute_process(
         self, process_id: str, process_request: ProcessRequest, *args, **kwargs
     ) -> JobInfo:
-        logical_date = datetime.datetime.now(datetime.UTC)
+        logical_date = datetime.datetime.now(datetime.timezone.utc)
         dag_run_id = self.new_dag_run_id(process_id, logical_date)
         dag_run_body = TriggerDAGRunPostBody(
             dag_run_id=dag_run_id,
@@ -192,7 +192,7 @@ class AirflowService(ServiceBase):
             raise JSONContentException(e.status, e.reason, exception=e) from e
         return JobResults(**xcom_entry.model_dump(mode="json"))
 
-    def new_dag_run_id(self, dag_id: str, logical_time: datetime):
+    def new_dag_run_id(self, dag_id: str, logical_time: datetime.datetime):
         self._exec_count += 1
         return f"{dag_id}__{logical_time.strftime('%Y%m%d%H%M%S')}_{self._exec_count}"
 
