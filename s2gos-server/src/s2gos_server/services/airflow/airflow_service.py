@@ -2,8 +2,8 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+import datetime
 import os
-from datetime import datetime
 from functools import cached_property
 from typing import Optional
 
@@ -118,16 +118,19 @@ class AirflowService(ServiceBase):
     async def execute_process(
         self, process_id: str, process_request: ProcessRequest, *args, **kwargs
     ) -> JobInfo:
-        logical_date = datetime.now()
+        logical_date = datetime.datetime.now(datetime.UTC)
         dag_run_id = self.new_dag_run_id(process_id, logical_date)
         dag_run_body = TriggerDAGRunPostBody(
             dag_run_id=dag_run_id,
             conf=process_request.inputs,
             logical_date=logical_date,
         )
+        print("execute_process #1")
         try:
             dag_run = self.airflow_dag_run_api.trigger_dag_run(process_id, dag_run_body)
+            print("execute_process #2", dag_run)
         except ApiException as e:
+            print("execute_process #3", e)
             raise JSONContentException(e.status, e.reason, exception=e) from e
         return self.dag_run_to_job_info(dag_run)
 

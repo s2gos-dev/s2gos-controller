@@ -55,6 +55,7 @@ def gen_dag(process: RegisteredProcess) -> str:
         f"{tab}params=" + "{",
         *[f"{tab}{tab}{p}," for p in param_specs],
         f"{tab}" + "},",
+        f"{tab}is_paused_upon_creation=False,",
         ")",
         f"def {function_name}_dag():",
         "",
@@ -64,7 +65,7 @@ def gen_dag(process: RegisteredProcess) -> str:
         "",
         f"{tab}task_instance = {function_name}_task()  # noqa: F841",
         "",
-        f"dag_instance = {function_name}_dag()  # noqa: F841",
+        f"{function_name}_dag()",
     ]
     return "\n".join(lines) + "\n"
 
