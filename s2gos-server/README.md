@@ -1,6 +1,6 @@
 # DTE-S2GOS controller server
 
-Python server for the ESA DTE-S2GOS synthetic scene generator service.
+Python gateway server for the ESA DTE-S2GOS synthetic scene generator service.
 
 ## Local
 
@@ -13,14 +13,15 @@ s2gos-server run --service=s2gos_server.services.local.testing:service
 
 ## Airflow
 
-Running a local Airflow instance with some test DAGs:
+Start by running a local Airflow instance with some test DAGs:
 ```commandline
 cd s2gos-airflow
 pixi install
 pixi run airflow standalone
 ```
 
-Running the S2GOS gateway server with a local Airflow instance:
+Then run the S2GOS gateway server with the local Airflow instance (assuming
+the local Airflow webserver runs on http://localhost:8080):
 
 ```commandline
 pixi shell
