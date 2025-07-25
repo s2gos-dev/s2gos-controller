@@ -8,7 +8,7 @@ import click
 import pytest
 import typer
 
-from s2gos_client import ClientError
+from s2gos_client import ClientException
 from s2gos_client.api.client import Client
 from s2gos_client.cli.app import app
 from s2gos_client.cli.client import use_client
@@ -25,7 +25,7 @@ class UseClientTest(TestCase):
         with pytest.raises(
             click.ClickException,
             match=(
-                "Not found \\(404\\)\n"
+                "Not found\n"
                 "Server-side error details:\n"
                 "  title:  Not found\n"
                 "  status: 404\n"
@@ -35,9 +35,8 @@ class UseClientTest(TestCase):
             ),
         ):
             with use_client(new_cli_context(traceback=True), None):
-                raise ClientError(
+                raise ClientException(
                     "Not found",
-                    404,
                     api_error=ApiError(
                         type="error",
                         title="Not found",

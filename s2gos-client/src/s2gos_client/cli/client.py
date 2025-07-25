@@ -9,7 +9,7 @@ import click
 import typer
 
 from s2gos_client.api.client import Client
-from s2gos_client.api.error import ClientError
+from s2gos_client.api.exceptions import ClientException
 
 GetClient: TypeAlias = Callable[[str | None], Client]
 
@@ -39,11 +39,11 @@ class UseClient:
             self.client.close()
             self.client = None
         show_traceback = self.ctx.obj.get("traceback", False)
-        if isinstance(exc_value, ClientError):
-            client_error: ClientError = exc_value
+        if isinstance(exc_value, ClientException):
+            client_error: ClientException = exc_value
             api_error = client_error.api_error
             message_lines = [
-                f"{client_error} ({client_error.status_code})",
+                f"{client_error}",
                 "Server-side error details:",
                 f"  title:  {api_error.title}",
                 f"  status: {api_error.status}",

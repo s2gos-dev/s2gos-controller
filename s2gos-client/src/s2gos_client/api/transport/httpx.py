@@ -6,6 +6,9 @@ from typing import Any
 
 import httpx
 
+from s2gos_client.api.exceptions import ClientException
+from s2gos_common.models import ApiError
+
 from .args import TransportArgs
 from .transport import AsyncTransport, Transport
 
@@ -46,14 +49,26 @@ class HttpxTransport(Transport, AsyncTransport):
 
     # noinspection PyMethodMayBeStatic
     def _process_response(self, args: TransportArgs, response: httpx.Response) -> Any:
-        # TODO: we should only do `response.json()` if JSON is expected,
-        #   use args.return_types for this decision.
-        response_json = response.json()
+        try:
+            # Note, actually we should only do `response.json()` if JSON is expected,
+            # use args.return_types for this decision.
+            response_json = response.json()
+        except (ValueError, TypeError) as e:
+            raise ClientException(
+                f"{e}",
+                api_error=ApiError(
+                    type=type(e).__name__,
+                    title="Expected JSON response from API",
+                    detail=f"{e}",
+                ),
+            ) from e
         try:
             response.raise_for_status()
-            return args.get_response_for_json(response.status_code, response_json)
+            return args.get_response_for_status(response.status_code, response_json)
         except httpx.HTTPError as e:
-            raise args.get_error_for_json(response.status_code, f"{e}", response_json)
+            raise args.get_exception_for_status(
+                response.status_code, f"{e}", response_json
+            ) from e
 
     def close(self):
         if self.sync_httpx is not None:

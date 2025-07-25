@@ -31,7 +31,7 @@ from typing import Any, Optional
 from s2gos_common.models import {{ model_imports }}
 
 from .config import ClientConfig
-from .defaults import DEFAULT_SERVER_URL
+from .ishell import has_ishell as _  # noqa F401
 from .transport import {{ uc_async }}Transport, TransportArgs
 from .transport.httpx import HttpxTransport
 

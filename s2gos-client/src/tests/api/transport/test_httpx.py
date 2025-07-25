@@ -9,7 +9,7 @@ from unittest.mock import AsyncMock, MagicMock
 import httpx
 import pytest
 
-from s2gos_client.api.error import ClientError
+from s2gos_client.api.exceptions import ClientException
 from s2gos_client.api.transport import TransportArgs
 from s2gos_client.api.transport.httpx import HttpxTransport
 from s2gos_common.models import ApiError, ConformanceDeclaration
@@ -120,10 +120,10 @@ class HttpxSyncTransportTest(TestCase):
             return_types={"200": ConformanceDeclaration},
             error_types={"401": ApiError},
         )
-        with pytest.raises(ClientError, match="Panic!") as e:
+        with pytest.raises(ClientException, match="Panic!") as e:
             transport.call(args)
-        ce: ClientError = e.value
-        self.assertEqual(401, ce.status_code)
+        ce: ClientException = e.value
+        self.assertEqual("Panic! (status 401)", str(ce))
         self.assertEqual(ApiError(type="error", detail="So sorry"), ce.api_error)
 
     def test_close(self):
