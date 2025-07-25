@@ -13,6 +13,7 @@
 - Introduced `s2gos_server.services.base.ServiceBase` to serve as base 
   class for local and Airflow service implementations.
 - Introduced custom client error rendering in notebooks.
+- Renamed `ClientError` into `ClientException`.
 
 ## Changes in version 0.0.2
 
