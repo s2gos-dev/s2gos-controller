@@ -11,7 +11,7 @@ import pydantic
 import uri_template
 from pydantic import BaseModel
 
-from s2gos_client.api.error import ClientError
+from s2gos_client.api.exceptions import ClientException
 from s2gos_common.models import ApiError
 
 
@@ -39,7 +39,7 @@ class TransportArgs:
             else request
         )
 
-    def get_response_for_json(self, status_code: int, json_data: Any):
+    def get_response_for_status(self, status_code: int, json_data: Any):
         status_key = str(status_code)
         return_type = self.return_types.get(status_key)
         if (
@@ -53,27 +53,28 @@ class TransportArgs:
             return json_data
 
     # noinspection PyMethodMayBeStatic
-    def get_error_for_json(
+    def get_exception_for_status(
         self,
         status_code: int,
         message: str,
         json_data: Optional[Any] = None,
-    ) -> ClientError:
+    ) -> ClientException:
+        status_key = str(status_code)
+        # Currently, all error types fall back to ApiError
+        _return_type = self.error_types.get(status_key)
         if isinstance(json_data, dict):
             try:
                 api_error = ApiError(**json_data)
             except pydantic.ValidationError as e:
                 api_error = ApiError(
                     type="ValidationError",
-                    status=0,
-                    title="Invalid error body",
+                    title="Received invalid error details from API",
                     detail=f"{e}",
                 )
         else:
             api_error = ApiError(
                 type="ValidationError",
-                status=0,
-                title="Missing error body",
+                title="Missing error details from API",
                 detail=f"JSON object expected, but got {type(json_data).__name__}",
             )
-        return ClientError(message, status_code=status_code, api_error=api_error)
+        return ClientException(f"{message} (status {status_code})", api_error=api_error)

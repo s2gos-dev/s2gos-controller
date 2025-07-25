@@ -13,13 +13,13 @@ def _register_client_exception_handler():
     from IPython.core.interactiveshell import InteractiveShell
     from IPython.display import JSON, display
 
-    from .error import ClientError
+    from .exceptions import ClientException
 
     # noinspection PyUnusedLocal
     def client_exception_handler(
         self: InteractiveShell, exc_type, exc_value, tb, tb_offset=None
     ):
-        if isinstance(exc_value, ClientError):
+        if isinstance(exc_value, ClientException):
             display(
                 JSON(
                     exc_value.api_error.model_dump(mode="json", exclude_none=True),
@@ -32,7 +32,9 @@ def _register_client_exception_handler():
         return None
 
     # Register handler for MyCustomError
-    InteractiveShell.instance().set_custom_exc((ClientError,), client_exception_handler)
+    InteractiveShell.instance().set_custom_exc(
+        (ClientException,), client_exception_handler
+    )
 
 
 if has_ishell:
