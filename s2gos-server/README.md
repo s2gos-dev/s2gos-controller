@@ -8,7 +8,7 @@ Running the S2GOS gateway server with a local service:
 
 ```commandline
 pixi shell
-s2gos-server run --service=s2gos_server.services.local.testing:service
+s2gos-server run s2gos_server.services.local.testing:service
 ```
 
 ## Airflow
@@ -25,9 +25,7 @@ the local Airflow webserver runs on http://localhost:8080):
 
 ```commandline
 pixi shell
-export AIRFLOW_USERNAME admin
-export AIRFLOW_PASSWORD ***********
-s2gos-server run --service=s2gos_server.services.airflow.testing:service
+s2gos-server run s2gos_server.services.airflow.testing:service -- --username=admin --password=a8e7f4bb230
 ```
 
-Get the airflow user password from `s2gos-airflow/.airflow/simple_auth_manager_passwords.json.generated`.
+Get the actual Airflow password from `s2gos-airflow/.airflow/simple_auth_manager_passwords.json.generated`.
