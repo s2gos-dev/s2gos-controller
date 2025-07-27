@@ -2,59 +2,129 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-import os
-from typing import Optional
+from typing import Optional, Annotated
 
 import typer
 
-from s2gos_server import __version__
-from s2gos_server.constants import S2GOS_SERVICE_ENV_VAR
+from s2gos_server.constants import (
+    S2GOS_SERVICE_ENV_VAR,
+    S2GOS_SERVICE_ARGS_ENV_VAR,
+)
 from s2gos_server.defaults import DEFAULT_HOST, DEFAULT_PORT
 
-HELP = """
+CLI_HELP = """
 Server for the ESA synthetic scene generator service DTE-S2GOS.
 
-It provides a restful API that should be almost compliant
+The server provides a restful API that should be almost compliant
 with the OGC API - Processes - Part 1: Core Standard.
 
-For details see https://ogcapi.ogc.org/processes/ 
-"""
+For details see https://ogcapi.ogc.org/processes/.
 
-cli = typer.Typer(name="s2gos-server", help=HELP)
+Note that the service parameter may also be given by the 
+environment variable `{service_env_var}` and the service's 
+options by `{service_options_env_var}`. The latter must be 
+provided as a Python `list` literal.
+""".format(
+    service_env_var=S2GOS_SERVICE_ENV_VAR,
+    service_options_env_var=S2GOS_SERVICE_ARGS_ENV_VAR,
+)
 
 
-@cli.command()
-def version():
-    """Show server version."""
-    typer.echo(f"Version {__version__}")
+def parse_cli_service_options(
+    _ctx: typer.Context, kwargs: Optional[list[str]] = None
+) -> list[str]:
+    import os
+    import shlex
+
+    if not kwargs:
+        return []
+    service_args = os.environ.get(S2GOS_SERVICE_ARGS_ENV_VAR)
+    if kwargs == [service_args]:
+        return shlex.split(service_args)
+    return kwargs
+
+
+cli = typer.Typer(name="s2gos-server", help=CLI_HELP, invoke_without_command=True)
+
+cli_host_option = typer.Option(
+    envvar="S2GOS_SERVER_HOST",
+    help="Host address.",
+)
+cli_port_option = typer.Option(
+    envvar="S2GOS_SERVER_PORT",
+    help="Port number.",
+)
+cli_service_arg = typer.Argument(
+    envvar=S2GOS_SERVICE_ENV_VAR,
+    help="Service instance.",
+)
+cli_service_opt_arg = typer.Argument(
+    callback=parse_cli_service_options,
+    envvar=S2GOS_SERVICE_ARGS_ENV_VAR,
+    help="Service specific options.",
+)
+
+
+@cli.callback()
+def main(
+    _ctx: typer.Context,
+    version_: Annotated[
+        bool, typer.Option("--version", help="Show version and exit.")
+    ] = False,
+):
+    if version_:
+        from importlib.metadata import version
+
+        typer.echo(version("s2gos-server"))
+        return
 
 
 @cli.command()
 def run(
-    host: str = DEFAULT_HOST,
-    port: int = DEFAULT_PORT,
-    service: Optional[str] = None,
+    host: Annotated[str, cli_host_option] = DEFAULT_HOST,
+    port: Annotated[int, cli_port_option] = DEFAULT_PORT,
+    service: Annotated[Optional[str], cli_service_arg] = None,
+    service_options: Annotated[Optional[list[str]], cli_service_opt_arg] = None,
 ):
     """Run server in production mode."""
-    run_server(host=host, port=port, service=service, reload=False)
+    run_server(
+        host=host,
+        port=port,
+        service=service,
+        service_options=service_options,
+        reload=False,
+    )
 
 
 @cli.command()
 def dev(
-    host: str = DEFAULT_HOST,
-    port: int = DEFAULT_PORT,
-    service: Optional[str] = None,
+    host: Annotated[str, cli_host_option] = DEFAULT_HOST,
+    port: Annotated[int, cli_port_option] = DEFAULT_PORT,
+    service: Annotated[Optional[str], cli_service_arg] = None,
+    service_options: Annotated[Optional[list[str]], cli_service_opt_arg] = None,
 ):
     """Run server in development mode."""
-    run_server(host=host, port=port, service=service, reload=True)
+    run_server(
+        host=host,
+        port=port,
+        service=service,
+        service_options=service_options,
+        reload=True,
+    )
 
 
 def run_server(**kwargs):
+    import os
+    import shlex
     import uvicorn
 
     service_ref = kwargs.pop("service", None)
     if isinstance(service_ref, str) and service_ref:
         os.environ[S2GOS_SERVICE_ENV_VAR] = service_ref
+
+    service_options = kwargs.pop("service_options", None)
+    if isinstance(service_options, list) and service_options:
+        os.environ[S2GOS_SERVICE_ARGS_ENV_VAR] = shlex.join(service_options)
 
     uvicorn.run("s2gos_server.main:app", **kwargs)
 

@@ -38,6 +38,18 @@ class ServiceBase(Service, ABC):
         self.description = description
         self.conforms_to = conforms_to or DEFAULT_CONFORMS_TO
 
+    # noinspection PyMethodMayBeStatic
+    def configure(self, *args, **kwargs):
+        """Configure this service by the given positional and keyword arguments.
+
+        The default implementation does nothing.
+
+        Args:
+            args: positional arguments.
+            kwargs: keyword arguments.
+        """
+        print("configure:", args, kwargs)
+
     async def get_capabilities(
         self, request: fastapi.Request, **kwargs
     ) -> Capabilities:

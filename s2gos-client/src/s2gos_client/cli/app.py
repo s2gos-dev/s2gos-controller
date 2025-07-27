@@ -94,7 +94,7 @@ def main(
     if version_:
         from importlib.metadata import version
 
-        click.echo(version("s2gos-client"))
+        typer.echo(version("s2gos-client"))
         return
 
     def get_client(config_path: str | None):
