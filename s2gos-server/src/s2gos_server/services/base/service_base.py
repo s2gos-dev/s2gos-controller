@@ -3,6 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 import importlib
+import logging
 import os
 import shlex
 from abc import ABC
@@ -59,13 +60,19 @@ class ServiceBase(Service, ABC):
                     )
                 kv = [p.strip() for p in a[2:].split("=", maxsplit=1)]
                 k = kv[0]
+                k = k.replace("-", "_")
+                maybe_invert = k.startswith("no_") and len(k) > 3
                 if not k.isidentifier():
                     kv_example = "--key[=value]"
                     raise ConfigException(
                         f"Service options must have the form {kv_example!r}, "
-                        f"but {k!r} is not an identifier."
+                        f"but {kv[0]!r} is not an identifier."
                     )
-                kwargs[k] = yaml.safe_load(kv[1]) if len(kv) == 2 else True
+                v = yaml.safe_load(kv[1]) if len(kv) == 2 else True
+                if maybe_invert and isinstance(v, bool):
+                    kwargs[k[3:]] = not v
+                else:
+                    kwargs[k] = v
             else:
                 args.append(a)
 
@@ -100,6 +107,8 @@ class ServiceBase(Service, ABC):
             raise ConfigException(
                 f"{service_name!r} is not referring to a service instance."
             )
+        logger = logging.getLogger("uvicorn")
+        logger.info(f"Created service instance of type {type(service).__name__}")
         service.configure(*args, **kwargs)
         return service
 
@@ -112,6 +121,7 @@ class ServiceBase(Service, ABC):
         self.title = title
         self.description = description
         self.conforms_to = conforms_to or DEFAULT_CONFORMS_TO
+        self.logger = logging.getLogger("uvicorn")
 
     # noinspection PyMethodMayBeStatic
     def configure(self, *args, **kwargs):

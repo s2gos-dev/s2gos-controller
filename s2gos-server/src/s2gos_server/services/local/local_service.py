@@ -1,7 +1,7 @@
 #  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
-
+import logging
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures.process import ProcessPoolExecutor
 from typing import Any, Callable, Optional
@@ -36,9 +36,21 @@ class LocalService(ServiceBase):
         executor: Optional[ThreadPoolExecutor | ProcessPoolExecutor] = None,
     ):
         super().__init__(title=title, description=description)
-        self.executor = executor or ThreadPoolExecutor(max_workers=3)
+        self.executor = executor
         self.process_registry = ProcessRegistry()
         self.jobs: dict[str, Job] = {}
+
+    def configure(
+        self, processes: Optional[bool] = None, max_workers: Optional[int] = None
+    ):
+        if self.executor is None or processes is not None or max_workers is not None:
+            max_workers = max_workers or 3
+            if processes:
+                self.executor = ProcessPoolExecutor(max_workers=max_workers)
+                self.logger.info(f"Using processes with max {max_workers} workers.")
+            else:
+                self.executor = ThreadPoolExecutor(max_workers=max_workers)
+                self.logger.info(f"Using threads with max {max_workers} workers.")
 
     async def get_processes(self, request: fastapi.Request, **_kwargs) -> ProcessList:
         return ProcessList(

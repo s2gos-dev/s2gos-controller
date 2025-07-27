@@ -10,8 +10,12 @@
   `LocalService.process()` decorator. Instead, one can simply 
   use dotted property names to set values of nested objects in a 
   process request.
+- Server CLI now access has service as argument, which can have service-specific 
+  arguments passed after `--`.
 - Introduced `s2gos_server.services.base.ServiceBase` to serve as base 
   class for local and Airflow service implementations.
+  - it can be configured by overriding `configure(args, kwargs)` 
+  - it can log using `self.logger`
 
 ## Changes in version 0.0.2
 
