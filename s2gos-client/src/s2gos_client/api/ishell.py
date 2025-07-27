@@ -3,20 +3,22 @@
 #  https://opensource.org/license/apache-2-0.
 
 import importlib.util
+from typing import Any, Callable
 
 has_ishell = importlib.util.find_spec("IPython.core.interactiveshell")
+exception_handler: Callable[[Any, Any, Any, Any], None] | None = None
 
-__all__ = ["has_ishell"]
+__all__ = ["has_ishell", "exception_handler"]
 
 
-def _register_client_exception_handler():
+def _register_exception_handler() -> Callable[[Any, Any, Any, Any], None]:
     from IPython.core.interactiveshell import InteractiveShell
     from IPython.display import JSON, display
 
     from .exceptions import ClientException
 
     # noinspection PyUnusedLocal
-    def client_exception_handler(
+    def handle_exception(
         self: InteractiveShell, exc_type, exc_value, tb, tb_offset=None
     ):
         if isinstance(exc_value, ClientException):
@@ -32,10 +34,9 @@ def _register_client_exception_handler():
         return None
 
     # Register handler for MyCustomError
-    InteractiveShell.instance().set_custom_exc(
-        (ClientException,), client_exception_handler
-    )
+    InteractiveShell.instance().set_custom_exc((ClientException,), handle_exception)
+    return handle_exception
 
 
 if has_ishell:
-    _register_client_exception_handler()
+    exception_handler = _register_exception_handler()

@@ -2,6 +2,7 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+from pathlib import Path
 from unittest import TestCase
 
 import typer.testing
@@ -31,8 +32,21 @@ class AppTest(TestCase):
         self.assertEqual(__version__ + "\n", result.output)
 
     def test_configure(self):
-        result = invoke_app("configure")
-        self.assertEqual(1, result.exit_code, msg=self.get_result_msg(result))
+        config_path = Path("config.cfg")
+        result = invoke_app(
+            "configure",
+            "-c",
+            str(config_path),
+            "-u",
+            "bibo",
+            "-t",
+            "1234",
+            "-s",
+            "http://localhorst:2357",
+        )
+        self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
+        self.assertTrue(config_path.exists())
+        config_path.unlink()
 
     def test_get_processes(self):
         result = invoke_app("list-processes")

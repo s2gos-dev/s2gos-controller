@@ -37,8 +37,10 @@ def configure_client(
     if not user_name:
         user_name = typer.prompt(
             "User name",
-            default=(config and config.user_name)
-            or os.environ.get("USER", os.environ.get("USERNAME")),
+            default=(
+                (config and config.user_name)
+                or os.environ.get("USER", os.environ.get("USERNAME"))
+            ),
         )
     if not access_token:
         prev_access_token = config and config.access_token
