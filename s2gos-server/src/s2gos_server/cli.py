@@ -2,13 +2,13 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from typing import Optional, Annotated
+from typing import Annotated, Optional
 
 import typer
 
 from s2gos_server.constants import (
-    S2GOS_SERVICE_ENV_VAR,
     S2GOS_SERVICE_ARGS_ENV_VAR,
+    S2GOS_SERVICE_ENV_VAR,
 )
 from s2gos_server.defaults import DEFAULT_HOST, DEFAULT_PORT
 
@@ -55,13 +55,12 @@ cli_port_option = typer.Option(
     help="Port number.",
 )
 cli_service_arg = typer.Argument(
-    envvar=S2GOS_SERVICE_ENV_VAR,
-    help="Service instance.",
-)
-cli_service_opt_arg = typer.Argument(
     callback=parse_cli_service_options,
-    envvar=S2GOS_SERVICE_ARGS_ENV_VAR,
-    help="Service specific options.",
+    envvar=S2GOS_SERVICE_ENV_VAR,
+    help=(
+        "Service instance optionally followed by `--` to pass "
+        "service-specific arguments and options."
+    ),
 )
 
 
@@ -76,22 +75,20 @@ def main(
         from importlib.metadata import version
 
         typer.echo(version("s2gos-server"))
-        return
+        raise typer.Exit()
 
 
 @cli.command()
 def run(
     host: Annotated[str, cli_host_option] = DEFAULT_HOST,
     port: Annotated[int, cli_port_option] = DEFAULT_PORT,
-    service: Annotated[Optional[str], cli_service_arg] = None,
-    service_options: Annotated[Optional[list[str]], cli_service_opt_arg] = None,
+    service: Annotated[Optional[list[str]], cli_service_arg] = None,
 ):
     """Run server in production mode."""
     run_server(
         host=host,
         port=port,
         service=service,
-        service_options=service_options,
         reload=False,
     )
 
@@ -100,15 +97,13 @@ def run(
 def dev(
     host: Annotated[str, cli_host_option] = DEFAULT_HOST,
     port: Annotated[int, cli_port_option] = DEFAULT_PORT,
-    service: Annotated[Optional[str], cli_service_arg] = None,
-    service_options: Annotated[Optional[list[str]], cli_service_opt_arg] = None,
+    service: Annotated[Optional[list[str]], cli_service_arg] = None,
 ):
     """Run server in development mode."""
     run_server(
         host=host,
         port=port,
         service=service,
-        service_options=service_options,
         reload=True,
     )
 
@@ -116,15 +111,12 @@ def dev(
 def run_server(**kwargs):
     import os
     import shlex
+
     import uvicorn
 
-    service_ref = kwargs.pop("service", None)
-    if isinstance(service_ref, str) and service_ref:
-        os.environ[S2GOS_SERVICE_ENV_VAR] = service_ref
-
-    service_options = kwargs.pop("service_options", None)
-    if isinstance(service_options, list) and service_options:
-        os.environ[S2GOS_SERVICE_ARGS_ENV_VAR] = shlex.join(service_options)
+    service = kwargs.pop("service", None)
+    if isinstance(service, list) and service:
+        os.environ[S2GOS_SERVICE_ENV_VAR] = shlex.join(service)
 
     uvicorn.run("s2gos_server.main:app", **kwargs)
 
