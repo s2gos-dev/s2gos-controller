@@ -1,4 +1,4 @@
-## Changes in version 0.0.3 (in development)
+## Changes in version 0.0.3
 
 - The client's CLI is now fully operable.
 - Simplified generation of CLI reference documentation and improved general 
