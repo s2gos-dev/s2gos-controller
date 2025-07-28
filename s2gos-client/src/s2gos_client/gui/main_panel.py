@@ -7,7 +7,7 @@ from typing import Any, Callable, TypeAlias
 import panel as pn
 import param
 
-from s2gos_client.api.error import ClientError
+from s2gos_client.api.exceptions import ClientException
 from s2gos_common.models import (
     Format,
     JobInfo,
@@ -36,7 +36,7 @@ class MainPanel(pn.viewable.Viewer):
     def __init__(
         self,
         process_list: ProcessList,
-        process_list_error: ClientError | None,
+        process_list_error: ClientException | None,
         on_get_process: GetProcessAction,
         on_execute_process: ExecuteProcessAction,
     ):
@@ -152,10 +152,10 @@ class MainPanel(pn.viewable.Viewer):
                 try:
                     process_description = self._on_get_process(process_id)
                     self._processes_dict[process_id] = process_description
-                except ClientError as e:
+                except ClientException as e:
                     # TODO: also show e.api_error.traceback, when user expands the message
                     process_description = None
-                    process_markdown = f"**Error**: {e} (status `{e.status_code}`): {e.api_error.detail}"
+                    process_markdown = f"**Error**: {e}: {e.api_error.detail}"
             if process_description:
                 process_markdown = (
                     f"**{process_description.title}**\n\n"
@@ -184,7 +184,7 @@ class MainPanel(pn.viewable.Viewer):
             self._execute_button.disabled = True
             job_info = self._on_execute_process(process_id, process_request)
             self._job_info_panel.job_info = job_info
-        except ClientError as e:
+        except ClientException as e:
             self._job_info_panel.client_error = e
         finally:
             self._execute_button.disabled = False

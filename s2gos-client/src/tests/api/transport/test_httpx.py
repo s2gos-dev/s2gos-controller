@@ -9,7 +9,7 @@ from unittest.mock import AsyncMock, MagicMock
 import httpx
 import pytest
 
-from s2gos_client.api.error import ClientError
+from s2gos_client.api.exceptions import ClientException
 from s2gos_client.api.transport import TransportArgs
 from s2gos_client.api.transport.httpx import HttpxTransport
 from s2gos_common.models import ApiError, ConformanceDeclaration
@@ -17,15 +17,17 @@ from s2gos_common.models import ApiError, ConformanceDeclaration
 
 def make_mocked_transport(
     status_code: int,
-    return_value: Any,
-    side_effect: Callable | None = None,
+    json_return_value: Any = None,
+    json_side_effect: Callable | None = None,
+    raise_for_status_side_effect: Callable | None = None,
     reason: str | None = None,
 ):
     response = MagicMock()
     response.status_code = status_code
     response.reason = reason
-    response.json.return_value = return_value
-    response.raise_for_status.side_effect = side_effect
+    response.json.return_value = json_return_value
+    response.json.side_effect = json_side_effect
+    response.raise_for_status.side_effect = raise_for_status_side_effect
 
     sync_httpx = MagicMock()
     sync_httpx.request.return_value = response
@@ -40,6 +42,13 @@ def make_mocked_transport(
 
 
 class HttpxSyncTransportTest(TestCase):
+    def test_sync_call_initializes_correctly(self):
+        transport = HttpxTransport(server_url="https://api.example.com")
+        self.assertIsNone(transport.sync_httpx)
+        with pytest.raises(httpx.ConnectError):
+            transport.call(TransportArgs("/"))
+        self.assertIsInstance(transport.sync_httpx, httpx.Client)
+
     def test_call_success_200(self):
         transport = make_mocked_transport(
             200,
@@ -104,14 +113,14 @@ class HttpxSyncTransportTest(TestCase):
         self.assertEqual({"conformsTo": ["Hello", "World"]}, result)
 
     # noinspection PyMethodMayBeStatic
-    def test_call_fail(self):
+    def test_call_raise_for_status_fail(self):
         def panic():
             raise httpx.HTTPError("Panic!")
 
         transport = make_mocked_transport(
             401,
             {"type": "error", "detail": "So sorry"},
-            side_effect=panic,
+            raise_for_status_side_effect=panic,
             reason="Conformance not found",
         )
         args = TransportArgs(
@@ -120,11 +129,38 @@ class HttpxSyncTransportTest(TestCase):
             return_types={"200": ConformanceDeclaration},
             error_types={"401": ApiError},
         )
-        with pytest.raises(ClientError, match="Panic!") as e:
+        with pytest.raises(ClientException, match="Panic!") as e:
             transport.call(args)
-        ce: ClientError = e.value
-        self.assertEqual(401, ce.status_code)
+        ce: ClientException = e.value
+        self.assertEqual("Panic! (status 401)", str(ce))
         self.assertEqual(ApiError(type="error", detail="So sorry"), ce.api_error)
+
+    def test_call_json_fail(self):
+        def panic():
+            raise ValueError("This is no JSON")
+
+        transport = make_mocked_transport(
+            500,
+            json_side_effect=panic,
+        )
+        args = TransportArgs(
+            path="/conformance",
+            method="get",
+            return_types={"200": ConformanceDeclaration},
+            error_types={"401": ApiError},
+        )
+        with pytest.raises(ClientException, match="This is no JSON") as e:
+            transport.call(args)
+        ce: ClientException = e.value
+        self.assertEqual("This is no JSON", str(ce))
+        self.assertEqual(
+            ApiError(
+                type="ValueError",
+                title="Expected JSON response from API",
+                detail="This is no JSON",
+            ),
+            ce.api_error,
+        )
 
     def test_close(self):
         sync_httpx = MagicMock()
@@ -137,6 +173,13 @@ class HttpxSyncTransportTest(TestCase):
 
 
 class HttpxAsyncTransportTest(IsolatedAsyncioTestCase):
+    async def test_async_call_initializes_correctly(self):
+        transport = HttpxTransport(server_url="https://api.example.com")
+        self.assertIsNone(transport.async_httpx)
+        with pytest.raises(httpx.ConnectError):
+            await transport.async_call(TransportArgs("/"))
+        self.assertIsInstance(transport.async_httpx, httpx.AsyncClient)
+
     async def test_async_call_success(self):
         transport = make_mocked_transport(
             200,

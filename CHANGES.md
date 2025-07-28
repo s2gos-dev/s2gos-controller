@@ -14,6 +14,8 @@
   arguments passed after `--`.
 - Introduced `s2gos_server.services.base.ServiceBase` to serve as base 
   class for local and Airflow service implementations.
+- Introduced custom client error rendering in notebooks.
+- Renamed `ClientError` into `ClientException`.
   - it can be configured by overriding `configure(args, kwargs)` 
   - it can log using `self.logger`
 
