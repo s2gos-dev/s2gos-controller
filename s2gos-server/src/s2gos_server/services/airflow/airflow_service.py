@@ -41,24 +41,40 @@ from s2gos_server.services.base import ServiceBase
 
 DEFAULT_AIRFLOW_BASE_URL = "http://localhost:8080"
 
-ENV_VAR_AIRFLOW_DAGS_FOLDER = "S2GOS_AIRFLOW_DAGS_FOLDER"
-ENV_VAR_AIRFLOW_USER_PACKAGE = "S2GOS_AIRFLOW_USER_PACKAGE"
-
 
 class AirflowService(ServiceBase):
     def __init__(
         self,
         title: str,
         description: Optional[str] = None,
+    ):
+        super().__init__(title=title, description=description)
+        self._exec_count: int = 0
+        self._airflow_base_url: Optional[str] = None
+        self._airflow_username: Optional[str] = None
+        self._airflow_password: Optional[str] = None
+
+    def configure(
+        self,
         airflow_base_url: Optional[str] = None,
         airflow_username: Optional[str] = None,
         airflow_password: Optional[str] = None,
     ):
-        super().__init__(title=title, description=description)
+        """
+        Configure the Airflow service.
+
+        Args:
+            airflow_base_url: The base URL of the Airflow web API, defaults to
+                `http://localhost:8080`.
+            airflow_username: The Airflow username, defaults to `admin`.
+            airflow_password: The Airflow password.
+                For an Airflow installation with the simple Auth manager,
+                use the one from
+                `.airflow/simple_auth_manager_passwords.json.generated`.
+        """
         self._airflow_base_url = airflow_base_url
         self._airflow_username = airflow_username
         self._airflow_password = airflow_password
-        self._exec_count: int = 0
 
     async def get_processes(
         self, request: fastapi.Request, *args, **kwargs

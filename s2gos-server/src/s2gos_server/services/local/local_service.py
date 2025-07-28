@@ -33,24 +33,29 @@ class LocalService(ServiceBase):
         self,
         title: str,
         description: Optional[str] = None,
-        executor: Optional[ThreadPoolExecutor | ProcessPoolExecutor] = None,
     ):
         super().__init__(title=title, description=description)
-        self.executor = executor
+        self.executor: Optional[ThreadPoolExecutor | ProcessPoolExecutor] = None
         self.process_registry = ProcessRegistry()
         self.jobs: dict[str, Job] = {}
 
     def configure(
         self, processes: Optional[bool] = None, max_workers: Optional[int] = None
     ):
-        if self.executor is None or processes is not None or max_workers is not None:
-            max_workers = max_workers or 3
-            if processes:
-                self.executor = ProcessPoolExecutor(max_workers=max_workers)
-                self.logger.info(f"Using processes with max {max_workers} workers.")
-            else:
-                self.executor = ThreadPoolExecutor(max_workers=max_workers)
-                self.logger.info(f"Using threads with max {max_workers} workers.")
+        """
+        Configure the local service.
+
+        Args:
+            processes: Whether to use processes instead of threads. Defaults to threads.
+            max_workers: The maximum number of processes or threads. Defaults to 3.
+        """
+        num_workers: int = max_workers or 3
+        if processes:
+            self.executor = ProcessPoolExecutor(max_workers=num_workers)
+            self.logger.info(f"Using processes with max {num_workers} workers.")
+        else:
+            self.executor = ThreadPoolExecutor(max_workers=num_workers)
+            self.logger.info(f"Using threads with max {num_workers} workers.")
 
     async def get_processes(self, request: fastapi.Request, **_kwargs) -> ProcessList:
         return ProcessList(
@@ -105,10 +110,6 @@ class LocalService(ServiceBase):
             if k in input_values
         }
 
-        # print("input_params:", input_params)
-        # print("input_default_params:", input_default_params)
-        # print("params:", function_kwargs)
-
         job_id = f"job_{len(self.jobs)}"
         job = Job(
             process_id=process_desc.id,
@@ -117,7 +118,7 @@ class LocalService(ServiceBase):
             function_kwargs=function_kwargs,
         )
         self.jobs[job_id] = job
-        assert self.executor is not None
+        assert self.executor is not None, "illegal state: no executor specified"
         job.future = self.executor.submit(job.run)
         # 201 means, async execution started
         return job.job_info
