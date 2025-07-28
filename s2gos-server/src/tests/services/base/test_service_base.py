@@ -6,10 +6,10 @@ from unittest import TestCase
 
 import pytest
 
+from s2gos_common.testing import set_env_cm
+from s2gos_server.constants import S2GOS_SERVICE_ENV_VAR
 from s2gos_server.exceptions import ConfigException
 from s2gos_server.services.base import ServiceBase
-from s2gos_server.constants import S2GOS_SERVICE_ENV_VAR
-from s2gos_common.testing import set_env_cm
 
 
 class ServiceBaseTest(TestCase):

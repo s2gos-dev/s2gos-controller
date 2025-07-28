@@ -8,9 +8,9 @@ import pytest
 
 from s2gos_common.testing import set_env_cm
 from s2gos_server.exceptions import ConfigException
-from s2gos_server.services.local.testing import service as test_service
 from s2gos_server.provider import ServiceProvider, get_service
 from s2gos_server.services.local import LocalService
+from s2gos_server.services.local.testing import service as test_service
 
 
 class ServiceProviderTest(TestCase):
