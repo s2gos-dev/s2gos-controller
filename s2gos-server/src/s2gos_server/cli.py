@@ -6,10 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from s2gos_server.constants import (
-    S2GOS_SERVICE_ARGS_ENV_VAR,
-    S2GOS_SERVICE_ENV_VAR,
-)
+from s2gos_server.constants import S2GOS_SERVICE_ENV_VAR
 from s2gos_server.defaults import DEFAULT_HOST, DEFAULT_PORT
 
 CLI_HELP = """
@@ -21,12 +18,9 @@ with the OGC API - Processes - Part 1: Core Standard.
 For details see https://ogcapi.ogc.org/processes/.
 
 Note that the service parameter may also be given by the 
-environment variable `{service_env_var}` and the service's 
-options by `{service_options_env_var}`. The latter must be 
-provided as a Python `list` literal.
+environment variable `{service_env_var}`.
 """.format(
     service_env_var=S2GOS_SERVICE_ENV_VAR,
-    service_options_env_var=S2GOS_SERVICE_ARGS_ENV_VAR,
 )
 
 
@@ -38,7 +32,7 @@ def parse_cli_service_options(
 
     if not kwargs:
         return []
-    service_args = os.environ.get(S2GOS_SERVICE_ARGS_ENV_VAR)
+    service_args = os.environ.get(S2GOS_SERVICE_ENV_VAR)
     if kwargs == [service_args]:
         return shlex.split(service_args)
     return kwargs

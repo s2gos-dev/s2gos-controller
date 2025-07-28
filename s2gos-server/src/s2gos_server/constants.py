@@ -5,4 +5,3 @@
 from typing import Final
 
 S2GOS_SERVICE_ENV_VAR: Final = "S2GOS_SERVICE"
-S2GOS_SERVICE_ARGS_ENV_VAR: Final = "S2GOS_SERVICE_ARGS"
