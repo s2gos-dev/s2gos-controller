@@ -7,7 +7,7 @@ import time
 from typing import Optional
 
 from s2gos_client.api.client import Client as ApiClient
-from s2gos_client.api.error import ClientError
+from s2gos_client.api.exceptions import ClientException
 from s2gos_client.api.transport import Transport
 from s2gos_common.models import JobInfo, ProcessList
 
@@ -120,7 +120,7 @@ class Client(ApiClient):
     def _update_jobs(self):
         try:
             job_list = self.get_jobs()
-        except ClientError as e:
+        except ClientException as e:
             for jobs_observer in self._jobs_observers:
                 jobs_observer.on_job_list_error(e)
             return
@@ -149,8 +149,8 @@ class Client(ApiClient):
                 jobs_observer.on_job_list_changed(job_list)
             self._jobs = new_jobs
 
-    def _get_processes(self) -> tuple[ProcessList, ClientError | None]:
+    def _get_processes(self) -> tuple[ProcessList, ClientException | None]:
         try:
             return self.get_processes(), None
-        except ClientError as e:
+        except ClientException as e:
             return ProcessList(processes=[], links=[]), e
