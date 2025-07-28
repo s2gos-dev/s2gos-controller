@@ -8,10 +8,10 @@ Both clients return their configuration as a
 [`ClientConfig`](#s2gos_client.ClientConfig) object.
 
 Methods of the [`Client`](#s2gos_client.Client) and `AsyncClient` 
-may raise a [`ClientError`](#s2gos_client.ClientError) if a server call fails. 
+may raise a [`ClientException`](#s2gos_client.ClientError) if a server call fails. 
 
 ::: s2gos_client.Client
 
 ::: s2gos_client.ClientConfig
 
-::: s2gos_client.ClientError
+::: s2gos_client.ClientException
