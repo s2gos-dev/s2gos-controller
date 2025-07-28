@@ -8,7 +8,7 @@ import pydantic
 import pytest
 
 from s2gos_common.models import Schema
-from s2gos_server.services.local.registered_process import (
+from s2gos_common.process.json_schema import (
     create_schema_instance,
     inline_schema_refs,
 )

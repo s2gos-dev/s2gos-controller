@@ -4,15 +4,11 @@
 
 from .job import Job, JobCancelledException, JobContext, get_job_context
 from .local_service import LocalService
-from .process_registry import ProcessRegistry
-from .registered_process import RegisteredProcess
 
 __all__ = [
     "LocalService",
     "Job",
     "JobCancelledException",
     "JobContext",
-    "ProcessRegistry",
-    "RegisteredProcess",
     "get_job_context",
 ]

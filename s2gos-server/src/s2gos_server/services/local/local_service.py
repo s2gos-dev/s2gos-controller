@@ -20,12 +20,11 @@ from s2gos_common.models import (
     ProcessSummary,
     Schema,
 )
+from s2gos_common.process import ProcessRegistry, RegisteredProcess
 from s2gos_server.exceptions import JSONContentException
 from s2gos_server.services.base import ServiceBase
 
 from .job import Job
-from .process_registry import ProcessRegistry
-from .registered_process import RegisteredProcess
 
 
 class LocalService(ServiceBase):
