@@ -19,7 +19,7 @@ from s2gos_common.models import (
     Link,
 )
 from s2gos_common.service import Service
-from s2gos_server.constants import S2GOS_SERVICE_ENV_VAR
+from s2gos_server.constants import ENV_VAR_SERVICE
 from s2gos_server.exceptions import ConfigException
 
 DEFAULT_CONFORMS_TO = [
@@ -46,7 +46,7 @@ class ServiceBase(Service, ABC):
         Raises:
             ConfigException: if a server configuration error occurs.
         """
-        service_spec: str | None = os.environ.get(S2GOS_SERVICE_ENV_VAR)
+        service_spec: str | None = os.environ.get(ENV_VAR_SERVICE)
         service_args = shlex.split(service_spec) if service_spec else []
         args = []
         kwargs = {}
@@ -81,7 +81,7 @@ class ServiceBase(Service, ABC):
             service_help = (
                 f"The service must be passed in the form {service_name_example!r} "
                 "either as first command-line argument or using the environment "
-                f"variable {S2GOS_SERVICE_ENV_VAR!r}."
+                f"variable {ENV_VAR_SERVICE!r}."
             )
             raise ConfigException(f"Service not specified. {service_help}")
 

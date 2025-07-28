@@ -8,15 +8,15 @@ from unittest import TestCase
 import pytest
 
 from s2gos_common.models import (
-    JobResults,
     JobInfo,
     JobList,
-    ProcessRequest,
+    JobResults,
     ProcessDescription,
     ProcessList,
+    ProcessRequest,
 )
 from s2gos_common.testing import set_env_cm
-from s2gos_server.constants import S2GOS_SERVICE_ENV_VAR
+from s2gos_server.constants import ENV_VAR_SERVICE
 from s2gos_server.exceptions import ConfigException
 from s2gos_server.services.base import ServiceBase
 
@@ -61,7 +61,7 @@ service = MyService()
 class ServiceBaseTest(TestCase):
     def test_load_without_options(self):
         service_spec = "tests.services.base.test_service_base:service"
-        with set_env_cm(**{S2GOS_SERVICE_ENV_VAR: service_spec}):
+        with set_env_cm(**{ENV_VAR_SERVICE: service_spec}):
             s = ServiceBase.load()
         self.assertIsInstance(s, MyService)
         self.assertEqual(None, s.threads)
@@ -71,7 +71,7 @@ class ServiceBaseTest(TestCase):
         service_spec = (
             "tests.services.base.test_service_base:service --threads --workers=4"
         )
-        with set_env_cm(**{S2GOS_SERVICE_ENV_VAR: service_spec}):
+        with set_env_cm(**{ENV_VAR_SERVICE: service_spec}):
             s = ServiceBase.load()
         self.assertIsInstance(s, MyService)
         self.assertEqual(True, s.threads)
@@ -81,7 +81,7 @@ class ServiceBaseTest(TestCase):
         service_spec = (
             "tests.services.base.test_service_base:service --no-threads --workers=2"
         )
-        with set_env_cm(**{S2GOS_SERVICE_ENV_VAR: service_spec}):
+        with set_env_cm(**{ENV_VAR_SERVICE: service_spec}):
             s = ServiceBase.load()
         self.assertIsInstance(s, MyService)
         self.assertEqual(False, s.threads)
@@ -140,6 +140,6 @@ class ServiceBaseTest(TestCase):
 
     # noinspection PyMethodMayBeStatic
     def assert_fails_with_config_exception(self, value: str | None, match: str):
-        with set_env_cm(**{S2GOS_SERVICE_ENV_VAR: value}):
+        with set_env_cm(**{ENV_VAR_SERVICE: value}):
             with pytest.raises(ConfigException, match=match):
                 ServiceBase.load()

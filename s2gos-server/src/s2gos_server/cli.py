@@ -6,8 +6,13 @@ from typing import Annotated, Optional
 
 import typer
 
-from s2gos_server.constants import S2GOS_SERVICE_ENV_VAR
-from s2gos_server.defaults import DEFAULT_HOST, DEFAULT_PORT
+from s2gos_server.constants import (
+    DEFAULT_HOST,
+    DEFAULT_PORT,
+    ENV_VAR_SERVER_HOST,
+    ENV_VAR_SERVER_PORT,
+    ENV_VAR_SERVICE,
+)
 
 CLI_HELP = """
 Server for the ESA synthetic scene generator service DTE-S2GOS.
@@ -17,10 +22,13 @@ with the OGC API - Processes - Part 1: Core Standard.
 
 For details see https://ogcapi.ogc.org/processes/.
 
-Note that the service parameter may also be given by the 
+The service instance may be followed by a `--` to pass one or more 
+service-specific arguments and options.
+
+Note that the service arguments may also be given by the 
 environment variable `{service_env_var}`.
 """.format(
-    service_env_var=S2GOS_SERVICE_ENV_VAR,
+    service_env_var=ENV_VAR_SERVICE,
 )
 
 
@@ -32,7 +40,7 @@ def parse_cli_service_options(
 
     if not kwargs:
         return []
-    service_args = os.environ.get(S2GOS_SERVICE_ENV_VAR)
+    service_args = os.environ.get(ENV_VAR_SERVICE)
     if kwargs == [service_args]:
         return shlex.split(service_args)
     return kwargs
@@ -41,20 +49,22 @@ def parse_cli_service_options(
 cli = typer.Typer(name="s2gos-server", help=CLI_HELP, invoke_without_command=True)
 
 cli_host_option = typer.Option(
-    envvar="S2GOS_SERVER_HOST",
+    envvar=ENV_VAR_SERVER_HOST,
     help="Host address.",
 )
 cli_port_option = typer.Option(
-    envvar="S2GOS_SERVER_PORT",
+    envvar=ENV_VAR_SERVER_PORT,
     help="Port number.",
 )
 cli_service_arg = typer.Argument(
     callback=parse_cli_service_options,
-    envvar=S2GOS_SERVICE_ENV_VAR,
+    envvar=ENV_VAR_SERVICE,
     help=(
         "Service instance optionally followed by `--` to pass "
-        "service-specific arguments and options."
+        "service-specific arguments and options. SERVICE should "
+        "have the form `path.to.module:service`."
     ),
+    metavar="SERVICE [-- SERVICE-OPTIONS]",
 )
 
 
@@ -110,7 +120,7 @@ def run_server(**kwargs):
 
     service = kwargs.pop("service", None)
     if isinstance(service, list) and service:
-        os.environ[S2GOS_SERVICE_ENV_VAR] = shlex.join(service)
+        os.environ[ENV_VAR_SERVICE] = shlex.join(service)
 
     uvicorn.run("s2gos_server.main:app", **kwargs)
 

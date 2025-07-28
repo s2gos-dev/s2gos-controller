@@ -9,9 +9,9 @@ import typer
 from typer.testing import CliRunner
 
 from s2gos_common.testing import set_env_cm
-from s2gos_server.cli import cli, parse_cli_service_options
 from s2gos_server import __version__
-from s2gos_server.constants import S2GOS_SERVICE_ENV_VAR
+from s2gos_server.cli import cli, parse_cli_service_options
+from s2gos_server.constants import ENV_VAR_SERVICE
 
 runner = CliRunner()
 
@@ -35,7 +35,7 @@ class CliTest(TestCase):
             ignore_unknown_options=False,
         )
         env_var_value = "my.service:service --workers=5 --threads"
-        with set_env_cm(**{S2GOS_SERVICE_ENV_VAR: env_var_value}):
+        with set_env_cm(**{ENV_VAR_SERVICE: env_var_value}):
             self.assertEqual([], parse_cli_service_options(ctx, None))
             self.assertEqual([], parse_cli_service_options(ctx, []))
             self.assertEqual(
