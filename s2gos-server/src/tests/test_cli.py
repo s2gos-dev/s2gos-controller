@@ -24,8 +24,10 @@ class CliTest(TestCase):
             cli,
             [
                 "run",
-                "--service",
+                "--",
                 "s2gos_server.services.local.testing:service",
+                "--processes",
+                "--max-workers=4",
             ],
         )
         self.assertEqual(0, result.exit_code)
@@ -39,8 +41,10 @@ class CliTest(TestCase):
             cli,
             [
                 "dev",
-                "--service",
+                "--",
                 "s2gos_server.services.local.testing:service",
+                "--no-processes",
+                "--max-workers=4",
             ],
         )
         self.assertEqual(0, result.exit_code)

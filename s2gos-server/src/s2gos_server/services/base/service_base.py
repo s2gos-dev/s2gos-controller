@@ -66,7 +66,7 @@ class ServiceBase(Service, ABC):
                     kv_example = "--key[=value]"
                     raise ConfigException(
                         f"Service options must have the form {kv_example!r}, "
-                        f"but {kv[0]!r} is not an identifier."
+                        f"but got {kv[0]!r} as key, which is not an identifier."
                     )
                 v = yaml.safe_load(kv[1]) if len(kv) == 2 else True
                 if maybe_invert and isinstance(v, bool):
@@ -76,13 +76,13 @@ class ServiceBase(Service, ABC):
             else:
                 args.append(a)
 
-        service_name_example = "path.to.my.model:service"
-        service_help = (
-            f"The service must be passed in the form {service_name_example!r} "
-            "either as first command-line argument or using the environment "
-            f"variable {S2GOS_SERVICE_ENV_VAR!r}."
-        )
+        service_name_example = "path.to.module:service"
         if not args:
+            service_help = (
+                f"The service must be passed in the form {service_name_example!r} "
+                "either as first command-line argument or using the environment "
+                f"variable {S2GOS_SERVICE_ENV_VAR!r}."
+            )
             raise ConfigException(f"Service not specified. {service_help}")
 
         service_name, args = args[0], args[1:]
@@ -136,7 +136,6 @@ class ServiceBase(Service, ABC):
         Raises:
             ConfigException: if a server configuration error occurs.
         """
-        print("configure:", args, kwargs)
 
     async def get_capabilities(
         self, request: fastapi.Request, **kwargs
