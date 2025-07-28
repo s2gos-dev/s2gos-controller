@@ -2,7 +2,7 @@
 
 Python gateway server for the ESA DTE-S2GOS synthetic scene generator service.
 
-## Airflow
+## Airflow service
 
 Start by running a local Airflow instance with some test DAGs:
 ```commandline
@@ -29,7 +29,7 @@ The possible options are
   `.airflow/simple_auth_manager_passwords.json.generated`.
 
 
-## Local test server
+## Local service
 
 Running the S2GOS gateway server with a local service:
 
@@ -40,6 +40,7 @@ s2gos-server run -- s2gos_server.services.local.testing:service --processes --ma
 
 The possible options are
 
-* `--processes` /  `--no-processes`: whether to use processes or threads 
-* `--max-workers=INTEGER`: maximum number of processes or threads 
+* `--processes` /  `--no-processes`: Whether to use processes or threads, defaults
+  to threads.
+* `--max-workers=INTEGER`: Maximum number of processes or threads, defaults to 3.
 
