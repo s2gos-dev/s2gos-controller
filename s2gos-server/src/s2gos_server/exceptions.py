@@ -31,3 +31,7 @@ class JSONContentException(HTTPException):
                 else None
             ),
         )
+
+
+class ConfigException(Exception):
+    """An exception raised on server configuration errors."""

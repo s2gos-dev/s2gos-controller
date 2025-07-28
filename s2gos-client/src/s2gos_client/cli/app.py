@@ -4,7 +4,6 @@
 
 from typing import Annotated, Final, Optional
 
-import click
 import typer.core
 
 from s2gos_client.cli.aliased_group import AliasedGroup
@@ -94,7 +93,7 @@ def main(
     if version_:
         from importlib.metadata import version
 
-        click.echo(version("s2gos-client"))
+        typer.echo(version("s2gos-client"))
         return
 
     def get_client(config_path: str | None):

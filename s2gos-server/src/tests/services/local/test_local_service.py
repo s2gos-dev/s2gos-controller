@@ -2,6 +2,8 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+from concurrent.futures.process import ProcessPoolExecutor
+from concurrent.futures.thread import ThreadPoolExecutor
 from unittest import IsolatedAsyncioTestCase, TestCase
 
 import fastapi
@@ -38,6 +40,12 @@ class LocalServiceSetupTest(TestCase):
             return 2 * y if x else y / 2
 
         self.service = service
+
+    def test_configure(self):
+        self.service.configure(processes=False, max_workers=1)
+        self.assertIsInstance(self.service.executor, ThreadPoolExecutor)
+        self.service.configure(processes=True, max_workers=4)
+        self.assertIsInstance(self.service.executor, ProcessPoolExecutor)
 
     def test_server_setup_ok(self):
         service = self.service
@@ -106,7 +114,8 @@ class LocalServiceTest(IsolatedAsyncioTestCase):
             JSONContentException,
             match=(
                 r"400: Invalid parameterization for process 'primes_between': "
-                r"1 validation error for Inputs\nmin_val"
+                r"1 validation error for Inputs\n"
+                r"min_val"
             ),
         ):
             await self.service.execute_process(

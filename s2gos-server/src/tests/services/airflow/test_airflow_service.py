@@ -2,10 +2,8 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-# import shutil
 import unittest
 import warnings
-from pathlib import Path
 from unittest import IsolatedAsyncioTestCase
 
 import fastapi
@@ -22,8 +20,6 @@ from s2gos_server.main import app
 from s2gos_server.provider import ServiceProvider, get_service
 from s2gos_server.services.airflow import DEFAULT_AIRFLOW_BASE_URL, AirflowService
 
-S2GOS_AIRFLOW_DAGS_FOLDER = "test_dags"
-
 
 def is_airflow_running(url: str, timeout: float = 1.0) -> bool:
     try:
@@ -39,15 +35,14 @@ def is_airflow_running(url: str, timeout: float = 1.0) -> bool:
 )
 class AirflowServiceTest(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
-        Path(S2GOS_AIRFLOW_DAGS_FOLDER).mkdir(exist_ok=True)
         self.app = app
         self.restore_env = set_env(
-            S2GOS_SERVICE="s2gos_server.services.airflow.testing:service",
-            S2GOS_AIRFLOW_DAGS_FOLDER=S2GOS_AIRFLOW_DAGS_FOLDER,
+            S2GOS_SERVICE="s2gos_server.services.airflow:service",
         )
         ServiceProvider._service = None
         self.service = get_service()
         self.assertIsInstance(self.service, AirflowService)
+        self.service.configure()
 
     async def asyncTearDown(self):
         self.restore_env()

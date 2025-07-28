@@ -2,13 +2,11 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-import importlib
 import logging
-import os
 
 from s2gos_common.service import Service
 
-from .constants import S2GOS_SERVICE_ENV_VAR
+from .services.base import ServiceBase
 
 
 def get_service() -> Service:
@@ -21,7 +19,7 @@ class ServiceProvider:
     @classmethod
     def get_instance(cls) -> Service:
         if cls._service is None:
-            cls.set_instance(cls._load_service())
+            cls.set_instance(ServiceBase.load())
         assert cls._service is not None
         return cls._service
 
@@ -30,16 +28,3 @@ class ServiceProvider:
         cls._service = service
         logger = logging.getLogger("uvicorn")
         logger.info(f"Using service instance of type {type(service).__name__}")
-
-    @classmethod
-    def _load_service(cls) -> Service:
-        service_impl_spec = os.environ.get(S2GOS_SERVICE_ENV_VAR)
-        if not service_impl_spec:
-            raise RuntimeError(
-                "Service not specified. "
-                f"Please set environment variable {S2GOS_SERVICE_ENV_VAR!r}."
-            )
-        module_name, class_name = service_impl_spec.split(":", maxsplit=1)
-        module = importlib.import_module(module_name)
-        service = getattr(module, class_name)
-        return service
