@@ -484,9 +484,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#s2gos_client.ClientError" class="md-nav__link">
+  <a href="#s2gos_client.ClientException" class="md-nav__link">
     <span class="md-ellipsis">
-      ClientError
+      ClientException
     </span>
   </a>
   
@@ -663,9 +663,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#s2gos_client.ClientError" class="md-nav__link">
+  <a href="#s2gos_client.ClientException" class="md-nav__link">
     <span class="md-ellipsis">
-      ClientError
+      ClientException
     </span>
   </a>
   
@@ -697,7 +697,7 @@ It provides the same interface, but using asynchronous server calls.</p>
 <p>Both clients return their configuration as a 
 <a href="#s2gos_client.ClientConfig"><code>ClientConfig</code></a> object.</p>
 <p>Methods of the <a href="#s2gos_client.Client"><code>Client</code></a> and <code>AsyncClient</code> 
-may raise a <a href="#s2gos_client.ClientError"><code>ClientError</code></a> if a server call fails. </p>
+may raise a <a href="#s2gos_client.ClientError"><code>ClientException</code></a> if a server call fails. </p>
 
 
 <div class="doc doc-object doc-class">
@@ -820,8 +820,7 @@ other configuration arguments are ignored.</p>
 
               <details class="quote">
                 <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 25</span>
-<span class="normal"> 26</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 26</span>
 <span class="normal"> 27</span>
 <span class="normal"> 28</span>
 <span class="normal"> 29</span>
@@ -1170,7 +1169,8 @@ other configuration arguments are ignored.</p>
 <span class="normal">372</span>
 <span class="normal">373</span>
 <span class="normal">374</span>
-<span class="normal">375</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Client</span><span class="p">:</span>
+<span class="normal">375</span>
+<span class="normal">376</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Client</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The client API for the web service (synchronous mode).</span>
 
@@ -1599,7 +1599,7 @@ link relation <code>http://www.opengis.net/def/rel/ogc/1.0/conformance</code>),<
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-internal" title="s2gos_client.ClientError (s2gos_client.api.error.ClientError)" href="#s2gos_client.ClientError">ClientError</a></code>
+                  <code><span title="ClientError">ClientError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1615,8 +1615,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 74</span>
-<span class="normal"> 75</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 75</span>
 <span class="normal"> 76</span>
 <span class="normal"> 77</span>
 <span class="normal"> 78</span>
@@ -1646,7 +1645,8 @@ with a status code != <code>2xx</code>.
 <span class="normal">102</span>
 <span class="normal">103</span>
 <span class="normal">104</span>
-<span class="normal">105</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_capabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Capabilities</span><span class="p">:</span>
+<span class="normal">105</span>
+<span class="normal">106</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_capabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Capabilities</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The landing page provides links to the:</span>
 <span class="sd">      * The OpenAPI-definition (no fixed path),</span>
@@ -1782,7 +1782,7 @@ server conforms to.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-internal" title="s2gos_client.ClientError (s2gos_client.api.error.ClientError)" href="#s2gos_client.ClientError">ClientError</a></code>
+                  <code><span title="ClientError">ClientError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1798,8 +1798,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">107</span>
-<span class="normal">108</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">108</span>
 <span class="normal">109</span>
 <span class="normal">110</span>
 <span class="normal">111</span>
@@ -1839,7 +1838,8 @@ with a status code != <code>2xx</code>.
 <span class="normal">145</span>
 <span class="normal">146</span>
 <span class="normal">147</span>
-<span class="normal">148</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_conformance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConformanceDeclaration</span><span class="p">:</span>
+<span class="normal">148</span>
+<span class="normal">149</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_conformance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConformanceDeclaration</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A list of all conformance classes, specified in a standard, that the</span>
 <span class="sd">    server conforms to.</span>
@@ -1939,7 +1939,7 @@ the process.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-internal" title="s2gos_client.ClientError (s2gos_client.api.error.ClientError)" href="#s2gos_client.ClientError">ClientError</a></code>
+                  <code><span title="ClientError">ClientError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1954,8 +1954,7 @@ with a status code != <code>2xx</code>.</p>
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">150</span>
-<span class="normal">151</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">151</span>
 <span class="normal">152</span>
 <span class="normal">153</span>
 <span class="normal">154</span>
@@ -1978,7 +1977,8 @@ with a status code != <code>2xx</code>.</p>
 <span class="normal">171</span>
 <span class="normal">172</span>
 <span class="normal">173</span>
-<span class="normal">174</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_processes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProcessList</span><span class="p">:</span>
+<span class="normal">174</span>
+<span class="normal">175</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_processes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProcessList</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The list of processes contains a summary of each process the OGC API -</span>
 <span class="sd">    Processes offers, including the link to a more detailed description of</span>
@@ -2112,7 +2112,7 @@ used by the underlying transport.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-internal" title="s2gos_client.ClientError (s2gos_client.api.error.ClientError)" href="#s2gos_client.ClientError">ClientError</a></code>
+                  <code><span title="ClientError">ClientError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -2128,8 +2128,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">176</span>
-<span class="normal">177</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">177</span>
 <span class="normal">178</span>
 <span class="normal">179</span>
 <span class="normal">180</span>
@@ -2163,7 +2162,8 @@ with a status code != <code>2xx</code>.
 <span class="normal">208</span>
 <span class="normal">209</span>
 <span class="normal">210</span>
-<span class="normal">211</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProcessDescription</span><span class="p">:</span>
+<span class="normal">211</span>
+<span class="normal">212</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProcessDescription</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The process description contains information about inputs and outputs</span>
 <span class="sd">    and a link to the execution-endpoint for the process. The Core does not</span>
@@ -2319,7 +2319,7 @@ used by the underlying transport.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-internal" title="s2gos_client.ClientError (s2gos_client.api.error.ClientError)" href="#s2gos_client.ClientError">ClientError</a></code>
+                  <code><span title="ClientError">ClientError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -2336,8 +2336,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">213</span>
-<span class="normal">214</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">214</span>
 <span class="normal">215</span>
 <span class="normal">216</span>
 <span class="normal">217</span>
@@ -2370,7 +2369,8 @@ with a status code != <code>2xx</code>.
 <span class="normal">244</span>
 <span class="normal">245</span>
 <span class="normal">246</span>
-<span class="normal">247</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">execute_process</span><span class="p">(</span>
+<span class="normal">247</span>
+<span class="normal">248</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">execute_process</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">process_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">ProcessRequest</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobInfo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2461,7 +2461,7 @@ with a status code != <code>2xx</code>.
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-internal" title="s2gos_client.ClientError (s2gos_client.api.error.ClientError)" href="#s2gos_client.ClientError">ClientError</a></code>
+                  <code><span title="ClientError">ClientError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -2477,8 +2477,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">249</span>
-<span class="normal">250</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">250</span>
 <span class="normal">251</span>
 <span class="normal">252</span>
 <span class="normal">253</span>
@@ -2501,7 +2500,8 @@ with a status code != <code>2xx</code>.
 <span class="normal">270</span>
 <span class="normal">271</span>
 <span class="normal">272</span>
-<span class="normal">273</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobList</span><span class="p">:</span>
+<span class="normal">273</span>
+<span class="normal">274</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobList</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Lists available jobs.</span>
 
@@ -2630,7 +2630,7 @@ used by the underlying transport.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-internal" title="s2gos_client.ClientError (s2gos_client.api.error.ClientError)" href="#s2gos_client.ClientError">ClientError</a></code>
+                  <code><span title="ClientError">ClientError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -2647,8 +2647,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">275</span>
-<span class="normal">276</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">276</span>
 <span class="normal">277</span>
 <span class="normal">278</span>
 <span class="normal">279</span>
@@ -2677,7 +2676,8 @@ with a status code != <code>2xx</code>.
 <span class="normal">302</span>
 <span class="normal">303</span>
 <span class="normal">304</span>
-<span class="normal">305</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobInfo</span><span class="p">:</span>
+<span class="normal">305</span>
+<span class="normal">306</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobInfo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Shows the status of a job.</span>
 
@@ -2812,7 +2812,7 @@ used by the underlying transport.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-internal" title="s2gos_client.ClientError (s2gos_client.api.error.ClientError)" href="#s2gos_client.ClientError">ClientError</a></code>
+                  <code><span title="ClientError">ClientError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -2829,8 +2829,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">307</span>
-<span class="normal">308</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">308</span>
 <span class="normal">309</span>
 <span class="normal">310</span>
 <span class="normal">311</span>
@@ -2859,7 +2858,8 @@ with a status code != <code>2xx</code>.
 <span class="normal">334</span>
 <span class="normal">335</span>
 <span class="normal">336</span>
-<span class="normal">337</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">dismiss_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobInfo</span><span class="p">:</span>
+<span class="normal">337</span>
+<span class="normal">338</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">dismiss_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobInfo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cancel a job execution and remove it from the jobs list.</span>
 
@@ -2995,7 +2995,7 @@ used by the underlying transport.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><a class="autorefs autorefs-internal" title="s2gos_client.ClientError (s2gos_client.api.error.ClientError)" href="#s2gos_client.ClientError">ClientError</a></code>
+                  <code><span title="ClientError">ClientError</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -3012,8 +3012,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">339</span>
-<span class="normal">340</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">340</span>
 <span class="normal">341</span>
 <span class="normal">342</span>
 <span class="normal">343</span>
@@ -3043,7 +3042,8 @@ with a status code != <code>2xx</code>.
 <span class="normal">367</span>
 <span class="normal">368</span>
 <span class="normal">369</span>
-<span class="normal">370</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_job_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobResults</span><span class="p">:</span>
+<span class="normal">370</span>
+<span class="normal">371</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_job_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobResults</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Lists available results of a job. In case of a failure, lists errors</span>
 <span class="sd">    instead.</span>
@@ -3097,10 +3097,10 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">372</span>
-<span class="normal">373</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">373</span>
 <span class="normal">374</span>
-<span class="normal">375</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="normal">375</span>
+<span class="normal">376</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Closes this client.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -3468,8 +3468,8 @@ with a status code != <code>2xx</code>.
 
 
 
-<h2 id="s2gos_client.ClientError" class="doc doc-heading">
-            <code>s2gos_client.ClientError</code>
+<h2 id="s2gos_client.ClientException" class="doc doc-heading">
+            <code>s2gos_client.ClientException</code>
 
 
 </h2>
@@ -3480,7 +3480,60 @@ with a status code != <code>2xx</code>.
               Bases: <code><span title="Exception">Exception</span></code></p>
 
 
-        <p>Raised if a web API call failed with a status code that is not 2xx.</p>
+        <p>Raised if a web API call failed.</p>
+<p>The failure can have several reasons such as</p>
+<ul>
+<li>the request failed with a status code that is not 2xx, or</li>
+<li>the received JSON response is not parsable.</li>
+</ul>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>message</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>the error message</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>api_error</code>
+            </td>
+            <td>
+                  <code><span title="s2gos_common.models.ApiError">ApiError</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The details describing the error that occurred on the server
+or the details that describe a non-expected response from the server.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
 
@@ -3489,19 +3542,39 @@ with a status code != <code>2xx</code>.
 
 
               <details class="quote">
-                <summary>Source code in <code>s2gos-client\src\s2gos_client\api\error.py</code></summary>
+                <summary>Source code in <code>s2gos-client\src\s2gos_client\api\exceptions.py</code></summary>
                 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
 <span class="normal">13</span>
-<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ClientError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised if a web API call failed with a status code that is not 2xx.&quot;&quot;&quot;</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ClientException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised if a web API call failed.</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">status_code</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">api_error</span><span class="p">:</span> <span class="n">ApiError</span><span class="p">):</span>
+<span class="sd">     The failure can have several reasons such as</span>
+
+<span class="sd">    - the request failed with a status code that is not 2xx, or</span>
+<span class="sd">    - the received JSON response is not parsable.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        message: the error message</span>
+<span class="sd">        api_error: The details describing the error that occurred on the server</span>
+<span class="sd">            or the details that describe a non-expected response from the server.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">api_error</span><span class="p">:</span> <span class="n">ApiError</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="n">status_code</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">api_error</span> <span class="o">=</span> <span class="n">api_error</span>
 </code></pre></div></td></tr></table></div>
               </details>

@@ -274,7 +274,7 @@ config:
     theme: default
 ---
 classDiagram
-direction TB
+direction LR
     namespace s2gos_client {
         class api.AsyncClient
         class api.Client
@@ -289,6 +289,7 @@ direction TB
         class server
         class routes
         class services.local.LocalService
+        class services.airflow.AirflowService
     }
 
     cli ..&gt; api.Client : use
@@ -297,9 +298,11 @@ direction TB
     api.AsyncClient ..&gt; service.Service : uses
     service.Service ..&gt; models : uses
     services.local.LocalService --|&gt; service.Service : implements
+    services.airflow.AirflowService --|&gt; service.Service : implements
     routes ..&gt; service.Service : uses
     server ..&gt; routes : uses
-    server ..&gt; services.local.LocalService : configured to use
+    server ..&gt; services.local.LocalService : can run with
+    server ..&gt; services.airflow.AirflowService : can run with
 
     note for gui.Client "will later inherit from AsyncClient"
 </code></pre>

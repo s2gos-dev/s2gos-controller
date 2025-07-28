@@ -702,10 +702,10 @@ pixi shell
 </code></pre></div>
 <h3 id="running-the-s2gos-controller-tools">Running the S2GOS controller tools</h3>
 <p>Run local test server</p>
-<div class="highlight"><pre><span></span><code>s2gos-server run --service=s2gos_server.services.local.testing:service
+<div class="highlight"><pre><span></span><code>s2gos-server run s2gos_server.services.local.testing:service
 </code></pre></div>
 <p>The dev mode is useful if you are changing server code:</p>
-<div class="highlight"><pre><span></span><code>s2gos-server dev --service=s2gos_server.services.local.testing:service
+<div class="highlight"><pre><span></span><code>s2gos-server dev s2gos_server.services.local.testing:service
 </code></pre></div>
 <p>Run client API</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">s2gos_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
