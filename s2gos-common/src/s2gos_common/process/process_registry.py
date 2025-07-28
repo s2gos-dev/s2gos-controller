@@ -3,7 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 import json
 from collections.abc import Iterator, Mapping
-from typing import Callable, Optional, Any
+from typing import Any, Callable, Optional
 
 import pydantic
 

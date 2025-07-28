@@ -13,7 +13,8 @@ from s2gos_common.models import (
     OutputDescription,
     ProcessDescription,
 )
-from .json_schema import create_schema_instance, create_json_schema
+
+from .json_schema import create_json_schema, create_schema_instance
 
 
 @dataclass
