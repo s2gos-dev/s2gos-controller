@@ -17,7 +17,7 @@ from s2gos_common.models import (
 )
 from s2gos_common.testing import set_env_cm
 from s2gos_server.constants import ENV_VAR_SERVICE
-from s2gos_server.exceptions import ConfigException
+from s2gos_server.exceptions import ServiceConfigException
 from s2gos_server.services.base import ServiceBase
 
 
@@ -141,5 +141,5 @@ class ServiceBaseTest(TestCase):
     # noinspection PyMethodMayBeStatic
     def assert_fails_with_config_exception(self, value: str | None, match: str):
         with set_env_cm(**{ENV_VAR_SERVICE: value}):
-            with pytest.raises(ConfigException, match=match):
+            with pytest.raises(ServiceConfigException, match=match):
                 ServiceBase.load()

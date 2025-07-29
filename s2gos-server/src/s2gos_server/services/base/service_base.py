@@ -20,7 +20,7 @@ from s2gos_common.models import (
 )
 from s2gos_common.service import Service
 from s2gos_server.constants import ENV_VAR_SERVICE
-from s2gos_server.exceptions import ConfigException
+from s2gos_server.exceptions import ServiceConfigException
 
 DEFAULT_CONFORMS_TO = [
     "http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/core",
@@ -54,7 +54,7 @@ class ServiceBase(Service, ABC):
             if a.startswith("-"):
                 if not a.startswith("--"):
                     kv_example = "--key[=value]"
-                    raise ConfigException(
+                    raise ServiceConfigException(
                         f"Service options must have the form {kv_example!r}, "
                         f"but got {a!r}."
                     )
@@ -64,7 +64,7 @@ class ServiceBase(Service, ABC):
                 maybe_invert = k.startswith("no_") and len(k) > 3
                 if not k.isidentifier():
                     kv_example = "--key[=value]"
-                    raise ConfigException(
+                    raise ServiceConfigException(
                         f"Service options must have the form {kv_example!r}, "
                         f"but got {kv[0]!r} as key, which is not an identifier."
                     )
@@ -83,28 +83,30 @@ class ServiceBase(Service, ABC):
                 "either as first command-line argument or using the environment "
                 f"variable {ENV_VAR_SERVICE!r}."
             )
-            raise ConfigException(f"Service not specified. {service_help}")
+            raise ServiceConfigException(f"Service not specified. {service_help}")
 
         service_name, args = args[0], args[1:]
         try:
             module_name, attr_name = service_name.split(":", maxsplit=1)
         except ValueError:
-            raise ConfigException(
+            raise ServiceConfigException(
                 f"The service must be passed in the form {service_name_example!r}, "
                 f"but got {service_name!r}."
             )
         try:
             module = importlib.import_module(module_name)
         except ImportError:
-            raise ConfigException(f"Cannot import the service module {module_name!r}.")
+            raise ServiceConfigException(
+                f"Cannot import the service module {module_name!r}."
+            )
         try:
             service: Service = getattr(module, attr_name)
         except AttributeError:
-            raise ConfigException(
+            raise ServiceConfigException(
                 f"Service module {module_name!r} has no attribute {attr_name!r}."
             )
         if not isinstance(service, ServiceBase):
-            raise ConfigException(
+            raise ServiceConfigException(
                 f"{service_name!r} is not referring to a service instance."
             )
         logger = logging.getLogger("uvicorn")

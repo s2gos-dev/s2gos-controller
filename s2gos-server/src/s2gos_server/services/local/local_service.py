@@ -21,7 +21,7 @@ from s2gos_common.models import (
     Schema,
 )
 from s2gos_common.process import ProcessRegistry, RegisteredProcess
-from s2gos_server.exceptions import JSONContentException
+from s2gos_server.exceptions import ServiceException
 from s2gos_server.services.base import ServiceBase
 
 from .job import Job
@@ -97,7 +97,7 @@ class LocalService(ServiceBase):
         try:
             model_instance = process.model_class(**input_values)
         except pydantic.ValidationError as e:
-            raise JSONContentException(
+            raise ServiceException(
                 400,
                 detail=f"Invalid parameterization for process {process_id!r}: {e}",
                 exception=e,
@@ -197,9 +197,7 @@ class LocalService(ServiceBase):
     def _get_process(self, process_id: str) -> RegisteredProcess:
         process = self.process_registry.get(process_id)
         if process is None:
-            raise JSONContentException(
-                404, detail=f"Process {process_id!r} does not exist"
-            )
+            raise ServiceException(404, detail=f"Process {process_id!r} does not exist")
         return process
 
     def _get_job(
@@ -207,10 +205,10 @@ class LocalService(ServiceBase):
     ) -> Job:
         job = self.jobs.get(job_id)
         if job is None:
-            raise JSONContentException(404, detail=f"Job {job_id!r} does not exist")
+            raise ServiceException(404, detail=f"Job {job_id!r} does not exist")
         message = forbidden_status_codes.get(job.job_info.status)
         if message:
-            raise JSONContentException(403, detail=f"Job {job_id!r} {message}")
+            raise ServiceException(403, detail=f"Job {job_id!r} {message}")
         return job
 
 

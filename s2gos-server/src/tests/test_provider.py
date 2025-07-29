@@ -7,7 +7,7 @@ from unittest import TestCase
 import pytest
 
 from s2gos_common.testing import set_env_cm
-from s2gos_server.exceptions import ConfigException
+from s2gos_server.exceptions import ServiceConfigException
 from s2gos_server.provider import ServiceProvider, get_service
 from s2gos_server.services.local import LocalService
 from s2gos_server.services.local.testing import service as test_service
@@ -33,7 +33,7 @@ class ServiceProviderTest(TestCase):
     def test_not_set(self):
         with set_env_cm(S2GOS_SERVICE=None):
             with pytest.raises(
-                ConfigException,
+                ServiceConfigException,
                 match=(
                     "Service not specified. "
                     "The service must be passed in the form "

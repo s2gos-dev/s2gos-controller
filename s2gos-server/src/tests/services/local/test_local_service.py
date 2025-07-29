@@ -22,7 +22,7 @@ from s2gos_common.models import (
 )
 from s2gos_common.process import RegisteredProcess
 from s2gos_common.testing import set_env
-from s2gos_server.exceptions import JSONContentException
+from s2gos_server.exceptions import ServiceException
 from s2gos_server.main import app
 from s2gos_server.provider import ServiceProvider, get_service
 from s2gos_server.services.local import LocalService
@@ -112,7 +112,7 @@ class LocalServiceTest(IsolatedAsyncioTestCase):
 
     async def test_execute_process_fail(self):
         with pytest.raises(
-            JSONContentException,
+            ServiceException,
             match=(
                 r"400: Invalid parameterization for process 'primes_between': "
                 r"1 validation error for Inputs\n"

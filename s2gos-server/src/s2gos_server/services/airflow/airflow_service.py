@@ -36,7 +36,7 @@ from s2gos_common.models import (
     ProcessRequest,
     ProcessSummary,
 )
-from s2gos_server.exceptions import JSONContentException
+from s2gos_server.exceptions import ServiceException
 from s2gos_server.services.base import ServiceBase
 
 DEFAULT_AIRFLOW_BASE_URL = "http://localhost:8080"
@@ -87,7 +87,7 @@ class AirflowService(ServiceBase):
                 owners=None,  # TODO important, get for current user only
             )
         except ApiException as e:
-            raise JSONContentException(e.status, detail=e.reason, exception=e) from e
+            raise ServiceException(e.status, detail=e.reason, exception=e) from e
         if dag_collection and dag_collection.dags:
             for dag in dag_collection.dags:
                 # https://github.com/apache/airflow-client-python/blob/main/airflow_client/client/models/dag_response.py
@@ -108,7 +108,7 @@ class AirflowService(ServiceBase):
         try:
             dag_details = self.airflow_dag_api.get_dag_details(dag_id=process_id)
         except ApiException as e:
-            raise JSONContentException(e.status, detail=e.reason, exception=e) from e
+            raise ServiceException(e.status, detail=e.reason, exception=e) from e
 
         inputs: dict[str, InputDescription] = {}
         if dag_details.params:
@@ -147,7 +147,7 @@ class AirflowService(ServiceBase):
             print("execute_process #2", dag_run)
         except ApiException as e:
             print("execute_process #3", e)
-            raise JSONContentException(e.status, e.reason, exception=e) from e
+            raise ServiceException(e.status, e.reason, exception=e) from e
         return self.dag_run_to_job_info(dag_run)
 
     async def get_jobs(self, request: fastapi.Request, *args, **kwargs) -> JobList:
@@ -158,14 +158,14 @@ class AirflowService(ServiceBase):
                 owners=None,  # TODO important, get for current user only
             )
         except ApiException as e:
-            raise JSONContentException(e.status, detail=e.reason, exception=e) from e
+            raise ServiceException(e.status, detail=e.reason, exception=e) from e
 
         jobs: list[JobInfo] = []
         for dag in dag_collection.dags:
             try:
                 dag_run_collection = self.airflow_dag_run_api.get_dag_runs(dag.dag_id)
             except ApiException as e:
-                raise JSONContentException(e.status, e.reason, exception=e) from e
+                raise ServiceException(e.status, e.reason, exception=e) from e
             jobs.extend(
                 self.dag_run_to_job_info(dag_run)
                 for dag_run in dag_run_collection.dag_runs
@@ -177,7 +177,7 @@ class AirflowService(ServiceBase):
         try:
             dag_run = self.airflow_dag_run_api.get_dag_run(dag_id, job_id)
         except ApiException as e:
-            raise JSONContentException(e.status, e.reason, exception=e) from e
+            raise ServiceException(e.status, e.reason, exception=e) from e
         return self.dag_run_to_job_info(dag_run)
 
     async def dismiss_job(self, job_id: str, *args, **kwargs) -> JobInfo:
@@ -191,7 +191,7 @@ class AirflowService(ServiceBase):
                 dag_id, job_id, dag_run_patch
             )
         except ApiException as e:
-            raise JSONContentException(e.status, e.reason, exception=e) from e
+            raise ServiceException(e.status, e.reason, exception=e) from e
         return self.dag_run_to_job_info(dag_run)
 
     async def get_job_results(self, job_id: str, *args, **kwargs) -> JobResults:
@@ -205,7 +205,7 @@ class AirflowService(ServiceBase):
                 xcom_key="result",
             )
         except ApiException as e:
-            raise JSONContentException(e.status, e.reason, exception=e) from e
+            raise ServiceException(e.status, e.reason, exception=e) from e
         return JobResults(**xcom_entry.model_dump(mode="json"))
 
     def new_dag_run_id(self, dag_id: str, logical_time: datetime.datetime):
@@ -292,6 +292,6 @@ class AirflowService(ServiceBase):
             token_data = response.json()
             return token_data.get("access_token")
         except requests.exceptions.HTTPError as e:
-            raise JSONContentException(
+            raise ServiceException(
                 response.status_code, detail=response.reason, exception=e
             ) from e

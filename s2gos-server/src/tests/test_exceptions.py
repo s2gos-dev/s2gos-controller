@@ -5,12 +5,12 @@
 from unittest import TestCase
 
 from s2gos_common.models import ApiError
-from s2gos_server.exceptions import JSONContentException
+from s2gos_server.exceptions import ServiceException
 
 
 class JSONContentExceptionTest(TestCase):
     def test_content_is_api_error_model(self):
-        exc = JSONContentException(401, "Bibo not authorized")
+        exc = ServiceException(401, "Bibo not authorized")
         self.assertEqual(
             ApiError(
                 type="ApiError",
@@ -25,6 +25,6 @@ class JSONContentExceptionTest(TestCase):
         try:
             raise RuntimeError("Argh!")
         except Exception as e:
-            exc = JSONContentException(500, "Internal error", exception=e)
+            exc = ServiceException(500, "Internal error", exception=e)
             self.assertIsInstance(exc.content, ApiError)
             self.assertIsInstance(exc.content.traceback, list)
