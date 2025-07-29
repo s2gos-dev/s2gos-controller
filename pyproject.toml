@@ -63,6 +63,7 @@ pymdown-extensions = "*"
 s2gos-client = { path = "s2gos-client", editable = true }
 s2gos-common = { path = "s2gos-common", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
+s2gos-exappl = { path = "s2gos-exappl", editable = true }
 # Airflow is only available on PyPI
 apache-airflow-client = "==3.0.2"
 # Documentation
@@ -73,7 +74,7 @@ mkdocs-mermaid2-plugin = "*"
 skip = [".idea", ".github", ".pixi", "htmlcov", "site"]
 profile = "black"
 line_length = 88
-known_first_party = ["s2gos_common", "s2gos_client", "s2gos_server"]
+known_first_party = ["s2gos_common", "s2gos_client", "s2gos_server", "s2gos_exappl"]
 
 [tool.black]
 line-length = 88
@@ -84,6 +85,7 @@ include = [
     "s2gos-common/src/**/*.py",
     "s2gos-server/src/**/*.py",
     "s2gos-client/src/**/*.py",
+    "s2gos-exappl/src/**/*.py",
     "tools/**/*.py",
 ]
 
@@ -96,6 +98,7 @@ select = ["I", "F", "E"]
 [tool.coverage.report]
 omit = [
     "s2gos-client/src/s2gos_client/gui/**/*",
+    "s2gos-exappl/src/s2gos_exappl/**/*",
     "s2gos-server/src/s2gos_server/services/airflow/**/*",
 ]
 
@@ -107,6 +110,7 @@ exclude = [
     "s2gos-client/src/test",
     "s2gos-common/src/test",
     "s2gos-server/src/test",
+    "s2gos-exappl/src/test",
     "s2gos-airflow",
     "tools",
 ]

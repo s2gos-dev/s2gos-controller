@@ -1,0 +1,139 @@
+#  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
+#  Permissions are hereby granted under the terms of the Apache 2.0 License:
+#  https://opensource.org/license/apache-2-0.
+
+[project]
+name = "s2gos-exappl"
+version = "0.0.0"
+description = "Example application for the ESA DTE-S2GOS synthetic scene generator service"
+readme = "README.md"
+authors = [
+  {name = "Norman Fomferra (Brockmann Consult GmbH)"},
+  {name = "Tejas Morbagal Harish (Brockmann Consult GmbH)"}
+]
+keywords = [
+  "synthetic scene generation",
+  "esa",
+  "eRadiate",
+  "zarr"
+]
+license = {text = "Apache-2.0"}
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development",
+  "Topic :: Scientific/Engineering",
+  "Typing :: Typed",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX",
+  "Operating System :: Unix",
+  "Operating System :: MacOS",
+]
+requires-python = ">=3.10"
+
+[project.scripts]
+s2gos-exappl = "s2gos_exappl.cli:cli"
+
+[tool.pixi.features.dev.dependencies]
+# Combined sub-workspace dependencies to prevent our editable
+# PyPI dependencies (our project's sub-workspaces) to install
+# PyPI packages instead of using conda packages.
+click = "*"
+fastapi = "*"
+httpx = "*"
+pydantic = "*"
+pyyaml = "*"
+typer = "*"
+uri-template = "*"
+uvicorn = "*"
+# IDE integration
+pixi-pycharm = ">=0.0.8,<0.0.9"
+# Development & build tools
+pip = "*"
+hatch = "*"
+# Code style & linting
+isort = "*"
+ruff = "*"
+mypy = "*"
+# Unit-testing
+pytest = "*"
+pytest-cov = "*"
+# GUI testing
+ipyleaflet = "*"
+ipywidgets = "*"
+ipywidgets_bokeh = "*"
+jupyter = "*"
+notebook = "*"
+panel = "*"
+watchfiles = "*"
+# Use cases testing
+dask = "*"
+xarray = "*"
+zarr = "*"
+# Needed in /tools
+datamodel-code-generator = "*"
+tomlkit = "*"  # to sync versions
+# Documentation
+mkdocs = "*"
+mkdocs-autorefs = "*"
+mkdocs-material = "*"
+mkdocstrings = "*"
+mkdocstrings-python = "*"
+# For mermaid diagrams
+pymdown-extensions = "*"
+
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tool.pixi.dependencies]
+python = "3.12.*"
+
+[tool.pixi.pypi-dependencies]
+s2gos-exappl = { path = ".", editable = true }
+
+[tool.isort]
+skip = [".idea", ".github", ".pixi", "htmlcov", "site"]
+profile = "black"
+line_length = 88
+known_first_party = ["s2gos_exappl"]
+
+[tool.black]
+line-length = 88
+
+[tool.ruff]
+include = [
+    "notebooks/**/*.py",
+    "s2gos-common/src/**/*.py",
+    "s2gos-server/src/**/*.py",
+    "s2gos-client/src/**/*.py",
+    "tools/**/*.py",
+]
+
+[build-system]
+requires = ["hatch"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+sources = ["src"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "src/s2gos_exappl/**/*",
+  "pyproject.toml",
+  "README.md",
+  "LICENSE",
+]
+
+[tool.hatch.build.targets.wheel]
+include = [
+  "src/s2gos_exappl/**/*"
+]

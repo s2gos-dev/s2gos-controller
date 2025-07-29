@@ -370,6 +370,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/24/ce/c8a41cb0f3044990c8afbdc20c853845a9e940995d4e0cffecafbb5e927b/mkdocs_mermaid2_plugin-1.2.1-py3-none-any.whl
       - pypi: ./s2gos-client
       - pypi: ./s2gos-common
+      - pypi: ./s2gos-exappl
       - pypi: ./s2gos-server
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/annotated-types-0.7.0-pyhd8ed1ab_1.conda
@@ -723,6 +724,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/24/ce/c8a41cb0f3044990c8afbdc20c853845a9e940995d4e0cffecafbb5e927b/mkdocs_mermaid2_plugin-1.2.1-py3-none-any.whl
       - pypi: ./s2gos-client
       - pypi: ./s2gos-common
+      - pypi: ./s2gos-exappl
       - pypi: ./s2gos-server
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/win-64/_openmp_mutex-4.5-2_gnu.conda
@@ -1066,6 +1068,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/24/ce/c8a41cb0f3044990c8afbdc20c853845a9e940995d4e0cffecafbb5e927b/mkdocs_mermaid2_plugin-1.2.1-py3-none-any.whl
       - pypi: ./s2gos-client
       - pypi: ./s2gos-common
+      - pypi: ./s2gos-exappl
       - pypi: ./s2gos-server
 packages:
 - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
@@ -8644,6 +8647,12 @@ packages:
   sha256: ef5aeee90ef209eedb1f50fa9e278534cd04cfb5c2206268b077c0173076278e
   requires_dist:
   - pydantic
+  requires_python: '>=3.10'
+  editable: true
+- pypi: ./s2gos-exappl
+  name: s2gos-exappl
+  version: 0.0.0
+  sha256: 951415179660927b998d284a4615860472a1ed67ad2c4b01037ecc993ab6b80e
   requires_python: '>=3.10'
   editable: true
 - pypi: ./s2gos-server
