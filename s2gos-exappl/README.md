@@ -3,6 +3,6 @@
 Build the image
 
 ```commandline
-docker build -t mytool .
-docker run --rm mytool --help
+docker build -t s2gos-processor-v1 .
+docker run --rm s2gos-processor-v1 --help
 ```

@@ -41,82 +41,35 @@ requires-python = ">=3.10"
 [project.scripts]
 s2gos-exappl = "s2gos_exappl.cli:cli"
 
-[tool.pixi.features.dev.dependencies]
-# Combined sub-workspace dependencies to prevent our editable
-# PyPI dependencies (our project's sub-workspaces) to install
-# PyPI packages instead of using conda packages.
-click = "*"
-fastapi = "*"
-httpx = "*"
-pydantic = "*"
-pyyaml = "*"
-typer = "*"
-uri-template = "*"
-uvicorn = "*"
-# IDE integration
-pixi-pycharm = ">=0.0.8,<0.0.9"
-# Development & build tools
-pip = "*"
-hatch = "*"
-# Code style & linting
-isort = "*"
-ruff = "*"
-mypy = "*"
-# Unit-testing
-pytest = "*"
-pytest-cov = "*"
-# GUI testing
-ipyleaflet = "*"
-ipywidgets = "*"
-ipywidgets_bokeh = "*"
-jupyter = "*"
-notebook = "*"
-panel = "*"
-watchfiles = "*"
-# Use cases testing
-dask = "*"
-xarray = "*"
-zarr = "*"
-# Needed in /tools
-datamodel-code-generator = "*"
-tomlkit = "*"  # to sync versions
-# Documentation
-mkdocs = "*"
-mkdocs-autorefs = "*"
-mkdocs-material = "*"
-mkdocstrings = "*"
-mkdocstrings-python = "*"
-# For mermaid diagrams
-pymdown-extensions = "*"
-
-
 [tool.pixi.project]
 channels = ["conda-forge"]
 platforms = ["linux-64"]
 
 [tool.pixi.dependencies]
 python = "3.12.*"
+typer = ">=0.16.0,<0.17"
+pydantic = ">=2.11.7,<3"
 
 [tool.pixi.pypi-dependencies]
+s2gos-common = { path = "../s2gos-common", editable = true }
 s2gos-exappl = { path = ".", editable = true }
+
+[tool.pixi.feature.dev.dependencies]
+pytest = "*"
+pytest-cov = "*"
+ruff = "*"
+isort = "*"
+mypy = "*"
+
+[tool.pixi.environments]
+production = { solve-group = "prod" }
+default = { features = ["dev"], solve-group = "prod" }
 
 [tool.isort]
 skip = [".idea", ".github", ".pixi", "htmlcov", "site"]
 profile = "black"
 line_length = 88
 known_first_party = ["s2gos_exappl"]
-
-[tool.black]
-line-length = 88
-
-[tool.ruff]
-include = [
-    "notebooks/**/*.py",
-    "s2gos-common/src/**/*.py",
-    "s2gos-server/src/**/*.py",
-    "s2gos-client/src/**/*.py",
-    "tools/**/*.py",
-]
 
 [build-system]
 requires = ["hatch"]

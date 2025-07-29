@@ -8652,7 +8652,7 @@ packages:
 - pypi: ./s2gos-exappl
   name: s2gos-exappl
   version: 0.0.0
-  sha256: 951415179660927b998d284a4615860472a1ed67ad2c4b01037ecc993ab6b80e
+  sha256: 1fda62016261392a051a11a512a47a19cde5e0a2e966ffe2d7f32dbc774b1fcf
   requires_python: '>=3.10'
   editable: true
 - pypi: ./s2gos-server
