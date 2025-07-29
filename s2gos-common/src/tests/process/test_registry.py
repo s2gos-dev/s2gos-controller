@@ -11,31 +11,49 @@ from .test_process import f1, f2, f3
 
 
 class ProcessRegistryTest(BaseModelMixin, TestCase):
-    def test_register_function(self):
+    def test_register(self):
         registry = ProcessRegistry()
-        self.assertEqual([], list(registry.keys()))
         self.assertEqual(None, registry.get("f1"))
+        self.assertEqual([], list(registry.keys()))
 
-        registry.register_function(f1)
+        # use as no-arg decorator
+        registry.register(f1)
         self.assertEqual(1, len(registry))
         p1 = list(registry.values())[0]
         self.assertIsInstance(p1, Process)
         self.assertIs(p1, registry.get(p1.description.id))
+        self.assertEqual(["tests.process.test_process:f1"], list(registry.keys()))
 
-        registry.register_function(f2)
+        # use as decorator with args
+        registry.register(id="f2")(f2)
         self.assertEqual(2, len(registry))
         p1, p2 = registry.values()
         self.assertIsInstance(p1, Process)
         self.assertIsInstance(p2, Process)
         self.assertIs(p1, registry.get(p1.description.id))
         self.assertIs(p2, registry.get(p2.description.id))
+        self.assertEqual(["tests.process.test_process:f1", "f2"], list(registry.keys()))
+
+        # use as function
+        registry.register(f3, id="my_fn3")
+        self.assertEqual(3, len(registry))
+        p1, p2, p3 = registry.values()
+        self.assertIsInstance(p1, Process)
+        self.assertIsInstance(p2, Process)
+        self.assertIsInstance(p3, Process)
+        self.assertIs(p1, registry.get(p1.description.id))
+        self.assertIs(p2, registry.get(p2.description.id))
+        self.assertIs(p3, registry.get(p3.description.id))
+        self.assertEqual(
+            ["tests.process.test_process:f1", "f2", "my_fn3"], list(registry.keys())
+        )
 
     def test_to_json_dict(self):
         self.maxDiff = None
         registry = ProcessRegistry()
-        registry.register_function(f1)
-        registry.register_function(f2)
-        registry.register_function(f3)
+        registry.register(f1)
+        registry.register(f2)
+        registry.register(f3)
 
         json_dict = registry.to_json_dict()
         self.assertEqual(
@@ -52,9 +70,9 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         )
 
         registry = ProcessRegistry()
-        registry.register_function(f1, id="F1")
-        registry.register_function(f2, id="F2")
-        registry.register_function(f3, id="F3")
+        registry.register(f1, id="F1")
+        registry.register(f2, id="F2")
+        registry.register(f3, id="F3")
         json_dict = registry.to_json_dict()
         self.assertEqual({"F1", "F2", "F3"}, set(json_dict.keys()))
         self.assertEqual(

@@ -29,10 +29,11 @@ class LocalService(ServiceBase):
         self,
         title: str,
         description: Optional[str] = None,
+        process_registry: Optional[ProcessRegistry] = None,
     ):
         super().__init__(title=title, description=description)
         self.executor: Optional[ThreadPoolExecutor | ProcessPoolExecutor] = None
-        self.process_registry = ProcessRegistry()
+        self.process_registry = process_registry or ProcessRegistry()
         self.jobs: dict[str, Job] = {}
 
     def configure(
@@ -128,6 +129,9 @@ class LocalService(ServiceBase):
     # noinspection PyShadowingBuiltins
     def process(
         self,
+        function: Optional[Callable] = None,
+        /,
+        *,
         id: Optional[str] = None,
         version: Optional[str] = None,
         title: Optional[str] = None,
@@ -136,20 +140,15 @@ class LocalService(ServiceBase):
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
     ) -> Callable[[Callable], Callable]:
         """A decorator that registers a user function as a process."""
-
-        def _factory(function: Callable):
-            self.process_registry.register_function(
-                function,
-                id=id,
-                version=version,
-                title=title,
-                description=description,
-                input_fields=input_fields,
-                output_fields=output_fields,
-            )
-            return function
-
-        return _factory
+        return self.process_registry.register(
+            function,
+            id=id,
+            version=version,
+            title=title,
+            description=description,
+            input_fields=input_fields,
+            output_fields=output_fields,
+        )
 
     def _get_process(self, process_id: str) -> Process:
         process = self.process_registry.get(process_id)
