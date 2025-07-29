@@ -2,10 +2,15 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from .process_registry import ProcessRegistry
-from .registered_process import RegisteredProcess
+from .job import Job, JobCancelledException, JobContext, get_job_context
+from .process import Process
+from .registry import ProcessRegistry
 
 __all__ = [
+    "Job",
+    "JobContext",
+    "JobCancelledException",
     "ProcessRegistry",
-    "RegisteredProcess",
+    "Process",
+    "get_job_context",
 ]

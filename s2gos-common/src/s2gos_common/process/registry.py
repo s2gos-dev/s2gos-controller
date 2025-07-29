@@ -1,20 +1,20 @@
 #  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
-import json
+
 from collections.abc import Iterator, Mapping
 from typing import Any, Callable, Optional
 
 import pydantic
 
-from .registered_process import RegisteredProcess
+from .process import Process
 
 
-class ProcessRegistry(Mapping[str, RegisteredProcess]):
+class ProcessRegistry(Mapping[str, Process]):
     def __init__(self):
-        self._processes: dict[str, RegisteredProcess] = {}
+        self._processes: dict[str, Process] = {}
 
-    def __getitem__(self, process_id: str, /) -> RegisteredProcess:
+    def __getitem__(self, process_id: str, /) -> Process:
         return self._processes[process_id]
 
     def __len__(self) -> int:
@@ -33,8 +33,8 @@ class ProcessRegistry(Mapping[str, RegisteredProcess]):
         description: Optional[str] = None,
         input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
-    ) -> RegisteredProcess:
-        process = RegisteredProcess.from_function(
+    ) -> Process:
+        process = Process.create(
             function,
             id=id,
             version=version,
@@ -46,10 +46,10 @@ class ProcessRegistry(Mapping[str, RegisteredProcess]):
         self._processes[process.description.id] = process
         return process
 
-    def to_json_dict(self, use_qual_names: bool = False) -> dict[str, Any]:
+    def to_json_dict(self) -> dict[str, Any]:
         """Convert this registry into a JSON-serializable dictionary"""
         return {
-            (v.qual_name if use_qual_names else k): v.description.model_dump(
+            k: v.description.model_dump(
                 mode="json",
                 by_alias=True,
                 exclude_none=True,
@@ -58,6 +58,3 @@ class ProcessRegistry(Mapping[str, RegisteredProcess]):
             )
             for k, v in self.items()
         }
-
-    def to_json(self, use_qual_names: bool = False, **kwargs) -> str:
-        return json.dumps(self.to_json_dict(use_qual_names=use_qual_names), **kwargs)

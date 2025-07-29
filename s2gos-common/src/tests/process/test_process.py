@@ -14,7 +14,7 @@ from s2gos_common.models import (
     ProcessDescription,
     Schema,
 )
-from s2gos_common.process import RegisteredProcess
+from s2gos_common.process import Process
 from s2gos_common.testing import BaseModelMixin
 
 
@@ -41,15 +41,13 @@ def f3(point1: Point, point2: Point) -> Point:
 
 
 class RegisteredProcessTest(BaseModelMixin, TestCase):
-    def test_from_function_f1(self):
-        process = RegisteredProcess.from_function(f1)
-        self.assertIsInstance(process, RegisteredProcess)
+    def test_create_f1(self):
+        process = Process.create(f1)
+        self.assertIsInstance(process, Process)
         self.assertIs(f1, process.function)
-        self.assertEqual("f1", process.name)
-        self.assertEqual("tests.process.test_registered_process:f1", process.qual_name)
         proc_desc = process.description
         self.assertIsInstance(proc_desc, ProcessDescription)
-        self.assertEqual("f1", proc_desc.id)
+        self.assertEqual("tests.process.test_process:f1", proc_desc.id)
         self.assertEqual("0.0.0", proc_desc.version)
         self.assertEqual(None, proc_desc.title)
         self.assertEqual("This is f1.", proc_desc.description)
@@ -75,13 +73,13 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
             proc_outputs["return_value"],
         )
 
-    def test_from_function_f2(self):
-        process = RegisteredProcess.from_function(f2)
-        self.assertIsInstance(process, RegisteredProcess)
+    def test_create_f2(self):
+        process = Process.create(f2)
+        self.assertIsInstance(process, Process)
         self.assertIs(f2, process.function)
         proc_desc = process.description
         self.assertIsInstance(proc_desc, ProcessDescription)
-        self.assertEqual("f2", proc_desc.id)
+        self.assertEqual("tests.process.test_process:f2", proc_desc.id)
         self.assertEqual("0.0.0", proc_desc.version)
         self.assertEqual(None, proc_desc.title)
         self.assertEqual("This is f2.", proc_desc.description)
@@ -123,18 +121,18 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
             proc_outputs["return_value"],
         )
 
-    def test_from_function_f2_with_one_output_field(self):
-        process = RegisteredProcess.from_function(
+    def test_create_f2_with_one_output_field(self):
+        process = Process.create(
             f2,
             output_fields={
                 "point": Field(title="A point (x, y)"),
             },
         )
-        self.assertIsInstance(process, RegisteredProcess)
+        self.assertIsInstance(process, Process)
         self.assertIs(f2, process.function)
         proc_desc = process.description
         self.assertIsInstance(proc_desc, ProcessDescription)
-        self.assertEqual("f2", proc_desc.id)
+        self.assertEqual("tests.process.test_process:f2", proc_desc.id)
         self.assertEqual("0.0.0", proc_desc.version)
         self.assertEqual(None, proc_desc.title)
         self.assertEqual("This is f2.", proc_desc.description)
@@ -157,19 +155,19 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
             proc_outputs["point"],
         )
 
-    def test_from_function_f2_with_two_output_fields(self):
-        process = RegisteredProcess.from_function(
+    def test_create_f2_with_two_output_fields(self):
+        process = Process.create(
             f2,
             output_fields={
                 "x": Field(title="The X", ge=0.0),
                 "y": Field(title="The Y", lt=1.0),
             },
         )
-        self.assertIsInstance(process, RegisteredProcess)
+        self.assertIsInstance(process, Process)
         self.assertIs(f2, process.function)
         proc_desc = process.description
         self.assertIsInstance(proc_desc, ProcessDescription)
-        self.assertEqual("f2", proc_desc.id)
+        self.assertEqual("tests.process.test_process:f2", proc_desc.id)
         self.assertEqual("0.0.0", proc_desc.version)
         self.assertEqual(None, proc_desc.title)
         self.assertEqual("This is f2.", proc_desc.description)
@@ -195,15 +193,15 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
         )
 
     # noinspection PyMethodMayBeStatic
-    def test_from_function_with_illegal_f1_with_output_fields(self):
+    def test_create_with_illegal_f1_with_output_fields(self):
         with pytest.raises(
             TypeError,
             match=(
-                r"function 'tests\.process\.test_registered_process:f1': "
+                r"function 'tests\.process\.test_process:f1': "
                 r"return type must be tuple\[\] with arguments"
             ),
         ):
-            RegisteredProcess.from_function(
+            Process.create(
                 f1,
                 output_fields={
                     "x": Field(title="The X", ge=0.0),
@@ -212,16 +210,16 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
             )
 
     # noinspection PyMethodMayBeStatic
-    def test_from_function_f1_with_illegal_input_fields(self):
+    def test_create_f1_with_illegal_input_fields(self):
         with pytest.raises(
             ValueError,
             match=(
-                r"function 'tests\.process\.test_registered_process:f1': "
+                r"function 'tests\.process\.test_process:f1': "
                 r"all input names must have corresponding parameter names; "
                 r"invalid input name\(s\)\: 'u', 'v'"
             ),
         ):
-            RegisteredProcess.from_function(
+            Process.create(
                 f1,
                 input_fields={
                     "x": Field(title="The valid X", ge=0.0),
@@ -232,15 +230,15 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
             )
 
     # noinspection PyMethodMayBeStatic
-    def test_from_function_f2_with_illegal_output_fields(self):
+    def test_create_f2_with_illegal_output_fields(self):
         with pytest.raises(
             ValueError,
             match=(
-                r"function 'tests\.process\.test_registered_process:f2': "
+                r"function 'tests\.process\.test_process:f2': "
                 r"number of outputs must match number of tuple\[\] arguments"
             ),
         ):
-            RegisteredProcess.from_function(
+            Process.create(
                 f2,
                 output_fields={
                     "x": Field(title="The X", ge=0.0),
@@ -249,11 +247,9 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
                 },
             )
 
-    def test_from_function_f1_with_props(self):
-        e1 = RegisteredProcess.from_function(
-            f1, id="foo", version="1.0.2", title="My Foo"
-        )
-        self.assertIsInstance(e1, RegisteredProcess)
+    def test_create_f1_with_props(self):
+        e1 = Process.create(f1, id="foo", version="1.0.2", title="My Foo")
+        self.assertIsInstance(e1, Process)
         self.assertIs(f1, e1.function)
         p1 = e1.description
         self.assertIsInstance(p1, ProcessDescription)
@@ -264,8 +260,8 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
         self.assertIsInstance(p1.inputs, dict)
         self.assertIsInstance(p1.outputs, dict)
 
-    def test_from_function_f3(self):
-        process = RegisteredProcess.from_function(f3, id="f3")
+    def test_create_f3(self):
+        process = Process.create(f3, id="f3")
         self.assertEqual(
             {"point1", "point2"},
             set(process.description.inputs.keys()),

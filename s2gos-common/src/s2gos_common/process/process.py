@@ -14,27 +14,24 @@ from s2gos_common.models import (
     ProcessDescription,
 )
 
-from .json_schema import create_json_schema, create_schema_instance
+from .schema import create_json_schema, create_schema_instance
 
 
 @dataclass
-class RegisteredProcess:
+class Process:
+    """
+    A process comprises a process description and executable code
+    in form of a Python function.
+    """
+
     function: Callable
     signature: inspect.Signature
-    description: ProcessDescription
     model_class: type[pydantic.BaseModel]
-
-    @property
-    def name(self) -> str:
-        return self.function.__name__
-
-    @property
-    def qual_name(self) -> str:
-        return _get_qual_name(self.function)
+    description: ProcessDescription
 
     # noinspection PyShadowingBuiltins
     @classmethod
-    def from_function(
+    def create(
         cls,
         function: Callable,
         id: Optional[str] = None,
@@ -43,19 +40,20 @@ class RegisteredProcess:
         description: Optional[str] = None,
         input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
-    ) -> "RegisteredProcess":
+    ) -> "Process":
         if not inspect.isfunction(function):
             raise ValueError("function argument must be callable")
-        fn_name = _get_qual_name(function)
-        id = id or function.__name__
+        fn_name = f"{function.__module__}:{function.__qualname__}"
+        id = id or fn_name
         version = version or "0.0.0"
         description = description or inspect.getdoc(function)
         signature = inspect.signature(function)
         inputs, model_class = _generate_inputs(fn_name, signature, input_fields)
         outputs = _generate_outputs(fn_name, signature.return_annotation, output_fields)
-        return RegisteredProcess(
+        return Process(
             function=function,
             signature=signature,
+            model_class=model_class,
             description=ProcessDescription(
                 id=id,
                 version=version,
@@ -70,7 +68,6 @@ class RegisteredProcess:
                 # outputTransmission=output_transmission,
                 # jobControlOptions=job_control_options,
             ),
-            model_class=model_class,
         )
 
 

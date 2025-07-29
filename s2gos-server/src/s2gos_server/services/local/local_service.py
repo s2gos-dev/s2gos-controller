@@ -4,7 +4,7 @@
 
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures.process import ProcessPoolExecutor
-from typing import Any, Callable, Optional
+from typing import Callable, Optional
 
 import fastapi
 import pydantic
@@ -18,13 +18,10 @@ from s2gos_common.models import (
     ProcessList,
     ProcessRequest,
     ProcessSummary,
-    Schema,
 )
-from s2gos_common.process import ProcessRegistry, RegisteredProcess
+from s2gos_common.process import Job, Process, ProcessRegistry
 from s2gos_server.exceptions import ServiceException
 from s2gos_server.services.base import ServiceBase
-
-from .job import Job
 
 
 class LocalService(ServiceBase):
@@ -78,48 +75,18 @@ class LocalService(ServiceBase):
         self, process_id: str, process_request: ProcessRequest, **_kwargs
     ) -> JobInfo:
         process = self._get_process(process_id)
-        process_desc = process.description
-        input_params = _nest_dict(process_request.inputs or {})
-        input_default_params = {
-            input_name: input_info.schema_.default
-            for input_name, input_info in (process_desc.inputs or {}).items()
-            if isinstance(input_info.schema_, Schema)
-            and input_info.schema_.default is not None
-        }
-        input_values: dict[str, Any] = {}
-        for input_name in (process_desc.inputs or {}).keys():
-            if input_name in input_params:
-                input_values[input_name] = input_params[input_name]
-            elif input_name in input_default_params:
-                input_values[input_name] = input_default_params[input_name]
-
-        model_instance: pydantic.BaseModel
+        job_id = f"job_{len(self.jobs)}"
         try:
-            model_instance = process.model_class(**input_values)
+            job = Job.create(process, process_request, job_id=job_id)
         except pydantic.ValidationError as e:
             raise ServiceException(
                 400,
                 detail=f"Invalid parameterization for process {process_id!r}: {e}",
                 exception=e,
             )
-
-        function_kwargs = {
-            k: getattr(model_instance, k)
-            for k in process.model_class.model_fields.keys()
-            if k in input_values
-        }
-
-        job_id = f"job_{len(self.jobs)}"
-        job = Job(
-            process_id=process_desc.id,
-            job_id=job_id,
-            function=process.function,
-            function_kwargs=function_kwargs,
-        )
         self.jobs[job_id] = job
         assert self.executor is not None, "illegal state: no executor specified"
         job.future = self.executor.submit(job.run)
-        # 201 means, async execution started
         return job.job_info
 
     async def get_jobs(self, request: fastapi.Request, **_kwargs) -> JobList:
@@ -154,19 +121,9 @@ class LocalService(ServiceBase):
                 JobStatus.failed: "has failed",
             },
         )
+        assert job.job_info.status == JobStatus.successful
         assert job.future is not None
-        assert job.job_info.processID is not None
-        result = job.future.result()
-        process = self.process_registry.get(job.job_info.processID)
-        assert process is not None
-        outputs = process.description.outputs or {}
-        output_count = len(outputs)
-        return JobResults.model_validate(
-            {
-                output_name: result if output_count == 1 else result[i]
-                for i, output_name in enumerate(outputs.keys())
-            }
-        )
+        return job.future.result()
 
     # noinspection PyShadowingBuiltins
     def process(
@@ -194,7 +151,7 @@ class LocalService(ServiceBase):
 
         return _factory
 
-    def _get_process(self, process_id: str) -> RegisteredProcess:
+    def _get_process(self, process_id: str) -> Process:
         process = self.process_registry.get(process_id)
         if process is None:
             raise ServiceException(404, detail=f"Process {process_id!r} does not exist")
@@ -210,14 +167,3 @@ class LocalService(ServiceBase):
         if message:
             raise ServiceException(403, detail=f"Job {job_id!r} {message}")
         return job
-
-
-def _nest_dict(flat_dict: dict[str, Any]) -> dict[str, Any]:
-    nested_dict: dict[str, Any] = {}
-    for key, value in flat_dict.items():
-        path = key.split(".")
-        current = nested_dict
-        for name in path[:-1]:
-            current = current.setdefault(name, {})
-        current[path[-1]] = value
-    return nested_dict

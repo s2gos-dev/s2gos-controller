@@ -6,9 +6,16 @@ from unittest import TestCase
 
 import pytest
 
-from s2gos_common.models import JobStatus
-from s2gos_server.services.local import Job, JobCancelledException, get_job_context
-from s2gos_server.services.local.job import NullJobContext
+from s2gos_common.models import JobResults, JobStatus
+from s2gos_common.process import Process
+from s2gos_common.process.job import (
+    Job,
+    JobCancelledException,
+    NullJobContext,
+    get_job_context,
+)
+
+from .test_process import f1
 
 
 def fn_success(x: int, y: int) -> int:
@@ -37,23 +44,20 @@ def fn_exc(path: str) -> str:
 class JobTest(TestCase):
     def test_ctor(self):
         job = Job(
-            process_id="process_54",
+            process=Process.create(fn_success, id="process_54"),
             job_id="job_27",
-            function=fn_success,
-            function_kwargs={"x": 4, "y": 2},
+            function_kwargs={"x": True, "y": 2},
         )
         self.assertEqual("process_54", job.job_info.processID)
         self.assertEqual("job_27", job.job_info.jobID)
         self.assertEqual(None, job.job_info.progress)
-        self.assertIs(fn_success, job.function)
-        self.assertEqual({"x": 4, "y": 2}, job.function_kwargs)
+        self.assertEqual({"x": True, "y": 2}, job.function_kwargs)
 
     def test_context(self):
         job = Job(
-            process_id="process_54",
+            process=Process.create(fn_success, id="process_54"),
             job_id="job_27",
-            function=fn_success,
-            function_kwargs={"x": 4, "y": 2},
+            function_kwargs={"x": False, "y": 2},
         )
         self.assertEqual(False, job.is_cancelled())
         self.assertEqual(None, job.check_cancelled())
@@ -76,35 +80,36 @@ class JobTest(TestCase):
 
     def test_run_success(self):
         job = Job(
-            process_id="process_8",
+            process=Process.create(fn_success, id="process_8"),
             job_id="job_41",
-            function=fn_success,
             function_kwargs={"x": 3, "y": 9},
         )
-        result = job.run()
-        self.assertEqual(27, result)
+        job_results = job.run()
+        # noinspection PyArgumentList
+        self.assertEqual(JobResults({"return_value": 27}), job_results)
         self.assertEqual(JobStatus.successful, job.job_info.status)
         self.assertEqual(None, job.job_info.progress)
         self.assertEqual(None, job.job_info.message)
 
     def test_run_success_report(self):
         job = Job(
-            process_id="process_8",
+            process=Process.create(fn_success_report, id="process_8"),
             job_id="job_41",
-            function=fn_success_report,
             function_kwargs={"path": "outputs"},
         )
-        result = job.run()
-        self.assertEqual("outputs/result.zarr", result)
+        job_results = job.run()
+        # noinspection PyArgumentList
+        self.assertEqual(
+            JobResults({"return_value": "outputs/result.zarr"}), job_results
+        )
         self.assertEqual(JobStatus.successful, job.job_info.status)
         self.assertEqual(100, job.job_info.progress)
         self.assertEqual("Almost done", job.job_info.message)
 
     def test_run_exc(self):
         job = Job(
-            process_id="process_8",
+            process=Process.create(fn_exc, id="process_8"),
             job_id="job_41",
-            function=fn_exc,
             function_kwargs={"path": "outputs"},
         )
         result = job.run()
@@ -113,9 +118,8 @@ class JobTest(TestCase):
 
     def test_run_failed(self):
         job = Job(
-            process_id="process_8",
+            process=Process.create(fn_cancel_exc, id="process_8"),
             job_id="job_41",
-            function=fn_cancel_exc,
             function_kwargs={"path": "outputs"},
         )
         result = job.run()
@@ -130,9 +134,8 @@ class GetJobContextTest(TestCase):
 
     def test_valid(self):
         __job_context__ = Job(  # noqa: F841
-            process_id="a",
+            process=Process.create(f1),
             job_id="b",
-            function=lambda x: 2 * x,
             function_kwargs={"x": 4},
         )
         value = get_job_context()
