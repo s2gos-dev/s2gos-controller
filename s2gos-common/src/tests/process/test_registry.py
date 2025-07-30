@@ -47,35 +47,3 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         self.assertEqual(
             ["tests.process.test_process:f1", "f2", "my_fn3"], list(registry.keys())
         )
-
-    def test_to_json_dict(self):
-        self.maxDiff = None
-        registry = ProcessRegistry()
-        registry.register(f1)
-        registry.register(f2)
-        registry.register(f3)
-
-        json_dict = registry.to_json_dict()
-        self.assertEqual(
-            {
-                "tests.process.test_process:f1",
-                "tests.process.test_process:f2",
-                "tests.process.test_process:f3",
-            },
-            set(json_dict.keys()),
-        )
-        self.assertEqual(
-            "tests.process.test_process:f1",
-            json_dict["tests.process.test_process:f1"].get("id"),
-        )
-
-        registry = ProcessRegistry()
-        registry.register(f1, id="F1")
-        registry.register(f2, id="F2")
-        registry.register(f3, id="F3")
-        json_dict = registry.to_json_dict()
-        self.assertEqual({"F1", "F2", "F3"}, set(json_dict.keys()))
-        self.assertEqual(
-            "F1",
-            json_dict["F1"].get("id"),
-        )

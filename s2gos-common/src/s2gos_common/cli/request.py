@@ -27,8 +27,8 @@ class ProcessingRequest(ProcessRequest):
 
 
 def read_processing_request(
-    request_file: str | None = None,
     process_id: str | None = None,
+    request_file: str | None = None,
     request_inputs: list[str] | None = None,
 ) -> ProcessingRequest:
     request_dict, request_file = read_processing_request_from_file(request_file)

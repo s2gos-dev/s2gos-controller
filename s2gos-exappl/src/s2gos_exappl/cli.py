@@ -5,31 +5,70 @@
 import json
 from typing import Annotated, Optional
 
+import click
 import typer
 
-from s2gos_common.models import ProcessRequest
 
 cli = typer.Typer(add_completion=False)
 
+# See also s2gos-client/src/s2gos_client/cli/cli.py
+process_id_arg = typer.Argument(
+    help="Process identifier.",
+)
 
-@cli.command("execute-process", help="Execute a process.")
+# See also s2gos-client/src/s2gos_client/cli/cli.py
+request_input_option = typer.Option(
+    "--input",
+    "-i",
+    help="Processing request input.",
+    metavar="[NAME=VALUE]...",
+)
+
+# See also s2gos-client/src/s2gos_client/cli/cli.py
+request_file_option = typer.Option(
+    ...,
+    "--request",
+    "-r",
+    help="Processing request file. Use `-` to read from <stdin>.",
+    metavar="PATH",
+)
+
+
+@cli.command("execute-process")
 def execute_process(
-    process_id: Annotated[str, typer.Argument(help="The process identifier")],
-    request_path: Annotated[
-        Optional[str], typer.Option("--request", "-r", help="The process request file")
-    ] = None,
+    process_id: Annotated[Optional[str], process_id_arg] = None,
+    request_inputs: Annotated[Optional[list[str]], request_input_option] = None,
+    request_file: Annotated[Optional[str], request_file_option] = None,
 ):
+    """
+    Execute a process.
+
+    The processing request to be submitted may be read from a file given
+    by `--request`, or from `stdin`, or from the `process_id` argument
+    with zero, one, or more `--input` (or `-i`) options.
+
+    The `process_id` argument and any given `--input` options will override
+    settings with same name found in the given request file or `stdin`, if any.
+    """
+    from s2gos_common.cli.request import read_processing_request
     from s2gos_common.process import Job
     from s2gos_exappl.processors import registry
 
-    process_request_dict = {}
-    if request_path:
-        with open(request_path, "rt") as fp:
-            process_request_dict = json.load(fp)
-    process = registry.get(process_id)
-    job = Job.create(process, process_request=ProcessRequest(**process_request_dict))
+    processing_request = read_processing_request(
+        process_id=process_id, request_file=request_file, request_inputs=request_inputs
+    )
+
+    process_id_ = processing_request.process_id
+    process = registry.get(process_id_)
+    if process is None:
+        raise click.ClickException(f"Process {process_id_!r} not found.")
+
+    job = Job.create(process, process_request=processing_request)
     job_results = job.run()
-    typer.echo(job_results.model_dump_json(indent=2))
+    if job_results is not None:
+        typer.echo(job_results.model_dump_json(indent=2))
+    else:
+        typer.echo(job.job_info.model_dump_json(indent=2))
 
 
 @cli.command("list-processes", help="List all processes.")
@@ -62,6 +101,9 @@ def get_process(
     from s2gos_exappl.processors import registry
 
     process = registry.get(process_id)
+    if process is None:
+        raise click.ClickException(f"Process {process_id!r} not found.")
+
     typer.echo(
         json.dumps(
             process.description.model_dump(

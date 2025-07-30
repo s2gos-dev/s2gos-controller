@@ -2,6 +2,5 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from .cli import cli
-
-__all__ = ["cli"]
+# No exports here. To avoid unnecessary imports, CLI apps should pick
+# only what they need from dedicated submodules.

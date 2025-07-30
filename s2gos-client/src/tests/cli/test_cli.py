@@ -9,7 +9,7 @@ import typer.testing
 from tests.helpers import MockTransport
 
 from s2gos_client import Client, ClientConfig, __version__
-from s2gos_client.cli.app import app
+from s2gos_client.cli.cli import cli
 
 
 def invoke_app(*args: str) -> typer.testing.Result:
@@ -17,7 +17,7 @@ def invoke_app(*args: str) -> typer.testing.Result:
         return Client(config=ClientConfig(), _transport=MockTransport())
 
     runner = typer.testing.CliRunner()
-    return runner.invoke(app, args, obj={"get_client": get_mock_client})
+    return runner.invoke(cli, args, obj={"get_client": get_mock_client})
 
 
 class AppTest(TestCase):
@@ -113,7 +113,7 @@ class AppWithRealClientTest(TestCase):
     def test_get_processes(self):
         """Test code in app so that the non-mocked Client is used."""
         runner = typer.testing.CliRunner()
-        result = runner.invoke(app, ["list-processes"])
+        result = runner.invoke(cli, ["list-processes"])
         # May succeed if dev server is running
         self.assertTrue(
             result.exit_code in (0, 1), msg=f"exit code was {result.exit_code}"

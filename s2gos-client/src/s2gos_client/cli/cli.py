@@ -6,13 +6,13 @@ from typing import Annotated, Final, Optional
 
 import typer.core
 
-from s2gos_client.cli.aliased_group import AliasedGroup
+from s2gos_common.cli.group import AliasedGroup
 from s2gos_client.cli.output import OutputFormat
 
 SERVICE_NAME = "S2GOS service"
 
-APP_NAME = "s2gos-client"
-APP_HELP = """
+CLI_NAME = "s2gos-client"
+CLI_HELP = """
 `{app_name}` is the client shell tool for the {service_name}.
 
 The tool provides commands for managing processing request templates,
@@ -20,7 +20,7 @@ processing requests, processing jobs, and gets processing results.
 
 You can use shorter command name aliases, e.g., use command name `vr`
 for `validate-request`, or `lp` for `list-processes`.
-""".format(app_name=APP_NAME, service_name=SERVICE_NAME)
+""".format(app_name=CLI_NAME, service_name=SERVICE_NAME)
 
 DEFAULT_OUTPUT_FORMAT: Final = OutputFormat.yaml
 
@@ -35,6 +35,14 @@ request_input_option = typer.Option(
     metavar="[NAME=VALUE]...",
 )
 
+request_file_option = typer.Option(
+    ...,
+    "--request",
+    "-r",
+    help="Processing request file. Use `-` to read from <stdin>.",
+    metavar="PATH",
+)
+
 job_id_arg = typer.Argument(
     help="Job identifier.",
 )
@@ -43,14 +51,6 @@ config_option = typer.Option(
     "--config",
     "-c",
     help="Client configuration file.",
-    metavar="PATH",
-)
-
-request_option = typer.Option(
-    ...,
-    "--request",
-    "-r",
-    help="Processing request file. Use `-` to read from <stdin>.",
     metavar="PATH",
 )
 
@@ -63,10 +63,10 @@ format_option = typer.Option(
     # metavar="FORMAT",
 )
 
-app = typer.Typer(
-    name=APP_NAME,
+cli = typer.Typer(
+    name=CLI_NAME,
     cls=AliasedGroup,
-    help=APP_HELP,
+    help=CLI_HELP,
     invoke_without_command=True,
     # rich_markup_mode="rich",  # doesn't work
     # # but should, see https://github.com/fastapi/typer/discussions/818
@@ -74,7 +74,7 @@ app = typer.Typer(
 )
 
 
-@app.callback()
+@cli.callback()
 def main(
     ctx: typer.Context,
     version_: Annotated[
@@ -117,7 +117,7 @@ def main(
             ctx.obj[k] = v
 
 
-@app.command()
+@cli.command()
 def configure(
     user_name: Optional[str] = typer.Option(
         None,
@@ -151,7 +151,7 @@ def configure(
     typer.echo(f"Client configuration written to {config_path}")
 
 
-@app.command()
+@cli.command()
 def list_processes(
     ctx: typer.Context,
     config_file: Annotated[Optional[str], config_option] = None,
@@ -166,7 +166,7 @@ def list_processes(
     output(get_renderer(output_format).render_process_list(process_list))
 
 
-@app.command()
+@cli.command()
 def get_process(
     ctx: typer.Context,
     process_id: Annotated[str, process_id_arg],
@@ -182,11 +182,11 @@ def get_process(
     output(get_renderer(output_format).render_process_description(process_description))
 
 
-@app.command()
+@cli.command()
 def validate_request(
     process_id: Annotated[Optional[str], process_id_arg] = None,
     request_inputs: Annotated[Optional[list[str]], request_input_option] = None,
-    request_file: Annotated[Optional[str], request_option] = None,
+    request_file: Annotated[Optional[str], request_file_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
     """
@@ -200,18 +200,18 @@ def validate_request(
     settings with same name found in the given request file or `stdin`, if any.
     """
     from .output import get_renderer, output
-    from .request import read_processing_request
+    from s2gos_common.cli.request import read_processing_request
 
-    request = read_processing_request(request_file, process_id, request_inputs)
+    request = read_processing_request(process_id, request_file, request_inputs)
     output(get_renderer(output_format).render_processing_request_valid(request))
 
 
-@app.command()
+@cli.command()
 def execute_process(
     ctx: typer.Context,
     process_id: Annotated[Optional[str], process_id_arg] = None,
     request_inputs: Annotated[Optional[list[str]], request_input_option] = None,
-    request_file: Annotated[Optional[str], request_option] = None,
+    request_file: Annotated[Optional[str], request_file_option] = None,
     config_file: Annotated[Optional[str], config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
 ):
@@ -227,9 +227,9 @@ def execute_process(
     """
     from .client import use_client
     from .output import get_renderer, output
-    from .request import read_processing_request
+    from s2gos_common.cli.request import read_processing_request
 
-    request = read_processing_request(request_file, process_id, request_inputs)
+    request = read_processing_request(process_id, request_file, request_inputs)
     with use_client(ctx, config_file) as client:
         job = client.execute_process(
             process_id=request.process_id, request=request.as_process_request()
@@ -237,7 +237,7 @@ def execute_process(
     output(get_renderer(output_format).render_job_info(job))
 
 
-@app.command()
+@cli.command()
 def list_jobs(
     ctx: typer.Context,
     config_file: Annotated[Optional[str], config_option] = None,
@@ -252,7 +252,7 @@ def list_jobs(
     output(get_renderer(output_format).render_job_list(job_list))
 
 
-@app.command()
+@cli.command()
 def get_job(
     ctx: typer.Context,
     job_id: Annotated[str, job_id_arg],
@@ -268,7 +268,7 @@ def get_job(
     output(get_renderer(output_format).render_job_info(job))
 
 
-@app.command()
+@cli.command()
 def dismiss_job(
     ctx: typer.Context,
     job_id: Annotated[str, job_id_arg],
@@ -284,7 +284,7 @@ def dismiss_job(
     output(get_renderer(output_format).render_job_info(job))
 
 
-@app.command()
+@cli.command()
 def get_job_results(
     ctx: typer.Context,
     job_id: Annotated[str, job_id_arg],
@@ -301,4 +301,4 @@ def get_job_results(
 
 
 if __name__ == "__main__":  # pragma: no cover
-    app()
+    cli()
