@@ -24,7 +24,7 @@ class ProcessRegistry(Mapping[str, Process]):
         return iter(self._processes)
 
     # noinspection PyShadowingBuiltins
-    def register(
+    def process(
         self,
         function: Optional[Callable] = None,
         /,

@@ -2,14 +2,13 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-import time
 
 from s2gos_common.process import ProcessRegistry, get_job_context
 
 registry = ProcessRegistry()
 
 
-@registry.register(
+@registry.process(
     id="sleep_a_while",
     title="Sleep Processor",
     description=(
@@ -22,6 +21,8 @@ def sleep_a_while(
     duration: float = 10.0,
     fail: bool = False,
 ) -> float:
+    import time
+
     ctx = get_job_context()
 
     t0 = time.time()

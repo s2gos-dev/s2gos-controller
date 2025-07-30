@@ -139,8 +139,13 @@ class LocalService(ServiceBase):
         input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
     ) -> Callable[[Callable], Callable]:
-        """A decorator that registers a user function as a process."""
-        return self.process_registry.register(
+        """
+        A decorator that can be applied to a user function in order to
+        register it as a process in this registry.
+
+        The decorator can be used with or without parameters.
+        """
+        return self.process_registry.process(
             function,
             id=id,
             version=version,

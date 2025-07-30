@@ -7,6 +7,12 @@ from typing import Annotated, Final, Optional
 import typer.core
 
 from s2gos_client.cli.output import OutputFormat
+from s2gos_common.cli.constants import (
+    PROCESS_ID_ARGUMENT,
+    REQUEST_FILE_OPTION,
+    REQUEST_INPUT_OPTION,
+    REQUEST_SUBSCRIBER_OPTION,
+)
 from s2gos_common.cli.group import AliasedGroup
 
 SERVICE_NAME = "S2GOS service"
@@ -25,44 +31,14 @@ for `validate-request`, or `lp` for `list-processes`.
 
 DEFAULT_OUTPUT_FORMAT: Final = OutputFormat.yaml
 
-process_id_arg = typer.Argument(
-    help="Process identifier.",
-)
-
-request_input_option = typer.Option(
-    "--input",
-    "-i",
-    help="Process input value.",
-    metavar="[NAME=VALUE]...",
-)
-
-request_subscriber_option = typer.Option(
-    "--subscriber",
-    "-s",
-    help="Process subscriber URL.",
-    metavar="[EVENT=URL]...",
-)
-
-request_file_option = typer.Option(
-    ...,
-    "--request",
-    "-r",
-    help="Process request file. Use `-` to read from <stdin>.",
-    metavar="PATH",
-)
-
-job_id_arg = typer.Argument(
-    help="Job identifier.",
-)
-
-config_option = typer.Option(
+CONFIG_OPTION = typer.Option(
     "--config",
     "-c",
     help="Client configuration file.",
     metavar="PATH",
 )
 
-format_option = typer.Option(
+FORMAT_OPTION = typer.Option(
     ...,
     "--format",
     "-f",
@@ -71,11 +47,16 @@ format_option = typer.Option(
     # metavar="FORMAT",
 )
 
+JOB_ID_ARGUMENT = typer.Argument(
+    help="Job identifier.",
+)
+
 cli = typer.Typer(
     name=CLI_NAME,
     cls=AliasedGroup,
     help=CLI_HELP,
     invoke_without_command=True,
+    context_settings={},
     # rich_markup_mode="rich",  # doesn't work
     # # but should, see https://github.com/fastapi/typer/discussions/818
     # no_args_is_help=True,  # check: it shows empty error msg
@@ -145,7 +126,7 @@ def configure(
         "-s",
         help=f"The {SERVICE_NAME} API URL.",
     ),
-    config_file: Annotated[Optional[str], config_option] = None,
+    config_file: Annotated[Optional[str], CONFIG_OPTION] = None,
 ):
     """Configure the client tool."""
     from .config import configure_client
@@ -162,8 +143,8 @@ def configure(
 @cli.command()
 def list_processes(
     ctx: typer.Context,
-    config_file: Annotated[Optional[str], config_option] = None,
-    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
+    config_file: Annotated[Optional[str], CONFIG_OPTION] = None,
+    output_format: Annotated[OutputFormat, FORMAT_OPTION] = DEFAULT_OUTPUT_FORMAT,
 ):
     """List available processes."""
     from .client import use_client
@@ -177,9 +158,9 @@ def list_processes(
 @cli.command()
 def get_process(
     ctx: typer.Context,
-    process_id: Annotated[str, process_id_arg],
-    config_file: Annotated[Optional[str], config_option] = None,
-    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
+    process_id: Annotated[str, PROCESS_ID_ARGUMENT],
+    config_file: Annotated[Optional[str], CONFIG_OPTION] = None,
+    output_format: Annotated[OutputFormat, FORMAT_OPTION] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Get process details."""
     from .client import use_client
@@ -192,10 +173,10 @@ def get_process(
 
 @cli.command()
 def validate_request(
-    process_id: Annotated[Optional[str], process_id_arg] = None,
-    request_inputs: Annotated[Optional[list[str]], request_input_option] = None,
-    request_file: Annotated[Optional[str], request_file_option] = None,
-    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
+    process_id: Annotated[Optional[str], PROCESS_ID_ARGUMENT] = None,
+    request_inputs: Annotated[Optional[list[str]], REQUEST_INPUT_OPTION] = None,
+    request_file: Annotated[Optional[str], REQUEST_FILE_OPTION] = None,
+    output_format: Annotated[OutputFormat, FORMAT_OPTION] = DEFAULT_OUTPUT_FORMAT,
 ):
     """
     Validate a processing request.
@@ -218,14 +199,14 @@ def validate_request(
 @cli.command()
 def execute_process(
     ctx: typer.Context,
-    process_id: Annotated[Optional[str], process_id_arg] = None,
-    request_inputs: Annotated[Optional[list[str]], request_input_option] = None,
+    process_id: Annotated[Optional[str], PROCESS_ID_ARGUMENT] = None,
+    request_inputs: Annotated[Optional[list[str]], REQUEST_INPUT_OPTION] = None,
     request_subscribers: Annotated[
-        Optional[list[str]], request_subscriber_option
+        Optional[list[str]], REQUEST_SUBSCRIBER_OPTION
     ] = None,
-    request_file: Annotated[Optional[str], request_file_option] = None,
-    config_file: Annotated[Optional[str], config_option] = None,
-    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
+    request_file: Annotated[Optional[str], REQUEST_FILE_OPTION] = None,
+    config_file: Annotated[Optional[str], CONFIG_OPTION] = None,
+    output_format: Annotated[OutputFormat, FORMAT_OPTION] = DEFAULT_OUTPUT_FORMAT,
 ):
     """
     Execute a process in asynchronous mode.
@@ -258,8 +239,8 @@ def execute_process(
 @cli.command()
 def list_jobs(
     ctx: typer.Context,
-    config_file: Annotated[Optional[str], config_option] = None,
-    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
+    config_file: Annotated[Optional[str], CONFIG_OPTION] = None,
+    output_format: Annotated[OutputFormat, FORMAT_OPTION] = DEFAULT_OUTPUT_FORMAT,
 ):
     """List all jobs."""
     from .client import use_client
@@ -273,9 +254,9 @@ def list_jobs(
 @cli.command()
 def get_job(
     ctx: typer.Context,
-    job_id: Annotated[str, job_id_arg],
-    config_file: Annotated[Optional[str], config_option] = None,
-    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
+    job_id: Annotated[str, JOB_ID_ARGUMENT],
+    config_file: Annotated[Optional[str], CONFIG_OPTION] = None,
+    output_format: Annotated[OutputFormat, FORMAT_OPTION] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Get job details."""
     from .client import use_client
@@ -289,9 +270,9 @@ def get_job(
 @cli.command()
 def dismiss_job(
     ctx: typer.Context,
-    job_id: Annotated[str, job_id_arg],
-    config_file: Annotated[Optional[str], config_option] = None,
-    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
+    job_id: Annotated[str, JOB_ID_ARGUMENT],
+    config_file: Annotated[Optional[str], CONFIG_OPTION] = None,
+    output_format: Annotated[OutputFormat, FORMAT_OPTION] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Cancel a running or delete a finished job."""
     from .client import use_client
@@ -305,9 +286,9 @@ def dismiss_job(
 @cli.command()
 def get_job_results(
     ctx: typer.Context,
-    job_id: Annotated[str, job_id_arg],
-    config_file: Annotated[Optional[str], config_option] = None,
-    output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
+    job_id: Annotated[str, JOB_ID_ARGUMENT],
+    config_file: Annotated[Optional[str], CONFIG_OPTION] = None,
+    output_format: Annotated[OutputFormat, FORMAT_OPTION] = DEFAULT_OUTPUT_FORMAT,
 ):
     """Get job results."""
     from .client import use_client

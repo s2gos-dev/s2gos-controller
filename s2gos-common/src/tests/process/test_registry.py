@@ -17,7 +17,7 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         self.assertEqual([], list(registry.keys()))
 
         # use as no-arg decorator
-        registry.register(f1)
+        registry.process(f1)
         self.assertEqual(1, len(registry))
         p1 = list(registry.values())[0]
         self.assertIsInstance(p1, Process)
@@ -25,7 +25,7 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         self.assertEqual(["tests.process.test_process:f1"], list(registry.keys()))
 
         # use as decorator with args
-        registry.register(id="f2")(f2)
+        registry.process(id="f2")(f2)
         self.assertEqual(2, len(registry))
         p1, p2 = registry.values()
         self.assertIsInstance(p1, Process)
@@ -35,7 +35,7 @@ class ProcessRegistryTest(BaseModelMixin, TestCase):
         self.assertEqual(["tests.process.test_process:f1", "f2"], list(registry.keys()))
 
         # use as function
-        registry.register(f3, id="my_fn3")
+        registry.process(f3, id="my_fn3")
         self.assertEqual(3, len(registry))
         p1, p2, p3 = registry.values()
         self.assertIsInstance(p1, Process)
