@@ -20,8 +20,16 @@ process_id_arg = typer.Argument(
 request_input_option = typer.Option(
     "--input",
     "-i",
-    help="Processing request input.",
+    help="Process input value.",
     metavar="[NAME=VALUE]...",
+)
+
+# See also s2gos-client/src/s2gos_client/cli/cli.py
+request_subscriber_option = typer.Option(
+    "--subscriber",
+    "-s",
+    help="Process subscriber URL.",
+    metavar="[NAME=URL]...",
 )
 
 # See also s2gos-client/src/s2gos_client/cli/cli.py
@@ -38,6 +46,9 @@ request_file_option = typer.Option(
 def execute_process(
     process_id: Annotated[Optional[str], process_id_arg] = None,
     request_inputs: Annotated[Optional[list[str]], request_input_option] = None,
+    request_subscribers: Annotated[
+        Optional[list[str]], request_subscriber_option
+    ] = None,
     request_file: Annotated[Optional[str], request_file_option] = None,
 ):
     """
@@ -55,7 +66,10 @@ def execute_process(
     from s2gos_exappl.processors import registry
 
     processing_request = read_processing_request(
-        process_id=process_id, request_file=request_file, request_inputs=request_inputs
+        process_id=process_id,
+        request_inputs=request_inputs,
+        request_subscribers=request_subscribers,
+        request_file=request_file,
     )
 
     process_id_ = processing_request.process_id

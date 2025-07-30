@@ -31,15 +31,22 @@ process_id_arg = typer.Argument(
 request_input_option = typer.Option(
     "--input",
     "-i",
-    help="Processing request input.",
+    help="Process input value.",
     metavar="[NAME=VALUE]...",
+)
+
+request_subscriber_option = typer.Option(
+    "--subscriber",
+    "-s",
+    help="Process subscriber URL.",
+    metavar="[NAME=URL]...",
 )
 
 request_file_option = typer.Option(
     ...,
     "--request",
     "-r",
-    help="Processing request file. Use `-` to read from <stdin>.",
+    help="Process request file. Use `-` to read from <stdin>.",
     metavar="PATH",
 )
 
@@ -211,6 +218,7 @@ def execute_process(
     ctx: typer.Context,
     process_id: Annotated[Optional[str], process_id_arg] = None,
     request_inputs: Annotated[Optional[list[str]], request_input_option] = None,
+    request_subscribers: Annotated[Optional[str], request_subscriber_option] = None,
     request_file: Annotated[Optional[str], request_file_option] = None,
     config_file: Annotated[Optional[str], config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
@@ -229,7 +237,12 @@ def execute_process(
     from .output import get_renderer, output
     from s2gos_common.cli.request import read_processing_request
 
-    request = read_processing_request(process_id, request_file, request_inputs)
+    request = read_processing_request(
+        process_id=process_id,
+        request_file=request_file,
+        request_inputs=request_inputs,
+        request_subscribers=request_subscribers,
+    )
     with use_client(ctx, config_file) as client:
         job = client.execute_process(
             process_id=request.process_id, request=request.as_process_request()

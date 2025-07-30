@@ -30,14 +30,19 @@ def read_processing_request(
     process_id: str | None = None,
     request_file: str | None = None,
     request_inputs: list[str] | None = None,
+    request_subscribers: list[str] | None = None,
 ) -> ProcessingRequest:
     request_dict, request_file = read_processing_request_from_file(request_file)
     if process_id:
         request_dict["process_id"] = process_id
-    input_dict = parse_request_inputs(request_inputs)
-    if input_dict:
+    inputs_dict = parse_request_inputs(request_inputs)
+    if inputs_dict:
         request_dict["inputs"] = dict(request_dict.get("inputs") or {})
-        request_dict["inputs"].update(input_dict)
+        request_dict["inputs"].update(inputs_dict)
+    subscriber_dict = parse_request_subscribers(request_subscribers)
+    if subscriber_dict:
+        request_dict["subscriber"] = dict(request_dict.get("subscriber") or {})
+        request_dict["subscriber"].update(subscriber_dict)
     try:
         return ProcessingRequest(**request_dict)
     except pydantic.ValidationError as e:
@@ -81,14 +86,25 @@ def parse_request_inputs(request_inputs: list[str] | None) -> dict[str, Any]:
     import json
 
     inputs_dict: dict[str, Any] = {}
-    for parameter in request_inputs or []:
+    for name, value in _parse_kv_list(request_inputs, "request input"):
         try:
-            name, value = parameter.split("=", maxsplit=1)
-            try:
-                data = json.loads(value.strip())
-            except json.JSONDecodeError:
-                raise ValueError
-        except ValueError:
-            raise click.ClickException(f"Invalid request input argument: {parameter}")
-        inputs_dict[name] = data
+            json_value = json.loads(value)
+        except json.JSONDecodeError:
+            json_value = value
+        inputs_dict[name] = json_value
     return inputs_dict
+
+
+def parse_request_subscribers(request_subscribers: list[str] | None) -> dict[str, Any]:
+    return _parse_kv_list(request_subscribers, "request subscriber")
+
+
+def _parse_kv_list(kv_list: list[str] | None, item_name: str) -> dict[str, Any]:
+    d: dict[str, Any] = {}
+    for kv in kv_list or []:
+        try:
+            k, v = kv.split("=", maxsplit=1)
+        except ValueError:
+            raise click.ClickException(f"Invalid {item_name}: {kv}")
+        d[k] = v
+    return d
