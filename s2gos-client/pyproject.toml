@@ -49,7 +49,7 @@ dependencies = [
 ]
 
 [project.scripts]
-s2gos-client = "s2gos_client.cli:app"
+s2gos-client = "s2gos_client.cli:cli"
 
 [project.urls]
 Documentation = "https://s2gos-dev.github.io/s2gos-controller"
