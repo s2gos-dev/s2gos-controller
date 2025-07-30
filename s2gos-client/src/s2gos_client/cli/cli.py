@@ -40,7 +40,7 @@ request_subscriber_option = typer.Option(
     "--subscriber",
     "-s",
     help="Process subscriber URL.",
-    metavar="[NAME=URL]...",
+    metavar="[EVENT=URL]...",
 )
 
 request_file_option = typer.Option(
@@ -208,9 +208,9 @@ def validate_request(
     settings with same name found in the given request file or `stdin`, if any.
     """
     from .output import get_renderer, output
-    from s2gos_common.cli.request import read_processing_request
+    from s2gos_common.cli.request import parse_processing_request
 
-    request = read_processing_request(process_id, request_file, request_inputs)
+    request = parse_processing_request(process_id, request_file, request_inputs)
     output(get_renderer(output_format).render_processing_request_valid(request))
 
 
@@ -236,13 +236,13 @@ def execute_process(
     """
     from .client import use_client
     from .output import get_renderer, output
-    from s2gos_common.cli.request import read_processing_request
+    from s2gos_common.cli.request import parse_processing_request
 
-    request = read_processing_request(
+    request = parse_processing_request(
         process_id=process_id,
         request_file=request_file,
-        request_inputs=request_inputs,
-        request_subscribers=request_subscribers,
+        inputs=request_inputs,
+        subscribers=request_subscribers,
     )
     with use_client(ctx, config_file) as client:
         job = client.execute_process(

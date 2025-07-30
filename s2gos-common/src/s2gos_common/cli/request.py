@@ -13,6 +13,12 @@ from pydantic import Field
 
 from s2gos_common.models import ProcessRequest
 
+SUBSCRIBER_EVENTS = {
+    "success": "successUri",
+    "failed": "failedUri",
+    "progress": "inProgressUri",
+}
+
 
 class ProcessingRequest(ProcessRequest):
     process_id: str = Field(title="Process identifier", min_length=1)
@@ -26,20 +32,20 @@ class ProcessingRequest(ProcessRequest):
         )
 
 
-def read_processing_request(
+def parse_processing_request(
     process_id: str | None = None,
     request_file: str | None = None,
-    request_inputs: list[str] | None = None,
-    request_subscribers: list[str] | None = None,
+    inputs: list[str] | None = None,
+    subscribers: list[str] | None = None,
 ) -> ProcessingRequest:
-    request_dict, request_file = read_processing_request_from_file(request_file)
+    request_dict, request_file = read_processing_request(request_file)
     if process_id:
         request_dict["process_id"] = process_id
-    inputs_dict = parse_request_inputs(request_inputs)
+    inputs_dict = _parse_inputs(inputs)
     if inputs_dict:
         request_dict["inputs"] = dict(request_dict.get("inputs") or {})
         request_dict["inputs"].update(inputs_dict)
-    subscriber_dict = parse_request_subscribers(request_subscribers)
+    subscriber_dict = _parse_subscribers(subscribers)
     if subscriber_dict:
         request_dict["subscriber"] = dict(request_dict.get("subscriber") or {})
         request_dict["subscriber"].update(subscriber_dict)
@@ -49,8 +55,8 @@ def read_processing_request(
         raise click.ClickException(f"Processing request is invalid: {e}")
 
 
-def read_processing_request_from_file(
-    request_path: str | None = None,
+def read_processing_request(
+    request_path: Path | str | None = None,
 ) -> tuple[dict[str, Any], str]:
     if not request_path:
         return {}, ""
@@ -82,29 +88,64 @@ def read_processing_request_from_file(
     return request_dict, request_path
 
 
-def parse_request_inputs(request_inputs: list[str] | None) -> dict[str, Any]:
+def _parse_inputs(inputs: list[str] | None) -> dict[str, Any]:
+    return dict(_parse_inputs_kv(kv) for kv in (inputs or []))
+
+
+def _parse_inputs_kv(kv: str) -> tuple[str, str]:
+    parts = kv.split("=", maxsplit=1)
+    key, value = parts if len(parts) == 2 else (parts[0], "true")
+    return _parse_input_name(key), _parse_input_value(value)
+
+
+def _parse_input_name(key: str) -> str:
+    norm_key = key.strip().replace("-", "_")
+
+    property_names = key.split(".")
+    for property_name in property_names:
+        if not property_name.isidentifier():
+            raise click.ClickException(f"Invalid request NAME: {key!r}")
+
+    return norm_key
+
+
+def _parse_input_value(value: str) -> Any:
     import json
 
-    inputs_dict: dict[str, Any] = {}
-    for name, value in _parse_kv_list(request_inputs, "request input"):
-        try:
-            json_value = json.loads(value)
-        except json.JSONDecodeError:
-            json_value = value
-        inputs_dict[name] = json_value
-    return inputs_dict
+    try:
+        return json.loads(value)
+    except json.JSONDecodeError:
+        return value
 
 
-def parse_request_subscribers(request_subscribers: list[str] | None) -> dict[str, Any]:
-    return _parse_kv_list(request_subscribers, "request subscriber")
+def _parse_subscribers(subscribers: list[str] | None) -> dict[str, str]:
+    return dict(_parse_subscriber_kv(kv) for kv in (subscribers or []))
 
 
-def _parse_kv_list(kv_list: list[str] | None, item_name: str) -> dict[str, Any]:
-    d: dict[str, Any] = {}
-    for kv in kv_list or []:
-        try:
-            k, v = kv.split("=", maxsplit=1)
-        except ValueError:
-            raise click.ClickException(f"Invalid {item_name}: {kv}")
-        d[k] = v
-    return d
+def _parse_subscriber_kv(kv: str) -> tuple[str, str]:
+    try:
+        key, value = kv.split("=", maxsplit=1)
+    except ValueError:
+        raise click.ClickException(
+            f"Invalid subscriber item: must have form `EVENT=URL`, but was {kv!r}"
+        )
+    return _parse_subscriber_event(key), _parse_subscriber_url(value)
+
+
+def _parse_subscriber_event(key: str):
+    norm_key = SUBSCRIBER_EVENTS.get(key)
+    if norm_key is None:
+        raise click.ClickException(
+            "Invalid subscriber EVENT: must be one of "
+            f"[{'|'.join(SUBSCRIBER_EVENTS.keys())}], but was {key!r}"
+        )
+    return norm_key
+
+
+def _parse_subscriber_url(value: str):
+    from urllib.parse import urlparse
+
+    url = urlparse(value)
+    if not all([url.scheme in ("http", "https"), url.netloc]):
+        raise click.ClickException(f"Invalid subscriber URL: {value!r}")
+    return value

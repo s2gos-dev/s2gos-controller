@@ -69,14 +69,14 @@ def execute_process(
     The `process_id` argument and any given `--input` options will override
     settings with same name found in the given request file or `stdin`, if any.
     """
-    from s2gos_common.cli.request import read_processing_request
+    from s2gos_common.cli.request import parse_processing_request
     from s2gos_common.process import Job
     from s2gos_exappl.processors import registry
 
-    processing_request = read_processing_request(
+    processing_request = parse_processing_request(
         process_id=process_id,
-        request_inputs=request_inputs,
-        request_subscribers=request_subscribers,
+        inputs=request_inputs,
+        subscribers=request_subscribers,
         request_file=request_file,
     )
 
