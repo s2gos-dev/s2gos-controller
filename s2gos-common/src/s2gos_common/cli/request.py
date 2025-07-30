@@ -34,11 +34,11 @@ class ProcessingRequest(ProcessRequest):
 
 def parse_processing_request(
     process_id: str | None = None,
-    request_file: str | None = None,
+    request_path: str | None = None,
     inputs: list[str] | None = None,
     subscribers: list[str] | None = None,
 ) -> ProcessingRequest:
-    request_dict, request_file = read_processing_request(request_file)
+    request_dict, _ = read_processing_request(request_path)
     if process_id:
         request_dict["process_id"] = process_id
     inputs_dict = _parse_inputs(inputs)
@@ -85,7 +85,7 @@ def read_processing_request(
             f"Request must be an object, but was type {type(request_dict).__name__}"
         )
 
-    return request_dict, request_path
+    return request_dict, str(request_path)
 
 
 def _parse_inputs(inputs: list[str] | None) -> dict[str, Any]:

@@ -6,8 +6,8 @@ from typing import Annotated, Final, Optional
 
 import typer.core
 
-from s2gos_common.cli.group import AliasedGroup
 from s2gos_client.cli.output import OutputFormat
+from s2gos_common.cli.group import AliasedGroup
 
 SERVICE_NAME = "S2GOS service"
 
@@ -207,8 +207,9 @@ def validate_request(
     The `process_id` argument and any given `--input` options will override
     settings with same name found in the given request file or `stdin`, if any.
     """
-    from .output import get_renderer, output
     from s2gos_common.cli.request import parse_processing_request
+
+    from .output import get_renderer, output
 
     request = parse_processing_request(process_id, request_file, request_inputs)
     output(get_renderer(output_format).render_processing_request_valid(request))
@@ -219,7 +220,9 @@ def execute_process(
     ctx: typer.Context,
     process_id: Annotated[Optional[str], process_id_arg] = None,
     request_inputs: Annotated[Optional[list[str]], request_input_option] = None,
-    request_subscribers: Annotated[Optional[str], request_subscriber_option] = None,
+    request_subscribers: Annotated[
+        Optional[list[str]], request_subscriber_option
+    ] = None,
     request_file: Annotated[Optional[str], request_file_option] = None,
     config_file: Annotated[Optional[str], config_option] = None,
     output_format: Annotated[OutputFormat, format_option] = DEFAULT_OUTPUT_FORMAT,
@@ -234,15 +237,16 @@ def execute_process(
     The `process_id` argument and any given `--input` options will override
     settings with same name found in the given request file or `stdin`, if any.
     """
+    from s2gos_common.cli.request import parse_processing_request
+
     from .client import use_client
     from .output import get_renderer, output
-    from s2gos_common.cli.request import parse_processing_request
 
     request = parse_processing_request(
         process_id=process_id,
-        request_file=request_file,
         inputs=request_inputs,
         subscribers=request_subscribers,
+        request_path=request_file,
     )
     with use_client(ctx, config_file) as client:
         job = client.execute_process(

@@ -24,7 +24,7 @@ class RequestTest(unittest.TestCase):
     def test_read_processing_request_from_yaml_stdin(self):
         stream = StringIO("process_id: test_func\ninputs:\n  x: 7\n  y: 9")
         with patch("sys.stdin", new=stream):
-            request = parse_processing_request(request_file="-")
+            request = parse_processing_request(request_path="-")
             self.assertEqual(
                 ProcessingRequest(process_id="test_func", inputs={"x": 7, "y": 9}),
                 request,
@@ -41,7 +41,7 @@ class RequestTest(unittest.TestCase):
             "}"
         )
         with patch("sys.stdin", new=stream):
-            request = parse_processing_request(request_file="-")
+            request = parse_processing_request(request_path="-")
             self.assertEqual(
                 ProcessingRequest(process_id="test_func_2", inputs={"x": 0, "y": -4}),
                 request,
@@ -51,7 +51,7 @@ class RequestTest(unittest.TestCase):
         with open(REQUEST_PATH, mode="w") as stream:
             stream.write("process_id: test_func\ninputs:\n  x: 5\n  y: 2\n")
 
-        request = parse_processing_request(request_file=REQUEST_PATH)
+        request = parse_processing_request(request_path=REQUEST_PATH)
         self.assertEqual(
             ProcessingRequest(process_id="test_func", inputs={"x": 5, "y": 2}),
             request,
@@ -95,7 +95,7 @@ class RequestTest(unittest.TestCase):
         with open(REQUEST_PATH, mode="w") as stream:
             stream.write("process_id: test_func\ninputs:\n  x: 5\n  y: 2\n")
 
-        request = parse_processing_request(request_file=REQUEST_PATH, inputs=["x=13"])
+        request = parse_processing_request(request_path=REQUEST_PATH, inputs=["x=13"])
         self.assertEqual(
             ProcessingRequest(process_id="test_func", inputs={"x": 13, "y": 2}),
             request,
@@ -115,7 +115,7 @@ class RequestTest(unittest.TestCase):
         with pytest.raises(
             click.ClickException, match="Request must be an object, but was type int"
         ):
-            parse_processing_request(request_file=REQUEST_PATH)
+            parse_processing_request(request_path=REQUEST_PATH)
 
     # noinspection PyMethodMayBeStatic
     def test_read_processing_request_from_invalid_input(self):

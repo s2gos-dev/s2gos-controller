@@ -3,7 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 from collections.abc import Iterator, Mapping
-from typing import Optional, Callable
+from typing import Callable, Optional
 
 import pydantic
 

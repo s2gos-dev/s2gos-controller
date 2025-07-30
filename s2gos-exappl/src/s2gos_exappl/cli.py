@@ -77,7 +77,7 @@ def execute_process(
         process_id=process_id,
         inputs=request_inputs,
         subscribers=request_subscribers,
-        request_file=request_file,
+        request_path=request_file,
     )
 
     process_id_ = processing_request.process_id
@@ -106,7 +106,7 @@ def list_processes():
                     exclude_none=True,
                     exclude_defaults=True,
                     exclude_unset=True,
-                    exclude=["inputs", "outputs"],
+                    exclude={"inputs", "outputs"},
                 )
                 for k, v in registry.items()
             },
@@ -120,6 +120,7 @@ def get_process(
     process_id: Annotated[str, typer.Argument(help="The process identifier")],
 ):
     import json
+
     from s2gos_exappl.processors import registry
 
     process = registry.get(process_id)
