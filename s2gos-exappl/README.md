@@ -1,8 +1,10 @@
 # DTE-S2GOS example application
 
-Build the image
+Build and run the image
 
 ```commandline
-docker build -t s2gos-processor-v1 .
-docker run --rm s2gos-processor-v1 --help
+cd ..
+docker build -f s2gos-exappl/Dockerfile -t s2gos-exappl-v1 .
+docker run s2gos-exappl-v1 s2gos-exappl --help
+docker run -it s2gos-exappl-v1 /bin/bash
 ```
