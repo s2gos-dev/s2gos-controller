@@ -15,8 +15,9 @@ CLI_NAME = "s2gos-client"
 CLI_HELP = """
 `{app_name}` is the client shell tool for the {service_name}.
 
-The tool provides commands for managing processing request templates,
-processing requests, processing jobs, and gets processing results.
+The tool can be used to get the available processes, get process details,
+execute processes, and manage the jobs originating from the latter. 
+It herewith resembles the functionality of the OGC API Processes - Part 1.
 
 You can use shorter command name aliases, e.g., use command name `vr`
 for `validate-request`, or `lp` for `list-processes`.

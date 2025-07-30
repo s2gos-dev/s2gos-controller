@@ -8,8 +8,16 @@ from typing import Annotated, Optional
 import click
 import typer
 
+from s2gos_common.cli.group import AliasedGroup
 
-cli = typer.Typer(add_completion=False)
+CLI_HELP = """
+Command-line interface for process description and execution.
+
+You can use shorter command name aliases, e.g., use command name `ep`
+for `execute-process`, or `lp` for `list-processes`.
+"""
+
+cli = typer.Typer(add_completion=False, cls=AliasedGroup, help=CLI_HELP)
 
 # See also s2gos-client/src/s2gos_client/cli/cli.py
 process_id_arg = typer.Argument(
