@@ -31,7 +31,7 @@ class ClientConfig(BaseModel):
         )
 
     @classmethod
-    def get(
+    def create(
         cls,
         *,
         config: Optional["ClientConfig"] = None,

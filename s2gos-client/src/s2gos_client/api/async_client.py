@@ -47,7 +47,7 @@ class AsyncClient:
         _debug: bool = False,
         _transport: Optional[AsyncTransport] = None,
     ):
-        self._config = ClientConfig.get(
+        self._config = ClientConfig.create(
             config=config,
             config_path=config_path,
             server_url=server_url,

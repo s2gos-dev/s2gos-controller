@@ -24,7 +24,7 @@ def get_config(config_path: Path | str | None) -> ClientConfig:
             raise click.ClickException(
                 f"Configuration file {config_path} not found or empty."
             )
-    return ClientConfig.get(config=file_config)
+    return ClientConfig.create(config=file_config)
 
 
 def configure_client(
@@ -33,7 +33,7 @@ def configure_client(
     server_url: str | None = None,
     config_path: Path | str | None = None,
 ) -> Path:
-    config = ClientConfig.get(config_path=config_path)
+    config = ClientConfig.create(config_path=config_path)
     if not user_name:
         user_name = typer.prompt(
             "User name",
