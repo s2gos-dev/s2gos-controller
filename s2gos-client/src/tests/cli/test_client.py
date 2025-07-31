@@ -10,7 +10,7 @@ import typer
 
 from s2gos_client import ClientException
 from s2gos_client.api.client import Client
-from s2gos_client.cli.app import app
+from s2gos_client.cli.cli import cli
 from s2gos_client.cli.client import use_client
 from s2gos_common.models import ApiError
 
@@ -55,7 +55,7 @@ class UseClientTest(TestCase):
 
 def new_cli_context(traceback: bool = False):
     return typer.Context(
-        app,
+        cli,
         obj={
             "get_client": lambda config_path: Client(config_path=config_path),
             "traceback": traceback,

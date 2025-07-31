@@ -108,7 +108,7 @@ class ReadConfigTest(unittest.TestCase):
             S2GOS_ACCESS_TOKEN="9823hc",
             S2GOS_SERVER_URL="http://localhorst:2357",
         ):
-            mock_prompt.side_effect = [None, None, None]
+            mock_prompt.side_effect = ["bibo", "*****", "http://localhorst:2357"]
             custom_config_path = Path("test.cfg")
             try:
                 actual_config_path = configure_client(config_path=custom_config_path)

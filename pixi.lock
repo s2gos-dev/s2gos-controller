@@ -370,6 +370,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/24/ce/c8a41cb0f3044990c8afbdc20c853845a9e940995d4e0cffecafbb5e927b/mkdocs_mermaid2_plugin-1.2.1-py3-none-any.whl
       - pypi: ./s2gos-client
       - pypi: ./s2gos-common
+      - pypi: ./s2gos-exappl
       - pypi: ./s2gos-server
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/annotated-types-0.7.0-pyhd8ed1ab_1.conda
@@ -723,6 +724,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/24/ce/c8a41cb0f3044990c8afbdc20c853845a9e940995d4e0cffecafbb5e927b/mkdocs_mermaid2_plugin-1.2.1-py3-none-any.whl
       - pypi: ./s2gos-client
       - pypi: ./s2gos-common
+      - pypi: ./s2gos-exappl
       - pypi: ./s2gos-server
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/win-64/_openmp_mutex-4.5-2_gnu.conda
@@ -1066,6 +1068,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/24/ce/c8a41cb0f3044990c8afbdc20c853845a9e940995d4e0cffecafbb5e927b/mkdocs_mermaid2_plugin-1.2.1-py3-none-any.whl
       - pypi: ./s2gos-client
       - pypi: ./s2gos-common
+      - pypi: ./s2gos-exappl
       - pypi: ./s2gos-server
 packages:
 - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
@@ -8627,7 +8630,7 @@ packages:
 - pypi: ./s2gos-client
   name: s2gos-client
   version: 0.0.4.dev0
-  sha256: 223efbfd5783dae9674bbd3637864e51b2d61fe4b62abea73eb07c3dbbc67e05
+  sha256: 995df6fa4a0fff108fb9bfec457b3c1a6fce4c8de709197d6211a71ba1d1f85c
   requires_dist:
   - click
   - pydantic
@@ -8641,9 +8644,16 @@ packages:
 - pypi: ./s2gos-common
   name: s2gos-common
   version: 0.0.4.dev0
-  sha256: ef5aeee90ef209eedb1f50fa9e278534cd04cfb5c2206268b077c0173076278e
+  sha256: 18e640e32d505210d7bb0fbdf5695ca668a41489aa84cc5f41aa4fe658247c77
   requires_dist:
   - pydantic
+  - typer
+  requires_python: '>=3.10'
+  editable: true
+- pypi: ./s2gos-exappl
+  name: s2gos-exappl
+  version: 0.0.0
+  sha256: ef3ab54c7a1e3b724866f89506aa237757ebd453dfe80744c6aee7720d32ed23
   requires_python: '>=3.10'
   editable: true
 - pypi: ./s2gos-server

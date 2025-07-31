@@ -2,19 +2,15 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from s2gos_common.process.job import (
-    Job,
-    JobCancelledException,
-    JobContext,
-    get_job_context,
-)
-
-from .local_service import LocalService
+from .job import Job, JobCancelledException, JobContext, get_job_context
+from .process import Process
+from .registry import ProcessRegistry
 
 __all__ = [
-    "LocalService",
     "Job",
-    "JobCancelledException",
     "JobContext",
+    "JobCancelledException",
+    "ProcessRegistry",
+    "Process",
     "get_job_context",
 ]

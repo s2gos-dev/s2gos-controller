@@ -47,7 +47,7 @@ class Client:
         _debug: bool = False,
         _transport: Optional[Transport] = None,
     ):
-        self._config = ClientConfig.get(
+        self._config = ClientConfig.create(
             config=config,
             config_path=config_path,
             server_url=server_url,

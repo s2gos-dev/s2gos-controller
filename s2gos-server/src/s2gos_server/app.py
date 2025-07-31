@@ -9,14 +9,14 @@ from typing import Awaitable, Callable
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 
-from .exceptions import JSONContentException
+from .exceptions import ServiceException
 
 app = FastAPI()
 
 
-@app.exception_handler(JSONContentException)
+@app.exception_handler(ServiceException)
 async def json_http_exception_handler(
-    _request: Request, exc: JSONContentException
+    _request: Request, exc: ServiceException
 ) -> JSONResponse:
     return JSONResponse(
         status_code=exc.status_code,

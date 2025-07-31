@@ -1,6 +1,7 @@
 #  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
+
 import traceback
 from http import HTTPStatus
 from typing import Optional
@@ -10,7 +11,9 @@ from fastapi import HTTPException
 from s2gos_common.models import ApiError
 
 
-class JSONContentException(HTTPException):
+class ServiceException(HTTPException):
+    """Raised if a service error occurred."""
+
     def __init__(
         self,
         status_code: int,
@@ -33,5 +36,8 @@ class JSONContentException(HTTPException):
         )
 
 
-class ConfigException(Exception):
-    """An exception raised on server configuration errors."""
+class ServiceConfigException(ServiceException):
+    """Raised if a service configuration error occurred."""
+
+    def __init__(self, message: str):
+        super().__init__(status_code=500, detail=message, exception=self)

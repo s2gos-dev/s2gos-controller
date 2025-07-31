@@ -1,3 +1,8 @@
+## Changes in version 0.0.4 (in development)
+
+- Moved process registry stuff from `s2gos_server.services.local` into 
+  `s2gos_common.process` so it can be easier reused.
+
 ## Changes in version 0.0.3
 
 - The client's CLI is now fully operable.

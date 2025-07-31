@@ -3,9 +3,9 @@
 #  https://opensource.org/license/apache-2-0.
 
 [project]
-name = "s2gos-common"
-version = "0.0.4.dev"
-description = "Python data models for the ESA DTE-S2GOS synthetic scene generator service"
+name = "s2gos-exappl"
+version = "0.0.0"
+description = "Example application for the ESA DTE-S2GOS synthetic scene generator service"
 readme = "README.md"
 authors = [
   {name = "Norman Fomferra (Brockmann Consult GmbH)"},
@@ -37,16 +37,39 @@ classifiers = [
   "Operating System :: MacOS",
 ]
 requires-python = ">=3.10"
-dependencies = [
-  "pydantic",
-  "typer",
-]
 
-[project.urls]
-Documentation = "https://s2gos-dev.github.io/s2gos-controller"
-Repository = "https://github.com/s2gos-dev/s2gos-controller"
-Changelog = "https://github.com/s2gos-dev/s2gos-controller/blob/main/CHANGES.md"
-Issues = "https://github.com/s2gos-dev/s2gos-controller/issues"
+[project.scripts]
+s2gos-exappl = "s2gos_exappl.cli:cli"
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tool.pixi.dependencies]
+python = "3.12.*"
+typer = ">=0.16.0,<0.17"
+pydantic = ">=2.11.7,<3"
+
+[tool.pixi.pypi-dependencies]
+s2gos-common = { path = "../s2gos-common", editable = true }
+s2gos-exappl = { path = ".", editable = true }
+
+[tool.pixi.feature.dev.dependencies]
+pytest = "*"
+pytest-cov = "*"
+ruff = "*"
+isort = "*"
+mypy = "*"
+
+[tool.pixi.environments]
+production = { solve-group = "prod" }
+default = { features = ["dev"], solve-group = "prod" }
+
+[tool.isort]
+skip = [".idea", ".github", ".pixi", "htmlcov", "site"]
+profile = "black"
+line_length = 88
+known_first_party = ["s2gos_exappl"]
 
 [build-system]
 requires = ["hatch"]
@@ -54,11 +77,10 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build]
 sources = ["src"]
-exclude = ["src/tests/**/*"]
 
 [tool.hatch.build.targets.sdist]
 include = [
-  "src/s2gos_common/**/*",
+  "src/s2gos_exappl/**/*",
   "pyproject.toml",
   "README.md",
   "LICENSE",
@@ -66,5 +88,5 @@ include = [
 
 [tool.hatch.build.targets.wheel]
 include = [
-  "src/s2gos_common/**/*"
+  "src/s2gos_exappl/**/*"
 ]

@@ -20,11 +20,12 @@ from s2gos_common.models import (
     ProcessList,
     ProcessRequest,
 )
+from s2gos_common.process import Process
 from s2gos_common.testing import set_env
-from s2gos_server.exceptions import JSONContentException
+from s2gos_server.exceptions import ServiceException
 from s2gos_server.main import app
 from s2gos_server.provider import ServiceProvider, get_service
-from s2gos_server.services.local import LocalService, RegisteredProcess
+from s2gos_server.services.local import LocalService
 
 
 class LocalServiceSetupTest(TestCase):
@@ -51,7 +52,7 @@ class LocalServiceSetupTest(TestCase):
         service = self.service
 
         foo_entry = service.process_registry.get("foo")
-        self.assertIsInstance(foo_entry, RegisteredProcess)
+        self.assertIsInstance(foo_entry, Process)
         self.assertTrue(callable(foo_entry.function))
         foo_process = foo_entry.description
         self.assertIsInstance(foo_process, ProcessDescription)
@@ -59,7 +60,7 @@ class LocalServiceSetupTest(TestCase):
         self.assertEqual("1.0.1", foo_process.version)
 
         bar_entry = service.process_registry.get("bar")
-        self.assertIsInstance(bar_entry, RegisteredProcess)
+        self.assertIsInstance(bar_entry, Process)
         self.assertTrue(callable(bar_entry.function))
         bar_process = bar_entry.description
         self.assertIsInstance(bar_process, ProcessDescription)
@@ -111,7 +112,7 @@ class LocalServiceTest(IsolatedAsyncioTestCase):
 
     async def test_execute_process_fail(self):
         with pytest.raises(
-            JSONContentException,
+            ServiceException,
             match=(
                 r"400: Invalid parameterization for process 'primes_between': "
                 r"1 validation error for Inputs\n"

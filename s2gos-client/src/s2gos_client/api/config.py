@@ -31,7 +31,7 @@ class ClientConfig(BaseModel):
         )
 
     @classmethod
-    def get(
+    def create(
         cls,
         *,
         config: Optional["ClientConfig"] = None,
@@ -86,25 +86,6 @@ class ClientConfig(BaseModel):
             if env_var_name in os.environ:
                 config_dict[field_name] = os.environ[env_var_name]
         return ClientConfig(**config_dict) if config_dict else None
-
-    @classmethod
-    def read(cls, config_path: Optional[str | Path] = None) -> Optional["ClientConfig"]:
-        config_path = cls.normalize_config_path(config_path)
-
-        env_config_dict = {}
-        for field_name, _field_info in ClientConfig.model_fields.items():
-            env_var_name = "S2GOS_" + field_name.upper()
-            if env_var_name in os.environ:
-                env_config_dict[field_name] = os.environ[env_var_name]
-
-        config_dict = {}
-        if config_path and config_path.exists():
-            with config_path.open("rt") as stream:
-                config_dict = yaml.safe_load(stream)
-        config_dict.update(env_config_dict)
-        if not config_dict:
-            return None
-        return ClientConfig(**config_dict)
 
     def write(self, config_path: Optional[str | Path] = None) -> Path:
         config_path = self.normalize_config_path(config_path)

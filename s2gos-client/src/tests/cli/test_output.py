@@ -5,7 +5,7 @@
 from unittest import TestCase
 
 from s2gos_client.cli.output import OutputFormat, OutputRenderer, get_renderer
-from s2gos_client.cli.request import ProcessingRequest
+from s2gos_common.cli.request import ProcessingRequest
 from s2gos_common.models import (
     JobInfo,
     JobList,
