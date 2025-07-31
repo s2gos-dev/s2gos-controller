@@ -6,7 +6,7 @@ from unittest import TestCase
 
 import pytest
 
-from s2gos_common.models import JobResults, JobStatus
+from s2gos_common.models import JobResults, JobStatus, ProcessRequest, Subscriber
 from s2gos_common.process import Process
 from s2gos_common.process.job import (
     Job,
@@ -20,6 +20,10 @@ from .test_process import f1
 
 def fn_success(x: int, y: int) -> int:
     return x * y
+
+
+def fn_success_with_defaults(x: int = 0, y: int = 0) -> int:
+    return x + y
 
 
 def fn_success_report(path: str) -> str:
@@ -43,21 +47,21 @@ def fn_exc(path: str) -> str:
 
 class JobTest(TestCase):
     def test_ctor(self):
-        job = Job(
-            process=Process.create(fn_success, id="process_54"),
+        job = Job.create(
+            process=Process.create(fn_success, id="fn_success"),
             job_id="job_27",
-            function_kwargs={"x": True, "y": 2},
+            request=ProcessRequest(inputs={"x": True, "y": 2}),
         )
-        self.assertEqual("process_54", job.job_info.processID)
+        self.assertEqual("fn_success", job.job_info.processID)
         self.assertEqual("job_27", job.job_info.jobID)
         self.assertEqual(None, job.job_info.progress)
         self.assertEqual({"x": True, "y": 2}, job.function_kwargs)
 
     def test_context(self):
-        job = Job(
-            process=Process.create(fn_success, id="process_54"),
+        job = Job.create(
+            process=Process.create(fn_success, id="fn_success"),
             job_id="job_27",
-            function_kwargs={"x": False, "y": 2},
+            request=ProcessRequest(inputs={"x": False, "y": 2}),
         )
         self.assertEqual(False, job.is_cancelled())
         self.assertEqual(None, job.check_cancelled())
@@ -79,10 +83,10 @@ class JobTest(TestCase):
         self.assertEqual("3/6 input files downloaded", job.job_info.message)
 
     def test_run_success(self):
-        job = Job(
-            process=Process.create(fn_success, id="process_8"),
+        job = Job.create(
+            process=Process.create(fn_success, id="fn_success"),
             job_id="job_41",
-            function_kwargs={"x": 3, "y": 9},
+            request=ProcessRequest(inputs={"x": 3, "y": 9}),
         )
         job_results = job.run()
         # noinspection PyArgumentList
@@ -91,11 +95,26 @@ class JobTest(TestCase):
         self.assertEqual(None, job.job_info.progress)
         self.assertEqual(None, job.job_info.message)
 
+    def test_run_success_with_defaults(self):
+        job = Job.create(
+            process=Process.create(
+                fn_success_with_defaults, id="fn_success_with_defaults"
+            ),
+            job_id="job_652",
+            request=ProcessRequest(inputs={"y": 13}),
+        )
+        job_results = job.run()
+        # noinspection PyArgumentList
+        self.assertEqual(JobResults({"return_value": 13}), job_results)
+        self.assertEqual(JobStatus.successful, job.job_info.status)
+        self.assertEqual(None, job.job_info.progress)
+        self.assertEqual(None, job.job_info.message)
+
     def test_run_success_report(self):
-        job = Job(
-            process=Process.create(fn_success_report, id="process_8"),
+        job = Job.create(
+            process=Process.create(fn_success_report, id="fn_success_report"),
             job_id="job_41",
-            function_kwargs={"path": "outputs"},
+            request=ProcessRequest(inputs={"path": "outputs"}),
         )
         job_results = job.run()
         # noinspection PyArgumentList
@@ -107,24 +126,62 @@ class JobTest(TestCase):
         self.assertEqual("Almost done", job.job_info.message)
 
     def test_run_exc(self):
-        job = Job(
-            process=Process.create(fn_exc, id="process_8"),
+        job = Job.create(
+            process=Process.create(fn_exc, id="fn_exc"),
             job_id="job_41",
-            function_kwargs={"path": "outputs"},
+            request=ProcessRequest(inputs={"path": "outputs"}),
         )
         result = job.run()
         self.assertEqual(None, result)
         self.assertEqual(JobStatus.failed, job.job_info.status)
 
     def test_run_failed(self):
-        job = Job(
-            process=Process.create(fn_cancel_exc, id="process_8"),
+        job = Job.create(
+            process=Process.create(fn_cancel_exc, id="fn_cancel_exc"),
             job_id="job_41",
-            function_kwargs={"path": "outputs"},
+            request=ProcessRequest(inputs={"path": "outputs"}),
         )
         result = job.run()
         self.assertEqual(None, result)
         self.assertEqual(JobStatus.dismissed, job.job_info.status)
+
+    def test_run_success_report_with_subscriber(self):
+        job = Job.create(
+            process=Process.create(fn_success_report, id="fn_success_report"),
+            job_id="job_3092",
+            request=ProcessRequest(
+                inputs={"path": "outputs"},
+                subscriber=Subscriber(
+                    **{
+                        "successUri": "http://localhost:7000/cb/success",
+                        "inProgressUri": "http://localhost:7000/cb/progress",
+                        "failedUri": "http://localhost:7000/cb/failed",
+                    }
+                ),
+            ),
+        )
+        result = job.run()
+        self.assertIsInstance(result, JobResults)
+        self.assertEqual(JobStatus.successful, job.job_info.status)
+
+    def test_run_exc_with_subscriber(self):
+        job = Job.create(
+            process=Process.create(fn_exc, id="fn_exc"),
+            job_id="job_3092",
+            request=ProcessRequest(
+                inputs={"path": "outputs"},
+                subscriber=Subscriber(
+                    **{
+                        "successUri": "http://localhost:7000/cb/success",
+                        "inProgressUri": "http://localhost:7000/cb/progress",
+                        "failedUri": "http://localhost:7000/cb/failed",
+                    }
+                ),
+            ),
+        )
+        result = job.run()
+        self.assertEqual(None, result)
+        self.assertEqual(JobStatus.failed, job.job_info.status)
 
 
 class GetJobContextTest(TestCase):
@@ -148,3 +205,12 @@ class NullJobContextTest(TestCase):
         self.assertFalse(job_context.report_progress(progress=85))
         self.assertFalse(job_context.is_cancelled())
         self.assertFalse(job_context.check_cancelled())
+
+
+class JobHelpersTest(TestCase):
+    def test_nest_dict(self):
+        self.assertEqual({"a": 1, "b": True}, Job._nest_dict({"a": 1, "b": True}))
+        self.assertEqual(
+            {"a": 1, "b": {"x": 0.3, "y": -0.1}},
+            Job._nest_dict({"a": 1, "b.x": 0.3, "b.y": -0.1}),
+        )

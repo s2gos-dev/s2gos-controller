@@ -109,6 +109,9 @@ def _generate_inputs(
                     ),
                 )
         model_class = pydantic.create_model("Inputs", **model_field_definitions)
+
+    model_class.model_rebuild()
+
     inputs_schema = create_json_schema(model_class)
 
     input_descriptions = {}

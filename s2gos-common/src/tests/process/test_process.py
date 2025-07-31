@@ -18,7 +18,7 @@ from s2gos_common.process import Process
 from s2gos_common.testing import BaseModelMixin
 
 
-def f1(x: bool, y: int) -> float:
+def f1(x: float, y: float) -> float:
     """This is f1."""
     return 2.0 * y if x else 0.5 * y
 
@@ -64,11 +64,50 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
         self.assertEqual(["x", "y"], list(proc_inputs.keys()))
         self.assertEqual(["return_value"], list(proc_outputs.keys()))
         self.assertBaseModelEqual(
-            InputDescription(title="X", schema=Schema(type=DataType.boolean)),
+            InputDescription(title="X", schema=Schema(type=DataType.number)),
             proc_inputs["x"],
         )
         self.assertBaseModelEqual(
-            InputDescription(title="Y", schema=Schema(type=DataType.integer)),
+            InputDescription(title="Y", schema=Schema(type=DataType.number)),
+            proc_inputs["y"],
+        )
+        self.assertEqual(
+            OutputDescription(
+                title="Return Value",
+                schema=Schema(type=DataType.number),
+            ),
+            proc_outputs["return_value"],
+        )
+
+    # noinspection PyMethodMayBeStatic
+    def test_create_f1_with_input_fields(self):
+        process = Process.create(
+            f1,
+            input_fields={
+                "x": Field(title="A wonderful X", ge=0.0),
+                "y": Field(title="A beautiful Y", lt=1.0),
+            },
+        )
+        self.assertIsInstance(process, Process)
+        self.assertIs(f1, process.function)
+        proc_desc = process.description
+        proc_inputs = proc_desc.inputs
+        proc_outputs = proc_desc.outputs
+        self.assertIsInstance(proc_inputs, dict)
+        self.assertIsInstance(proc_outputs, dict)
+        self.assertEqual(["x", "y"], list(proc_inputs.keys()))
+        self.assertEqual(["return_value"], list(proc_outputs.keys()))
+        self.assertBaseModelEqual(
+            InputDescription(
+                title="A wonderful X", schema=Schema(type=DataType.number, minimum=0.0)
+            ),
+            proc_inputs["x"],
+        )
+        self.assertBaseModelEqual(
+            InputDescription(
+                title="A beautiful Y",
+                schema=Schema(type=DataType.number, exclusiveMaximum=1.0),
+            ),
             proc_inputs["y"],
         )
         self.assertEqual(

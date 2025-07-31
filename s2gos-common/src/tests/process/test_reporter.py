@@ -40,6 +40,16 @@ class CallbackReporterTest(unittest.TestCase):
             reporter.stop()
             self.assertEqual(mock_urlopen.call_count, 1)
 
+    def test_report_with_other_error(self):
+        with patch(
+            "urllib.request.urlopen",
+            side_effect=TypeError(self.url),
+        ) as mock_urlopen:
+            reporter = CallbackReporter()
+            reporter.report(self.url, {"status": "server error"})
+            reporter.stop()
+            self.assertEqual(mock_urlopen.call_count, 1)
+
     def test_idle_thread_does_not_post(self):
         with patch("urllib.request.urlopen") as mock_urlopen:
             reporter = CallbackReporter()

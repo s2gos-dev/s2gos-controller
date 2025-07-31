@@ -92,6 +92,9 @@ class Job(JobContext):
         process: The process that created this job.
         job_id: A job identifier.
         function_kwargs: The user function's keyword arguments.
+            A keyword must be a valid Python identifier or a
+            sequence of Python identifiers separated by the dot
+            (`.`) character.
         subscriber: Optional subscriber URIs.
     """
 
@@ -99,16 +102,30 @@ class Job(JobContext):
     def create(
         cls,
         process: Process,
-        process_request: ProcessRequest,
+        request: ProcessRequest,
         job_id: Optional[str] = None,
     ) -> "Job":
         """
+        Create a new job for the given process and process request.
+
+        Args:
+            process: The process.
+            request: The process request.
+                Names of request inputs must be valid Python identifiers or a
+                sequences of Python identifiers separated by the dot
+                (`.`) character. The latter is used to set nested input objects.
+            job_id: Optional job identifier.
+                If omitted, a unique identifier will be generated (UUID4).
+
+        Returns:
+            A new job instance.
+
         Raises:
             pydantic.ValidationError: if an input value is not valid
                 with respect to its process input description.
         """
         process_desc = process.description
-        input_params = cls._nest_dict(process_request.inputs or {})
+        input_params = cls._nest_dict(request.inputs or {})
         input_default_params = {
             input_name: input_info.schema_.default
             for input_name, input_info in (process_desc.inputs or {}).items()
@@ -134,7 +151,7 @@ class Job(JobContext):
             process=process,
             job_id=job_id or f"{uuid.uuid4()}",
             function_kwargs=function_kwargs,
-            subscriber=process_request.subscriber,
+            subscriber=request.subscriber,
         )
 
     def __init__(
@@ -145,6 +162,9 @@ class Job(JobContext):
         function_kwargs: dict[str, Any],
         subscriber: Optional[Subscriber] = None,
     ):
+        """Internal constructor.
+        Use `Job.create() instead.`
+        """
         self.process = process
         self.job_info = JobInfo(
             type=JobType.process,

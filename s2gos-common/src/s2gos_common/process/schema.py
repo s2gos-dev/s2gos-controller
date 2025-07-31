@@ -25,12 +25,13 @@ def create_schema_instance(name: str, schema: dict[str, Any]) -> Schema:
 def create_json_schema(
     model_class: type[pydantic.BaseModel],
 ) -> dict[str, Any]:
-    schema = model_class.model_json_schema(mode="serialization")
+    model_class.model_rebuild()
+    schema = model_class.model_json_schema()
     schema = inline_schema_refs(schema)
     return backport_schema_to_openapi_3_0(schema)
 
 
-def inline_schema_refs(schema: dict[str, Any]):
+def inline_schema_refs(schema: dict[str, Any]) -> dict[str, Any]:
     defs: dict[str, Any] | None = schema.get("$defs")
     if not defs:
         return schema
@@ -39,7 +40,7 @@ def inline_schema_refs(schema: dict[str, Any]):
     return _inline_schema_refs(schema, {f"#/$defs/{k}": v for k, v in defs.items()})
 
 
-def _inline_schema_refs(schema: dict[str, Any], defs: dict[str, Any]):
+def _inline_schema_refs(schema: dict[str, Any], defs: dict[str, Any]) -> dict[str, Any]:
     if "$ref" in schema:
         ref = schema["$ref"]
         if ref in defs:
@@ -68,7 +69,7 @@ def _inline_schema_refs(schema: dict[str, Any], defs: dict[str, Any]):
     return schema
 
 
-def backport_schema_to_openapi_3_0(schema: dict[str, Any]):
+def backport_schema_to_openapi_3_0(schema: dict[str, Any]) -> dict[str, Any]:
     if "type" in schema:
         type_ = schema["type"]
         if type_ == "null":
