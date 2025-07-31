@@ -5,18 +5,18 @@
 from s2gos_common.cli.cli import get_cli
 
 
+# By using a getter function, we defer importing the registry
+# until needed. This avoids early loading of all dependencies
+# in the case where the CLI is invoked just with a`--help` option.
 def get_process_registry():
-    """This function defers importing the processors package
-    until it is required by the CLI. This way no heavy
-    package are needed when the CLI is used with `--help` only.
-    """
-    from s2gos_exappl.processors import registry
+    from s2gos_exappl.processes import registry
 
     return registry
 
 
 # The CLI with a basic set of commands.
-# You can use the instance to register your own commands.
+# The `cli` is a Typer application of type `typer.Typer()`,
+# so can use the instance to register your own commands.
 cli = get_cli(get_process_registry)
 
 

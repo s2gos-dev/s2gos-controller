@@ -29,7 +29,17 @@ from .reporter import CallbackReporter
 
 
 def get_job_context() -> "JobContext":
-    """Get the current job context."""
+    """Get the current job context.
+
+    Returns the current job context that can be used to report
+    job progress in percent or via messages.
+
+    This function is intended to be called from within
+    functions executed as a job.
+
+    Returns:
+        An instance of the current job context.
+    """
     frame = inspect.currentframe()
     try:
         while frame:

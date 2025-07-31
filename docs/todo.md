@@ -12,12 +12,6 @@ Given here are the issues that will be addressed next.
   - user files --> **scene generator** --> OBJ
   - OBJ --> **scene simulator** --> Zarr 
 
-### Enhance the API Client
-
-- Consider generating a higher-level client from the 
-  OGC API Processes descriptions
-- Address the user-facing issues given under [Code generation](#code-generation)
-
 ### Enhance the GUI Client
 
 - Use the async API client version in the GUI Client.
@@ -39,23 +33,24 @@ Given here are the issues that will be addressed next.
 - `show_processes()` - get a nicely rendered overview of all processes 
 - `show_process(process_id: str = None, job_id: str = None, editable: bool = True)`
 
-### Implement CLI commands
+### Processor Containerization
 
-- `list_processes`
-- `get_process process_id`
-- `list_jobs`
-- `get_job job_id`
-- `dismiss_job job_id`
-- `get_job_results job_id --output <path>` 
+- **DONE**: Develop a simple processor development framework that
+  - provides a CLI to query and execute processes   
+  - supports registration of processes from python functions  
+  - supports progress reporting by subscriber callback URLs 
+  
+
+### Airflow Service
+
+- Test the Airflow-based service that connects to the Airflow web API
+- Generate DAGs for containerized processes in Docker
+- Generate DAGs for containerized processes in K8s
 
 ### Local Service
 
 - Path `/`:
   - Also provide a HTML version, support mimetype `text/html`
-
-### Airflow Service
-
-- Test the Airflow-based service that connects to the Airflow web API
 
 ### Authentication
 
@@ -70,14 +65,6 @@ Given here are the issues that will be addressed next.
 * Implement accordingly in
   - client 
   - server
-
-### Error handling
-
-* We currently have only little error management in client. 
-  Handle ClientException so users understand what went wrong:
-  - Python API
-  - CLI
-  - GUI
 
 ## Code generation
 
@@ -117,6 +104,15 @@ The output of `generators/gen_models` is not satisfying:
   - **DONE**: Generate them using [`httpx`](https://github.com/encode/httpx), which 
     should replace currently used `requests`
 
+### Implement CLI commands
+
+- **DONE**: `list-processes`
+- **DONE**: `get-process process_id`
+- **DONE**: `list-jobs`
+- **DONE**: `get-job job_id`
+- **DONE**: `dismiss-job job_id`
+- **DONE**: `get-job-results job_id --output <path>` 
+
 ### Enhance the GUI Client
 
 -  `show()` - show the main form where users can select a process 
@@ -151,7 +147,12 @@ The output of `generators/gen_models` is not satisfying:
 
 ### Error handling
 
-* **TODO**: Include server traceback on internal server errors with 500 status
+* **DONE**: Include server traceback on internal server errors with 500 status
+* **DONE**: We currently have only little error management in client. 
+  Handle ClientException so users understand what went wrong:
+  - **DONE**: Python API
+  - **DONE**: CLI
+  - **DONE**: GUI
 
 ### Code generation
 
