@@ -11,7 +11,7 @@ import click
 import pytest
 
 from s2gos_common.cli.request import ProcessingRequest, parse_processing_request
-from s2gos_common.models import Subscriber
+from s2gos_common.models import ProcessRequest, Subscriber
 
 REQUEST_PATH = "test-request.yaml"
 
@@ -20,6 +20,11 @@ class RequestTest(unittest.TestCase):
     def tearDown(self):
         if os.path.exists(REQUEST_PATH):
             os.remove(REQUEST_PATH)
+
+    def test_as_process_request(self):
+        processing_request = ProcessingRequest(process_id="P16")
+        process_request = processing_request.as_process_request()
+        self.assertIsInstance(process_request, ProcessRequest)
 
     def test_read_processing_request_from_yaml_stdin(self):
         stream = StringIO("process_id: test_func\ninputs:\n  x: 7\n  y: 9")

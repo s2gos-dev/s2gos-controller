@@ -33,7 +33,7 @@ def invoke_cli(*args: str) -> typer.testing.Result:
 
 
 class CliTest(TestCase):
-    def test_execute_process_f1_ok(self):
+    def test_execute_process_f1_success(self):
         result = invoke_cli(
             "execute-process", "f1", "-i", "a=0", "-i", "b=bibo", "-i", "c=0.2"
         )
@@ -43,7 +43,7 @@ class CliTest(TestCase):
             result.output,
         )
 
-    def test_execute_process_f2_ok(self):
+    def test_execute_process_f2_success(self):
         result = invoke_cli(
             "execute-process", "f2", "-i", "x=true", "-i", "y=pippo", "-i", "z=0.3"
         )
@@ -53,7 +53,7 @@ class CliTest(TestCase):
             result.output,
         )
 
-    def test_execute_process_fail(self):
+    def test_execute_process_f2_fail(self):
         result = invoke_cli(
             "execute-process", "f2", "-i", "x=true", "-i", "y=bibo", "-i", "z=1.8"
         )
@@ -61,6 +61,11 @@ class CliTest(TestCase):
         self.assertIn('  "processID": "f2",', result.output)
         self.assertIn('  "status": "failed",', result.output)
         self.assertIn('  "message": "y must not be bibo",', result.output)
+
+    def test_execute_process_fail(self):
+        result = invoke_cli("execute-process", "f5")
+        self.assertEqual(1, result.exit_code, msg=self.get_result_msg(result))
+        self.assertIn("Process 'f5' not found.", result.output)
 
     def test_list_processes(self):
         result = invoke_cli("list-processes")
@@ -81,7 +86,7 @@ class CliTest(TestCase):
             result.output,
         )
 
-    def test_get_process(self):
+    def test_get_process_ok(self):
         result = invoke_cli("get-process", "f2")
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertEqual(
@@ -122,6 +127,11 @@ class CliTest(TestCase):
             ),
             result.output,
         )
+
+    def test_get_process_fail(self):
+        result = invoke_cli("get-process", "f9")
+        self.assertEqual(1, result.exit_code, msg=self.get_result_msg(result))
+        self.assertIn("Process 'f9' not found.", result.output)
 
     def test_help(self):
         result = invoke_cli("--help")
