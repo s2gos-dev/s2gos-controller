@@ -32,13 +32,16 @@ class ClientConfigTest(TestCase):
         self.assertEqual(None, config.access_token)
         self.assertEqual(None, config.server_url)
 
-    def test_read_empty(self):
+    def test_create_empty(self):
         with tempfile.TemporaryDirectory() as tmp_dir_name:
             config_path = Path(tmp_dir_name) / "config"
-            config = ClientConfig.read(config_path=config_path)
-            self.assertIsNone(config)
+            config = ClientConfig.create(config_path=config_path)
+            self.assertIsInstance(config, ClientConfig)
+            self.assertEqual("http://127.0.0.1:8008", config.server_url)
+            self.assertEqual(None, config.user_name)
+            self.assertEqual(None, config.access_token)
 
-    def test_read_from_env(self):
+    def test_create_from_env(self):
         os.environ.update(
             dict(
                 S2GOS_SERVER_URL="https://s2gos.test.api",
@@ -48,24 +51,25 @@ class ClientConfigTest(TestCase):
         )
         with tempfile.TemporaryDirectory() as tmp_dir_name:
             config_path = Path(tmp_dir_name) / "config"
-            config = ClientConfig.read(config_path=config_path)
+            config = ClientConfig.create(config_path=config_path)
+            self.assertIsInstance(config, ClientConfig)
             self.assertEqual("https://s2gos.test.api", config.server_url)
             self.assertEqual("pippo", config.user_name)
             self.assertEqual("0f8915a4", config.access_token)
 
-    def test_read_from_file(self):
+    def test_create_from_file(self):
         config = ClientConfig(
             server_url="https://s2gos.test2.api", user_name="bibo", access_token="981b"
         )
         with tempfile.TemporaryDirectory() as tmp_dir_name:
             config_path = Path(tmp_dir_name) / "config"
             config.write(config_path=config_path)
-            config = ClientConfig.read(config_path=config_path)
+            config = ClientConfig.create(config_path=config_path)
             self.assertEqual("https://s2gos.test2.api", config.server_url)
             self.assertEqual("bibo", config.user_name)
             self.assertEqual("981b", config.access_token)
 
-    def test_read_from_file_and_env(self):
+    def test_create_from_file_and_env(self):
         os.environ.update(
             dict(
                 S2GOS_SERVER_URL="https://s2gos.test.api",
@@ -77,7 +81,7 @@ class ClientConfigTest(TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir_name:
             config_path = Path(tmp_dir_name) / "config"
             config.write(config_path=config_path)
-            config = ClientConfig.read(config_path=config_path)
+            config = ClientConfig.create(config_path=config_path)
             self.assertEqual("https://s2gos.test.api", config.server_url)
             self.assertEqual("pippo", config.user_name)
             self.assertEqual("0f8915a4", config.access_token)
