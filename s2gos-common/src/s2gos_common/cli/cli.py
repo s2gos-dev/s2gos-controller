@@ -22,8 +22,7 @@ if TYPE_CHECKING:
 
 PROCESS_REGISTRY_GETTER_KEY = "get_process_registry"
 
-CLI_HELP = """
-Command-line interface for process description and execution.
+CLI_HELP = """Command-line interface for process description and execution.
 
 You can use shorter command name aliases, e.g., use command name `ep`
 for `execute-process`, or `lp` for `list-processes`.

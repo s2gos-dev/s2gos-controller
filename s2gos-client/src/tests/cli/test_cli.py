@@ -12,7 +12,7 @@ from s2gos_client import Client, ClientConfig, __version__
 from s2gos_client.cli.cli import cli
 
 
-def invoke_app(*args: str) -> typer.testing.Result:
+def invoke_cli(*args: str) -> typer.testing.Result:
     def get_mock_client(_config_path: str | None):
         return Client(config=ClientConfig(), _transport=MockTransport())
 
@@ -20,20 +20,20 @@ def invoke_app(*args: str) -> typer.testing.Result:
     return runner.invoke(cli, args, obj={"get_client": get_mock_client})
 
 
-class AppTest(TestCase):
+class CliTest(TestCase):
     def test_help(self):
-        result = invoke_app("--help")
+        result = invoke_cli("--help")
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertIn("tool for the S2GOS service.", result.output)
 
     def test_version(self):
-        result = invoke_app("--version")
+        result = invoke_cli("--version")
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertEqual(__version__ + "\n", result.output)
 
     def test_configure(self):
         config_path = Path("config.cfg")
-        result = invoke_app(
+        result = invoke_cli(
             "configure",
             "-c",
             str(config_path),
@@ -49,17 +49,17 @@ class AppTest(TestCase):
         config_path.unlink()
 
     def test_get_processes(self):
-        result = invoke_app("list-processes")
+        result = invoke_cli("list-processes")
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertEqual("links: []\nprocesses: []\n\n", result.output)
 
     def test_get_process(self):
-        result = invoke_app("get-process", "sleep_a_while")
+        result = invoke_cli("get-process", "sleep_a_while")
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertEqual("id: ''\nversion: ''\n\n", result.output)
 
     def test_validate_request(self):
-        result = invoke_app(
+        result = invoke_cli(
             "validate-request", "sleep_a_while", "-i", "duration=120", "-i", "fail=true"
         )
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
@@ -69,7 +69,7 @@ class AppTest(TestCase):
         )
 
     def test_execute_process(self):
-        result = invoke_app(
+        result = invoke_cli(
             "execute-process", "sleep_a_while", "-i", "duration=120", "-i", "fail=true"
         )
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
@@ -78,26 +78,26 @@ class AppTest(TestCase):
         )
 
     def test_list_jobs(self):
-        result = invoke_app("list-jobs")
+        result = invoke_cli("list-jobs")
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertEqual("jobs: []\nlinks: []\n\n", result.output)
 
     def test_get_job(self):
-        result = invoke_app("get-job", "job_4")
+        result = invoke_cli("get-job", "job_4")
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertEqual(
             "jobID: ''\nstatus: accepted\ntype: process\n\n", result.output
         )
 
     def test_dismiss_job(self):
-        result = invoke_app("dismiss-job", "job_4")
+        result = invoke_cli("dismiss-job", "job_4")
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertEqual(
             "jobID: ''\nstatus: accepted\ntype: process\n\n", result.output
         )
 
     def test_get_job_results(self):
-        result = invoke_app("get-job-results", "job_4")
+        result = invoke_cli("get-job-results", "job_4")
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertEqual("null\n...\n\n", result.output)
 
@@ -109,7 +109,7 @@ class AppTest(TestCase):
             return None
 
 
-class AppWithRealClientTest(TestCase):
+class CliWithRealClientTest(TestCase):
     def test_get_processes(self):
         """Test code in app so that the non-mocked Client is used."""
         runner = typer.testing.CliRunner()
