@@ -42,7 +42,7 @@ class Process:
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
     ) -> "Process":
         if not inspect.isfunction(function):
-            raise ValueError("function argument must be callable")
+            raise TypeError("function argument must be callable")
         fn_name = f"{function.__module__}:{function.__qualname__}"
         id = id or fn_name
         version = version or "0.0.0"

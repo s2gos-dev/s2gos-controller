@@ -41,6 +41,12 @@ def f3(point1: Point, point2: Point) -> Point:
 
 
 class RegisteredProcessTest(BaseModelMixin, TestCase):
+    # noinspection PyMethodMayBeStatic
+    def test_create_fail(self):
+        with pytest.raises(TypeError, match="function argument must be callable"):
+            # noinspection PyTypeChecker
+            Process.create(42)
+
     def test_create_f1(self):
         process = Process.create(f1)
         self.assertIsInstance(process, Process)
