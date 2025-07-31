@@ -159,8 +159,3 @@ def _generate_outputs(
             schema=create_schema_instance(output_name, schema),
         )
     return output_descriptions
-
-
-def _get_qual_name(function: Callable) -> str:
-    # noinspection PyUnresolvedReferences
-    return f"{function.__module__}:{function.__qualname__}"
