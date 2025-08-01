@@ -11,7 +11,8 @@ import pydantic
 from pydantic import Field
 
 from s2gos_common.models import Link
-from s2gos_server.services.local import LocalService, get_job_context
+from s2gos_common.process import JobContext
+from s2gos_server.services.local import LocalService
 
 service = LocalService(
     title="S2GOS API Server (local dummy for testing)",
@@ -32,7 +33,7 @@ def sleep_a_while(
     duration: float = 10.0,
     fail: bool = False,
 ) -> float:
-    ctx = get_job_context()
+    ctx = JobContext.get()
 
     t0 = time.time()
     for i in range(101):
@@ -47,13 +48,14 @@ def sleep_a_while(
     id="primes_between",
     title="Prime Processor",
     description=(
-        "Returns the list of prime numbers between a `min_val` and `max_val`. "
+        "Returns the list of prime numbers between a `min_val` and `max_val`."
     ),
 )
 def primes_between(
-    min_val: int = pydantic.Field(0, ge=0), max_val: int = pydantic.Field(100, le=100)
+    min_val: int = pydantic.Field(0, ge=0),
+    max_val: int = pydantic.Field(100, le=100),
 ) -> list[int]:
-    ctx = get_job_context()
+    ctx = JobContext.get()
 
     if max_val < 2 or max_val <= min_val:
         raise ValueError("max_val must be greater 1 and greater min_val")

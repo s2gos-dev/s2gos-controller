@@ -28,39 +28,53 @@ from .process import Process
 from .reporter import CallbackReporter
 
 
-def get_job_context() -> "JobContext":
-    """Get the current job context.
-
-    Returns the current job context that can be used to report
-    job progress in percent or via messages.
-
-    This function is intended to be called from within
-    functions executed as a job.
-
-    Returns:
-        An instance of the current job context.
-    """
-    frame = inspect.currentframe()
-    try:
-        while frame:
-            job_context = frame.f_locals.get("__job_context__")
-            if isinstance(job_context, JobContext):
-                return job_context
-            frame = frame.f_back
-    finally:
-        # Always free alive frame-references
-        del frame
-    # noinspection PyUnreachableCode
-    warnings.warn("cannot determine current job context; using non-functional dummy")
-    return NullJobContext()
-
-
 class JobCancelledException(Exception):
     """Raised if a job's cancellation has been requested."""
 
 
 class JobContext(ABC):
-    """Report task progress and check for task cancellation."""
+    """
+    Report process progress and check for task cancellation.
+
+    A process function can retrieve the current job context
+
+    1. via [JobContext.get()][s2gos_common.process.JobContext.get] from
+       within a process function, or
+    2. as a function argument of type [JobContext][s2gos_common.process.JobContext].
+    """
+
+    @classmethod
+    def get(cls) -> "JobContext":
+        """
+        Get the current job context.
+
+        Returns the current job context that can be used by
+        process functions to report job progress in percent
+        or via messages and to check whether cancellation
+        has been requested.
+        This function is intended to be called from within
+        a process function executed as a job. If called as a usual
+        Python function (without a job serving as context), the
+        returned context will have no-op methods only.
+
+        Returns:
+            An instance of the current job context.
+        """
+        frame = inspect.currentframe()
+        try:
+            while frame:
+                job_context = frame.f_locals.get("__job_context__")
+                if isinstance(job_context, JobContext):
+                    return job_context
+                frame = frame.f_back
+        finally:
+            # Always free alive frame-references
+            del frame
+        # noinspection PyUnreachableCode
+        warnings.warn(
+            "cannot determine current job context; using non-functional dummy"
+        )
+        return NullJobContext()
 
     @abstractmethod
     def report_progress(
@@ -71,8 +85,8 @@ class JobContext(ABC):
         """Report task progress.
 
         Args:
-            progress: Progress in percent
-            message: Detail progress message
+            progress: Progress in percent.
+            message: Detail progress message.
 
         Raises:
             JobCancellationException: if an attempt has been made
@@ -90,13 +104,14 @@ class JobContext(ABC):
 
     @abstractmethod
     def check_cancelled(self) -> None:
-        """Raise a `JobCancellationException`,
+        """Raise a `JobCancellationException`, if
         an attempt has been made to cancel this job.
         """
 
 
 class Job(JobContext):
-    """Represents an execution of a user function.
+    """
+    Represents an execution of a user function.
 
     Args:
         process: The process that created this job.
@@ -225,13 +240,20 @@ class Job(JobContext):
 
         # Make the job (context) findable by get_job_context()
         # through the local variable __job_context__
-        __job_context__ = self  # noqa: F841
+        ctx = __job_context__ = self  # noqa: F841
+
+        # check if we need to inject job context
+        ctx_args = self.process.job_ctx_args
+        if ctx_args:
+            function_kwargs = {**{k: ctx for k in ctx_args}, **self.function_kwargs}
+        else:
+            function_kwargs = self.function_kwargs
 
         self._start_job()
 
         try:
             self.check_cancelled()
-            function_result = self.process.function(**self.function_kwargs)
+            function_result = self.process.function(**function_kwargs)
             self._finish_job(JobStatus.successful)
             job_results = self._get_job_results(function_result)
             self._maybe_notify_success(job_results)

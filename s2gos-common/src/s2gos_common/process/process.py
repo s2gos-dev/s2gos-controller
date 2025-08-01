@@ -26,6 +26,7 @@ class Process:
 
     function: Callable
     signature: inspect.Signature
+    job_ctx_args: list[str]
     model_class: type[pydantic.BaseModel]
     description: ProcessDescription
 
@@ -48,11 +49,14 @@ class Process:
         version = version or "0.0.0"
         description = description or inspect.getdoc(function)
         signature = inspect.signature(function)
-        inputs, model_class = _generate_inputs(fn_name, signature, input_fields)
-        outputs = _generate_outputs(fn_name, signature.return_annotation, output_fields)
+        inputs, job_ctx_args, model_class = _parse_inputs(
+            fn_name, signature, input_fields
+        )
+        outputs = _parse_outputs(fn_name, signature.return_annotation, output_fields)
         return Process(
             function=function,
             signature=signature,
+            job_ctx_args=job_ctx_args,
             model_class=model_class,
             description=ProcessDescription(
                 id=id,
@@ -71,19 +75,27 @@ class Process:
         )
 
 
-def _generate_inputs(
+def _parse_inputs(
     fn_name: str,
     signature: inspect.Signature,
     input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] | None,
-) -> tuple[dict[str, InputDescription], type[pydantic.BaseModel]]:
+) -> tuple[dict[str, InputDescription], list[str], type[pydantic.BaseModel]]:
+    from .job import JobContext
+
+    job_ctx_args: list[str] = []
+    model_class_name = "ProcessInputs"
+
     model_field_definitions = {}
     for param_name, parameter in signature.parameters.items():
-        if parameter.default is inspect.Parameter.empty:
-            field = parameter.annotation
+        if parameter.annotation is not JobContext:
+            if parameter.default is inspect.Parameter.empty:
+                field = parameter.annotation
+            else:
+                field = parameter.annotation, parameter.default
+            model_field_definitions[param_name] = field
         else:
-            field = parameter.annotation, parameter.default
-        model_field_definitions[param_name] = field
-    model_class = pydantic.create_model("Inputs", **model_field_definitions)
+            job_ctx_args.append(param_name)
+    model_class = pydantic.create_model(model_class_name, **model_field_definitions)
     if input_fields:
         invalid_inputs = [
             input_name
@@ -108,7 +120,7 @@ def _generate_inputs(
                         old_field_info, field_info
                     ),
                 )
-        model_class = pydantic.create_model("Inputs", **model_field_definitions)
+        model_class = pydantic.create_model(model_class_name, **model_field_definitions)
 
     model_class.model_rebuild()
 
@@ -124,10 +136,10 @@ def _generate_inputs(
             schema=create_schema_instance(input_name, schema),
         )
 
-    return input_descriptions, model_class
+    return input_descriptions, job_ctx_args, model_class
 
 
-def _generate_outputs(
+def _parse_outputs(
     fn_name: str,
     annotation: type,
     output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] | None,

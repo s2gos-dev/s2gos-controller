@@ -3,7 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 from .cli.cli import get_cli
-from .job import Job, JobCancelledException, JobContext, get_job_context
+from .job import Job, JobCancelledException, JobContext
 from .process import Process
 from .registry import ProcessRegistry
 
@@ -16,5 +16,4 @@ __all__ = [
     "ProcessRegistry",
     "Process",
     "get_cli",
-    "get_job_context",
 ]

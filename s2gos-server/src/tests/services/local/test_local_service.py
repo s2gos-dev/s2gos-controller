@@ -115,7 +115,7 @@ class LocalServiceTest(IsolatedAsyncioTestCase):
             ServiceException,
             match=(
                 r"400: Invalid parameterization for process 'primes_between': "
-                r"1 validation error for Inputs\n"
+                r"1 validation error for ProcessInputs\n"
                 r"min_val"
             ),
         ):

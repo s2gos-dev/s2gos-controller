@@ -11,8 +11,8 @@ from s2gos_common.process import Process
 from s2gos_common.process.job import (
     Job,
     JobCancelledException,
+    JobContext,
     NullJobContext,
-    get_job_context,
 )
 
 from .test_process import f1
@@ -27,7 +27,7 @@ def fn_success_with_defaults(x: int = 0, y: int = 0) -> int:
 
 
 def fn_success_report(path: str) -> str:
-    ctx = get_job_context()
+    ctx = JobContext.get()
     ctx.check_cancelled()
     ctx.report_progress(progress=0)
     ctx.report_progress(progress=50, message="Almost done")
@@ -186,7 +186,7 @@ class JobTest(TestCase):
 
 class GetJobContextTest(TestCase):
     def test_null(self):
-        job_context = get_job_context()
+        job_context = JobContext.get()
         self.assertIsInstance(job_context, NullJobContext)
 
     def test_valid(self):
@@ -195,7 +195,7 @@ class GetJobContextTest(TestCase):
             job_id="b",
             function_kwargs={"x": 4},
         )
-        value = get_job_context()
+        value = JobContext.get()
         self.assertIs(__job_context__, value)
 
 
