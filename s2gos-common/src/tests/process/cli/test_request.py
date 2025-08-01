@@ -10,8 +10,8 @@ from unittest.mock import patch
 import click
 import pytest
 
-from s2gos_common.cli.request import ProcessingRequest, parse_processing_request
 from s2gos_common.models import ProcessRequest, Subscriber
+from s2gos_common.process.cli import ProcessingRequest, parse_processing_request
 
 REQUEST_PATH = "test-request.yaml"
 

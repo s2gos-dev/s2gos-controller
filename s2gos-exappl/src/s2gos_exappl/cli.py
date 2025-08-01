@@ -2,7 +2,7 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from s2gos_common.cli.cli import get_cli
+from s2gos_common.process.cli.cli import get_cli
 
 
 # By using a getter function, we defer importing the registry

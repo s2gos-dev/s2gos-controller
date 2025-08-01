@@ -6,8 +6,8 @@ from unittest import TestCase
 
 import typer.testing
 
-from s2gos_common.cli.cli import get_cli
 from s2gos_common.process import ProcessRegistry
+from s2gos_common.process.cli.cli import get_cli
 
 registry = ProcessRegistry()
 

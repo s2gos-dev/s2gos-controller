@@ -31,31 +31,32 @@ class ProcessingRequest(ProcessRequest):
             subscriber=self.subscriber,
         )
 
+    @classmethod
+    def create(
+        cls,
+        process_id: str | None = None,
+        request_path: str | None = None,
+        inputs: list[str] | None = None,
+        subscribers: list[str] | None = None,
+    ) -> "ProcessingRequest":
+        request_dict, _ = _read_processing_request(request_path)
+        if process_id:
+            request_dict["process_id"] = process_id
+        inputs_dict = _parse_inputs(inputs)
+        if inputs_dict:
+            request_dict["inputs"] = dict(request_dict.get("inputs") or {})
+            request_dict["inputs"].update(inputs_dict)
+        subscriber_dict = _parse_subscribers(subscribers)
+        if subscriber_dict:
+            request_dict["subscriber"] = dict(request_dict.get("subscriber") or {})
+            request_dict["subscriber"].update(subscriber_dict)
+        try:
+            return ProcessingRequest(**request_dict)
+        except pydantic.ValidationError as e:
+            raise click.ClickException(f"Processing request is invalid: {e}")
 
-def parse_processing_request(
-    process_id: str | None = None,
-    request_path: str | None = None,
-    inputs: list[str] | None = None,
-    subscribers: list[str] | None = None,
-) -> ProcessingRequest:
-    request_dict, _ = read_processing_request(request_path)
-    if process_id:
-        request_dict["process_id"] = process_id
-    inputs_dict = _parse_inputs(inputs)
-    if inputs_dict:
-        request_dict["inputs"] = dict(request_dict.get("inputs") or {})
-        request_dict["inputs"].update(inputs_dict)
-    subscriber_dict = _parse_subscribers(subscribers)
-    if subscriber_dict:
-        request_dict["subscriber"] = dict(request_dict.get("subscriber") or {})
-        request_dict["subscriber"].update(subscriber_dict)
-    try:
-        return ProcessingRequest(**request_dict)
-    except pydantic.ValidationError as e:
-        raise click.ClickException(f"Processing request is invalid: {e}")
 
-
-def read_processing_request(
+def _read_processing_request(
     request_path: Path | str | None = None,
 ) -> tuple[dict[str, Any], str]:
     if not request_path:

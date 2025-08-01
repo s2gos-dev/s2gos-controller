@@ -7,7 +7,7 @@ import unittest
 import click
 import pytest
 
-from s2gos_common.cli.group import AliasedGroup
+from s2gos_common.process.cli import AliasedGroup
 
 
 class AliasedGroupTest(unittest.TestCase):

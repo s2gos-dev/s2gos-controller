@@ -8,13 +8,13 @@ from typing import TYPE_CHECKING, Annotated, Callable, Optional
 import click
 import typer
 
-from s2gos_common.cli.constants import (
+from s2gos_common.util.cli.group import AliasedGroup
+from s2gos_common.util.cli.parameters import (
     PROCESS_ID_ARGUMENT,
     REQUEST_FILE_OPTION,
     REQUEST_INPUT_OPTION,
     REQUEST_SUBSCRIBER_OPTION,
 )
-from s2gos_common.cli.group import AliasedGroup
 
 if TYPE_CHECKING:  # pragma: no cover
     from s2gos_common.process import ProcessRegistry
@@ -95,11 +95,11 @@ def execute_process(
     The `process_id` argument and any given `--input` options will override
     settings with same name found in the given request file or `stdin`, if any.
     """
-    from s2gos_common.cli.request import parse_processing_request
     from s2gos_common.process import Job
+    from s2gos_common.process.cli.request import ProcessingRequest
 
     process_registry = _get_process_registry(ctx)
-    processing_request = parse_processing_request(
+    processing_request = ProcessingRequest.create(
         process_id=process_id,
         inputs=request_inputs,
         subscribers=request_subscribers,

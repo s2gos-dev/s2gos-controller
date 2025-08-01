@@ -48,15 +48,17 @@ special form. An example for the latter is
 your process registry. In `my_package/cli.py`:
 
 ```python
-from s2gos_common.cli.cli import get_cli
+from s2gos_common.process.cli.cli import get_cli
+
 
 # By using a getter function, we defer importing the registry 
 # until needed. This avoids early loading of all dependencies
 # in the case where the CLI is invoked just with a`--help` option.
 def get_registry():
     from my_package.processes import registry
-    
+
     return registry
+
 
 # The CLI with a basic set of commands.
 # The `cli` is a Typer application of type `typer.Typer()`, 

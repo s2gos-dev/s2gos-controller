@@ -9,7 +9,6 @@ from typing import Any, Callable, Literal
 import pydantic
 import typer
 
-from s2gos_common.cli.request import ProcessingRequest
 from s2gos_common.models import (
     JobInfo,
     JobList,
@@ -17,6 +16,7 @@ from s2gos_common.models import (
     ProcessDescription,
     ProcessList,
 )
+from s2gos_common.process.cli import ProcessingRequest
 
 
 class OutputFormat(str, Enum):

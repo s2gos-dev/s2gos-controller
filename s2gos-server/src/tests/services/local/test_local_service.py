@@ -21,7 +21,7 @@ from s2gos_common.models import (
     ProcessRequest,
 )
 from s2gos_common.process import Process
-from s2gos_common.testing import set_env
+from s2gos_common.util.testing import set_env
 from s2gos_server.exceptions import ServiceException
 from s2gos_server.main import app
 from s2gos_server.provider import ServiceProvider, get_service

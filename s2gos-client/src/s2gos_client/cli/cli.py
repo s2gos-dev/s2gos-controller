@@ -7,13 +7,13 @@ from typing import Annotated, Final, Optional
 import typer.core
 
 from s2gos_client.cli.output import OutputFormat
-from s2gos_common.cli.constants import (
+from s2gos_common.util.cli.group import AliasedGroup
+from s2gos_common.util.cli.parameters import (
     PROCESS_ID_ARGUMENT,
     REQUEST_FILE_OPTION,
     REQUEST_INPUT_OPTION,
     REQUEST_SUBSCRIBER_OPTION,
 )
-from s2gos_common.cli.group import AliasedGroup
 
 SERVICE_NAME = "S2GOS service"
 
@@ -188,7 +188,7 @@ def validate_request(
     The `process_id` argument and any given `--input` options will override
     settings with same name found in the given request file or `stdin`, if any.
     """
-    from s2gos_common.cli.request import parse_processing_request
+    from s2gos_common.process.cli import parse_processing_request
 
     from .output import get_renderer, output
 
@@ -218,7 +218,7 @@ def execute_process(
     The `process_id` argument and any given `--input` options will override
     settings with same name found in the given request file or `stdin`, if any.
     """
-    from s2gos_common.cli.request import parse_processing_request
+    from s2gos_common.process.cli import parse_processing_request
 
     from .client import use_client
     from .output import get_renderer, output

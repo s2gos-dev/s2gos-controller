@@ -15,7 +15,7 @@ from s2gos_common.models import (
     ProcessList,
     ProcessRequest,
 )
-from s2gos_common.testing import set_env_cm
+from s2gos_common.util.testing import set_env_cm
 from s2gos_server.constants import ENV_VAR_SERVICE
 from s2gos_server.exceptions import ServiceConfigException
 from s2gos_server.services.base import ServiceBase
