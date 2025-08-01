@@ -28,12 +28,14 @@ from s2gos_common.process import JobContext, ProcessRegistry
 
 registry = ProcessRegistry()
 
+
 @registry.process(id="my-process-1")
 def my_process_1(path: str, threshold: float = 0.5) -> str:
     ctx = JobContext.get()
     ...
     ctx.report_progress(progress=15, message="Initialized sources")
     ...
+
 
 @registry.process(id="my-process-2")
 def my_process_2(ctx: JobContext, path: str, factor: float = 1.0) -> str:
