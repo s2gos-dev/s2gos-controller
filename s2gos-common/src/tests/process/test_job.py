@@ -26,13 +26,21 @@ def fn_success_with_defaults(x: int = 0, y: int = 0) -> int:
     return x + y
 
 
-def fn_success_report(path: str) -> str:
+def fn_success_body_ctx(path: str) -> str:
     ctx = JobContext.get()
     ctx.check_cancelled()
     ctx.report_progress(progress=0)
     ctx.report_progress(progress=50, message="Almost done")
     ctx.report_progress(progress=100)
-    return path + "/result.zarr"
+    return path + "/result1.zarr"
+
+
+def fn_success_arg_ctx(ctx: JobContext, path: str) -> str:
+    ctx.check_cancelled()
+    ctx.report_progress(progress=0)
+    ctx.report_progress(progress=50, message="Almost done")
+    ctx.report_progress(progress=100)
+    return path + "/result2.zarr"
 
 
 # noinspection PyUnusedLocal
@@ -110,16 +118,31 @@ class JobTest(TestCase):
         self.assertEqual(None, job.job_info.progress)
         self.assertEqual(None, job.job_info.message)
 
-    def test_run_success_report(self):
+    def test_run_success_body_ctx_report(self):
         job = Job.create(
-            process=Process.create(fn_success_report, id="fn_success_report"),
+            process=Process.create(fn_success_body_ctx, id="fn_success_body_ctx"),
             job_id="job_41",
             request=ProcessRequest(inputs={"path": "outputs"}),
         )
         job_results = job.run()
         # noinspection PyArgumentList
         self.assertEqual(
-            JobResults({"return_value": "outputs/result.zarr"}), job_results
+            JobResults({"return_value": "outputs/result1.zarr"}), job_results
+        )
+        self.assertEqual(JobStatus.successful, job.job_info.status)
+        self.assertEqual(100, job.job_info.progress)
+        self.assertEqual("Almost done", job.job_info.message)
+
+    def test_run_success_arg_ctx_report(self):
+        job = Job.create(
+            process=Process.create(fn_success_arg_ctx, id="fn_success_arg_ctx"),
+            job_id="job_42",
+            request=ProcessRequest(inputs={"path": "outputs"}),
+        )
+        job_results = job.run()
+        # noinspection PyArgumentList
+        self.assertEqual(
+            JobResults({"return_value": "outputs/result2.zarr"}), job_results
         )
         self.assertEqual(JobStatus.successful, job.job_info.status)
         self.assertEqual(100, job.job_info.progress)
@@ -147,7 +170,7 @@ class JobTest(TestCase):
 
     def test_run_success_report_with_subscriber(self):
         job = Job.create(
-            process=Process.create(fn_success_report, id="fn_success_report"),
+            process=Process.create(fn_success_body_ctx, id="fn_success_report"),
             job_id="job_3092",
             request=ProcessRequest(
                 inputs={"path": "outputs"},
