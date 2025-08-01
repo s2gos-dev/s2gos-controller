@@ -2,9 +2,9 @@
 
 The package `s2gos_common` provides a simple processor development framework that
 
-  - supports registration of processes from python functions,  
+  - supports registration of processes from Python functions,  
   - supports progress reporting by subscriber callback URLs, and
-  - provides a command-line interface (CLI) to query and execute processes.
+  - provides a command-line interface (CLI) to query and execute the registered processes.
 
 Processor packages developed using the provided CLI can later on be used to
 generate Docker images, Airflow DAGs, and optionally OGC Application Packages.
@@ -19,7 +19,7 @@ Framework usage is simple, it is a 3-step process:
 
 The steps are explained in more detail in the following.
 
-(1) Create a process registry object of type `ProcessRegistry`.
+(1) First, you'll create a process registry object of type `ProcessRegistry`.
 Use the registry's `process` decorator to register your Python functions 
 that should be exposed as processes. In `my_package/processes.py`:
 
@@ -57,8 +57,8 @@ special form. An example for the latter is
 `factor: Annotated[float, Field(title="Scaling factor", gt=0., le=10.)] = 1.0`.
 
 
-(2) Create an instance of a common processor CLI and pass it a function that returns
-your process registry. In `my_package/cli.py`:
+(2) In a second step you create an instance of a common processor CLI and pass it 
+a reference to your registry instance. In `my_package/cli.py`:
 
 ```python
 from s2gos_common.process.cli.cli import get_cli
@@ -68,6 +68,11 @@ from s2gos_common.process.cli.cli import get_cli
 # so can use the instance to register your own commands.
 cli = get_cli("my_package.processes:registry")
 ```
+
+You could also pass the imported registry directly, but using a 
+reference string defers importing the registry instance until it is 
+needed. This makes the CLI much faster if it is just called with
+the `--help` option and hence no processing takes place. 
 
 (3) Expose the CLI as an entry point. In your `pyproject.toml`:
 
