@@ -398,6 +398,39 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Development Recipe">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-populate-process-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Populate process registry
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-define-cli-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Define CLI instance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-define-entry-point-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Define entry point script
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -580,6 +613,39 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Development Recipe">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-populate-process-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Populate process registry
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-define-cli-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Define CLI instance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-define-entry-point-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Define entry point script
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -723,19 +789,22 @@
 <ul>
 <li>supports registration of processes from Python functions,  </li>
 <li>supports progress reporting by subscriber callback URLs, and</li>
-<li>provides a command-line interface (CLI) to query and execute the registered processes.</li>
+<li>provides a command-line interface (CLI) to query and execute 
+    the registered processes.</li>
 </ul>
 <p>Processor packages developed using the provided CLI can later on be used to
 generate Docker images, Airflow DAGs, and optionally OGC Application Packages.</p>
 <h2 id="development-recipe">Development Recipe</h2>
 <p>Framework usage is simple, it is a 3-step process: </p>
 <ol>
-<li>Write your processes as Python functions and register them in a process registry.</li>
-<li>Create a CLI instance from that process registry.</li>
-<li>Register the CLI instance as an entry point script for your package.</li>
+<li>Populate process registry with processes derived from your Python functions.</li>
+<li>Define a CLI instance from that process registry.</li>
+<li>Define an entry point script for the CLI instance, so you can run your package 
+   as an application.</li>
 </ol>
 <p>The steps are explained in more detail in the following.</p>
-<p>(1) First, you'll create a process registry object of type <code>ProcessRegistry</code>.
+<h3 id="1-populate-process-registry">1. Populate process registry</h3>
+<p>First, you'll create a process registry object of type <code>ProcessRegistry</code>.
 Use the registry's <code>process</code> decorator to register your Python functions 
 that should be exposed as processes. In <code>my_package/processes.py</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">s2gos_common.process</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobContext</span><span class="p">,</span> <span class="n">ProcessRegistry</span>
@@ -767,7 +836,8 @@ passed  to the <a class="autorefs autorefs-internal" title="process(function=Non
 or preferably as part of the type declaration using the Python <code>Annotated</code> 
 special form. An example for the latter is
 <code>factor: Annotated[float, Field(title="Scaling factor", gt=0., le=10.)] = 1.0</code>.</p>
-<p>(2) In a second step you create an instance of a common processor CLI and pass it 
+<h3 id="2-define-cli-instance">2. Define CLI instance</h3>
+<p>In a second step you define an instance of a common process CLI and pass it 
 a reference to your registry instance. In <code>my_package/cli.py</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">s2gos_common.process.cli.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_cli</span>
 
@@ -780,11 +850,15 @@ a reference to your registry instance. In <code>my_package/cli.py</code>:</p>
 reference string defers importing the registry instance until it is 
 needed. This makes the CLI much faster if it is just called with
 the <code>--help</code> option and hence no processing takes place. </p>
-<p>(3) In a last step you expose the CLI as an entry point script of your package. 
+<h3 id="3-define-entry-point-script">3. Define entry point script</h3>
+<p>In a last step you expose the CLI as an entry point script of your package. 
 In your <code>pyproject.toml</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="k">[project.scripts]</span>
 <span class="n">my-tool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;my_package.cli:cli&quot;</span>
 </code></pre></div>
+<p>After installing <code>my_package</code> in a Python environment using <code>pip</code> or <code>pixi</code>
+you can run your CLI as an executable and <code>my-tool --help</code> will output:</p>
+<p><img alt="process-cli.png" src="../assets/process-cli.png" /></p>
 <h2 id="application-example">Application Example</h2>
 <p>An application example that can serve as a starting point is provided in the workspace 
 <a href="https://github.com/s2gos-dev/s2gos-controller/tree/main/s2gos-app-ex">s2gos-app-ex</a>.</p>
