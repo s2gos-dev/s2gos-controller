@@ -23,16 +23,26 @@ from s2gos_common.process import ProcessRegistry, get_job_context
 registry = ProcessRegistry()
 
 @registry.process(id="my-process-1")
-def my_process_1(path: str, threshold: float) -> str:
+def my_process_1(path: str, threshold: float = 0.5) -> str:
     ctx = get_job_context()
     ...
     ctx.report_progress(progress=15, message="Initialized sources")
     ...
 
 @registry.process(id="my-process-2")
-def my_process_2(path: str, factor: float) -> str:
+def my_process_2(path: str, factor: float = 1.0) -> str:
     ...
 ```
+
+Process inputs, such as the arguments `path` or `factor` above, 
+can be further specified by 
+[`pydantic.Field`](https://docs.pydantic.dev/latest/concepts/fields/) annotations.
+Field annotations for an argument can be provided via the `input_fields` dictionary 
+passed  to the [`process`][s2gos_common.process.ProcessRegistry.process] decorator, 
+or preferably as part of the type declaration using the Python `Annotated` 
+special form. An example for the latter is
+`factor: Annotated[float, Field(title="Scaling factor", gt=0., le=10.)] = 1.0`.
+
 
 (2) Create an instance of a common processor CLI and pass it a function that returns
 your process registry. In `my_package/cli.py`:
@@ -64,9 +74,21 @@ my-tool = "my_package.cli:cli"
 ## Process Development API
 
 ::: s2gos_common.process.ProcessRegistry
+    options:
+      show_source: false
+      heading_level: 3
 
 ::: s2gos_common.process.get_job_context
+    options:
+      show_source: false
+      heading_level: 3
 
 ::: s2gos_common.process.JobContext
+    options:
+      show_source: false
+      heading_level: 3
 
 ::: s2gos_common.cli.cli.get_cli
+    options:
+      show_source: false
+      heading_level: 3
