@@ -4,14 +4,49 @@
 
 from unittest import IsolatedAsyncioTestCase, TestCase
 
-from s2gos_common.models import InputDescription, Link, ProcessDescription, ProcessList
+from s2gos_common.models import (
+    InputDescription,
+    JobResults,
+    Link,
+    ProcessDescription,
+    ProcessList,
+    ProcessRequest,
+)
+from s2gos_common.process import Job, Process
+from s2gos_server.services.local.testing import SceneSpec
 from s2gos_server.services.local.testing import service as testing_service
-from s2gos_server.services.local.testing import simulate_scene
 
 
 class TestingFunctionsTest(TestCase):
-    def test_simulate_scene(self):
-        kwargs = {
+    def setUp(self):
+        self.registry = testing_service.process_registry
+
+    def test_run_sleep_a_while(self):
+        process = self.registry.get("sleep_a_while")
+        self.assertIsInstance(process, Process)
+        job = Job.create(process, ProcessRequest(inputs={"duration": 0.05}))
+        job_results = job.run()
+        self.assertIsInstance(job_results, JobResults)
+
+    def test_run_primes_between(self):
+        process = self.registry.get("primes_between")
+        self.assertIsInstance(process, Process)
+        job = Job.create(process, ProcessRequest())
+        job_results = job.run()
+        self.assertIsInstance(job_results, JobResults)
+
+    def test_run_return_base_model(self):
+        process = self.registry.get("return_base_model")
+        self.assertIsInstance(process, Process)
+        job = Job.create(
+            process,
+            ProcessRequest(inputs={"scene_spec": SceneSpec(threshold=0.2, factor=2)}),
+        )
+        job_results = job.run()
+        self.assertIsInstance(job_results, JobResults)
+
+    def test_run_simulate_scene(self):
+        inputs = {
             "var_names": "a, b",
             "bbox": [-10, 30, 5, 45],
             "resolution": 1,
@@ -20,8 +55,16 @@ class TestingFunctionsTest(TestCase):
             "periodicity": 1,
             "output_path": None,
         }
-        link = simulate_scene(**kwargs)
-        self.assertIsInstance(link, Link)
+
+        process = self.registry.get("simulate_scene")
+        self.assertIsInstance(process, Process)
+        job = Job.create(process, ProcessRequest(inputs=inputs))
+        job_results = job.run()
+        self.assertIsInstance(job_results, JobResults)
+        json_dict = job_results.model_dump(mode="json")
+        self.assertIsInstance(json_dict, dict)
+        self.assertIsInstance(json_dict.get("return_value"), dict)
+        link = Link(**json_dict.get("return_value"))
         self.assertIsInstance(link.href, str)
         self.assertTrue(link.href.startswith("memory://"))
         self.assertTrue(link.href.endswith(".zarr"))

@@ -203,6 +203,7 @@ def simulate_scene(
 
 class SceneSpec(pydantic.BaseModel):
     threshold: float
+    factor: float
     # TODO: uncomment and see tests fail!
     # bbox: Optional[Bbox] = None
 

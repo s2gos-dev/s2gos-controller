@@ -128,7 +128,14 @@ class LocalServiceTest(IsolatedAsyncioTestCase):
     async def test_execute_process_base_model_input(self):
         job_info = await self.service.execute_process(
             process_id="return_base_model",
-            process_request=ProcessRequest(inputs={"scene_spec": {"threshold": 0.12}}),
+            process_request=ProcessRequest(
+                inputs={
+                    "scene_spec": {
+                        "threshold": 0.12,
+                        "factor": 2,
+                    },
+                }
+            ),
             request=self.get_request(),
         )
         self.assertIsInstance(job_info, JobInfo)
@@ -136,7 +143,12 @@ class LocalServiceTest(IsolatedAsyncioTestCase):
     async def test_execute_process_base_model_input_flat(self):
         job_info = await self.service.execute_process(
             process_id="return_base_model",
-            process_request=ProcessRequest(inputs={"scene_spec.threshold": 0.13}),
+            process_request=ProcessRequest(
+                inputs={
+                    "scene_spec.threshold": 0.13,
+                    "scene_spec.factor": 0.3,
+                }
+            ),
             request=self.get_request(),
         )
         self.assertIsInstance(job_info, JobInfo)
