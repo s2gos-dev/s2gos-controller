@@ -444,15 +444,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#s2gos_common.process.get_job_context" class="md-nav__link">
-    <span class="md-ellipsis">
-      get_job_context
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#s2gos_common.process.JobContext" class="md-nav__link">
     <span class="md-ellipsis">
       JobContext
@@ -461,6 +452,15 @@
   
     <nav class="md-nav" aria-label="JobContext">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.JobContext.get" class="md-nav__link">
+    <span class="md-ellipsis">
+      get
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#s2gos_common.process.JobContext.report_progress" class="md-nav__link">
@@ -491,6 +491,15 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.JobCancelledException" class="md-nav__link">
+    <span class="md-ellipsis">
+      JobCancelledException
+    </span>
+  </a>
   
 </li>
         
@@ -617,15 +626,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#s2gos_common.process.get_job_context" class="md-nav__link">
-    <span class="md-ellipsis">
-      get_job_context
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#s2gos_common.process.JobContext" class="md-nav__link">
     <span class="md-ellipsis">
       JobContext
@@ -634,6 +634,15 @@
   
     <nav class="md-nav" aria-label="JobContext">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.JobContext.get" class="md-nav__link">
+    <span class="md-ellipsis">
+      get
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#s2gos_common.process.JobContext.report_progress" class="md-nav__link">
@@ -664,6 +673,15 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.JobCancelledException" class="md-nav__link">
+    <span class="md-ellipsis">
+      JobCancelledException
+    </span>
+  </a>
   
 </li>
         
@@ -720,21 +738,27 @@ generate Docker images, Airflow DAGs, and optionally OGC Application Packages.</
 <p>(1) Create a process registry object of type <code>ProcessRegistry</code>.
 Use the registry's <code>process</code> decorator to register your Python functions 
 that should be exposed as processes. In <code>my_package/processes.py</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">s2gos_common.process</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProcessRegistry</span><span class="p">,</span> <span class="n">get_job_context</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">s2gos_common.process</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobContext</span><span class="p">,</span> <span class="n">ProcessRegistry</span>
 
 <span class="n">registry</span> <span class="o">=</span> <span class="n">ProcessRegistry</span><span class="p">()</span>
 
+
 <span class="nd">@registry</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;my-process-1&quot;</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">my_process_1</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="n">ctx</span> <span class="o">=</span> <span class="n">get_job_context</span><span class="p">()</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="n">JobContext</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
     <span class="o">...</span>
     <span class="n">ctx</span><span class="o">.</span><span class="n">report_progress</span><span class="p">(</span><span class="n">progress</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;Initialized sources&quot;</span><span class="p">)</span>
     <span class="o">...</span>
 
+
 <span class="nd">@registry</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;my-process-2&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">my_process_2</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_process_2</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">JobContext</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="o">...</span>
 </code></pre></div>
+<p>The <code>ctx</code> object of type <a class="autorefs autorefs-internal" title="s2gos_common.process.JobContext" href="#s2gos_common.process.JobContext">JobContext</a>
+can be used to report progress and to check for job cancellation.
+You can get the job context inside the function body via <code>JobContext.get()</code> 
+or declare it as a function argument of type <code>JobContext</code>.</p>
 <p>Process inputs, such as the arguments <code>path</code> or <code>factor</code> above, 
 can be further specified by 
 <a href="https://docs.pydantic.dev/latest/concepts/fields/"><code>pydantic.Field</code></a> annotations.
@@ -966,22 +990,77 @@ dictionary.</p>
 
 </div>
 
-<div class="doc doc-object doc-function">
+<div class="doc doc-object doc-class">
 
 
-<h3 id="s2gos_common.process.get_job_context" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">s2gos_common</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">get_job_context</span><span class="p">()</span></code>
+
+<h3 id="s2gos_common.process.JobContext" class="doc doc-heading">
+            <code>s2gos_common.process.JobContext</code>
+
 
 </h3>
 
 
     <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="abc.ABC">ABC</span></code></p>
+
+
+        <p>Report process progress and check for task cancellation.</p>
+<p>A process function can retrieve the current job context</p>
+<ol>
+<li>via <a class="autorefs autorefs-internal" title="get()
+
+  
+      classmethod
+  " href="#s2gos_common.process.JobContext.get">JobContext.get()</a> from
+   within a process function, or</li>
+<li>as a function argument of type <a class="autorefs autorefs-internal" title="s2gos_common.process.JobContext" href="#s2gos_common.process.JobContext">JobContext</a>.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="s2gos_common.process.JobContext.get" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
 
         <p>Get the current job context.</p>
-<p>Returns the current job context that can be used to report
-job progress in percent or via messages.</p>
-<p>This function is intended to be called from within
-functions executed as a job.</p>
+<p>Returns the current job context that can be used by
+process functions to report job progress in percent
+or via messages and to check whether cancellation
+has been requested.
+This function is intended to be called from within
+a process function executed as a job. If called as a usual
+Python function (without a job serving as context), the
+returned context will have no-op methods only.</p>
 
 
     <p><span class="doc-section-title">Returns:</span></p>
@@ -1010,43 +1089,6 @@ functions executed as a job.</p>
     </div>
 
 </div>
-
-<div class="doc doc-object doc-class">
-
-
-
-<h3 id="s2gos_common.process.JobContext" class="doc doc-heading">
-            <code>s2gos_common.process.JobContext</code>
-
-
-</h3>
-
-
-    <div class="doc doc-contents first">
-            <p class="doc doc-class-bases">
-              Bases: <code><span title="abc.ABC">ABC</span></code></p>
-
-
-        <p>Report task progress and check for task cancellation.</p>
-
-
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
 
 <div class="doc doc-object doc-function">
 
@@ -1086,7 +1128,7 @@ functions executed as a job.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Progress in percent</p>
+                <p>Progress in percent.</p>
               </div>
             </td>
             <td>
@@ -1102,7 +1144,7 @@ functions executed as a job.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Detail progress message</p>
+                <p>Detail progress message.</p>
               </div>
             </td>
             <td>
@@ -1202,7 +1244,7 @@ It may still be running though.</p>
 
     <div class="doc doc-contents ">
 
-        <p>Raise a <code>JobCancellationException</code>,
+        <p>Raise a <code>JobCancellationException</code>, if
 an attempt has been made to cancel this job.</p>
 
 
@@ -1213,6 +1255,35 @@ an attempt has been made to cancel this job.</p>
 
 
   </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="s2gos_common.process.JobCancelledException" class="doc doc-heading">
+            <code>s2gos_common.process.JobCancelledException</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="Exception">Exception</span></code></p>
+
+
+        <p>Raised if a job's cancellation has been requested.</p>
+
+
+
+
+
+
+
 
     </div>
 
