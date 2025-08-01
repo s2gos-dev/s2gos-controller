@@ -1,4 +1,4 @@
-# DTE-S2GOS example application
+# DTE-S2GOS application example
 
 Build and run the image
 

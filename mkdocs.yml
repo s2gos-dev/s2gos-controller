@@ -13,6 +13,7 @@ nav:
   - Architecture: architecture.md
   - Client CLI: client-cli.md
   - Client API: client-api.md
+  - Process Development: process-dev.md
   - Contributing: contributing.md
 
 theme:

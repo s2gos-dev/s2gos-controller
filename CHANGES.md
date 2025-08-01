@@ -1,5 +1,11 @@
 ## Changes in version 0.0.4 (in development)
 
+- Developed a simple processor development framework that
+  - provides a CLI to query and execute processes;  
+  - supports registration of processes from python functions;  
+  - supports progress reporting by subscriber callback URLs.
+- Provided a processor example that uses the framework in workspace 
+  `s2gos-exappl`.
 - Moved process registry stuff from `s2gos_server.services.local` into 
   `s2gos_common.process` so it can be easier reused.
 
