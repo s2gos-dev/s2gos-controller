@@ -4,7 +4,8 @@ The package `s2gos_common` provides a simple processor development framework tha
 
   - supports registration of processes from Python functions,  
   - supports progress reporting by subscriber callback URLs, and
-  - provides a command-line interface (CLI) to query and execute the registered processes.
+  - provides a command-line interface (CLI) to query and execute 
+    the registered processes.
 
 Processor packages developed using the provided CLI can later on be used to
 generate Docker images, Airflow DAGs, and optionally OGC Application Packages.
@@ -13,13 +14,16 @@ generate Docker images, Airflow DAGs, and optionally OGC Application Packages.
 
 Framework usage is simple, it is a 3-step process: 
 
-1. Write your processes as Python functions and register them in a process registry.
-2. Create a CLI instance from that process registry.
-3. Register the CLI instance as an entry point script for your package.
+1. Populate process registry with processes derived from your Python functions.
+2. Define a CLI instance from that process registry.
+3. Define an entry point script for the CLI instance, so you can run your package 
+   as an application.
 
 The steps are explained in more detail in the following.
 
-(1) First, you'll create a process registry object of type `ProcessRegistry`.
+### 1. Populate process registry
+
+First, you'll create a process registry object of type `ProcessRegistry`.
 Use the registry's `process` decorator to register your Python functions 
 that should be exposed as processes. In `my_package/processes.py`:
 
@@ -56,8 +60,9 @@ or preferably as part of the type declaration using the Python `Annotated`
 special form. An example for the latter is
 `factor: Annotated[float, Field(title="Scaling factor", gt=0., le=10.)] = 1.0`.
 
+### 2. Define CLI instance
 
-(2) In a second step you create an instance of a common processor CLI and pass it 
+In a second step you define an instance of a common process CLI and pass it 
 a reference to your registry instance. In `my_package/cli.py`:
 
 ```python
@@ -74,13 +79,20 @@ reference string defers importing the registry instance until it is
 needed. This makes the CLI much faster if it is just called with
 the `--help` option and hence no processing takes place. 
 
-(3) In a last step you expose the CLI as an entry point script of your package. 
+### 3. Define entry point script
+
+In a last step you expose the CLI as an entry point script of your package. 
 In your `pyproject.toml`:
 
 ```toml
 [project.scripts]
 my-tool = "my_package.cli:cli"
 ```
+
+After installing `my_package` in a Python environment using `pip` or `pixi`
+you can run your CLI as an executable and `my-tool --help` will output:
+
+![process-cli.png](assets/process-cli.png)
 
 ## Application Example
 
