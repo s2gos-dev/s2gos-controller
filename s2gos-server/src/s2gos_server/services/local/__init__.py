@@ -6,7 +6,6 @@ from s2gos_common.process.job import (
     Job,
     JobCancelledException,
     JobContext,
-    get_job_context,
 )
 
 from .local_service import LocalService
@@ -16,5 +15,4 @@ __all__ = [
     "Job",
     "JobCancelledException",
     "JobContext",
-    "get_job_context",
 ]

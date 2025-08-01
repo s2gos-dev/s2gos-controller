@@ -6,7 +6,7 @@ from typing import Annotated
 
 from pydantic import Field
 
-from s2gos_common.process import ProcessRegistry, get_job_context
+from s2gos_common.process import JobContext, ProcessRegistry
 
 registry = ProcessRegistry()
 
@@ -26,7 +26,7 @@ def sleep_a_while(
     """
     import time
 
-    ctx = get_job_context()
+    ctx = JobContext.get()
 
     t0 = time.time()
     for i in range(101):
@@ -42,12 +42,11 @@ def sleep_a_while(
     title="Prime Generator",
 )
 def primes_between(
+    ctx: JobContext,
     min_val: Annotated[int, Field(title="Minimum value of search range", ge=0)] = 0,
     max_val: Annotated[int, Field(title="Maximum value of search range", ge=0)] = 100,
 ) -> list[int]:
     """Computes the list of prime numbers within an integer value range."""
-
-    ctx = get_job_context()
 
     if max_val < 2 or max_val <= min_val:
         raise ValueError("max_val must be greater 1 and greater min_val")

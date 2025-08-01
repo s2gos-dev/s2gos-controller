@@ -14,7 +14,7 @@ from s2gos_common.models import (
     ProcessDescription,
     Schema,
 )
-from s2gos_common.process import Process
+from s2gos_common.process import JobContext, Process
 from s2gos_common.util.testing import BaseModelMixin
 
 
@@ -38,6 +38,11 @@ class Point(BaseModel):
 def f3(point1: Point, point2: Point) -> Point:
     """This is f3."""
     return Point(x=(point2.x - point1.x), y=(point2.y - point1.y))
+
+
+def f4(ctx: JobContext, flag: bool) -> str:
+    """This is f3."""
+    return f"{ctx}-{flag}"
 
 
 class RegisteredProcessTest(BaseModelMixin, TestCase):
@@ -90,6 +95,7 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
         )
         self.assertIsInstance(process, Process)
         self.assertIs(f1, process.function)
+        self.assertEqual([], process.job_ctx_args)
         proc_desc = process.description
         proc_inputs = proc_desc.inputs
         proc_outputs = proc_desc.outputs
@@ -122,6 +128,7 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
         process = Process.create(f2)
         self.assertIsInstance(process, Process)
         self.assertIs(f2, process.function)
+        self.assertEqual([], process.job_ctx_args)
         proc_desc = process.description
         self.assertIsInstance(proc_desc, ProcessDescription)
         self.assertEqual("tests.process.test_process:f2", proc_desc.id)
@@ -293,20 +300,22 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
             )
 
     def test_create_f1_with_props(self):
-        e1 = Process.create(f1, id="foo", version="1.0.2", title="My Foo")
-        self.assertIsInstance(e1, Process)
-        self.assertIs(f1, e1.function)
-        p1 = e1.description
-        self.assertIsInstance(p1, ProcessDescription)
-        self.assertEqual("foo", p1.id)
-        self.assertEqual("1.0.2", p1.version)
-        self.assertEqual("My Foo", p1.title)
-        self.assertEqual("This is f1.", p1.description)
-        self.assertIsInstance(p1.inputs, dict)
-        self.assertIsInstance(p1.outputs, dict)
+        process = Process.create(f1, id="foo", version="1.0.2", title="My Foo")
+        self.assertIsInstance(process, Process)
+        self.assertIs(f1, process.function)
+        process_desc = process.description
+        self.assertIsInstance(process_desc, ProcessDescription)
+        self.assertEqual("foo", process_desc.id)
+        self.assertEqual("1.0.2", process_desc.version)
+        self.assertEqual("My Foo", process_desc.title)
+        self.assertEqual("This is f1.", process_desc.description)
+        self.assertIsInstance(process_desc.inputs, dict)
+        self.assertIsInstance(process_desc.outputs, dict)
 
     def test_create_f3(self):
         process = Process.create(f3, id="f3")
+        self.assertIsInstance(process, Process)
+        self.assertEqual([], process.job_ctx_args)
         self.assertEqual(
             {"point1", "point2"},
             set(process.description.inputs.keys()),
@@ -335,3 +344,9 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
             ),
             process.description.inputs["point1"],
         )
+
+    def test_create_f4(self):
+        process = Process.create(f4, id="f4")
+        self.assertIsInstance(process, Process)
+        self.assertIs(f4, process.function)
+        self.assertEqual(["ctx"], process.job_ctx_args)

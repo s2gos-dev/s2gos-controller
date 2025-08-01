@@ -24,21 +24,28 @@ Use the registry's `process` decorator to register your Python functions
 that should be exposed as processes. In `my_package/processes.py`:
 
 ```python
-from s2gos_common.process import ProcessRegistry, get_job_context
+from s2gos_common.process import JobContext, ProcessRegistry
 
 registry = ProcessRegistry()
 
+
 @registry.process(id="my-process-1")
 def my_process_1(path: str, threshold: float = 0.5) -> str:
-    ctx = get_job_context()
+    ctx = JobContext.get()
     ...
     ctx.report_progress(progress=15, message="Initialized sources")
     ...
 
+
 @registry.process(id="my-process-2")
-def my_process_2(path: str, factor: float = 1.0) -> str:
+def my_process_2(ctx: JobContext, path: str, factor: float = 1.0) -> str:
     ...
 ```
+
+The `ctx` object of type [JobContext][s2gos_common.process.JobContext]
+can be used to report progress and to check for job cancellation.
+You can get the job context inside the function body via `JobContext.get()` 
+or declare it as a function argument of type `JobContext`.
 
 Process inputs, such as the arguments `path` or `factor` above, 
 can be further specified by 
@@ -82,12 +89,12 @@ An application example that can serve as a starting point is provided in the wor
       show_source: false
       heading_level: 3
 
-::: s2gos_common.process.get_job_context
+::: s2gos_common.process.JobContext
     options:
       show_source: false
       heading_level: 3
 
-::: s2gos_common.process.JobContext
+::: s2gos_common.process.JobCancelledException
     options:
       show_source: false
       heading_level: 3

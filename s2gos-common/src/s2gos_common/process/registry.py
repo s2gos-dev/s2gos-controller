@@ -11,6 +11,12 @@ from .process import Process
 
 
 class ProcessRegistry(Mapping[str, Process]):
+    """
+    A registry for processes.
+
+    Processes are Python functions with extra metadata.
+    """
+
     def __init__(self):
         self._processes: dict[str, Process] = {}
 
@@ -41,6 +47,26 @@ class ProcessRegistry(Mapping[str, Process]):
         register it as a process in this registry.
 
         The decorator can be used with or without parameters.
+
+        Args:
+            function: The decorated function that is passed automatically
+                since `process()` is a decorator function.
+            id: Optional process identifier. Must be unique within the registry.
+                If not provided, the fully qualified function name will be used.
+            version: Optional version identifier.
+                If not provided, `"0.0.0"` will be used.
+            title: Optional, short process title.
+            description: Optional, detailed description of the process.
+                If not provided, the function's docstring, if any, will be used.
+            input_fields: Optional mapping from function argument names
+                to [`pydantic.Field`](https://docs.pydantic.dev/latest/concepts/fields/)
+                annotations. The preferred way is to annotate the arguments directly
+                as described in [The Annotated Pattern](https://docs.pydantic.dev/latest/concepts/fields/#the-annotated-pattern).
+            output_fields: Mapping from output names
+                to [`pydantic.Field`](https://docs.pydantic.dev/latest/concepts/fields/)
+                annotations. Required, if you have multiple outputs returned as a
+                dictionary. In this case, output names are the keys of your returned
+                dictionary.
         """
 
         def register_process(fn: Callable):
