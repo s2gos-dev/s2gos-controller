@@ -74,7 +74,8 @@ reference string defers importing the registry instance until it is
 needed. This makes the CLI much faster if it is just called with
 the `--help` option and hence no processing takes place. 
 
-(3) Expose the CLI as an entry point. In your `pyproject.toml`:
+(3) In a last step you expose the CLI as an entry point script of your package. 
+In your `pyproject.toml`:
 
 ```toml
 [project.scripts]
