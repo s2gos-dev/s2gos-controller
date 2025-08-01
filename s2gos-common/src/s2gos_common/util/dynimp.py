@@ -10,6 +10,7 @@ _type_fn = type
 T = TypeVar("T")
 
 
+# noinspection PyShadowingBuiltins
 def import_value(
     ref: str,
     *,

@@ -88,7 +88,7 @@ class ServiceBase(Service, ABC):
         try:
             service = import_value(
                 service_ref,
-                type=ServiceBase,
+                type=ServiceBase,  # type: ignore[type-abstract]
                 name="service",
                 example="path.to.module:service",
             )
