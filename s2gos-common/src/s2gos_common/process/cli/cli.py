@@ -46,7 +46,7 @@ def get_cli(
     Get the CLI instance configured to use the process registry
     that is given either by
 
-    - a reference of the form "<module>:<attribute>",
+    - a reference of the form "path.to.module:attribute",
     - or process registry instance,
     - or as a no-arg process registry getter function.
 
