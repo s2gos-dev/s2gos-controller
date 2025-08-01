@@ -8,7 +8,7 @@ from unittest import TestCase
 import pytest
 
 from s2gos_common.models import Schema
-from s2gos_common.testing import BaseModelMixin, set_env_cm
+from s2gos_common.util.testing import BaseModelMixin, set_env_cm
 
 
 class TestingTest(BaseModelMixin, TestCase):

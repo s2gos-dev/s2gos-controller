@@ -6,8 +6,8 @@ from unittest import TestCase
 
 import typer.testing
 
-from s2gos_common.cli.cli import get_cli
 from s2gos_common.process import ProcessRegistry
+from s2gos_common.process.cli.cli import get_cli
 
 registry = ProcessRegistry()
 
@@ -24,7 +24,7 @@ def f2(x: bool, y: str, z: float) -> tuple:
     return x, y, z
 
 
-cli = get_cli(lambda: registry)
+cli = get_cli("tests.process.cli.test_cli:registry")
 
 
 def invoke_cli(*args: str) -> typer.testing.Result:

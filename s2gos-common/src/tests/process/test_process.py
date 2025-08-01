@@ -15,7 +15,7 @@ from s2gos_common.models import (
     Schema,
 )
 from s2gos_common.process import Process
-from s2gos_common.testing import BaseModelMixin
+from s2gos_common.util.testing import BaseModelMixin
 
 
 def f1(x: float, y: float) -> float:

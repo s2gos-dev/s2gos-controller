@@ -7,13 +7,13 @@ from typing import Annotated, Final, Optional
 import typer.core
 
 from s2gos_client.cli.output import OutputFormat
-from s2gos_common.cli.constants import (
+from s2gos_common.util.cli.group import AliasedGroup
+from s2gos_common.util.cli.parameters import (
     PROCESS_ID_ARGUMENT,
     REQUEST_FILE_OPTION,
     REQUEST_INPUT_OPTION,
     REQUEST_SUBSCRIBER_OPTION,
 )
-from s2gos_common.cli.group import AliasedGroup
 
 SERVICE_NAME = "S2GOS service"
 
@@ -188,11 +188,11 @@ def validate_request(
     The `process_id` argument and any given `--input` options will override
     settings with same name found in the given request file or `stdin`, if any.
     """
-    from s2gos_common.cli.request import parse_processing_request
+    from s2gos_common.process.cli.request import ProcessingRequest
 
     from .output import get_renderer, output
 
-    request = parse_processing_request(process_id, request_file, request_inputs)
+    request = ProcessingRequest.create(process_id, request_file, request_inputs)
     output(get_renderer(output_format).render_processing_request_valid(request))
 
 
@@ -218,12 +218,12 @@ def execute_process(
     The `process_id` argument and any given `--input` options will override
     settings with same name found in the given request file or `stdin`, if any.
     """
-    from s2gos_common.cli.request import parse_processing_request
+    from s2gos_common.process.cli.request import ProcessingRequest
 
     from .client import use_client
     from .output import get_renderer, output
 
-    request = parse_processing_request(
+    request = ProcessingRequest.create(
         process_id=process_id,
         inputs=request_inputs,
         subscribers=request_subscribers,

@@ -3,9 +3,9 @@
 #  https://opensource.org/license/apache-2-0.
 
 [project]
-name = "s2gos-exappl"
+name = "s2gos-app-ex"
 version = "0.0.0"
-description = "Example application for the ESA DTE-S2GOS synthetic scene generator service"
+description = "Application example for the ESA DTE-S2GOS synthetic scene generator service"
 readme = "README.md"
 authors = [
   {name = "Norman Fomferra (Brockmann Consult GmbH)"},
@@ -39,11 +39,11 @@ classifiers = [
 requires-python = ">=3.10"
 
 [project.scripts]
-s2gos-exappl = "s2gos_exappl.cli:cli"
+s2gos-app-ex = "s2gos_app_ex.cli:cli"
 
 [tool.pixi.project]
 channels = ["conda-forge"]
-platforms = ["linux-64"]
+platforms = ["linux-64", "win-64"]
 
 [tool.pixi.dependencies]
 python = "3.12.*"
@@ -52,7 +52,7 @@ pydantic = ">=2.11.7,<3"
 
 [tool.pixi.pypi-dependencies]
 s2gos-common = { path = "../s2gos-common", editable = true }
-s2gos-exappl = { path = ".", editable = true }
+s2gos-app-ex = { path = ".", editable = true }
 
 [tool.pixi.feature.dev.dependencies]
 pytest = "*"
@@ -69,7 +69,7 @@ default = { features = ["dev"], solve-group = "prod" }
 skip = [".idea", ".github", ".pixi", "htmlcov", "site"]
 profile = "black"
 line_length = 88
-known_first_party = ["s2gos_exappl"]
+known_first_party = ["s2gos_app_ex"]
 
 [build-system]
 requires = ["hatch"]
@@ -80,7 +80,7 @@ sources = ["src"]
 
 [tool.hatch.build.targets.sdist]
 include = [
-  "src/s2gos_exappl/**/*",
+  "src/s2gos_app_ex/**/*",
   "pyproject.toml",
   "README.md",
   "LICENSE",
@@ -88,5 +88,5 @@ include = [
 
 [tool.hatch.build.targets.wheel]
 include = [
-  "src/s2gos_exappl/**/*"
+  "src/s2gos_app_ex/**/*"
 ]

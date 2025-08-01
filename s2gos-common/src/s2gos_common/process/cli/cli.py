@@ -8,13 +8,13 @@ from typing import TYPE_CHECKING, Annotated, Callable, Optional
 import click
 import typer
 
-from s2gos_common.cli.constants import (
+from s2gos_common.util.cli.group import AliasedGroup
+from s2gos_common.util.cli.parameters import (
     PROCESS_ID_ARGUMENT,
     REQUEST_FILE_OPTION,
     REQUEST_INPUT_OPTION,
     REQUEST_SUBSCRIBER_OPTION,
 )
-from s2gos_common.cli.group import AliasedGroup
 
 if TYPE_CHECKING:  # pragma: no cover
     from s2gos_common.process import ProcessRegistry
@@ -39,11 +39,12 @@ cli = typer.Typer(
 
 
 def get_cli(
-    process_registry_getter: Callable[[], "ProcessRegistry"], **kwargs
+    process_registry: str | Callable[[], "ProcessRegistry"], **kwargs
 ) -> typer.Typer:
     """
-    Get the CLI instance configured to use the given getter
-    for the process registry.
+    Get the CLI instance configured to use the process registry
+    that is given either by a reference of the form "<module>:<attribute>"
+    or as a no-arg getter function.
 
     The context object `obj` of the returned CLI object
     will be of type `dict` and will contain the provided
@@ -56,17 +57,31 @@ def get_cli(
     fail with an `AssertionError`.
 
     Args:
-        process_registry_getter: A no-arg function that returns an
-            instance of your `s2gos_common.process.ProcessRegistry`,
+        process_registry: A registry reference string or a no-arg
+            function that returns an instance of your
+            `s2gos_common.process.ProcessRegistry`,
             which is usually a singleton in your application.
         kwargs: Additional context values that will be registered in the
 
     """
+    if isinstance(process_registry, str):
+
+        def get_process_registry():
+            from s2gos_common.process import ProcessRegistry
+            from s2gos_common.util.dynimp import import_value
+
+            return import_value(
+                process_registry, name="process registry", type=ProcessRegistry
+            )
+
+        return get_cli(get_process_registry)
+
+    assert callable(process_registry)
     context_settings = cli.info.context_settings
     assert isinstance(context_settings, dict)
     context_obj = context_settings["obj"]
     assert isinstance(context_obj, dict)
-    context_obj.update({PROCESS_REGISTRY_GETTER_KEY: process_registry_getter, **kwargs})
+    context_obj.update({PROCESS_REGISTRY_GETTER_KEY: process_registry, **kwargs})
     return cli
 
 
@@ -95,11 +110,11 @@ def execute_process(
     The `process_id` argument and any given `--input` options will override
     settings with same name found in the given request file or `stdin`, if any.
     """
-    from s2gos_common.cli.request import parse_processing_request
     from s2gos_common.process import Job
+    from s2gos_common.process.cli.request import ProcessingRequest
 
     process_registry = _get_process_registry(ctx)
-    processing_request = parse_processing_request(
+    processing_request = ProcessingRequest.create(
         process_id=process_id,
         inputs=request_inputs,
         subscribers=request_subscribers,

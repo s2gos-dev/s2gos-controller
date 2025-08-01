@@ -4,14 +4,20 @@ The package `s2gos_common` provides a simple processor development framework tha
 
   - supports registration of processes from python functions,  
   - supports progress reporting by subscriber callback URLs, and
-  - provides a CLI to query and execute processes.
+  - provides a command-line interface (CLI) to query and execute processes.
 
 Processor packages developed using the provided CLI can later on be used to
 generate Docker images, Airflow DAGs, and optionally OGC Application Packages.
 
 ## Development Recipe
 
-Framework usage is simple, as described in the following three steps. 
+Framework usage is simple, it is a 3-step process: 
+
+1. Write your processes as Python functions and register them in a process registry.
+2. Create a CLI instance from that process registry.
+3. Register the CLI instance as an entry point script for your package.
+
+The steps are explained in more detail in the following.
 
 (1) Create a process registry object of type `ProcessRegistry`.
 Use the registry's `process` decorator to register your Python functions 
@@ -48,20 +54,12 @@ special form. An example for the latter is
 your process registry. In `my_package/cli.py`:
 
 ```python
-from s2gos_common.cli.cli import get_cli
-
-# By using a getter function, we defer importing the registry 
-# until needed. This avoids early loading of all dependencies
-# in the case where the CLI is invoked just with a`--help` option.
-def get_registry():
-    from my_package.processes import registry
-    
-    return registry
+from s2gos_common.process.cli.cli import get_cli
 
 # The CLI with a basic set of commands.
-# The `cli` is a Typer application of type `typer.Typer()`, 
-# so you can use the instance to register your own commands.
-cli = get_cli(get_registry)
+# The `cli` is a Typer application of type `typer.Typer()`,
+# so can use the instance to register your own commands.
+cli = get_cli("my_package.processes:registry")
 ```
 
 (3) Expose the CLI as an entry point. In your `pyproject.toml`:
@@ -71,7 +69,13 @@ cli = get_cli(get_registry)
 my-tool = "my_package.cli:cli"
 ```
 
-## Process Development API
+## Application Example
+
+An application example that can serve as a starting point is provided in the workspace 
+[s2gos-app-ex](https://github.com/s2gos-dev/s2gos-controller/tree/main/s2gos-app-ex).
+
+
+## Framework API
 
 ::: s2gos_common.process.ProcessRegistry
     options:
@@ -88,7 +92,7 @@ my-tool = "my_package.cli:cli"
       show_source: false
       heading_level: 3
 
-::: s2gos_common.cli.cli.get_cli
+::: s2gos_common.process.get_cli
     options:
       show_source: false
       heading_level: 3

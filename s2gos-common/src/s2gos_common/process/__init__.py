@@ -2,9 +2,12 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+from .cli.cli import get_cli
 from .job import Job, JobCancelledException, JobContext, get_job_context
 from .process import Process
 from .registry import ProcessRegistry
+
+"""Processes development API."""
 
 __all__ = [
     "Job",
@@ -12,5 +15,6 @@ __all__ = [
     "JobCancelledException",
     "ProcessRegistry",
     "Process",
+    "get_cli",
     "get_job_context",
 ]

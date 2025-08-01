@@ -10,8 +10,8 @@ from unittest.mock import patch
 import click
 import pytest
 
-from s2gos_common.cli.request import ProcessingRequest, parse_processing_request
 from s2gos_common.models import ProcessRequest, Subscriber
+from s2gos_common.process.cli.request import ProcessingRequest
 
 REQUEST_PATH = "test-request.yaml"
 
@@ -29,7 +29,7 @@ class RequestTest(unittest.TestCase):
     def test_read_processing_request_from_yaml_stdin(self):
         stream = StringIO("process_id: test_func\ninputs:\n  x: 7\n  y: 9")
         with patch("sys.stdin", new=stream):
-            request = parse_processing_request(request_path="-")
+            request = ProcessingRequest.create(request_path="-")
             self.assertEqual(
                 ProcessingRequest(process_id="test_func", inputs={"x": 7, "y": 9}),
                 request,
@@ -46,7 +46,7 @@ class RequestTest(unittest.TestCase):
             "}"
         )
         with patch("sys.stdin", new=stream):
-            request = parse_processing_request(request_path="-")
+            request = ProcessingRequest.create(request_path="-")
             self.assertEqual(
                 ProcessingRequest(process_id="test_func_2", inputs={"x": 0, "y": -4}),
                 request,
@@ -56,7 +56,7 @@ class RequestTest(unittest.TestCase):
         with open(REQUEST_PATH, mode="w") as stream:
             stream.write("process_id: test_func\ninputs:\n  x: 5\n  y: 2\n")
 
-        request = parse_processing_request(request_path=REQUEST_PATH)
+        request = ProcessingRequest.create(request_path=REQUEST_PATH)
         self.assertEqual(
             ProcessingRequest(process_id="test_func", inputs={"x": 5, "y": 2}),
             request,
@@ -67,7 +67,7 @@ class RequestTest(unittest.TestCase):
         successUri = "https://myhost/api/v1/subscriptions/success"
         failedUri = "https://myhost/api/v1/subscriptions/failed"
         inProgressUri = "https://myhost/api/v1/subscriptions/progress"
-        request = parse_processing_request(
+        request = ProcessingRequest.create(
             process_id="test_func",
             inputs=[
                 "flag",
@@ -100,7 +100,7 @@ class RequestTest(unittest.TestCase):
         with open(REQUEST_PATH, mode="w") as stream:
             stream.write("process_id: test_func\ninputs:\n  x: 5\n  y: 2\n")
 
-        request = parse_processing_request(request_path=REQUEST_PATH, inputs=["x=13"])
+        request = ProcessingRequest.create(request_path=REQUEST_PATH, inputs=["x=13"])
         self.assertEqual(
             ProcessingRequest(process_id="test_func", inputs={"x": 13, "y": 2}),
             request,
@@ -111,7 +111,7 @@ class RequestTest(unittest.TestCase):
         with pytest.raises(
             click.ClickException, match="Processing request is invalid:"
         ):
-            parse_processing_request()
+            ProcessingRequest.create()
 
     # noinspection PyMethodMayBeStatic
     def test_read_processing_request_from_invalid_file(self):
@@ -120,12 +120,12 @@ class RequestTest(unittest.TestCase):
         with pytest.raises(
             click.ClickException, match="Request must be an object, but was type int"
         ):
-            parse_processing_request(request_path=REQUEST_PATH)
+            ProcessingRequest.create(request_path=REQUEST_PATH)
 
     # noinspection PyMethodMayBeStatic
     def test_read_processing_request_from_invalid_input(self):
         with pytest.raises(click.ClickException, match="Invalid request NAME: '2x'"):
-            parse_processing_request(process_id="my_func", inputs=["2x=20'"])
+            ProcessingRequest.create(process_id="my_func", inputs=["2x=20'"])
 
     def test_read_processing_request_from_invalid_subscription(self):
         with pytest.raises(
@@ -135,7 +135,7 @@ class RequestTest(unittest.TestCase):
                 r"but was 'success\:http\:\/\/localhost\/success'"
             ),
         ):
-            parse_processing_request(
+            ProcessingRequest.create(
                 process_id="my_func", subscribers=["success:http://localhost/success"]
             )
 
@@ -146,7 +146,7 @@ class RequestTest(unittest.TestCase):
                 r"\[success\|failed\|progress\], but was 'error'"
             ),
         ):
-            parse_processing_request(
+            ProcessingRequest.create(
                 process_id="my_func", subscribers=["error=http://localhost/error"]
             )
 
@@ -154,6 +154,6 @@ class RequestTest(unittest.TestCase):
             click.ClickException,
             match="Invalid subscriber URL: 'localhorst'",
         ):
-            parse_processing_request(
+            ProcessingRequest.create(
                 process_id="my_func", subscribers=["failed=localhorst"]
             )

@@ -4,8 +4,10 @@
   - provides a CLI to query and execute processes;  
   - supports registration of processes from python functions;  
   - supports progress reporting by subscriber callback URLs.
-- Provided a processor example that uses the framework in workspace 
-  `s2gos-exappl`.
+- Provided an application example that uses the framework in workspace 
+  `s2gos-app-ex`.
+- Added basic documentation for the process development framework
+  in `docs/process-dev`.
 - Moved process registry stuff from `s2gos_server.services.local` into 
   `s2gos_common.process` so it can be easier reused.
 
