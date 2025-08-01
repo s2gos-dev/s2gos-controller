@@ -9,8 +9,10 @@
       
       
       
-        <link rel="prev" href="../process-dev/">
+        <link rel="prev" href="../client-api/">
       
+      
+        <link rel="next" href="../contributing/">
       
       
       <link rel="icon" href="../assets/logo.ico">
@@ -18,7 +20,7 @@
     
     
       
-        <title>Contributing - ESA DTE-S2GOS Controller</title>
+        <title>Process Development - ESA DTE-S2GOS Controller</title>
       
     
     
@@ -72,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#contributing-to-the-project" class="md-skip">
+        <a href="#process-development" class="md-skip">
           Skip to content
         </a>
       
@@ -107,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Contributing
+              Process Development
             
           </span>
         </div>
@@ -337,28 +339,6 @@
       
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../process-dev/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Process Development
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
     
   
   
@@ -376,7 +356,7 @@
   
   
   <span class="md-ellipsis">
-    Contributing
+    Process Development
     
   </span>
   
@@ -389,7 +369,7 @@
   
   
   <span class="md-ellipsis">
-    Contributing
+    Process Development
     
   </span>
   
@@ -412,100 +392,112 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#changelog" class="md-nav__link">
+  <a href="#development-recipe" class="md-nav__link">
     <span class="md-ellipsis">
-      Changelog
+      Development Recipe
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#reporting" class="md-nav__link">
+  <a href="#application-example" class="md-nav__link">
     <span class="md-ellipsis">
-      Reporting
+      Application Example
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#contributions" class="md-nav__link">
+  <a href="#framework-api" class="md-nav__link">
     <span class="md-ellipsis">
-      Contributions
+      Framework API
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#development" class="md-nav__link">
-    <span class="md-ellipsis">
-      Development
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Development">
+    <nav class="md-nav" aria-label="Framework API">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#setup" class="md-nav__link">
+  <a href="#s2gos_common.process.ProcessRegistry" class="md-nav__link">
     <span class="md-ellipsis">
-      Setup
+      ProcessRegistry
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ProcessRegistry">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.ProcessRegistry.process" class="md-nav__link">
+    <span class="md-ellipsis">
+      process
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.get_job_context" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_job_context
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#running-the-s2gos-controller-tools" class="md-nav__link">
+  <a href="#s2gos_common.process.JobContext" class="md-nav__link">
     <span class="md-ellipsis">
-      Running the S2GOS controller tools
+      JobContext
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="JobContext">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.JobContext.report_progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      report_progress
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#formatting-linting" class="md-nav__link">
+  <a href="#s2gos_common.process.JobContext.is_cancelled" class="md-nav__link">
     <span class="md-ellipsis">
-      Formatting &amp; Linting
+      is_cancelled
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#testing-coverage" class="md-nav__link">
+  <a href="#s2gos_common.process.JobContext.check_cancelled" class="md-nav__link">
     <span class="md-ellipsis">
-      Testing &amp; Coverage
+      check_cancelled
     </span>
   </a>
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#version-syncing" class="md-nav__link">
-    <span class="md-ellipsis">
-      Version syncing
-    </span>
-  </a>
+      </ul>
+    </nav>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#code-generation" class="md-nav__link">
+  <a href="#s2gos_common.process.get_cli" class="md-nav__link">
     <span class="md-ellipsis">
-      Code generation
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Documentation
+      get_cli
     </span>
   </a>
   
@@ -516,19 +508,32 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#license" class="md-nav__link">
-    <span class="md-ellipsis">
-      License
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -560,100 +565,47 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#changelog" class="md-nav__link">
+  <a href="#development-recipe" class="md-nav__link">
     <span class="md-ellipsis">
-      Changelog
+      Development Recipe
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#reporting" class="md-nav__link">
+  <a href="#application-example" class="md-nav__link">
     <span class="md-ellipsis">
-      Reporting
+      Application Example
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#contributions" class="md-nav__link">
+  <a href="#framework-api" class="md-nav__link">
     <span class="md-ellipsis">
-      Contributions
+      Framework API
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#development" class="md-nav__link">
-    <span class="md-ellipsis">
-      Development
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Development">
+    <nav class="md-nav" aria-label="Framework API">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#setup" class="md-nav__link">
+  <a href="#s2gos_common.process.ProcessRegistry" class="md-nav__link">
     <span class="md-ellipsis">
-      Setup
+      ProcessRegistry
     </span>
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="ProcessRegistry">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#running-the-s2gos-controller-tools" class="md-nav__link">
+  <a href="#s2gos_common.process.ProcessRegistry.process" class="md-nav__link">
     <span class="md-ellipsis">
-      Running the S2GOS controller tools
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#formatting-linting" class="md-nav__link">
-    <span class="md-ellipsis">
-      Formatting &amp; Linting
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#testing-coverage" class="md-nav__link">
-    <span class="md-ellipsis">
-      Testing &amp; Coverage
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#version-syncing" class="md-nav__link">
-    <span class="md-ellipsis">
-      Version syncing
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#code-generation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Code generation
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Documentation
+      process
     </span>
   </a>
   
@@ -663,13 +615,69 @@
     </nav>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#license" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.get_job_context" class="md-nav__link">
     <span class="md-ellipsis">
-      License
+      get_job_context
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.JobContext" class="md-nav__link">
+    <span class="md-ellipsis">
+      JobContext
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="JobContext">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.JobContext.report_progress" class="md-nav__link">
+    <span class="md-ellipsis">
+      report_progress
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.JobContext.is_cancelled" class="md-nav__link">
+    <span class="md-ellipsis">
+      is_cancelled
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.JobContext.check_cancelled" class="md-nav__link">
+    <span class="md-ellipsis">
+      check_cancelled
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.get_cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_cli
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -692,103 +700,459 @@
   
 
 
-<h1 id="contributing-to-the-project">Contributing to the project</h1>
-<h2 id="changelog">Changelog</h2>
-<p>You can find the complete changelog 
-<a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/CHANGES.md">here</a>. </p>
-<h2 id="reporting">Reporting</h2>
-<p>If you have suggestions, ideas, feature requests, or if you have identified
-a malfunction or error, then please 
-<a href="https://github.com/s2gos-dev/s2gos-controller/issues">post an issue</a>. </p>
-<h2 id="contributions">Contributions</h2>
-<p>The S2GOS client project welcomes contributions of any form as long as you 
-respect our 
-<a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/CODE_OF_CONDUCT.md">code of conduct</a>
-and follow our 
-<a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/CONTRIBUTING.md">contribution guide</a>.</p>
-<p>If you'd like to submit code or documentation changes, we ask you to provide a 
-pull request (PR) 
-<a href="https://github.com/s2gos-dev/s2gos-controller/pulls">here</a>. 
-For code and configuration changes, your PR must be linked to a 
-corresponding issue. </p>
-<h2 id="development">Development</h2>
-<h3 id="setup">Setup</h3>
-<p>Before you start, make sure you have <a href="https://pixi.sh">pixi</a> installed.</p>
-<p>Checkout sources</p>
-<div class="highlight"><pre><span></span><code>git clone https://github.com/s2gos-dev/s2gos-controller.git
-cd ./s2gos-controller
-</code></pre></div>
-<p>Create a new Python environment and activate it:</p>
-<div class="highlight"><pre><span></span><code>pixi install 
-pixi shell
-</code></pre></div>
-<h3 id="running-the-s2gos-controller-tools">Running the S2GOS controller tools</h3>
-<p>Run local test server</p>
-<div class="highlight"><pre><span></span><code>s2gos-server run s2gos_server.services.local.testing:service
-</code></pre></div>
-<p>The dev mode is useful if you are changing server code:</p>
-<div class="highlight"><pre><span></span><code>s2gos-server dev s2gos_server.services.local.testing:service
-</code></pre></div>
-<p>Run client API</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">s2gos_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
-
-<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">get_processes</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">get_jobs</span><span class="p">()</span>
-</code></pre></div>
-<p>Run client GUI (in Jupyter notebooks)</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">s2gos_client.gui</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span>
-
-<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">client</span><span class="o">.</span><span class="n">show_jobs</span><span class="p">()</span>
-</code></pre></div>
-<p>Run client CLI</p>
-<div class="highlight"><pre><span></span><code>$ s2gos-client --help
-</code></pre></div>
-<h3 id="formatting-linting">Formatting &amp; Linting</h3>
-<div class="highlight"><pre><span></span><code>pixi run isort .
-pixi run ruff format 
-pixi run ruff check
-</code></pre></div>
-<h3 id="testing-coverage">Testing &amp; Coverage</h3>
-<div class="highlight"><pre><span></span><code>pixi run test
-pixi run coverage
-</code></pre></div>
-<h3 id="version-syncing">Version syncing</h3>
-<p>Before a release increase version number in root <code>pyproject.toml</code>
-then synchronize versions in workspaces <code>tools/pyproject.toml</code> using </p>
-<div class="highlight"><pre><span></span><code>pixi run sync-versions
-</code></pre></div>
-<h3 id="code-generation">Code generation</h3>
-<p>Some code is generated (see respective file headers)
-from an OpenAPI specification in <code>tools/openapi.yaml</code>. 
-If this file is changed, code need to be regenerated: </p>
-<div class="highlight"><pre><span></span><code>pixi run generate
-</code></pre></div>
-<p>This will generate S2GOS'</p>
+<h1 id="process-development">Process Development</h1>
+<p>The package <code>s2gos_common</code> provides a simple processor development framework that</p>
 <ul>
-<li><a href="https://docs.pydantic.dev/">pydantic</a> models in <code>s2gos-common/src/s2gos_common/models.py</code> 
-(uses <a href="https://koxudaxi.github.io/datamodel-code-generator/">datamodel-code-generator</a>)</li>
-<li>client implementation in <code>s2gos-client/src/s2gos_client/client.py</code> and CLI documentation <code>docs/cli.md</code></li>
-<li>server routes in <code>s2gos-server/src/s2gos_server/routes.py</code> and the 
-  service interface in <code>s2gos-server/src/s2gos_server/service.py</code></li>
+<li>supports registration of processes from python functions,  </li>
+<li>supports progress reporting by subscriber callback URLs, and</li>
+<li>provides a command-line interface (CLI) to query and execute processes.</li>
 </ul>
-<h3 id="documentation">Documentation</h3>
-<p>The S2GOS client's documentation is built using the 
-<a href="https://www.mkdocs.org/">mkdocs</a> tool.</p>
-<p>With repository root as current working directory:</p>
-<div class="highlight"><pre><span></span><code>mkdocs<span class="w"> </span>build
-mkdocs<span class="w"> </span>serve
-mkdocs<span class="w"> </span>gh-deploy
+<p>Processor packages developed using the provided CLI can later on be used to
+generate Docker images, Airflow DAGs, and optionally OGC Application Packages.</p>
+<h2 id="development-recipe">Development Recipe</h2>
+<p>Framework usage is simple, it is a 3-step process: </p>
+<ol>
+<li>Write your processes as Python functions and register them in a process registry.</li>
+<li>Create a CLI instance from that process registry.</li>
+<li>Register the CLI instance as an entry point script for your package.</li>
+</ol>
+<p>The steps are explained in more detail in the following.</p>
+<p>(1) Create a process registry object of type <code>ProcessRegistry</code>.
+Use the registry's <code>process</code> decorator to register your Python functions 
+that should be exposed as processes. In <code>my_package/processes.py</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">s2gos_common.process</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProcessRegistry</span><span class="p">,</span> <span class="n">get_job_context</span>
+
+<span class="n">registry</span> <span class="o">=</span> <span class="n">ProcessRegistry</span><span class="p">()</span>
+
+<span class="nd">@registry</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;my-process-1&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_process_1</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="n">get_job_context</span><span class="p">()</span>
+    <span class="o">...</span>
+    <span class="n">ctx</span><span class="o">.</span><span class="n">report_progress</span><span class="p">(</span><span class="n">progress</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;Initialized sources&quot;</span><span class="p">)</span>
+    <span class="o">...</span>
+
+<span class="nd">@registry</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;my-process-2&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_process_2</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="o">...</span>
 </code></pre></div>
-<p>After changing the CLI code, always update its documentation <code>docs/cli.md</code> 
-by running</p>
-<div class="highlight"><pre><span></span><code>pixi<span class="w"> </span>run<span class="w"> </span>gen-client
+<p>Process inputs, such as the arguments <code>path</code> or <code>factor</code> above, 
+can be further specified by 
+<a href="https://docs.pydantic.dev/latest/concepts/fields/"><code>pydantic.Field</code></a> annotations.
+Field annotations for an argument can be provided via the <code>input_fields</code> dictionary 
+passed  to the <a class="autorefs autorefs-internal" title="process(function=None, /, *, id=None, version=None, title=None, description=None, input_fields=None, output_fields=None)" href="#s2gos_common.process.ProcessRegistry.process"><code>process</code></a> decorator, 
+or preferably as part of the type declaration using the Python <code>Annotated</code> 
+special form. An example for the latter is
+<code>factor: Annotated[float, Field(title="Scaling factor", gt=0., le=10.)] = 1.0</code>.</p>
+<p>(2) Create an instance of a common processor CLI and pass it a function that returns
+your process registry. In <code>my_package/cli.py</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">s2gos_common.process.cli.cli</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_cli</span>
+
+<span class="c1"># The CLI with a basic set of commands.</span>
+<span class="c1"># The `cli` is a Typer application of type `typer.Typer()`,</span>
+<span class="c1"># so can use the instance to register your own commands.</span>
+<span class="n">cli</span> <span class="o">=</span> <span class="n">get_cli</span><span class="p">(</span><span class="s2">&quot;my_package.processes:registry&quot;</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="license">License</h2>
-<p>The S2GOS client is open source made available under the terms and conditions of the 
-<a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0 license</a>.</p>
+<p>(3) Expose the CLI as an entry point. In your <code>pyproject.toml</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[project.scripts]</span>
+<span class="n">my-tool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;my_package.cli:cli&quot;</span>
+</code></pre></div>
+<h2 id="application-example">Application Example</h2>
+<p>An application example that can serve as a starting point is provided in the workspace 
+<a href="https://github.com/s2gos-dev/s2gos-controller/tree/main/s2gos-app-ex">s2gos-app-ex</a>.</p>
+<h2 id="framework-api">Framework API</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="s2gos_common.process.ProcessRegistry" class="doc doc-heading">
+            <code>s2gos_common.process.ProcessRegistry</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="collections.abc.Mapping">Mapping</span>[<span title="str">str</span>, <span title="s2gos_common.process.process.Process">Process</span>]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="s2gos_common.process.ProcessRegistry.process" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">process</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">input_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>A decorator that can be applied to a user function in order to
+register it as a process in this registry.</p>
+<p>The decorator can be used with or without parameters.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="s2gos_common.process.get_job_context" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">s2gos_common</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">get_job_context</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Get the current job context.</p>
+<p>Returns the current job context that can be used to report
+job progress in percent or via messages.</p>
+<p>This function is intended to be called from within
+functions executed as a job.</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="s2gos_common.process.JobContext (s2gos_common.process.job.JobContext)" href="#s2gos_common.process.JobContext">JobContext</a></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An instance of the current job context.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="s2gos_common.process.JobContext" class="doc doc-heading">
+            <code>s2gos_common.process.JobContext</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="abc.ABC">ABC</span></code></p>
+
+
+        <p>Report task progress and check for task cancellation.</p>
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="s2gos_common.process.JobContext.report_progress" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">report_progress</span><span class="p">(</span><span class="n">progress</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Report task progress.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>progress</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="int">int</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Progress in percent</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>message</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Detail progress message</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="JobCancellationException">JobCancellationException</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>if an attempt has been made
+to cancel this job.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="s2gos_common.process.JobContext.is_cancelled" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">is_cancelled</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Test whether an attempt has been made to cancel this job.
+It may still be running though.</p>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p><code>True</code> if so, <code>False</code> otherwise.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="s2gos_common.process.JobContext.check_cancelled" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">check_cancelled</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Raise a <code>JobCancellationException</code>,
+an attempt has been made to cancel this job.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="s2gos_common.process.get_cli" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">s2gos_common</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">get_cli</span><span class="p">(</span><span class="n">process_registry</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Get the CLI instance configured to use the process registry
+that is given either by a reference of the form "<module>:<attribute>"
+or as a no-arg getter function.</p>
+<p>The context object <code>obj</code> of the returned CLI object
+will be of type <code>dict</code> and will contain the provided
+<code>process_registry_getter</code> also using the name as key.</p>
+<p>The function must be called before any CLI command or
+callback has been invoked. Otherwise, the provided
+<code>process_registry_getter</code> will not be recognized and
+all commands that require the process registry will
+fail with an <code>AssertionError</code>.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>process_registry</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span> | <span title="typing.Callable">Callable</span>[[], <a class="autorefs autorefs-internal" title="s2gos_common.process.ProcessRegistry" href="#s2gos_common.process.ProcessRegistry">ProcessRegistry</a>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A registry reference string or a no-arg
+function that returns an instance of your
+<code>s2gos_common.process.ProcessRegistry</code>,
+which is usually a singleton in your application.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>kwargs</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Additional context values that will be registered in the</p>
+              </div>
+            </td>
+            <td>
+                  <code>{}</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
 
 
 

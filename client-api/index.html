@@ -12,7 +12,7 @@
         <link rel="prev" href="../client-cli/">
       
       
-        <link rel="next" href="../contributing/">
+        <link rel="next" href="../process-dev/">
       
       
       <link rel="icon" href="../assets/logo.ico">
@@ -507,6 +507,28 @@
   
   
     <li class="md-nav__item">
+      <a href="../process-dev/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Process Development
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../contributing/" class="md-nav__link">
         
   
@@ -697,7 +719,7 @@ It provides the same interface, but using asynchronous server calls.</p>
 <p>Both clients return their configuration as a 
 <a href="#s2gos_client.ClientConfig"><code>ClientConfig</code></a> object.</p>
 <p>Methods of the <a href="#s2gos_client.Client"><code>Client</code></a> and <code>AsyncClient</code> 
-may raise a <a href="#s2gos_client.ClientError"><code>ClientException</code></a> if a server call fails. </p>
+may raise a <a href="#s2gos_client.ClientException"><code>ClientException</code></a> if a server call fails. </p>
 
 
 <div class="doc doc-object doc-class">
@@ -1194,7 +1216,7 @@ other configuration arguments are ignored.</p>
         <span class="n">_debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">_transport</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Transport</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_config</span> <span class="o">=</span> <span class="n">ClientConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_config</span> <span class="o">=</span> <span class="n">ClientConfig</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
             <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
             <span class="n">config_path</span><span class="o">=</span><span class="n">config_path</span><span class="p">,</span>
             <span class="n">server_url</span><span class="o">=</span><span class="n">server_url</span><span class="p">,</span>
@@ -3303,26 +3325,7 @@ with a status code != <code>2xx</code>.
 <span class="normal">111</span>
 <span class="normal">112</span>
 <span class="normal">113</span>
-<span class="normal">114</span>
-<span class="normal">115</span>
-<span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
-<span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span>
-<span class="normal">129</span>
-<span class="normal">130</span>
-<span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ClientConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="normal">114</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ClientConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Client configuration.</span>
 
 <span class="sd">    Args:</span>
@@ -3341,7 +3344,7 @@ with a status code != <code>2xx</code>.
         <span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
         <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;ClientConfig&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -3396,25 +3399,6 @@ with a status code != <code>2xx</code>.
             <span class="k">if</span> <span class="n">env_var_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
                 <span class="n">config_dict</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">env_var_name</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">ClientConfig</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span> <span class="k">if</span> <span class="n">config_dict</span> <span class="k">else</span> <span class="kc">None</span>
-
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;ClientConfig&quot;</span><span class="p">]:</span>
-        <span class="n">config_path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">normalize_config_path</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span>
-
-        <span class="n">env_config_dict</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">_field_info</span> <span class="ow">in</span> <span class="n">ClientConfig</span><span class="o">.</span><span class="n">model_fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">env_var_name</span> <span class="o">=</span> <span class="s2">&quot;S2GOS_&quot;</span> <span class="o">+</span> <span class="n">field_name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">env_var_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
-                <span class="n">env_config_dict</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">env_var_name</span><span class="p">]</span>
-
-        <span class="n">config_dict</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">if</span> <span class="n">config_path</span> <span class="ow">and</span> <span class="n">config_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">with</span> <span class="n">config_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
-                <span class="n">config_dict</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
-        <span class="n">config_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">env_config_dict</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">config_dict</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">ClientConfig</span><span class="p">(</span><span class="o">**</span><span class="n">config_dict</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="n">config_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_config_path</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span>
