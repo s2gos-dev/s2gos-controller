@@ -368,9 +368,9 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/96/fd/a40c621ff207f3ce8e484aa0fc8ba4eb6e3ecf52e15b42ba764b457a9550/editorconfig-0.17.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/2d/14/1c65fccf8413d5f5c6e8425f84675169654395098000d8bddc4e9d3390e1/jsbeautifier-1.15.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/24/ce/c8a41cb0f3044990c8afbdc20c853845a9e940995d4e0cffecafbb5e927b/mkdocs_mermaid2_plugin-1.2.1-py3-none-any.whl
+      - pypi: ./s2gos-app-ex
       - pypi: ./s2gos-client
       - pypi: ./s2gos-common
-      - pypi: ./s2gos-exappl
       - pypi: ./s2gos-server
       osx-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/annotated-types-0.7.0-pyhd8ed1ab_1.conda
@@ -722,9 +722,9 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/96/fd/a40c621ff207f3ce8e484aa0fc8ba4eb6e3ecf52e15b42ba764b457a9550/editorconfig-0.17.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/2d/14/1c65fccf8413d5f5c6e8425f84675169654395098000d8bddc4e9d3390e1/jsbeautifier-1.15.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/24/ce/c8a41cb0f3044990c8afbdc20c853845a9e940995d4e0cffecafbb5e927b/mkdocs_mermaid2_plugin-1.2.1-py3-none-any.whl
+      - pypi: ./s2gos-app-ex
       - pypi: ./s2gos-client
       - pypi: ./s2gos-common
-      - pypi: ./s2gos-exappl
       - pypi: ./s2gos-server
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/win-64/_openmp_mutex-4.5-2_gnu.conda
@@ -1066,9 +1066,9 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/96/fd/a40c621ff207f3ce8e484aa0fc8ba4eb6e3ecf52e15b42ba764b457a9550/editorconfig-0.17.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/2d/14/1c65fccf8413d5f5c6e8425f84675169654395098000d8bddc4e9d3390e1/jsbeautifier-1.15.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/24/ce/c8a41cb0f3044990c8afbdc20c853845a9e940995d4e0cffecafbb5e927b/mkdocs_mermaid2_plugin-1.2.1-py3-none-any.whl
+      - pypi: ./s2gos-app-ex
       - pypi: ./s2gos-client
       - pypi: ./s2gos-common
-      - pypi: ./s2gos-exappl
       - pypi: ./s2gos-server
 packages:
 - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
@@ -8627,6 +8627,12 @@ packages:
   - pkg:pypi/ruff?source=hash-mapping
   size: 8291919
   timestamp: 1750189141795
+- pypi: ./s2gos-app-ex
+  name: s2gos-app-ex
+  version: 0.0.0
+  sha256: bcf9b35cf8dde8c393c51de92d933cf68c3f7e57765e239c71fadf6e0da497fa
+  requires_python: '>=3.10'
+  editable: true
 - pypi: ./s2gos-client
   name: s2gos-client
   version: 0.0.4.dev0
@@ -8648,12 +8654,6 @@ packages:
   requires_dist:
   - pydantic
   - typer
-  requires_python: '>=3.10'
-  editable: true
-- pypi: ./s2gos-exappl
-  name: s2gos-exappl
-  version: 0.0.0
-  sha256: ef3ab54c7a1e3b724866f89506aa237757ebd453dfe80744c6aee7720d32ed23
   requires_python: '>=3.10'
   editable: true
 - pypi: ./s2gos-server
