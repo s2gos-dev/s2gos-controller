@@ -24,17 +24,19 @@ def f2(x: bool, y: str, z: float) -> tuple:
     return x, y, z
 
 
-cli = get_cli("tests.process.cli.test_cli:registry")
+# noinspection PyUnresolvedReferences
+class CliTestMixin:
+    @classmethod
+    def get_cli(cls) -> typer.Typer:
+        raise NotImplementedError
 
+    @classmethod
+    def invoke_cli(cls, *args: str) -> typer.testing.Result:
+        runner = typer.testing.CliRunner()
+        return runner.invoke(cls.get_cli(), args)
 
-def invoke_cli(*args: str) -> typer.testing.Result:
-    runner = typer.testing.CliRunner()
-    return runner.invoke(cli, args)
-
-
-class CliTest(TestCase):
     def test_execute_process_f1_success(self):
-        result = invoke_cli(
+        result = self.invoke_cli(
             "execute-process", "f1", "-i", "a=0", "-i", "b=bibo", "-i", "c=0.2"
         )
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
@@ -44,7 +46,7 @@ class CliTest(TestCase):
         )
 
     def test_execute_process_f2_success(self):
-        result = invoke_cli(
+        result = self.invoke_cli(
             "execute-process", "f2", "-i", "x=true", "-i", "y=pippo", "-i", "z=0.3"
         )
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
@@ -54,7 +56,7 @@ class CliTest(TestCase):
         )
 
     def test_execute_process_f2_fail(self):
-        result = invoke_cli(
+        result = self.invoke_cli(
             "execute-process", "f2", "-i", "x=true", "-i", "y=bibo", "-i", "z=1.8"
         )
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
@@ -63,12 +65,12 @@ class CliTest(TestCase):
         self.assertIn('  "message": "y must not be bibo",', result.output)
 
     def test_execute_process_fail(self):
-        result = invoke_cli("execute-process", "f5")
+        result = self.invoke_cli("execute-process", "f5")
         self.assertEqual(1, result.exit_code, msg=self.get_result_msg(result))
         self.assertIn("Process 'f5' not found.", result.output)
 
     def test_list_processes(self):
-        result = invoke_cli("list-processes")
+        result = self.invoke_cli("list-processes")
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertEqual(
             (
@@ -87,7 +89,7 @@ class CliTest(TestCase):
         )
 
     def test_get_process_ok(self):
-        result = invoke_cli("get-process", "f2")
+        result = self.invoke_cli("get-process", "f2")
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertEqual(
             (
@@ -129,12 +131,12 @@ class CliTest(TestCase):
         )
 
     def test_get_process_fail(self):
-        result = invoke_cli("get-process", "f9")
+        result = self.invoke_cli("get-process", "f9")
         self.assertEqual(1, result.exit_code, msg=self.get_result_msg(result))
         self.assertIn("Process 'f9' not found.", result.output)
 
     def test_help(self):
-        result = invoke_cli("--help")
+        result = self.invoke_cli("--help")
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertIn(
             "Command-line interface for process description and execution",
@@ -152,6 +154,7 @@ class CliTest(TestCase):
 class AppWithRealClientTest(TestCase):
     def test_get_processes(self):
         """Test code in app so that the non-mocked Client is used."""
+        cli = CliRegistryTest.get_cli()
         runner = typer.testing.CliRunner()
         result = runner.invoke(cli, ["list-processes"])
         # May succeed if dev server is running
@@ -160,3 +163,24 @@ class AppWithRealClientTest(TestCase):
         )
         if result.exit_code != 0:
             print(result.output)
+
+
+class CliRegistryTest(CliTestMixin, TestCase):
+    @classmethod
+    def get_cli(cls):
+        return get_cli(registry)
+
+
+class CliRegistryRefTest(CliTestMixin, TestCase):
+    @classmethod
+    def get_cli(cls):
+        return get_cli("tests.process.cli.test_cli:registry")
+
+
+class CliRegistryGetterTest(CliTestMixin, TestCase):
+    @classmethod
+    def get_cli(cls):
+        def get_registry():
+            return registry
+
+        return get_cli(get_registry)

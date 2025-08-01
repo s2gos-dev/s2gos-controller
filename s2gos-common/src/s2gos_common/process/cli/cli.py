@@ -3,7 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 import json
-from typing import TYPE_CHECKING, Annotated, Callable, Optional
+from typing import TYPE_CHECKING, Annotated, Callable, Optional, Union
 
 import click
 import typer
@@ -39,28 +39,34 @@ cli = typer.Typer(
 
 
 def get_cli(
-    process_registry: str | Callable[[], "ProcessRegistry"], **kwargs
+    process_registry: Union[str, "ProcessRegistry", Callable[[], "ProcessRegistry"]],
+    **kwargs,
 ) -> typer.Typer:
     """
     Get the CLI instance configured to use the process registry
-    that is given either by a reference of the form "<module>:<attribute>"
-    or as a no-arg getter function.
+    that is given either by
+
+    - a reference of the form "<module>:<attribute>",
+    - or process registry instance,
+    - or as a no-arg process registry getter function.
+
+    The process registry is usually a singleton in your application.
 
     The context object `obj` of the returned CLI object
-    will be of type `dict` and will contain the provided
-    `process_registry_getter` also using the name as key.
+    will be of type `dict` and will contain
+    a process registry getter function using the key
+    `get_process_registry`.
 
     The function must be called before any CLI command or
     callback has been invoked. Otherwise, the provided
-    `process_registry_getter` will not be recognized and
+    `get_process_registry` getter will not be recognized and
     all commands that require the process registry will
     fail with an `AssertionError`.
 
     Args:
-        process_registry: A registry reference string or a no-arg
-            function that returns an instance of your
-            `s2gos_common.process.ProcessRegistry`,
-            which is usually a singleton in your application.
+        process_registry: A registry reference string,
+            or a registry instance, or a no-arg
+            function that returns a registry instance.
         kwargs: Additional context values that will be registered in the
 
     """
@@ -75,6 +81,9 @@ def get_cli(
             )
 
         return get_cli(get_process_registry)
+
+    elif not callable(process_registry):
+        return get_cli(lambda: process_registry)
 
     assert callable(process_registry)
     context_settings = cli.info.context_settings
