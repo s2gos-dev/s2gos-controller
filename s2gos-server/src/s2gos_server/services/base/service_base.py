@@ -2,7 +2,6 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-import importlib
 import logging
 import os
 import shlex
@@ -19,6 +18,7 @@ from s2gos_common.models import (
     Link,
 )
 from s2gos_common.service import Service
+from s2gos_common.util.dynimp import import_value
 from s2gos_server.constants import ENV_VAR_SERVICE
 from s2gos_server.exceptions import ServiceConfigException
 
@@ -76,39 +76,24 @@ class ServiceBase(Service, ABC):
             else:
                 args.append(a)
 
-        service_name_example = "path.to.module:service"
         if not args:
             service_help = (
-                f"The service must be passed in the form {service_name_example!r} "
+                f"The service must be passed in the form {'path.to.module:service'!r} "
                 "either as first command-line argument or using the environment "
                 f"variable {ENV_VAR_SERVICE!r}."
             )
             raise ServiceConfigException(f"Service not specified. {service_help}")
 
-        service_name, args = args[0], args[1:]
+        service_ref, args = args[0], args[1:]
         try:
-            module_name, attr_name = service_name.split(":", maxsplit=1)
-        except ValueError:
-            raise ServiceConfigException(
-                f"The service must be passed in the form {service_name_example!r}, "
-                f"but got {service_name!r}."
+            service = import_value(
+                service_ref,
+                type=ServiceBase,
+                name="service",
+                example="path.to.module:service",
             )
-        try:
-            module = importlib.import_module(module_name)
-        except ImportError:
-            raise ServiceConfigException(
-                f"Cannot import the service module {module_name!r}."
-            )
-        try:
-            service: Service = getattr(module, attr_name)
-        except AttributeError:
-            raise ServiceConfigException(
-                f"Service module {module_name!r} has no attribute {attr_name!r}."
-            )
-        if not isinstance(service, ServiceBase):
-            raise ServiceConfigException(
-                f"{service_name!r} is not referring to a service instance."
-            )
+        except (ValueError, TypeError) as e:
+            raise ServiceConfigException(f"{e}")
         logger = logging.getLogger("uvicorn")
         logger.info(f"Created service instance of type {type(service).__name__}")
         service.configure(*args, **kwargs)

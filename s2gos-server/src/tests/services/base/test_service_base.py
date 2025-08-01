@@ -100,28 +100,28 @@ class ServiceBaseTest(TestCase):
     def test_load_env_var_with_invalid_service_spec(self):
         self.assert_fails_with_config_exception(
             "hello.service",
-            r"The service must be passed in the form "
+            r"The service reference must be passed in the form "
             r"'path\.to\.module\:service', but got 'hello\.service'\.",
         )
 
     def test_load_env_var_with_invalid_service_module(self):
         self.assert_fails_with_config_exception(
             "hel.lo:service",
-            r"Cannot import the service module 'hel.lo'\.",
+            r"Cannot import module 'hel.lo'\.",
         )
 
     def test_load_env_var_with_invalid_service_attrib(self):
         self.assert_fails_with_config_exception(
             "tests.services.base.test_service_base:servize",
-            r"Service module 'tests\.services\.base\.test_service_base' "
+            r"Module 'tests\.services\.base\.test_service_base' "
             r"has no attribute 'servize'\.",
         )
 
     def test_load_env_var_with_invalid_service_type(self):
         self.assert_fails_with_config_exception(
             "tests.services.base.test_service_base:MyService",
-            r"'tests\.services\.base\.test_service_base:MyService' "
-            r"is not referring to a service instance\.",
+            r"The reference 'tests\.services\.base\.test_service_base:MyService' "
+            r"should refer to a service of type ServiceBase, but got type ABCMeta\.",
         )
 
     def test_load_env_var_with_invalid_opt(self):

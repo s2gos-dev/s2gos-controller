@@ -188,11 +188,11 @@ def validate_request(
     The `process_id` argument and any given `--input` options will override
     settings with same name found in the given request file or `stdin`, if any.
     """
-    from s2gos_common.process.cli import parse_processing_request
+    from s2gos_common.process.cli.request import ProcessingRequest
 
     from .output import get_renderer, output
 
-    request = parse_processing_request(process_id, request_file, request_inputs)
+    request = ProcessingRequest.create(process_id, request_file, request_inputs)
     output(get_renderer(output_format).render_processing_request_valid(request))
 
 
@@ -218,12 +218,12 @@ def execute_process(
     The `process_id` argument and any given `--input` options will override
     settings with same name found in the given request file or `stdin`, if any.
     """
-    from s2gos_common.process.cli import parse_processing_request
+    from s2gos_common.process.cli.request import ProcessingRequest
 
     from .client import use_client
     from .output import get_renderer, output
 
-    request = parse_processing_request(
+    request = ProcessingRequest.create(
         process_id=process_id,
         inputs=request_inputs,
         subscribers=request_subscribers,

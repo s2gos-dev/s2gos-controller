@@ -16,7 +16,7 @@ from s2gos_common.models import (
     ProcessDescription,
     ProcessList,
 )
-from s2gos_common.process.cli import ProcessingRequest
+from s2gos_common.process.cli.request import ProcessingRequest
 
 
 class OutputFormat(str, Enum):

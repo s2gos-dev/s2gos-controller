@@ -104,7 +104,11 @@ class CliTest(TestCase):
     @classmethod
     def get_result_msg(cls, result: typer.testing.Result):
         if result.exit_code != 0:
-            return f"output was: [{result.output}]\nstderr was: [{result.stderr}]"
+            return (
+                f"stdout was: [{result.stdout}]\n"
+                f"stderr was: [{result.stderr}]\n"
+                f"exception was: {result.exception}"
+            )
         else:
             return None
 

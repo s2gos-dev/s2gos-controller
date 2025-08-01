@@ -15,7 +15,7 @@ from s2gos_common.models import (
     ProcessList,
     ProcessSummary,
 )
-from s2gos_common.process.cli import ProcessingRequest
+from s2gos_common.process.cli.request import ProcessingRequest
 
 
 class OutputTest(TestCase):

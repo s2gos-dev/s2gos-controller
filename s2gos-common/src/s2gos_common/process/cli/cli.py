@@ -39,11 +39,12 @@ cli = typer.Typer(
 
 
 def get_cli(
-    process_registry_getter: Callable[[], "ProcessRegistry"], **kwargs
+    process_registry: str | Callable[[], "ProcessRegistry"], **kwargs
 ) -> typer.Typer:
     """
-    Get the CLI instance configured to use the given getter
-    for the process registry.
+    Get the CLI instance configured to use the process registry
+    that is given either by a reference of the form "<module>:<attribute>"
+    or as a no-arg getter function.
 
     The context object `obj` of the returned CLI object
     will be of type `dict` and will contain the provided
@@ -56,17 +57,31 @@ def get_cli(
     fail with an `AssertionError`.
 
     Args:
-        process_registry_getter: A no-arg function that returns an
-            instance of your `s2gos_common.process.ProcessRegistry`,
+        process_registry: A registry reference string or a no-arg
+            function that returns an instance of your
+            `s2gos_common.process.ProcessRegistry`,
             which is usually a singleton in your application.
         kwargs: Additional context values that will be registered in the
 
     """
+    if isinstance(process_registry, str):
+
+        def get_process_registry():
+            from s2gos_common.process import ProcessRegistry
+            from s2gos_common.util.dynimp import import_value
+
+            return import_value(
+                process_registry, name="process registry", type=ProcessRegistry
+            )
+
+        return get_cli(get_process_registry)
+
+    assert callable(process_registry)
     context_settings = cli.info.context_settings
     assert isinstance(context_settings, dict)
     context_obj = context_settings["obj"]
     assert isinstance(context_obj, dict)
-    context_obj.update({PROCESS_REGISTRY_GETTER_KEY: process_registry_getter, **kwargs})
+    context_obj.update({PROCESS_REGISTRY_GETTER_KEY: process_registry, **kwargs})
     return cli
 
 

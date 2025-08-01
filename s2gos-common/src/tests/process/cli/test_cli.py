@@ -24,7 +24,7 @@ def f2(x: bool, y: str, z: float) -> tuple:
     return x, y, z
 
 
-cli = get_cli(lambda: registry)
+cli = get_cli("tests.process.cli.test_cli:registry")
 
 
 def invoke_cli(*args: str) -> typer.testing.Result:
