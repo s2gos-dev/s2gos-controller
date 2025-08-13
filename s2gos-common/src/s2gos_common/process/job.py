@@ -150,7 +150,11 @@ class Job(JobContext):
                 with respect to its process input description.
         """
         process_desc = process.description
-        input_params = cls._nest_dict(request.inputs or {})
+        input_params = (
+            cls._nest_dict(request.inputs or {})
+            if not process.no_dot_path
+            else (request.inputs or {})
+        )
         input_default_params = {
             input_name: input_info.schema_.default
             for input_name, input_info in (process_desc.inputs or {}).items()

@@ -25,6 +25,7 @@ class Process:
     """
 
     function: Callable
+    no_dot_path: bool
     signature: inspect.Signature
     job_ctx_args: list[str]
     model_class: type[pydantic.BaseModel]
@@ -35,12 +36,14 @@ class Process:
     def create(
         cls,
         function: Callable,
+        *,
         id: Optional[str] = None,
         version: Optional[str] = None,
         title: Optional[str] = None,
         description: Optional[str] = None,
         input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
+        no_dot_path: bool = False,
     ) -> "Process":
         if not inspect.isfunction(function):
             raise TypeError("function argument must be callable")
@@ -72,6 +75,7 @@ class Process:
                 # outputTransmission=output_transmission,
                 # jobControlOptions=job_control_options,
             ),
+            no_dot_path=no_dot_path,
         )
 
 

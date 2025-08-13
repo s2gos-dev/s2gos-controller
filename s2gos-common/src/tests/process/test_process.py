@@ -56,6 +56,7 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
         process = Process.create(f1)
         self.assertIsInstance(process, Process)
         self.assertIs(f1, process.function)
+        self.assertEqual(False, process.no_dot_path)
         proc_desc = process.description
         self.assertIsInstance(proc_desc, ProcessDescription)
         self.assertEqual("tests.process.test_process:f1", proc_desc.id)
