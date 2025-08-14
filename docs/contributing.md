@@ -50,7 +50,7 @@ pixi shell
 Run local test server
 
 ```commandline
-s2gos-server run s2gos_server.services.local.testing:service
+s2gos-server run -- s2gos_server.services.local.testing:service
 ```
 
 The dev mode is useful if you are changing server code:
