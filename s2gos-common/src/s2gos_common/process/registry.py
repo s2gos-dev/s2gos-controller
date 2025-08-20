@@ -41,6 +41,7 @@ class ProcessRegistry(Mapping[str, Process]):
         description: Optional[str] = None,
         input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
+        no_dot_path: bool = False,
     ) -> Callable[[Callable], Callable] | Callable:
         """
         A decorator that can be applied to a user function in order to
@@ -67,6 +68,9 @@ class ProcessRegistry(Mapping[str, Process]):
                 annotations. Required, if you have multiple outputs returned as a
                 dictionary. In this case, output names are the keys of your returned
                 dictionary.
+            no_dot_path: Set to `True` to avoid interpreting dots in input names
+                as path separators for referring to nested values in an object
+                hierarchy. The default is `False` (allow flat notion).
         """
 
         def register_process(fn: Callable):
@@ -78,6 +82,7 @@ class ProcessRegistry(Mapping[str, Process]):
                 description=description,
                 input_fields=input_fields,
                 output_fields=output_fields,
+                no_dot_path=no_dot_path,
             )
             self._processes[process.description.id] = process
             return fn

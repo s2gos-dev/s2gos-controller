@@ -10,6 +10,10 @@
   in `docs/process-dev`.
 - Moved process registry stuff from `s2gos_server.services.local` into 
   `s2gos_common.process` so it can be easier reused.
+- Introduced `Process.no_dot_path: bool`. 
+  Set to `True` to avoid interpreting dots in input names
+  as path separators for referring to nested values in an object 
+  hierarchy. The default is `False` (allow flat notion).
 
 ## Changes in version 0.0.3
 
