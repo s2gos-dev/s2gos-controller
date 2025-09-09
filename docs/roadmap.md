@@ -1,8 +1,8 @@
 # S2GOS Controller Roadmap
 
-## Next
+Given here are the features and issues that are worked on and will be addressed next.
 
-Given here are the features and issues that will be addressed next.
+## Doing
 
 ### General design
 
@@ -10,45 +10,19 @@ Given here are the features and issues that will be addressed next.
     - user files --> **scene generator** --> OBJ
     - OBJ --> **scene simulator** --> Zarr 
 
-### Enhance the GUI Client
-
-- Use the async API client version in the GUI Client.
-  `panel` widget handler that use the client can and should be async.
-- `show()` - show the main form where users can select a process 
-  and submit process requests with inputs and outputs
-    - Actions
-      - open request 
-        - save request 
-        - save-as request
-        - show success/failure
-    - bug: process `gen_datacube`: if no bbox selected, client receives an error 
-    - optional enhancements
-        - integrate job status panel
-        - show request as JSON
-- `show_jobs()` - show all jobs in a table and provide actions on job selection: 
-    - Actions:
-        - ♻️️ restart dismissed/failed job(s)
-- `show_processes()` - get a nicely rendered overview of all processes 
-- `show_process(process_id: str = None, job_id: str = None, editable: bool = True)`
-
-### Processor Containerization
-
-- **DONE**: Develop a simple processor development framework that
-    - provides a CLI to query and execute processes   
-    - supports registration of processes from python functions  
-    - supports progress reporting by subscriber callback URLs 
-  
-
 ### Airflow Service
 
 - Test the Airflow-based service that connects to the Airflow web API
 - Generate DAGs for containerized processes in Docker
 - Generate DAGs for containerized processes in K8s
 
-### Local Service
+## Next
 
-- Path `/`:
-    - Also provide a HTML version, support mimetype `text/html`
+### GUI Client
+
+- ❌ Bug in `show()` with bbox. To reproduce with local service
+  select process `simulate_scene`: if no bbox selected, 
+  client receives an error. 
 
 ### Authentication
 
@@ -64,6 +38,8 @@ Given here are the features and issues that will be addressed next.
     - client 
     - server
 
+## Backlog
+
 ### Code generation
 
 The output of `generators/gen_models` is not satisfying: 
@@ -73,6 +49,31 @@ The output of `generators/gen_models` is not satisfying:
     - Use `openapi_pydantic.Schema`, `openapi_pydantic.Reference`, etc. in generated code
     - Use `openapi_pydantic.OpenAPI` for representing `s2gos/common/openapi.yaml` in 
       the generators
+
+### Local and Airflow Service
+
+- Path `/`:
+    - Also provide a HTML version, support mimetype `text/html`
+
+### Enhance the GUI Client
+
+- Use the async API client version in the GUI Client.
+  `panel` widget handler that use the client can and should be async.
+- `show()` - show the main form where users can select a process 
+  and submit process requests with inputs and outputs
+    - Actions
+      - open request 
+        - save request 
+        - save-as request
+        - show success/failure
+    - optional enhancements
+        - integrate job status panel
+        - show request as JSON
+- `show_jobs()` - show all jobs in a table and provide actions on job selection: 
+    - Actions:
+        - ♻️️ restart dismissed/failed job(s)
+- `show_processes()` - get a nicely rendered overview of all processes 
+- `show_process(process_id: str = None, job_id: str = None, editable: bool = True)`
 
 
 ## Done
@@ -102,6 +103,13 @@ The output of `generators/gen_models` is not satisfying:
     - **DONE**: Generate them using [`httpx`](https://github.com/encode/httpx), which 
       should replace currently used `requests`
 
+### Processor Containerization
+
+- Develop a simple processor development framework that
+    - **DONE**: provides a CLI to query and execute processes   
+    - **DONE**: supports registration of processes from python functions  
+    - **DONE**: supports progress reporting by subscriber callback URLs 
+
 ### Implement CLI commands
 
 - **DONE**: `list-processes`
@@ -125,9 +133,9 @@ The output of `generators/gen_models` is not satisfying:
     - **DONE**: use `Tabulator`
     - **DONE** Add an action row with actions applicable to the current table selection
     - Actions:
-        - **DONE**: ✖️ cancel accepted/running job(s)
-    - **DONE**: ❌ delete successful/dismissed/failed job(s)
-    - **DONE**: ⬇️ get job result(s)
+        - **DONE**: cancel accepted/running job(s)
+    - **DONE**: delete successful/dismissed/failed job(s)
+    - **DONE**: get job result(s)
 - `show_job(job_id: str)` - show a dedicated job
 
 ### Local service
