@@ -8,7 +8,8 @@ from typing import Any
 
 import typer
 
-from s2gos_server.services.local import LocalService, RegisteredProcess
+from s2gos_server.services.local import LocalService
+from s2gos_common.process import Process
 from tools.common import S2GOS_PATH, write_file
 
 GENERATOR_NAME = str(Path(__file__).name)
@@ -28,7 +29,7 @@ def main(service_spec: str = SERVICE_SPEC, dags_folder: Path = DAGS_FOLDER):
         )
 
 
-def gen_dag(process: RegisteredProcess) -> str:
+def gen_dag(process: Process) -> str:
     process_description = process.description
     function_name = process_description.id
     input_descriptions = process_description.inputs
