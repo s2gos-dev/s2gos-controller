@@ -195,7 +195,7 @@ class AirflowService(ServiceBase):
         return self.dag_run_to_job_info(dag_run)
 
     async def get_job_results(self, job_id: str, *args, **kwargs) -> JobResults:
-        dag_id = await self.get_dag_id_from_job_id(job_id)
+        dag_id = self.get_dag_id_from_job_id(job_id)
         try:
             xcom_entry = self.airflow_xcom_api.get_xcom_entry(
                 dag_id=dag_id,
@@ -203,9 +203,15 @@ class AirflowService(ServiceBase):
                 task_id=dag_id + "_task",
                 xcom_key="return_value",
             )
+            if xcom_entry and xcom_entry.actual_instance:
+                return_value = xcom_entry.actual_instance.value
+            else:
+                return_value = None
         except ApiException as e:
             raise ServiceException(e.status, e.reason, exception=e) from e
-        return JobResults(**xcom_entry.model_dump(mode="json"))
+        # TODO: use keys from output definitions, if provided. 
+        #   Otherwise, "return_value" is correct.
+        return JobResults({"return_value": return_value})
 
     def new_dag_run_id(self, dag_id: str, logical_time: datetime.datetime):
         self._exec_count += 1
