@@ -15,7 +15,7 @@ nav:
   - Client API: client-api.md
   - Process Development: process-dev.md
   - Contributing: contributing.md
-  - Development: todo.md
+  - Roadmap: todo.md
 
 theme:
   name: material
