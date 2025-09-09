@@ -200,9 +200,8 @@ class AirflowService(ServiceBase):
             xcom_entry = self.airflow_xcom_api.get_xcom_entry(
                 dag_id=dag_id,
                 dag_run_id=job_id,
-                # TODO: check how to use task_id / xcom_key correctly
-                task_id="compute_result",
-                xcom_key="result",
+                task_id=dag_id + "_task",
+                xcom_key="return_value",
             )
         except ApiException as e:
             raise ServiceException(e.status, e.reason, exception=e) from e
