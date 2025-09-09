@@ -1,6 +1,6 @@
 # Process Development
 
-The package `s2gos_common` provides a simple processor development framework that
+The package `s2gos_common` provides a simple **processor development framework** that
 
   - supports registration of processes from Python functions,  
   - supports progress reporting by subscriber callback URLs, and
@@ -9,6 +9,17 @@ The package `s2gos_common` provides a simple processor development framework tha
 
 Processor packages developed using the provided CLI can later on be used to
 generate Docker images, Airflow DAGs, and optionally OGC Application Packages.
+
+You find the processor framework in the `s2gos_common.processes` package. 
+It comprises just a few handy top-level components:
+
+* [class `ProcessRegistry`][s2gos_common.process.ProcessRegistry] - to register your 
+  Python functions as processes in a central collection.
+* [class `JobContext`][s2gos_common.process.JobContext] - used inside your process 
+  implementations to report progress or check for client-side cancellation.  
+* [function `get_cli()`][s2gos_common.process.get_cli] - generates a CLI for the 
+  processes in the registry.
+
 
 ## Development Recipe
 
@@ -103,6 +114,11 @@ An application example that can serve as a starting point is provided in the wor
 ## Framework API
 
 ::: s2gos_common.process.ProcessRegistry
+    options:
+      show_source: false
+      heading_level: 3
+
+::: s2gos_common.process.Process
     options:
       show_source: false
       heading_level: 3
