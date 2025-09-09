@@ -477,6 +477,30 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#s2gos_common.process.Process" class="md-nav__link">
+    <span class="md-ellipsis">
+      Process
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Process">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.Process.create" class="md-nav__link">
+    <span class="md-ellipsis">
+      create
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#s2gos_common.process.JobContext" class="md-nav__link">
     <span class="md-ellipsis">
       JobContext
@@ -692,6 +716,30 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#s2gos_common.process.Process" class="md-nav__link">
+    <span class="md-ellipsis">
+      Process
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Process">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.Process.create" class="md-nav__link">
+    <span class="md-ellipsis">
+      create
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#s2gos_common.process.JobContext" class="md-nav__link">
     <span class="md-ellipsis">
       JobContext
@@ -785,7 +833,7 @@
 
 
 <h1 id="process-development">Process Development</h1>
-<p>The package <code>s2gos_common</code> provides a simple processor development framework that</p>
+<p>The package <code>s2gos_common</code> provides a simple <strong>processor development framework</strong> that</p>
 <ul>
 <li>supports registration of processes from Python functions,  </li>
 <li>supports progress reporting by subscriber callback URLs, and</li>
@@ -794,6 +842,16 @@
 </ul>
 <p>Processor packages developed using the provided CLI can later on be used to
 generate Docker images, Airflow DAGs, and optionally OGC Application Packages.</p>
+<p>You find the processor framework in the <code>s2gos_common.processes</code> package. 
+It comprises just a few handy top-level components:</p>
+<ul>
+<li><a class="autorefs autorefs-internal" title="s2gos_common.process.ProcessRegistry" href="#s2gos_common.process.ProcessRegistry">class <code>ProcessRegistry</code></a> - to register your 
+  Python functions as processes in a central collection.</li>
+<li><a class="autorefs autorefs-internal" title="s2gos_common.process.JobContext" href="#s2gos_common.process.JobContext">class <code>JobContext</code></a> - used inside your process 
+  implementations to report progress or check for client-side cancellation.  </li>
+<li><a class="autorefs autorefs-internal" title="s2gos_common.process.get_cli(process_registry, **kwargs)" href="#s2gos_common.process.get_cli">function <code>get_cli()</code></a> - generates a CLI for the 
+  processes in the registry.</li>
+</ul>
 <h2 id="development-recipe">Development Recipe</h2>
 <p>Framework usage is simple, it is a 3-step process: </p>
 <ol>
@@ -878,11 +936,23 @@ you can run your CLI as an executable and <code>my-tool --help</code> will outpu
 
     <div class="doc doc-contents first">
             <p class="doc doc-class-bases">
-              Bases: <code><span title="collections.abc.Mapping">Mapping</span>[<span title="str">str</span>, <span title="s2gos_common.process.process.Process">Process</span>]</code></p>
+              Bases: <code><span title="collections.abc.Mapping">Mapping</span>[<span title="str">str</span>, <a class="autorefs autorefs-internal" title="s2gos_common.process.Process
+
+
+  
+      dataclass
+   (s2gos_common.process.process.Process)" href="#s2gos_common.process.Process">Process</a>]</code></p>
 
 
         <p>A registry for processes.</p>
 <p>Processes are Python functions with extra metadata.</p>
+<p>Represents a read-only mapping from process identifiers to
+<a class="autorefs autorefs-internal" title="s2gos_common.process.Process
+
+
+  
+      dataclass
+  " href="#s2gos_common.process.Process">Process</a> instances.</p>
 
 
 
@@ -1055,6 +1125,150 @@ dictionary.</p>
           </tr>
       </tbody>
     </table>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="s2gos_common.process.Process" class="doc doc-heading">
+            <code>s2gos_common.process.Process</code>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+
+        <p>A process comprises a process description and executable code
+in form of a Python function.</p>
+<p>Instances of this class are be managed by the
+<a class="autorefs autorefs-internal" title="s2gos_common.process.ProcessRegistry" href="#s2gos_common.process.ProcessRegistry">ProcessRegistry</a>.</p>
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td><code><span title="s2gos_common.process.Process.function">function</span></code></td>
+            <td>
+                  <code><span title="typing.Callable">Callable</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The user's Python function.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="s2gos_common.process.Process.signature">signature</span></code></td>
+            <td>
+                  <code><span title="inspect.Signature">Signature</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The signature of <code>function</code>.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="s2gos_common.process.Process.job_ctx_args">job_ctx_args</span></code></td>
+            <td>
+                  <code><span title="list">list</span>[<span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Names of <code>function</code> arguments of type <code>JobContext</code>.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="s2gos_common.process.Process.model_class">model_class</span></code></td>
+            <td>
+                  <code><span title="type">type</span>[<span title="pydantic.BaseModel">BaseModel</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Pydantic model class for the arguments of <code>function</code>.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td><code><span title="s2gos_common.process.Process.description">description</span></code></td>
+            <td>
+                  <code><span title="s2gos_common.models.ProcessDescription">ProcessDescription</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Process description modelled after
+<a href="https://docs.ogc.org/is/18-062r2/18-062r2.html#toc37">OGC API - Processes - Part 1: Core</a>.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="s2gos_common.process.Process.create" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">create</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">input_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Create a new instance of this dataclass.</p>
+<p>Called by the <code>ProcessRegistry.process()</code> decorator function.
+Not intended to be used by clients.</p>
 
 
     </div>
