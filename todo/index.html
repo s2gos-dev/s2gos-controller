@@ -18,7 +18,7 @@
     
     
       
-        <title>Development - ESA DTE-S2GOS Controller</title>
+        <title>Roadmap - ESA DTE-S2GOS Controller</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#dte-s2gos-client-to-dos" class="md-skip">
+        <a href="#s2gos-controller-roadmap" class="md-skip">
           Skip to content
         </a>
       
@@ -107,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Development
+              Roadmap
             
           </span>
         </div>
@@ -398,7 +398,7 @@
   
   
   <span class="md-ellipsis">
-    Development
+    Roadmap
     
   </span>
   
@@ -411,7 +411,7 @@
   
   
   <span class="md-ellipsis">
-    Development
+    Roadmap
     
   </span>
   
@@ -506,12 +506,7 @@
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
+          <li class="md-nav__item">
   <a href="#code-generation" class="md-nav__link">
     <span class="md-ellipsis">
       Code generation
@@ -519,15 +514,20 @@
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#completed" class="md-nav__link">
+  <a href="#done" class="md-nav__link">
     <span class="md-ellipsis">
-      Completed
+      Done
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Completed">
+    <nav class="md-nav" aria-label="Done">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -567,18 +567,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#server-implementation" class="md-nav__link">
+  <a href="#local-service_1" class="md-nav__link">
     <span class="md-ellipsis">
-      Server implementation
+      Local service
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#local-service_1" class="md-nav__link">
+  <a href="#airflow-service_1" class="md-nav__link">
     <span class="md-ellipsis">
-      Local service
+      Airflow Service
     </span>
   </a>
   
@@ -714,12 +714,7 @@
   
 </li>
         
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
+          <li class="md-nav__item">
   <a href="#code-generation" class="md-nav__link">
     <span class="md-ellipsis">
       Code generation
@@ -727,15 +722,20 @@
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#completed" class="md-nav__link">
+  <a href="#done" class="md-nav__link">
     <span class="md-ellipsis">
-      Completed
+      Done
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Completed">
+    <nav class="md-nav" aria-label="Done">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -775,18 +775,18 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#server-implementation" class="md-nav__link">
+  <a href="#local-service_1" class="md-nav__link">
     <span class="md-ellipsis">
-      Server implementation
+      Local service
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#local-service_1" class="md-nav__link">
+  <a href="#airflow-service_1" class="md-nav__link">
     <span class="md-ellipsis">
-      Local service
+      Airflow Service
     </span>
   </a>
   
@@ -834,24 +834,25 @@
   
 
 
-<h1 id="dte-s2gos-client-to-dos">DTE-S2GOS client To-Dos</h1>
-<p>The DTE-S2GOS client is currently under development.</p>
+<h1 id="s2gos-controller-roadmap">S2GOS Controller Roadmap</h1>
 <h2 id="next">Next</h2>
-<p>Given here are the issues that will be addressed next.</p>
+<p>Given here are the features and issues that will be addressed next.</p>
 <h3 id="general-design">General design</h3>
 <ul>
-<li>Clarify data i/o, formats, and protocols (also check OGC spec):</li>
+<li>Clarify data i/o, formats, and protocols (also check OGC spec):<ul>
 <li>user files --&gt; <strong>scene generator</strong> --&gt; OBJ</li>
 <li>OBJ --&gt; <strong>scene simulator</strong> --&gt; Zarr </li>
+</ul>
+</li>
 </ul>
 <h3 id="enhance-the-gui-client">Enhance the GUI Client</h3>
 <ul>
 <li>Use the async API client version in the GUI Client.
   <code>panel</code> widget handler that use the client can and should be async.</li>
 <li><code>show()</code> - show the main form where users can select a process 
-  and submit process requests with inputs and outputs</li>
-<li>Actions<ul>
-<li>open request </li>
+  and submit process requests with inputs and outputs<ul>
+<li>Actions</li>
+<li>open request <ul>
 <li>save request </li>
 <li>save-as request</li>
 <li>show success/failure</li>
@@ -863,9 +864,13 @@
 <li>show request as JSON</li>
 </ul>
 </li>
-<li><code>show_jobs()</code> - show all jobs in a table and provide actions on job selection: </li>
+</ul>
+</li>
+<li><code>show_jobs()</code> - show all jobs in a table and provide actions on job selection: <ul>
 <li>Actions:<ul>
 <li>♻️️ restart dismissed/failed job(s)</li>
+</ul>
+</li>
 </ul>
 </li>
 <li><code>show_processes()</code> - get a nicely rendered overview of all processes </li>
@@ -873,10 +878,12 @@
 </ul>
 <h3 id="processor-containerization">Processor Containerization</h3>
 <ul>
-<li><strong>DONE</strong>: Develop a simple processor development framework that</li>
+<li><strong>DONE</strong>: Develop a simple processor development framework that<ul>
 <li>provides a CLI to query and execute processes   </li>
 <li>supports registration of processes from python functions  </li>
 <li>supports progress reporting by subscriber callback URLs </li>
+</ul>
+</li>
 </ul>
 <h3 id="airflow-service">Airflow Service</h3>
 <ul>
@@ -886,57 +893,73 @@
 </ul>
 <h3 id="local-service">Local Service</h3>
 <ul>
-<li>Path <code>/</code>:</li>
+<li>Path <code>/</code>:<ul>
 <li>Also provide a HTML version, support mimetype <code>text/html</code></li>
+</ul>
+</li>
 </ul>
 <h3 id="authentication">Authentication</h3>
 <ul>
 <li>Implement basic authentication using OAuth2 from FastAPI, 
-  use user_name/access_token from ClientConfig in</li>
+  use user_name/access_token from ClientConfig in<ul>
 <li>client </li>
 <li>server</li>
+</ul>
+</li>
 </ul>
 <h3 id="authorisation">Authorisation</h3>
 <ul>
 <li>Define roles &amp; scopes</li>
-<li>Implement accordingly in</li>
+<li>Implement accordingly in<ul>
 <li>client </li>
 <li>server</li>
 </ul>
-<h2 id="code-generation">Code generation</h2>
+</li>
+</ul>
+<h3 id="code-generation">Code generation</h3>
 <p>The output of <code>generators/gen_models</code> is not satisfying: </p>
 <ul>
 <li>Consider code generation from templates with <code>jinja2</code></li>
-<li>Use <a href="https://github.com/mike-oakley/openapi-pydantic">openapi-pydantic</a></li>
+<li>Use <a href="https://github.com/mike-oakley/openapi-pydantic">openapi-pydantic</a><ul>
 <li>Use <code>openapi_pydantic.Schema</code>, <code>openapi_pydantic.Reference</code>, etc. in generated code</li>
 <li>Use <code>openapi_pydantic.OpenAPI</code> for representing <code>s2gos/common/openapi.yaml</code> in 
-    the generators</li>
+  the generators</li>
 </ul>
-<h2 id="completed">Completed</h2>
+</li>
+</ul>
+<h2 id="done">Done</h2>
 <h3 id="repopackage-setup">Repo/package setup</h3>
 <ul>
-<li><strong>DONE</strong> Setup CI with <code>pixi</code></li>
+<li><strong>DONE</strong> Setup CI with <code>pixi</code><ul>
 <li><strong>DONE</strong> pixi run sync-versions</li>
 <li><strong>DONE</strong> pixi run generate</li>
 <li><strong>DONE</strong> pixi run coverage</li>
+</ul>
+</li>
 <li><strong>DONE</strong> Move all source code into <code>src</code> folder.</li>
 <li><strong>DONE</strong> Use either <code>uv</code> or <code>pixi</code> for package and environment management. &lt;-- We use <code>pixi</code></li>
-<li><strong>DONE</strong>: We need three main packages in the end to avoid naming clashes:</li>
+<li><strong>DONE</strong>: We need three main packages in the end to avoid naming clashes:<ul>
 <li><code>s2gos_client</code> (now <code>s2gos.client</code>)</li>
 <li><code>s2gos_common</code> (now <code>s2gos.common.models</code>)</li>
 <li><code>s2gos_server</code> (now <code>s2gos.server</code>)</li>
-<li><strong>DONE</strong>: Find out and decide how to setup GitHub repo(s) for this</li>
+</ul>
+</li>
+<li><strong>DONE</strong>: Find out and decide how to setup GitHub repo(s) for this<ul>
 <li>One repository with all three packages in <code>src</code></li>
 <li>One repository with three subdirectories  &lt;-- This is the one!</li>
 <li>Three repositories </li>
+</ul>
+</li>
 <li><strong>DONE</strong>: Align <code>ruff</code> settings with other <a href="https://github.com/s2gos-dev">S2GOS repos</a>.</li>
 </ul>
 <h3 id="general-design_1">General design</h3>
 <ul>
-<li><strong>DOING</strong>: We need two API client versions: sync and async</li>
+<li><strong>DOING</strong>: We need two API client versions: sync and async<ul>
 <li><strong>DONE</strong>: Generate <code>AsyncClient</code>, next to <code>Client</code> </li>
 <li><strong>DONE</strong>: Generate them using <a href="https://github.com/encode/httpx"><code>httpx</code></a>, which 
-    should replace currently used <code>requests</code></li>
+  should replace currently used <code>requests</code></li>
+</ul>
+</li>
 </ul>
 <h3 id="implement-cli-commands">Implement CLI commands</h3>
 <ul>
@@ -951,30 +974,33 @@
 <ul>
 <li><code>show()</code> - show the main form where users can select a process 
   and submit process requests with inputs and outputs</li>
-<li><strong>DONE</strong>: select process</li>
+<li><strong>DONE</strong>: select process<ul>
 <li><strong>DONE</strong>: render input widgets</li>
 <li><strong>DONE</strong>: submit request</li>
 <li>Actions<ul>
-<li>*<em>DONE</em>: execute request </li>
-<li>*<em>DONE</em>: get request </li>
+<li><strong>DONE</strong>: execute request </li>
+<li><strong>DONE</strong>: get request </li>
 </ul>
 </li>
-<li><code>show_jobs()</code> - show all jobs in a table and provide actions on job selection: </li>
+</ul>
+</li>
+<li><code>show_jobs()</code> - show all jobs in a table and provide actions on job selection: <ul>
 <li><strong>DONE</strong>: use <code>Tabulator</code></li>
 <li><strong>DONE</strong> Add an action row with actions applicable to the current table selection</li>
 <li>Actions:<ul>
 <li><strong>DONE</strong>: ✖️ cancel accepted/running job(s)</li>
+</ul>
+</li>
 <li><strong>DONE</strong>: ❌ delete successful/dismissed/failed job(s)</li>
 <li><strong>DONE</strong>: ⬇️ get job result(s)</li>
 </ul>
 </li>
 <li><code>show_job(job_id: str)</code> - show a dedicated job</li>
 </ul>
-<h3 id="server-implementation">Server implementation</h3>
 <h3 id="local-service_1">Local service</h3>
 <ul>
 <li><strong>DONE</strong>: Implement local service that can invoke any Python function</li>
-<li>Path <code>/</code>:</li>
+<li>Endpoint path <code>/</code>:</li>
 <li><strong>DONE</strong>: The landing page provides links to the:<ul>
 <li><strong>DONE</strong>: The APIDefinition (no fixed path),</li>
 <li><strong>DONE</strong>: The Conformance statements (path <code>/conformance</code>),</li>
@@ -983,6 +1009,10 @@
 </ul>
 </li>
 <li><strong>DONE</strong>: Links should be absolute URL, hence we need <code>request: Request</code> as 1st function arg</li>
+</ul>
+<h3 id="airflow-service_1">Airflow Service</h3>
+<ul>
+<li><strong>DONE</strong>: Implement Airflow gateway service using the Airflow API</li>
 </ul>
 <h3 id="error-handling">Error handling</h3>
 <ul>
