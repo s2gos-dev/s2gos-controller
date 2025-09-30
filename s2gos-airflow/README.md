@@ -51,7 +51,9 @@ pixi run typecheck
 
 ## Generate DAGs
 
-
+```bash
+pixi run gen-dags
+```
 
 ## Run Airflow
 

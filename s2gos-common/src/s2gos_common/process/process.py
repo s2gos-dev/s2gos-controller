@@ -22,6 +22,17 @@ class Process:
     """
     A process comprises a process description and executable code
     in form of a Python function.
+
+    Instances of this class are be managed by the
+    [ProcessRegistry][s2gos_common.process.ProcessRegistry].
+
+    Attributes:
+        function: The user's Python function.
+        signature: The signature of `function`.
+        job_ctx_args: Names of `function` arguments of type `JobContext`.
+        model_class: Pydantic model class for the arguments of `function`.
+        description: Process description modelled after
+            [OGC API - Processes - Part 1: Core](https://docs.ogc.org/is/18-062r2/18-062r2.html#toc37).
     """
 
     function: Callable
@@ -45,6 +56,11 @@ class Process:
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         no_dot_path: bool = False,
     ) -> "Process":
+        """Create a new instance of this dataclass.
+
+        Called by the `ProcessRegistry.process()` decorator function.
+        Not intended to be used by clients.
+        """
         if not inspect.isfunction(function):
             raise TypeError("function argument must be callable")
         fn_name = f"{function.__module__}:{function.__qualname__}"

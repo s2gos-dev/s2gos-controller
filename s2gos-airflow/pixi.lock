@@ -3156,16 +3156,17 @@ packages:
   requires_python: '>=3.7'
 - pypi: ../s2gos-common
   name: s2gos-common
-  version: 0.0.3.dev0
-  sha256: e642375dd5cc6fdca8e3e1e048a50873ca8c892a95ff59df1d44d4242a1a8b28
+  version: 0.0.4.dev0
+  sha256: 18e640e32d505210d7bb0fbdf5695ca668a41489aa84cc5f41aa4fe658247c77
   requires_dist:
   - pydantic
+  - typer
   requires_python: '>=3.10'
   editable: true
 - pypi: ../s2gos-server
   name: s2gos-server
-  version: 0.0.3.dev0
-  sha256: ba9c61c88b9e205ce93256b3f616cbb967bf2ebb794828f8c3552956ef18845c
+  version: 0.0.4.dev0
+  sha256: 0df582a16e02468403e2181e136b294dbcfcd062adc4fb7290ffaa97691ee391
   requires_dist:
   - fastapi
   - pydantic

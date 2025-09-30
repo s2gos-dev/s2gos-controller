@@ -15,6 +15,9 @@ class ProcessRegistry(Mapping[str, Process]):
     A registry for processes.
 
     Processes are Python functions with extra metadata.
+
+    Represents a read-only mapping from process identifiers to
+    [Process][s2gos_common.process.Process] instances.
     """
 
     def __init__(self):
