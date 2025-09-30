@@ -29,7 +29,7 @@ class ProcessingRequest(ProcessRequest):
     def as_process_request(self) -> ProcessRequest:
         inputs = self.inputs
         if inputs and self.dotpath:
-            inputs = self._nest_dict(self.inputs)
+            inputs = self._nest_dict(inputs)
         return ProcessRequest(
             inputs=inputs,
             outputs=self.outputs,
