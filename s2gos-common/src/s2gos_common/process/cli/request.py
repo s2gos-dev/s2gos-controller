@@ -5,7 +5,7 @@
 import sys
 from io import StringIO
 from pathlib import Path
-from typing import Any, Annotated
+from typing import Annotated, Any
 
 import click
 import pydantic
@@ -27,8 +27,11 @@ class ProcessingRequest(ProcessRequest):
     ] = False
 
     def as_process_request(self) -> ProcessRequest:
+        inputs = self.inputs
+        if inputs and self.dotpath:
+            inputs = self._nest_dict(self.inputs)
         return ProcessRequest(
-            inputs=self.inputs if not self.dotpath else self._nest_dict(self.inputs),
+            inputs=inputs,
             outputs=self.outputs,
             response=self.response,
             subscriber=self.subscriber,

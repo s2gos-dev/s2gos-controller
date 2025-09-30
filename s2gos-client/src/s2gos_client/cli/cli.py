@@ -9,8 +9,8 @@ import typer.core
 from s2gos_client.cli.output import OutputFormat
 from s2gos_common.util.cli.group import AliasedGroup
 from s2gos_common.util.cli.parameters import (
-    PROCESS_ID_ARGUMENT,
     DOT_PATH_OPTION,
+    PROCESS_ID_ARGUMENT,
     REQUEST_FILE_OPTION,
     REQUEST_INPUT_OPTION,
     REQUEST_SUBSCRIBER_OPTION,

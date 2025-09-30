@@ -228,12 +228,3 @@ class NullJobContextTest(TestCase):
         self.assertFalse(job_context.report_progress(progress=85))
         self.assertFalse(job_context.is_cancelled())
         self.assertFalse(job_context.check_cancelled())
-
-
-class JobHelpersTest(TestCase):
-    def test_nest_dict(self):
-        self.assertEqual({"a": 1, "b": True}, Job._nest_dict({"a": 1, "b": True}))
-        self.assertEqual(
-            {"a": 1, "b": {"x": 0.3, "y": -0.1}},
-            Job._nest_dict({"a": 1, "b.x": 0.3, "b.y": -0.1}),
-        )

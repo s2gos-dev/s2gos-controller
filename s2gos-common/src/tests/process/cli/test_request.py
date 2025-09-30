@@ -158,6 +158,7 @@ class RequestTest(unittest.TestCase):
         with pytest.raises(click.ClickException, match="Invalid request NAME: '2x'"):
             ProcessingRequest.create(process_id="my_func", inputs=["2x=20'"])
 
+    # noinspection PyMethodMayBeStatic
     def test_read_processing_request_from_invalid_subscription(self):
         with pytest.raises(
             click.ClickException,
@@ -188,3 +189,14 @@ class RequestTest(unittest.TestCase):
             ProcessingRequest.create(
                 process_id="my_func", subscribers=["failed=localhorst"]
             )
+
+
+class ProcessingRequestHelpersTest(unittest.TestCase):
+    def test_nest_dict(self):
+        self.assertEqual(
+            {"a": 1, "b": True}, ProcessingRequest._nest_dict({"a": 1, "b": True})
+        )
+        self.assertEqual(
+            {"a": 1, "b": {"x": 0.3, "y": -0.1}},
+            ProcessingRequest._nest_dict({"a": 1, "b.x": 0.3, "b.y": -0.1}),
+        )

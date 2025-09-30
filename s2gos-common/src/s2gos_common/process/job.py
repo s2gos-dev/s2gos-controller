@@ -150,7 +150,7 @@ class Job(JobContext):
                 with respect to its process input description.
         """
         process_desc = process.description
-        input_params = cls._nest_dict(request.inputs or {})
+        input_params = request.inputs or {}
         input_default_params = {
             input_name: input_info.schema_.default
             for input_name, input_info in (process_desc.inputs or {}).items()
@@ -320,17 +320,6 @@ class Job(JobContext):
     @staticmethod
     def _now() -> datetime.datetime:
         return datetime.datetime.now(tz=datetime.timezone.utc)
-
-    @staticmethod
-    def _nest_dict(flat_dict: dict[str, Any]) -> dict[str, Any]:
-        nested_dict: dict[str, Any] = {}
-        for key, value in flat_dict.items():
-            path = key.split(".")
-            current = nested_dict
-            for name in path[:-1]:
-                current = current.setdefault(name, {})
-            current[path[-1]] = value
-        return nested_dict
 
 
 class NullJobContext(JobContext):

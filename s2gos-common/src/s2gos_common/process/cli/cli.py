@@ -10,11 +10,11 @@ import typer
 
 from s2gos_common.util.cli.group import AliasedGroup
 from s2gos_common.util.cli.parameters import (
+    DOT_PATH_OPTION,
     PROCESS_ID_ARGUMENT,
     REQUEST_FILE_OPTION,
     REQUEST_INPUT_OPTION,
     REQUEST_SUBSCRIBER_OPTION,
-    DOT_PATH_OPTION,
 )
 
 if TYPE_CHECKING:  # pragma: no cover
