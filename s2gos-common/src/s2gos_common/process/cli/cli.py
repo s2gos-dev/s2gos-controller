@@ -14,6 +14,7 @@ from s2gos_common.util.cli.parameters import (
     REQUEST_FILE_OPTION,
     REQUEST_INPUT_OPTION,
     REQUEST_SUBSCRIBER_OPTION,
+    DOT_PATH_OPTION,
 )
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -103,6 +104,7 @@ __all__ = [
 def execute_process(
     ctx: typer.Context,
     process_id: Annotated[Optional[str], PROCESS_ID_ARGUMENT] = None,
+    dotpath: Annotated[bool, DOT_PATH_OPTION] = False,
     request_inputs: Annotated[Optional[list[str]], REQUEST_INPUT_OPTION] = None,
     request_subscribers: Annotated[
         Optional[list[str]], REQUEST_SUBSCRIBER_OPTION
@@ -125,6 +127,7 @@ def execute_process(
     process_registry = _get_process_registry(ctx)
     processing_request = ProcessingRequest.create(
         process_id=process_id,
+        dotpath=dotpath,
         inputs=request_inputs,
         subscribers=request_subscribers,
         request_path=request_file,

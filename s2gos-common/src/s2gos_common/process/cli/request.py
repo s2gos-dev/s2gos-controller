@@ -5,7 +5,7 @@
 import sys
 from io import StringIO
 from pathlib import Path
-from typing import Any
+from typing import Any, Annotated
 
 import click
 import pydantic
@@ -21,11 +21,14 @@ SUBSCRIBER_EVENTS = {
 
 
 class ProcessingRequest(ProcessRequest):
-    process_id: str = Field(title="Process identifier", min_length=1)
+    process_id: Annotated[str, Field(title="Process identifier", min_length=1)]
+    dotpath: Annotated[
+        bool, Field(title="Whether to encode nested input values using dots ('.').")
+    ] = False
 
     def as_process_request(self) -> ProcessRequest:
         return ProcessRequest(
-            inputs=self.inputs,
+            inputs=self.inputs if not self.dotpath else self._nest_dict(self.inputs),
             outputs=self.outputs,
             response=self.response,
             subscriber=self.subscriber,
@@ -35,6 +38,7 @@ class ProcessingRequest(ProcessRequest):
     def create(
         cls,
         process_id: str | None = None,
+        dotpath: bool = False,
         request_path: str | None = None,
         inputs: list[str] | None = None,
         subscribers: list[str] | None = None,
@@ -42,6 +46,8 @@ class ProcessingRequest(ProcessRequest):
         request_dict, _ = _read_processing_request(request_path)
         if process_id:
             request_dict["process_id"] = process_id
+        if dotpath:
+            request_dict["dotpath"] = dotpath
         inputs_dict = _parse_inputs(inputs)
         if inputs_dict:
             request_dict["inputs"] = dict(request_dict.get("inputs") or {})
@@ -54,6 +60,17 @@ class ProcessingRequest(ProcessRequest):
             return ProcessingRequest(**request_dict)
         except pydantic.ValidationError as e:
             raise click.ClickException(f"Processing request is invalid: {e}")
+
+    @classmethod
+    def _nest_dict(cls, flat_dict: dict[str, Any]) -> dict[str, Any]:
+        nested_dict: dict[str, Any] = {}
+        for key, value in flat_dict.items():
+            path = key.split(".")
+            current = nested_dict
+            for name in path[:-1]:
+                current = current.setdefault(name, {})
+            current[path[-1]] = value
+        return nested_dict
 
 
 def _read_processing_request(

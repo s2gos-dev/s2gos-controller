@@ -26,6 +26,37 @@ class RequestTest(unittest.TestCase):
         process_request = processing_request.as_process_request()
         self.assertIsInstance(process_request, ProcessRequest)
 
+    def test_as_process_request_dotpath(self):
+        processing_request = ProcessingRequest(
+            process_id="P16",
+            dotpath=True,
+            inputs={
+                "scene.colors.bg": "blue",
+                "scene.colors.opacity": 0.7,
+                "scene.colors.fg": "white",
+                "scene.models.path": "models/*",
+                "log_file": "logs/*",
+            },
+        )
+        process_request = processing_request.as_process_request()
+        self.assertIsInstance(process_request, ProcessRequest)
+        self.assertEqual(
+            {
+                "scene": {
+                    "colors": {
+                        "bg": "blue",
+                        "opacity": 0.7,
+                        "fg": "white",
+                    },
+                    "models": {
+                        "path": "models/*",
+                    },
+                },
+                "log_file": "logs/*",
+            },
+            process_request.inputs,
+        )
+
     def test_read_processing_request_from_yaml_stdin(self):
         stream = StringIO("process_id: test_func\ninputs:\n  x: 7\n  y: 9")
         with patch("sys.stdin", new=stream):
