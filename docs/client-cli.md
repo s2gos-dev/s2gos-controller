@@ -2,8 +2,9 @@
 
 `s2gos-client` is the client shell tool for the S2GOS service.
 
-The tool provides commands for managing processing request templates,
-processing requests, processing jobs, and gets processing results.
+The tool can be used to get the available processes, get process details,
+execute processes, and manage the jobs originating from the latter. 
+It herewith resembles the functionality of the OGC API Processes - Part 1.
 
 You can use shorter command name aliases, e.g., use command name `vr`
 for `validate-request`, or `lp` for `list-processes`.
@@ -16,7 +17,8 @@ $ s2gos-client [OPTIONS] COMMAND [ARGS]...
 
 **Options**:
 
-* `--version`: Show version and exit
+* `--version`: Show version and exit.
+* `--traceback, --tb`: Show server exception traceback, if any.
 * `--install-completion`: Install completion for the current shell.
 * `--show-completion`: Show completion for the current shell, to copy it or customize the installation.
 * `--help`: Show this message and exit.
@@ -110,7 +112,8 @@ $ s2gos-client validate-request [OPTIONS] [PROCESS_ID]
 
 **Options**:
 
-* `-i, --input [NAME=VALUE]...`: Processing request input.
+* `-d, --dotpath`: Input names use dot-path notion to encode nested values, e.g., `-i scene.colors.bg=red`.
+* `-i, --input [NAME=VALUE]...`: Process input value.
 * `-r, --request PATH`: Processing request file. Use `-` to read from &lt;stdin&gt;.
 * `-f, --format [simple|json|yaml]`: Output format.  [default: yaml]
 * `--help`: Show this message and exit.
@@ -138,7 +141,9 @@ $ s2gos-client execute-process [OPTIONS] [PROCESS_ID]
 
 **Options**:
 
-* `-i, --input [NAME=VALUE]...`: Processing request input.
+* `-d, --dotpath`: Input names use dot-path notion to encode nested values, e.g., `-i scene.colors.bg=red`.
+* `-i, --input [NAME=VALUE]...`: Process input value.
+* `-s, --subscriber [NAME=URL]...`: Process subscriber URL.
 * `-r, --request PATH`: Processing request file. Use `-` to read from &lt;stdin&gt;.
 * `-c, --config PATH`: Client configuration file.
 * `-f, --format [simple|json|yaml]`: Output format.  [default: yaml]
