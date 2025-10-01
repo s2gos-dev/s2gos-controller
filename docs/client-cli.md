@@ -28,7 +28,7 @@ $ s2gos-client [OPTIONS] COMMAND [ARGS]...
 * `configure`: Configure the client tool.
 * `list-processes`: List available processes.
 * `get-process`: Get process details.
-* `validate-request`: Validate a processing request.
+* `validate-request`: Validate a process execution request.
 * `execute-process`: Execute a process in asynchronous mode.
 * `list-jobs`: List all jobs.
 * `get-job`: Get job details.
@@ -91,9 +91,9 @@ $ s2gos-client get-process [OPTIONS] PROCESS_ID
 
 ## `s2gos-client validate-request`
 
-Validate a processing request.
+Validate a process execution request.
 
-The processing request to be validated may be read from a file given
+The execution request to be validated may be read from a file given
 by `--request`, or from `stdin`, or from the `process_id` argument
 with zero, one, or more `--input` (or `-i`) options.
 
@@ -114,7 +114,7 @@ $ s2gos-client validate-request [OPTIONS] [PROCESS_ID]
 
 * `-d, --dotpath`: Input names use dot-path notion to encode nested values, e.g., `-i scene.colors.bg=red`.
 * `-i, --input [NAME=VALUE]...`: Process input value.
-* `-r, --request PATH`: Processing request file. Use `-` to read from &lt;stdin&gt;.
+* `-r, --request PATH`: Execution request file. Use `-` to read from &lt;stdin&gt;.
 * `-f, --format [simple|json|yaml]`: Output format.  [default: yaml]
 * `--help`: Show this message and exit.
 
@@ -122,7 +122,7 @@ $ s2gos-client validate-request [OPTIONS] [PROCESS_ID]
 
 Execute a process in asynchronous mode.
 
-The processing request to be submitted may be read from a file given
+The execution request to be submitted may be read from a file given
 by `--request`, or from `stdin`, or from the `process_id` argument
 with zero, one, or more `--input` (or `-i`) options.
 
@@ -144,7 +144,7 @@ $ s2gos-client execute-process [OPTIONS] [PROCESS_ID]
 * `-d, --dotpath`: Input names use dot-path notion to encode nested values, e.g., `-i scene.colors.bg=red`.
 * `-i, --input [NAME=VALUE]...`: Process input value.
 * `-s, --subscriber [NAME=URL]...`: Process subscriber URL.
-* `-r, --request PATH`: Processing request file. Use `-` to read from &lt;stdin&gt;.
+* `-r, --request PATH`: Execution request file. Use `-` to read from &lt;stdin&gt;.
 * `-c, --config PATH`: Client configuration file.
 * `-f, --format [simple|json|yaml]`: Output format.  [default: yaml]
 * `--help`: Show this message and exit.

@@ -46,7 +46,7 @@ class CliExecutionRequest(ProcessRequest):
         inputs: list[str] | None = None,
         subscribers: list[str] | None = None,
     ) -> "CliExecutionRequest":
-        request_dict, _ = _read_processing_request(request_path)
+        request_dict, _ = _read_execution_request(request_path)
         if process_id:
             request_dict["process_id"] = process_id
         if dotpath:
@@ -76,7 +76,7 @@ class CliExecutionRequest(ProcessRequest):
         return nested_dict
 
 
-def _read_processing_request(
+def _read_execution_request(
     request_path: Path | str | None = None,
 ) -> tuple[dict[str, Any], str]:
     if not request_path:

@@ -38,6 +38,6 @@ REQUEST_FILE_OPTION = typer.Option(
     ...,
     "--request",
     "-r",
-    help="Processing request file. Use `-` to read from <stdin>.",
+    help="Execution request file. Use `-` to read from <stdin>.",
     metavar="PATH",
 )

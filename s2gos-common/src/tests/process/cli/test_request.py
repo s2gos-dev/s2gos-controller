@@ -183,7 +183,7 @@ class CliExecutionRequestTest(unittest.TestCase):
     # noinspection PyMethodMayBeStatic
     def test_create_request_from_nothing(self):
         with pytest.raises(
-            click.ClickException, match="Processing request is invalid:"
+            click.ClickException, match="Execution request is invalid:"
         ):
             CliExecutionRequest.create()
 

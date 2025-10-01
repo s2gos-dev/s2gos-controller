@@ -88,7 +88,8 @@ cli = get_cli("my_package.processes:registry")
 You could also pass the imported registry directly, but using a 
 reference string defers importing the registry instance until it is 
 needed. This makes the CLI much faster if it is just called with
-the `--help` option and hence no processing takes place. 
+the `--help` option and hence no importing of yet unused libraries 
+takes place. 
 
 ### 3. Define entry point script
 
