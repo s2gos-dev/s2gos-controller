@@ -15,7 +15,7 @@ from s2gos_common.models import (
     ProcessList,
     ProcessSummary,
 )
-from s2gos_common.process.cli.request import ProcessingRequest
+from s2gos_common.process.cli.request import CliExecutionRequest
 
 
 class OutputTest(TestCase):
@@ -54,8 +54,8 @@ class OutputTest(TestCase):
                 ),
                 "render_process_list": "1: primes_between - None",
                 "render_process_list_empty": "No processes available.",
-                "render_processing_request_valid": (
-                    "Processing request is valid:\n"
+                "render_execution_request_valid": (
+                    "Execution request is valid:\n"
                     "inputs:\n"
                     "  max_val: 20\n"
                     "  min_val: 0\n"
@@ -104,7 +104,7 @@ class OutputTest(TestCase):
                     "links: []\nprocesses:\n- id: primes_between\n  version: 1.4.0\n"
                 ),
                 "render_process_list_empty": "links: []\nprocesses: []\n",
-                "render_processing_request_valid": (
+                "render_execution_request_valid": (
                     "inputs:\n  max_val: 20\n  min_val: 0\nprocess_id: primes_between\n"
                 ),
             },
@@ -181,7 +181,7 @@ class OutputTest(TestCase):
                     "}"
                 ),
                 "render_process_list_empty": '{\n  "processes": [],\n  "links": []\n}',
-                "render_processing_request_valid": (
+                "render_execution_request_valid": (
                     "{\n"
                     '  "inputs": {\n'
                     '    "min_val": 0,\n'
@@ -225,8 +225,8 @@ def get_outputs(renderer: OutputRenderer) -> dict[str, str]:
                 },
             ),
         ),
-        "render_processing_request_valid": renderer.render_processing_request_valid(
-            ProcessingRequest(
+        "render_execution_request_valid": renderer.render_execution_request_valid(
+            CliExecutionRequest(
                 process_id="primes_between", inputs={"min_val": 0, "max_val": 20}
             )
         ),

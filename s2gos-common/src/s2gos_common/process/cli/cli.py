@@ -122,10 +122,10 @@ def execute_process(
     settings with same name found in the given request file or `stdin`, if any.
     """
     from s2gos_common.process import Job
-    from s2gos_common.process.cli.request import ProcessingRequest
+    from s2gos_common.process.cli.request import CliExecutionRequest
 
     process_registry = _get_process_registry(ctx)
-    processing_request = ProcessingRequest.create(
+    processing_request = CliExecutionRequest.create(
         process_id=process_id,
         dotpath=dotpath,
         inputs=request_inputs,
@@ -137,7 +137,7 @@ def execute_process(
     if process is None:
         raise click.ClickException(f"Process {process_id_!r} not found.")
 
-    job = Job.create(process, request=processing_request.as_process_request())
+    job = Job.create(process, request=processing_request.to_process_request())
     job_results = job.run()
     if job_results is not None:
         typer.echo(job_results.model_dump_json(indent=2))

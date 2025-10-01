@@ -20,13 +20,13 @@ SUBSCRIBER_EVENTS = {
 }
 
 
-class ProcessingRequest(ProcessRequest):
+class CliExecutionRequest(ProcessRequest):
     process_id: Annotated[str, Field(title="Process identifier", min_length=1)]
     dotpath: Annotated[
         bool, Field(title="Whether to encode nested input values using dots ('.').")
     ] = False
 
-    def as_process_request(self) -> ProcessRequest:
+    def to_process_request(self) -> ProcessRequest:
         inputs = self.inputs
         if inputs and self.dotpath:
             inputs = self._nest_dict(inputs)
@@ -45,7 +45,7 @@ class ProcessingRequest(ProcessRequest):
         request_path: str | None = None,
         inputs: list[str] | None = None,
         subscribers: list[str] | None = None,
-    ) -> "ProcessingRequest":
+    ) -> "CliExecutionRequest":
         request_dict, _ = _read_processing_request(request_path)
         if process_id:
             request_dict["process_id"] = process_id
@@ -60,9 +60,9 @@ class ProcessingRequest(ProcessRequest):
             request_dict["subscriber"] = dict(request_dict.get("subscriber") or {})
             request_dict["subscriber"].update(subscriber_dict)
         try:
-            return ProcessingRequest(**request_dict)
+            return CliExecutionRequest(**request_dict)
         except pydantic.ValidationError as e:
-            raise click.ClickException(f"Processing request is invalid: {e}")
+            raise click.ClickException(f"Execution request is invalid: {e}")
 
     @classmethod
     def _nest_dict(cls, flat_dict: dict[str, Any]) -> dict[str, Any]:

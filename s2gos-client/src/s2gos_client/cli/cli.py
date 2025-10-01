@@ -181,26 +181,26 @@ def validate_request(
     output_format: Annotated[OutputFormat, FORMAT_OPTION] = DEFAULT_OUTPUT_FORMAT,
 ):
     """
-    Validate a processing request.
+    Validate a process execution request.
 
-    The processing request to be validated may be read from a file given
+    The execution request to be validated may be read from a file given
     by `--request`, or from `stdin`, or from the `process_id` argument
     with zero, one, or more `--input` (or `-i`) options.
 
     The `process_id` argument and any given `--input` options will override
     settings with same name found in the given request file or `stdin`, if any.
     """
-    from s2gos_common.process.cli.request import ProcessingRequest
+    from s2gos_common.process.cli.request import CliExecutionRequest
 
     from .output import get_renderer, output
 
-    request = ProcessingRequest.create(
+    request = CliExecutionRequest.create(
         process_id=process_id,
         dotpath=dotpath,
         inputs=request_inputs,
         request_path=request_file,
     )
-    output(get_renderer(output_format).render_processing_request_valid(request))
+    output(get_renderer(output_format).render_execution_request_valid(request))
 
 
 @cli.command()
@@ -219,19 +219,19 @@ def execute_process(
     """
     Execute a process in asynchronous mode.
 
-    The processing request to be submitted may be read from a file given
+    The execution request to be submitted may be read from a file given
     by `--request`, or from `stdin`, or from the `process_id` argument
     with zero, one, or more `--input` (or `-i`) options.
 
     The `process_id` argument and any given `--input` options will override
     settings with same name found in the given request file or `stdin`, if any.
     """
-    from s2gos_common.process.cli.request import ProcessingRequest
+    from s2gos_common.process.cli.request import CliExecutionRequest
 
     from .client import use_client
     from .output import get_renderer, output
 
-    request = ProcessingRequest.create(
+    request = CliExecutionRequest.create(
         process_id=process_id,
         dotpath=dotpath,
         inputs=request_inputs,
@@ -240,7 +240,7 @@ def execute_process(
     )
     with use_client(ctx, config_file) as client:
         job = client.execute_process(
-            process_id=request.process_id, request=request.as_process_request()
+            process_id=request.process_id, request=request.to_process_request()
         )
     output(get_renderer(output_format).render_job_info(job))
 
