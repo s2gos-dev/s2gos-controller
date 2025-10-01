@@ -60,7 +60,7 @@ class {{ uc_async }}Client:
         _debug: bool = False,
         _transport: Optional[{{ uc_async }}Transport] = None,
     ):
-        self._config = ClientConfig.get(
+        self._config = ClientConfig.create(
             config=config,
             config_path=config_path,
             server_url=server_url,
