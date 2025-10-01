@@ -11,7 +11,7 @@ from pydantic import BaseModel
 import s2gos_common.models as s2g_models
 
 REQUIRED_ENUMS = {
-    "Crs",
+    "CRS",
     "DataType",
     "MaxOccurs",
     "JobControlOptions",
