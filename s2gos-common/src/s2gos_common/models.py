@@ -223,6 +223,7 @@ class Format(BaseModel):
 #  because it was wrongly placed last by the datamodel-code-generator tool
 #  That's why we also use the tool with keep_model_order=False - which is by
 #  the way also a bug, as it does the opposite of what it should.
+#  PLEASE MAKE SURE YOU INCLUDE THIS COMMENT AS LONG AS THE PROBLEM PERSISTS.
 class QualifiedValue(Format):
     value: InlineValue
 
