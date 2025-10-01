@@ -20,7 +20,27 @@ SUBSCRIBER_EVENTS = {
 }
 
 
-class CliExecutionRequest(ProcessRequest):
+class ExecutionRequest(ProcessRequest):
+    """
+    Process execution request as used by the CLI.
+    Extends [ProcessRequest][ProcessRequest] to allow the process
+    identifier being part of the request.
+
+    Args:
+        process_id: Process identifier
+        dotpath: Whether dots in input names should be used to create
+            nested object values. Defaults to `False`.
+        inputs: Optional process inputs given as key-value mapping.
+            Values may be of any JSON-serializable type accepted by
+            the given process.
+        outputs: Optional process outputs given as key-value mapping.
+            Values are of type [Output][s2gos_common.models.Output]
+            supported by the given process.
+        subscriber: Optional subscriber of type
+            [Subscriber][s2gos_common.models.Subscriber] comprising callback
+            URLs that are informed about process status changes
+            while the processing takes place.
+    """
     process_id: Annotated[str, Field(title="Process identifier", min_length=1)]
     dotpath: Annotated[
         bool, Field(title="Whether to encode nested input values using dots ('.').")
@@ -45,7 +65,7 @@ class CliExecutionRequest(ProcessRequest):
         request_path: str | None = None,
         inputs: list[str] | None = None,
         subscribers: list[str] | None = None,
-    ) -> "CliExecutionRequest":
+    ) -> "ExecutionRequest":
         request_dict, _ = _read_execution_request(request_path)
         if process_id:
             request_dict["process_id"] = process_id
@@ -60,7 +80,7 @@ class CliExecutionRequest(ProcessRequest):
             request_dict["subscriber"] = dict(request_dict.get("subscriber") or {})
             request_dict["subscriber"].update(subscriber_dict)
         try:
-            return CliExecutionRequest(**request_dict)
+            return ExecutionRequest(**request_dict)
         except pydantic.ValidationError as e:
             raise click.ClickException(f"Execution request is invalid: {e}")
 

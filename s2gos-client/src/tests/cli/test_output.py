@@ -15,7 +15,7 @@ from s2gos_common.models import (
     ProcessList,
     ProcessSummary,
 )
-from s2gos_common.process.cli.request import CliExecutionRequest
+from s2gos_common.process.cli.request import ExecutionRequest
 
 
 class OutputTest(TestCase):
@@ -226,7 +226,7 @@ def get_outputs(renderer: OutputRenderer) -> dict[str, str]:
             ),
         ),
         "render_execution_request_valid": renderer.render_execution_request_valid(
-            CliExecutionRequest(
+            ExecutionRequest(
                 process_id="primes_between", inputs={"min_val": 0, "max_val": 20}
             )
         ),

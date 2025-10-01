@@ -16,7 +16,7 @@ from s2gos_common.models import (
     ProcessDescription,
     ProcessList,
 )
-from s2gos_common.process.cli.request import CliExecutionRequest
+from s2gos_common.process.cli.request import ExecutionRequest
 
 
 class OutputFormat(str, Enum):
@@ -53,7 +53,7 @@ class OutputRenderer(ABC):
 
     @abstractmethod
     def render_execution_request_valid(
-        self, execution_request: CliExecutionRequest
+        self, execution_request: ExecutionRequest
     ) -> str:
         """Render an execution request is valid."""
 
@@ -115,7 +115,7 @@ class SimpleOutputRenderer(OutputRenderer):
         return self._render_base_model(process_description)
 
     def render_execution_request_valid(
-        self, execution_request: CliExecutionRequest
+        self, execution_request: ExecutionRequest
     ) -> str:
         return "Execution request is valid:\n" + self._render_base_model(
             execution_request
@@ -163,7 +163,7 @@ class StructuredOutputRenderer(OutputRenderer):
         return self._render_base_model(process_description, self.format_name)
 
     def render_execution_request_valid(
-        self, execution_request: CliExecutionRequest
+        self, execution_request: ExecutionRequest
     ) -> str:
         return self._render_base_model(execution_request, self.format_name)
 
