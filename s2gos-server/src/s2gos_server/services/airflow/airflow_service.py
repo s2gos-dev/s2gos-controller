@@ -5,7 +5,7 @@
 import datetime
 import os
 from functools import cached_property
-from typing import Optional, Any
+from typing import Any, Optional
 
 import fastapi
 import requests

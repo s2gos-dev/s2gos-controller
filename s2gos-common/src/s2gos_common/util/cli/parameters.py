@@ -25,6 +25,14 @@ REQUEST_SUBSCRIBER_OPTION = typer.Option(
     metavar="[NAME=URL]...",
 )
 
+DOT_PATH_OPTION = typer.Option(
+    ...,
+    "--dotpath",
+    "-d",
+    is_flag=True,
+    help="Input names use dot-path notion to encode nested values, e.g., `-i scene.colors.bg=red`.",
+)
+
 # See also s2gos-client/src/s2gos_client/cli/cli.py
 REQUEST_FILE_OPTION = typer.Option(
     ...,

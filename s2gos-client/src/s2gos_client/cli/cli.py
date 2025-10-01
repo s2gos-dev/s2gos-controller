@@ -9,6 +9,7 @@ import typer.core
 from s2gos_client.cli.output import OutputFormat
 from s2gos_common.util.cli.group import AliasedGroup
 from s2gos_common.util.cli.parameters import (
+    DOT_PATH_OPTION,
     PROCESS_ID_ARGUMENT,
     REQUEST_FILE_OPTION,
     REQUEST_INPUT_OPTION,
@@ -174,6 +175,7 @@ def get_process(
 @cli.command()
 def validate_request(
     process_id: Annotated[Optional[str], PROCESS_ID_ARGUMENT] = None,
+    dotpath: Annotated[bool, DOT_PATH_OPTION] = False,
     request_inputs: Annotated[Optional[list[str]], REQUEST_INPUT_OPTION] = None,
     request_file: Annotated[Optional[str], REQUEST_FILE_OPTION] = None,
     output_format: Annotated[OutputFormat, FORMAT_OPTION] = DEFAULT_OUTPUT_FORMAT,
@@ -192,7 +194,12 @@ def validate_request(
 
     from .output import get_renderer, output
 
-    request = ProcessingRequest.create(process_id, request_file, request_inputs)
+    request = ProcessingRequest.create(
+        process_id=process_id,
+        dotpath=dotpath,
+        inputs=request_inputs,
+        request_path=request_file,
+    )
     output(get_renderer(output_format).render_processing_request_valid(request))
 
 
@@ -200,6 +207,7 @@ def validate_request(
 def execute_process(
     ctx: typer.Context,
     process_id: Annotated[Optional[str], PROCESS_ID_ARGUMENT] = None,
+    dotpath: Annotated[bool, DOT_PATH_OPTION] = False,
     request_inputs: Annotated[Optional[list[str]], REQUEST_INPUT_OPTION] = None,
     request_subscribers: Annotated[
         Optional[list[str]], REQUEST_SUBSCRIBER_OPTION
@@ -225,6 +233,7 @@ def execute_process(
 
     request = ProcessingRequest.create(
         process_id=process_id,
+        dotpath=dotpath,
         inputs=request_inputs,
         subscribers=request_subscribers,
         request_path=request_file,
