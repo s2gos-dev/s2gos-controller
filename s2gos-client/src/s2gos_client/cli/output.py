@@ -16,7 +16,7 @@ from s2gos_common.models import (
     ProcessDescription,
     ProcessList,
 )
-from s2gos_common.process.cli.request import ProcessingRequest
+from s2gos_common.process.cli.request import ExecutionRequest
 
 
 class OutputFormat(str, Enum):
@@ -52,10 +52,10 @@ class OutputRenderer(ABC):
         """Render a process description."""
 
     @abstractmethod
-    def render_processing_request_valid(
-        self, process_request: ProcessingRequest
+    def render_execution_request_valid(
+        self, execution_request: ExecutionRequest
     ) -> str:
-        """Render a processing request is valid."""
+        """Render an execution request is valid."""
 
     @abstractmethod
     def render_job_list(self, job_list: JobList) -> str:
@@ -114,11 +114,11 @@ class SimpleOutputRenderer(OutputRenderer):
     ) -> str:
         return self._render_base_model(process_description)
 
-    def render_processing_request_valid(
-        self, processing_request: ProcessingRequest
+    def render_execution_request_valid(
+        self, execution_request: ExecutionRequest
     ) -> str:
-        return "Processing request is valid:\n" + self._render_base_model(
-            processing_request
+        return "Execution request is valid:\n" + self._render_base_model(
+            execution_request
         )
 
     def render_job_list(self, job_list: JobList) -> str:
@@ -162,10 +162,10 @@ class StructuredOutputRenderer(OutputRenderer):
     ) -> str:
         return self._render_base_model(process_description, self.format_name)
 
-    def render_processing_request_valid(
-        self, processing_request: ProcessingRequest
+    def render_execution_request_valid(
+        self, execution_request: ExecutionRequest
     ) -> str:
-        return self._render_base_model(processing_request, self.format_name)
+        return self._render_base_model(execution_request, self.format_name)
 
     def render_job_list(self, job_list: JobList) -> str:
         return self._render_base_model(job_list, self.format_name)

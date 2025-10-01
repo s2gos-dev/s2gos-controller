@@ -114,7 +114,7 @@ def execute_process(
     """
     Execute a process.
 
-    The processing request to be submitted may be read from a file given
+    The process request to be submitted may be read from a file given
     by `--request`, or from `stdin`, or from the `process_id` argument
     with zero, one, or more `--input` (or `-i`) options.
 
@@ -122,22 +122,22 @@ def execute_process(
     settings with same name found in the given request file or `stdin`, if any.
     """
     from s2gos_common.process import Job
-    from s2gos_common.process.cli.request import ProcessingRequest
+    from s2gos_common.process.cli.request import ExecutionRequest
 
     process_registry = _get_process_registry(ctx)
-    processing_request = ProcessingRequest.create(
+    execution_request = ExecutionRequest.create(
         process_id=process_id,
         dotpath=dotpath,
         inputs=request_inputs,
         subscribers=request_subscribers,
         request_path=request_file,
     )
-    process_id_ = processing_request.process_id
+    process_id_ = execution_request.process_id
     process = process_registry.get(process_id_)
     if process is None:
         raise click.ClickException(f"Process {process_id_!r} not found.")
 
-    job = Job.create(process, request=processing_request.as_process_request())
+    job = Job.create(process, request=execution_request.to_process_request())
     job_results = job.run()
     if job_results is not None:
         typer.echo(job_results.model_dump_json(indent=2))

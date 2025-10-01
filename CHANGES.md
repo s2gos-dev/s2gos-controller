@@ -1,5 +1,9 @@
 ## Changes in version 0.0.4 (in development)
 
+- Renamed `s2gos_common.process.cli.ProcessingRequest` into
+  `s2gos_common.process.cli.ExecutionRequest`.
+- Replaced various occurrences of the term _processing_ by 
+  _execution_ to be more precise.
 - Developed a simple processor development framework that
   - provides a CLI to query and execute processes;  
   - supports registration of processes from python functions;  
