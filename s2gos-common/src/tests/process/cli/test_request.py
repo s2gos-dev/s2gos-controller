@@ -57,6 +57,10 @@ class RequestTest(unittest.TestCase):
             process_request.inputs,
         )
 
+    def test_create_processing_request_with_dotpath(self):
+        request = ProcessingRequest.create(process_id="x15", dotpath=True)
+        self.assertEqual(ProcessingRequest(process_id="x15", dotpath=True), request)
+
     def test_read_processing_request_from_yaml_stdin(self):
         stream = StringIO("process_id: test_func\ninputs:\n  x: 7\n  y: 9")
         with patch("sys.stdin", new=stream):
