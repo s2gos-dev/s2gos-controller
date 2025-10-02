@@ -412,38 +412,38 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
                 all(map(lambda v: isinstance(v, InputDescription), inputs.values()))
             )
 
-        process = Process.create(f5, id="f5", input_arg="arg")
+        process = Process.create(f5, id="f5", inputs_arg="arg")
         assert_input_arg_expanded(process)
 
-        process = Process.create(f5, id="f5", input_arg=True)
+        process = Process.create(f5, id="f5", inputs_arg=True)
         assert_input_arg_expanded(process)
 
-        process = Process.create(f5, id="f5", input_arg=False)
+        process = Process.create(f5, id="f5", inputs_arg=False)
         assert_input_arg_untouched(process)
 
     def test_create_f5_with_wrong_input_arg(self):
         with pytest.raises(
             ValueError,
-            match="function '.*:f5': specified input argument is not an "
-            "argument of the function \(input_arg='x'\)",
+            match="function '.*:f5': specified inputs argument is not an "
+            "argument of the function \(inputs_arg='x'\)",
         ):
-            Process.create(f5, id="f5", input_arg="x")
+            Process.create(f5, id="f5", inputs_arg="x")
 
     def test_create_f5_wrong_input_arg_type(self):
         with pytest.raises(
             TypeError,
             match="function '.*:f5_wrong_input_arg_type': "
-            "type of argument parameter 'arg' must be a subclass "
+            "type of inputs argument 'arg' must be a subclass "
             "of pydantic.BaseModel",
         ):
             Process.create(
-                f5_wrong_input_arg_type, id="f5_wrong_input_arg_type", input_arg="arg"
+                f5_wrong_input_arg_type, id="f5_wrong_input_arg_type", inputs_arg="arg"
             )
 
     def test_create_f5_too_many_args(self):
         with pytest.raises(
             ValueError,
-            match="function '.*:f5_too_many_args': the input argument must "
-            "be the only argument \(input_arg='u'\)",
+            match="function '.*:f5_too_many_args': the inputs argument must "
+            "be the only argument \(inputs_arg='u'\)",
         ):
-            Process.create(f5_too_many_args, id="f5_too_many_args", input_arg="u")
+            Process.create(f5_too_many_args, id="f5_too_many_args", inputs_arg="u")

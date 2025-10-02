@@ -1,7 +1,7 @@
 ## Changes in version 0.0.4 (in development)
 
-- Added a keyword-argument `input_arg: str | bool` to the `ProcessRegistry.process`
-  decorator. If specified, it defines an _input argument_, which is used to 
+- Added a keyword-argument `inputs_arg: str | bool` to the `ProcessRegistry.process`
+  decorator. If specified, it defines an _inputs argument_, which is used to 
   define the process inputs in form of a dataclass derived from 
   `pydantic.BaseModel`. (#35)
 - Now supporting the OpenAPI/JSON Schema `disscriminator` property 

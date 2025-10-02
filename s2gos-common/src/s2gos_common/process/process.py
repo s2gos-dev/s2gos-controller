@@ -40,7 +40,7 @@ class Process:
     model_class: type[pydantic.BaseModel]
     description: ProcessDescription
     # names of special arguments
-    input_arg: str | None
+    inputs_arg: str | None
     job_ctx_arg: str | None
 
     # noinspection PyShadowingBuiltins
@@ -54,7 +54,7 @@ class Process:
         description: Optional[str] = None,
         input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
         output_fields: Optional[dict[str, pydantic.fields.FieldInfo]] = None,
-        input_arg: bool | str = False,
+        inputs_arg: str | bool = False,
     ) -> "Process":
         """Create a new instance of this dataclass.
 
@@ -68,8 +68,8 @@ class Process:
         version = version or "0.0.0"
         description = description or inspect.getdoc(function)
         signature = inspect.signature(function)
-        inputs, model_class, input_arg, job_ctx_arg = _parse_inputs(
-            fn_name, signature, input_fields, input_arg
+        inputs, model_class, input_arg_, job_ctx_arg = _parse_inputs(
+            fn_name, signature, input_fields, inputs_arg
         )
         outputs = _parse_outputs(fn_name, signature.return_annotation, output_fields)
         return Process(
@@ -90,7 +90,7 @@ class Process:
                 # outputTransmission=output_transmission,
                 # jobControlOptions=job_control_options,
             ),
-            input_arg=input_arg,
+            inputs_arg=input_arg_,
             job_ctx_arg=job_ctx_arg,
         )
 
@@ -99,34 +99,18 @@ def _parse_inputs(
     fn_name: str,
     signature: inspect.Signature,
     input_fields: Optional[dict[str, pydantic.fields.FieldInfo]] | None,
-    input_arg: str | bool,
+    inputs_arg: str | bool,
 ) -> tuple[
     dict[str, InputDescription], type[pydantic.BaseModel], str | None, str | None
 ]:
-    from .job import JobContext
-
-    model_class_name = "ProcessInputs"
-
-    arg_parameters: dict[str, inspect.Parameter] = {}
-    job_ctx_arg: str | None = None
-    for param_name, parameter in signature.parameters.items():
-        if parameter.annotation is JobContext:
-            if job_ctx_arg:
-                raise ValueError(
-                    f"function {fn_name!r}: only one parameter can have type "
-                    f"{JobContext.__name__}, but found {job_ctx_arg!r} "
-                    f"and {param_name!r}"
-                )
-            job_ctx_arg = param_name
-        else:
-            arg_parameters[param_name] = parameter
+    arg_parameters, job_ctx_arg = _parse_parameters(fn_name, signature)
 
     model_class: type[pydantic.BaseModel]
     input_arg_: str | None = None
-    if input_arg:
-        model_class, input_arg_ = _parse_input_arg(fn_name, arg_parameters, input_arg)
+    if inputs_arg:
+        model_class, input_arg_ = _parse_input_arg(fn_name, arg_parameters, inputs_arg)
     else:
-        model_field_definitions = {
+        model_field_definitions: dict[str, Any] = {
             param_name: (
                 (parameter.annotation, parameter.default)
                 if parameter.default is not inspect.Parameter.empty
@@ -134,33 +118,12 @@ def _parse_inputs(
             )
             for param_name, parameter in arg_parameters.items()
         }
-        model_class = pydantic.create_model(model_class_name, **model_field_definitions)
+        model_class = pydantic.create_model("ProcessInputs", **model_field_definitions)
 
     if input_fields:
-        invalid_inputs = [
-            input_name
-            for input_name in input_fields
-            if input_name not in signature.parameters
-        ]
-        if invalid_inputs:
-            raise ValueError(
-                f"function {fn_name!r}: "
-                "all input names must have corresponding parameter names; "
-                f"invalid input name(s): {', '.join(map(repr, invalid_inputs))}"
-            )
-        # noinspection PyTypeChecker
-        model_field_definitions = dict(model_class.model_fields)
-        for input_name, field_info in input_fields.items():
-            if input_name in model_field_definitions:
-                old_field_info = model_field_definitions[input_name]
-                parameter = signature.parameters[input_name]
-                model_field_definitions[input_name] = (
-                    parameter.annotation,
-                    pydantic.fields.FieldInfo.merge_field_infos(
-                        old_field_info, field_info
-                    ),
-                )
-        model_class = pydantic.create_model(model_class_name, **model_field_definitions)
+        model_class = _merge_input_fields_into_model_class(
+            fn_name, signature, input_fields, model_class
+        )
 
     model_class.model_rebuild()
 
@@ -179,39 +142,92 @@ def _parse_inputs(
     return input_descriptions, model_class, input_arg_, job_ctx_arg
 
 
+def _parse_parameters(
+    fn_name: str, signature: inspect.Signature
+) -> tuple[dict[str, inspect.Parameter], str | None]:
+    from .job import JobContext
+
+    arg_parameters: dict[str, inspect.Parameter] = {}
+    job_ctx_arg: str | None = None
+    for param_name, parameter in signature.parameters.items():
+        if parameter.annotation is JobContext:
+            if job_ctx_arg:
+                raise ValueError(
+                    f"function {fn_name!r}: only one parameter can have type "
+                    f"{JobContext.__name__}, but found {job_ctx_arg!r} "
+                    f"and {param_name!r}"
+                )
+            job_ctx_arg = param_name
+        else:
+            arg_parameters[param_name] = parameter
+    return arg_parameters, job_ctx_arg
+
+
+def _merge_input_fields_into_model_class(
+    fn_name: str,
+    signature: inspect.Signature,
+    input_fields: dict[str, pydantic.fields.FieldInfo],
+    model_class: type[pydantic.BaseModel],
+) -> type[pydantic.BaseModel]:
+    invalid_inputs = [
+        input_name
+        for input_name in input_fields
+        if input_name not in signature.parameters
+    ]
+    if invalid_inputs:
+        raise ValueError(
+            f"function {fn_name!r}: "
+            "all input names must have corresponding parameter names; "
+            f"invalid input name(s): {', '.join(map(repr, invalid_inputs))}"
+        )
+
+    # noinspection PyTypeChecker
+    model_field_definitions: dict[str, Any] = dict(model_class.model_fields)
+    for input_name, field_info in input_fields.items():
+        if input_name in model_field_definitions:
+            old_field_info = model_field_definitions[input_name]
+            parameter = signature.parameters[input_name]
+            model_field_definitions[input_name] = (
+                parameter.annotation,
+                pydantic.fields.FieldInfo.merge_field_infos(old_field_info, field_info),
+            )
+
+    return pydantic.create_model(model_class.__name__, **model_field_definitions)
+
+
 def _parse_input_arg(
     fn_name: str,
     arg_parameters: dict[str, inspect.Parameter],
-    input_arg: str | Literal[True],
+    inputs_arg: str | Literal[True],
 ) -> tuple[type[pydantic.BaseModel], str]:
     if len(arg_parameters) > 1:
         raise ValueError(
-            f"function {fn_name!r}: the input argument must be the only "
-            f"argument (input_arg={input_arg!r})"
+            f"function {fn_name!r}: the inputs argument must be the only "
+            f"argument (inputs_arg={inputs_arg!r})"
         )
 
-    arg_param: inspect.Parameter | None
-    if isinstance(input_arg, str):
-        arg_param = arg_parameters.get(input_arg)
+    inputs_arg_param: inspect.Parameter | None
+    if isinstance(inputs_arg, str):
+        inputs_arg_param = arg_parameters.get(inputs_arg)
     else:
-        arg_param = (
+        inputs_arg_param = (
             list(arg_parameters.values())[0] if len(arg_parameters) == 1 else None
         )
 
-    if arg_param is None:
+    if inputs_arg_param is None:
         raise ValueError(
-            f"function {fn_name!r}: specified input argument "
-            f"is not an argument of the function (input_arg={input_arg!r})"
+            f"function {fn_name!r}: specified inputs argument "
+            f"is not an argument of the function (inputs_arg={inputs_arg!r})"
         )
 
-    model_class = arg_param.annotation
+    model_class = inputs_arg_param.annotation
     # noinspection PyTypeChecker
     if isinstance(model_class, type) and issubclass(model_class, pydantic.BaseModel):
-        return model_class, arg_param.name
+        return model_class, inputs_arg_param.name
     else:
         raise TypeError(
-            f"function {fn_name!r}: type of argument parameter {arg_param.name!r} "
-            f"must be a subclass of pydantic.BaseModel"
+            f"function {fn_name!r}: type of inputs argument "
+            f"{inputs_arg_param.name!r} must be a subclass of pydantic.BaseModel"
         )
 
 
