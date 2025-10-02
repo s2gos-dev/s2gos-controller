@@ -2,8 +2,10 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+from typing import Annotated
 from unittest import TestCase
 
+import pydantic
 import pytest
 from pydantic import BaseModel, Field
 
@@ -42,9 +44,37 @@ def f3(point1: Point, point2: Point) -> Point:
 
 def f4(ctx: JobContext, flag: bool) -> str:
     """This is f3."""
-    return f"{ctx}-{flag}"
+    return f"{type(ctx).__name__}-{flag}"
 
 
+def f4_fail_ctx(ctx: JobContext, flag: bool, ctx2: JobContext) -> str:
+    """This is f4 with two context definitions -> illegal."""
+    return f"{type(ctx).__name__}-{flag}"
+
+
+class InputArg(pydantic.BaseModel):
+    arg1: Annotated[int, pydantic.Field(..., ge=0, le=1)]
+    arg2: str
+    kwarg1: Annotated[int, pydantic.Field(..., ge=0, le=1)] = 0
+    kwarg2: str = ""
+
+
+def f5(ctx: JobContext, arg: InputArg) -> str:
+    """This is f5."""
+    return f"{type(ctx).__name__}-{arg.model_dump_json()}"
+
+
+def f5_wrong_input_arg_type(ctx: JobContext, arg: int) -> str:
+    """This is f5 with 'u' being an int --> raise type error"""
+    return f"{type(ctx).__name__}-{arg}"
+
+
+def f5_too_many_args(ctx: JobContext, u: InputArg, v: float) -> str:
+    """This is f5 with 'u' being input arg  --> raise v is illegal"""
+    return f"{type(ctx).__name__}-{u.model_dump_json()}-{v}"
+
+
+# noinspection PyMethodMayBeStatic
 class RegisteredProcessTest(BaseModelMixin, TestCase):
     # noinspection PyMethodMayBeStatic
     def test_create_fail(self):
@@ -95,7 +125,7 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
         )
         self.assertIsInstance(process, Process)
         self.assertIs(f1, process.function)
-        self.assertEqual([], process.job_ctx_args)
+        self.assertEqual(None, process.job_ctx_arg)
         proc_desc = process.description
         proc_inputs = proc_desc.inputs
         proc_outputs = proc_desc.outputs
@@ -128,7 +158,7 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
         process = Process.create(f2)
         self.assertIsInstance(process, Process)
         self.assertIs(f2, process.function)
-        self.assertEqual([], process.job_ctx_args)
+        self.assertEqual(None, process.job_ctx_arg)
         proc_desc = process.description
         self.assertIsInstance(proc_desc, ProcessDescription)
         self.assertEqual("tests.process.test_process:f2", proc_desc.id)
@@ -315,7 +345,7 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
     def test_create_f3(self):
         process = Process.create(f3, id="f3")
         self.assertIsInstance(process, Process)
-        self.assertEqual([], process.job_ctx_args)
+        self.assertEqual(None, process.job_ctx_arg)
         self.assertEqual(
             {"point1", "point2"},
             set(process.description.inputs.keys()),
@@ -349,4 +379,71 @@ class RegisteredProcessTest(BaseModelMixin, TestCase):
         process = Process.create(f4, id="f4")
         self.assertIsInstance(process, Process)
         self.assertIs(f4, process.function)
-        self.assertEqual(["ctx"], process.job_ctx_args)
+        self.assertEqual("ctx", process.job_ctx_arg)
+
+    def test_create_f4_fail_ctx(self):
+        with pytest.raises(
+            ValueError,
+            match="function '.*:f4_fail_ctx': only one parameter "
+            "can have type JobContext, but found 'ctx' and 'ctx2'",
+        ):
+            Process.create(f4_fail_ctx, id="f4_fail_ctx")
+
+    def test_create_f5(self):
+        def assert_process_ok(p: Process):
+            self.assertIsInstance(p, Process)
+            self.assertIs(f5, p.function)
+            self.assertEqual("ctx", p.job_ctx_arg)
+            self.assertIsInstance(p.description, ProcessDescription)
+            self.assertIsInstance(p.description.inputs, dict)
+            return p.description.inputs
+
+        def assert_input_arg_expanded(p: Process):
+            inputs = assert_process_ok(p)
+            self.assertEqual(["arg1", "arg2", "kwarg1", "kwarg2"], list(inputs.keys()))
+            self.assertTrue(
+                all(map(lambda v: isinstance(v, InputDescription), inputs.values()))
+            )
+
+        def assert_input_arg_untouched(p: Process):
+            inputs = assert_process_ok(p)
+            self.assertEqual(["arg"], list(inputs.keys()))
+            self.assertTrue(
+                all(map(lambda v: isinstance(v, InputDescription), inputs.values()))
+            )
+
+        process = Process.create(f5, id="f5", input_arg="arg")
+        assert_input_arg_expanded(process)
+
+        process = Process.create(f5, id="f5", input_arg=True)
+        assert_input_arg_expanded(process)
+
+        process = Process.create(f5, id="f5", input_arg=False)
+        assert_input_arg_untouched(process)
+
+    def test_create_f5_with_wrong_input_arg(self):
+        with pytest.raises(
+            ValueError,
+            match="function '.*:f5': specified input argument is not an "
+            "argument of the function \(input_arg='x'\)",
+        ):
+            Process.create(f5, id="f5", input_arg="x")
+
+    def test_create_f5_wrong_input_arg_type(self):
+        with pytest.raises(
+            TypeError,
+            match="function '.*:f5_wrong_input_arg_type': "
+            "type of argument parameter 'arg' must be a subclass "
+            "of pydantic.BaseModel",
+        ):
+            Process.create(
+                f5_wrong_input_arg_type, id="f5_wrong_input_arg_type", input_arg="arg"
+            )
+
+    def test_create_f5_too_many_args(self):
+        with pytest.raises(
+            ValueError,
+            match="function '.*:f5_too_many_args': the input argument must "
+            "be the only argument \(input_arg='u'\)",
+        ):
+            Process.create(f5_too_many_args, id="f5_too_many_args", input_arg="u")
