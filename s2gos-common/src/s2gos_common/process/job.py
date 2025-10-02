@@ -191,12 +191,13 @@ class Job(JobContext):
         Use `Job.create() instead.`
         """
         self.process = process
-        self.job_info = JobInfo(
+        self.job_info = JobInfo(  # noqa [call-arg]
             type=JobType.process,
             processID=process.description.id,
             jobID=job_id,
             status=JobStatus.accepted,
             created=self._now(),
+
         )
         self.function_kwargs = function_kwargs
         self.cancelled = False

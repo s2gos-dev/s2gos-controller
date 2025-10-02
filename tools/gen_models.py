@@ -17,7 +17,7 @@ def main():
     dcg.generate(
         input_=OPEN_API_PATH,
         input_file_type=dcg.InputFileType.OpenAPI,
-        use_annotated=True,
+        # use_annotated=True, # --> if True, mypy cannot see pydantic aliases
         use_double_quotes=True,
         use_standard_collections=True,
         use_schema_description=True,
