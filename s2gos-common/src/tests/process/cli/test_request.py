@@ -182,9 +182,7 @@ class ExecutionRequestTest(unittest.TestCase):
 
     # noinspection PyMethodMayBeStatic
     def test_create_request_from_nothing(self):
-        with pytest.raises(
-            click.ClickException, match="Execution request is invalid:"
-        ):
+        with pytest.raises(click.ClickException, match="Execution request is invalid:"):
             ExecutionRequest.create()
 
     # noinspection PyMethodMayBeStatic
