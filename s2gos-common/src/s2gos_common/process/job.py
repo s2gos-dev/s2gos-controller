@@ -197,7 +197,6 @@ class Job(JobContext):
             jobID=job_id,
             status=JobStatus.accepted,
             created=self._now(),
-
         )
         self.function_kwargs = function_kwargs
         self.cancelled = False
