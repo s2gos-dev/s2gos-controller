@@ -1,5 +1,7 @@
 ## Changes in version 0.0.4 (in development)
 
+- Now supporting the OpenAPI/JSON Schema `disscriminator` property 
+  in `tools/openapi.yaml/schemas/schema` and generated models. (#36)
 - Renamed `s2gos_common.process.cli.ProcessingRequest` into
   `s2gos_common.process.cli.ExecutionRequest`.
 - Replaced various occurrences of the term _processing_ by 
