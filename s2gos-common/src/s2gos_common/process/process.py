@@ -4,7 +4,7 @@
 
 import inspect
 from dataclasses import dataclass
-from typing import Any, Callable, Optional, get_args, get_origin, Literal
+from typing import Any, Callable, Literal, Optional, get_args, get_origin
 
 import pydantic
 

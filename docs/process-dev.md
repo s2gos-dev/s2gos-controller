@@ -106,10 +106,102 @@ you can run your CLI as an executable and `my-tool --help` will output:
 
 ![process-cli.png](assets/process-cli.png)
 
-## Application Example
+## Usage Example
+
+### Example project setup
 
 An application example that can serve as a starting point is provided in the workspace 
-[s2gos-app-ex](https://github.com/s2gos-dev/s2gos-controller/tree/main/s2gos-app-ex).
+[s2gos-app-ex](https://github.com/s2gos-dev/s2gos-controller/tree/main/s2gos-app-ex). Please check out its `README.md` to install and run it.
+
+The application's primary user interface is its simple, generated CLI 
+(you can extend it, if you like). For the above application example the CLI tool
+is named `s2gos-app-ex`. 
+
+### Getting process information
+
+Use `list-processes` (or short `lp`) subcommand to list the published processes, and use 
+`get-process` (or short `gp`) to get the details like the inputs of your your process.
+The command `s2gos-app-ex gp primes_between` will give you the input specs of the 
+published process `primes_between`:
+
+```json
+{
+  "title": "Prime Generator",
+  "description": "Computes the list of prime numbers within an integer value range.",
+  "id": "primes_between",
+  "version": "0.0.0",
+  "inputs": {
+    "min_val": {
+      "title": "Minimum value of search range",
+      "minOccurs": 0,
+      "schema": {
+        "minimum": 0.0,
+        "type": "integer",
+        "default": 0
+      }
+    },
+    "max_val": {
+      "title": "Maximum value of search range",
+      "minOccurs": 0,
+      "schema": {
+        "minimum": 0.0,
+        "type": "integer",
+        "default": 100
+      }
+    }
+  },
+  "outputs": {
+    "return_value": {
+      "title": "Return Value",
+      "schema": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}
+```
+
+### Executing a process
+
+To execute your processes, see help for the `execute-process` (or short `ep`) 
+subcommand:  
+
+![process-ep-cli.png](assets/process-ep-cli.png)
+
+### Execution request files
+
+For larger or complex sets of input parameters it is recommended to use a 
+_execution request file_ in JSON or YAML format. The structure is simple, for example:
+
+```json
+{
+    "process_id": "primes_between",
+    "inputs": {
+      "min_val": 100,
+      "max_val": 200
+    }
+}
+```
+
+The process request file format in detail:
+
+- `process_id`: Process identifier
+- `dotpath`: Whether dots in input names should be used to create
+    nested object values. Defaults to `False`.
+- `inputs`: Optional process inputs given as key-value mapping.
+    Values may be of any JSON-serializable type accepted by
+    the given process.
+- `outputs`: Optional process outputs given as key-value mapping.
+    Values are of type [Output][s2gos_common.models.Output] 
+    and should be supported by the given process.
+- `subscriber`: Optional object comprising callback
+    URLs that are informed about process status changes
+    while the processing takes place. The URLs are `successUri`,
+    `inProgressUri`, and `failedUri` and none is required.
+    See also [Subscriber][s2gos_common.models.Subscriber].
 
 
 ## Framework API
@@ -135,6 +227,11 @@ An application example that can serve as a starting point is provided in the wor
       heading_level: 3
 
 ::: s2gos_common.process.get_cli
+    options:
+      show_source: false
+      heading_level: 3
+
+::: s2gos_common.process.ExecutionRequest
     options:
       show_source: false
       heading_level: 3
