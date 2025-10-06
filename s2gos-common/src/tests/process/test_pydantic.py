@@ -19,15 +19,10 @@ class PydanticTest(TestCase):
         )
         self.assertIsInstance(model_class, type)
         self.assertTrue(issubclass(model_class, pydantic.BaseModel))
-        self.assertEqual(
-            {"sur-name", "max.age"},
-            set(model_class.model_fields.keys())
-        )
+        self.assertEqual({"sur-name", "max.age"}, set(model_class.model_fields.keys()))
 
         # noinspection PyArgumentList
         model_instance = model_class(**{"sur-name": "Bibo", "max.age": 100})
         self.assertEqual(
-            {'max.age': 100, 'sur-name': 'Bibo'},
-            model_instance.model_dump(mode="json")
+            {"max.age": 100, "sur-name": "Bibo"}, model_instance.model_dump(mode="json")
         )
-
