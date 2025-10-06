@@ -86,4 +86,4 @@ extra_css:
     - overrides/css/custom.css
 
 hooks:
-    - docs\notebooks\notebooks_json_output.py
+    - docs\hooks\notebooks_json_output.py

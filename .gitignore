@@ -2,6 +2,9 @@
 *.zarr/
 .cov-report
 
+# Documentation generation
+docs/notebooks/*.ipynb
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
