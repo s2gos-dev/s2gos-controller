@@ -9,67 +9,81 @@ repo_name: s2gos-dev/s2gos-controller
 copyright: Copyright &copy; 2025 ESA DTE-S2GOS Team
 
 nav:
-  - Overview: index.md
-  - Architecture: architecture.md
-  - Client CLI: client-cli.md
-  - Client API: client-api.md
-  - Process Development: process-dev.md
-  - Contributing: contributing.md
-  - Roadmap: roadmap.md
+    - Overview: index.md
+    - Architecture: architecture.md
+    - Client CLI: client-cli.md
+    - Client API: client-api.md
+    - Notebooks:
+          - notebooks/client-gui.ipynb
+          - notebooks/client-api.ipynb
+          - notebooks/client-api-airflow.ipynb
+          - notebooks/client-cli.ipynb
+    - Process Development: process-dev.md
+    - Contributing: contributing.md
+    - Roadmap: roadmap.md
 
 theme:
-  name: material
-  logo: assets/logo.png
-  favicon: assets/logo.ico
-  palette:
-    # Palette toggle for light mode
-    - scheme: default
-      primary: blue grey
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    # Palette toggle for dark mode
-    - scheme: slate
-      primary: blue grey
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
+    name: material
+    logo: assets/logo.png
+    favicon: assets/logo.ico
+    palette:
+        # Palette toggle for light mode
+        - scheme: default
+          primary: blue grey
+          toggle:
+              icon: material/brightness-7
+              name: Switch to dark mode
+        # Palette toggle for dark mode
+        - scheme: slate
+          primary: blue grey
+          toggle:
+              icon: material/brightness-4
+              name: Switch to light mode
+    custom_dir: docs\overrides
 
 markdown_extensions:
-  - attr_list
-  - admonition
-  - pymdownx.details
-  - pymdownx.superfences:
-      # make exceptions to highlighting of code:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:mermaid2.fence_mermaid_custom
-  # - pymdownx.highlight
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+    - attr_list
+    - admonition
+    - pymdownx.details
+    - pymdownx.superfences:
+          # make exceptions to highlighting of code:
+          custom_fences:
+              - name: mermaid
+                class: mermaid
+                format:
+                    !!python/name:mermaid2.fence_mermaid_custom # - pymdownx.highlight
+
+    - pymdownx.emoji:
+          emoji_index: !!python/name:material.extensions.emoji.twemoji
+          emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra:
-  mermaid: true
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/s2gos-dev/s2gos-controller
-    - icon: fontawesome/brands/python
-      link: https://pypi.org/project/s2gos/
+    mermaid: true
+    social:
+        - icon: fontawesome/brands/github
+          link: https://github.com/s2gos-dev/s2gos-controller
+        - icon: fontawesome/brands/python
+          link: https://pypi.org/project/s2gos/
 
 plugins:
-  - search
-  - autorefs
-  - mermaid2
-  - mkdocstrings:
-      handlers:
-        python:
-          options:
-            docstring_style: google
-            show_root_toc_entry: true
-            show_root_heading: true
-            show_source: true
-            heading_level: 2
-            annotations_path: brief
-            members_order: source
+    - search
+    - autorefs
+    - mermaid2
+    - mkdocs-jupyter
+    - mkdocstrings:
+          handlers:
+              python:
+                  options:
+                      docstring_style: google
+                      show_root_toc_entry: true
+                      show_root_heading: true
+                      show_source: true
+                      heading_level: 2
+                      annotations_path: brief
+                      members_order: source
+
+extra_css:
+    - overrides/css/custom.css
+
+hooks:
+    - docs\notebooks\notebooks_json_output.py
