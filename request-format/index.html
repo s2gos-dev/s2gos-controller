@@ -9,10 +9,6 @@
       
       
       
-        <link rel="prev" href="../architecture/">
-      
-      
-        <link rel="next" href="../client-api/">
       
       
       <link rel="icon" href="../assets/logo.ico">
@@ -20,7 +16,7 @@
     
     
       
-        <title>Client CLI - ESA DTE-S2GOS Controller</title>
+        <title>Execution request format - ESA DTE-S2GOS Controller</title>
       
     
     
@@ -74,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#client-cli-reference" class="md-skip">
+        <a href="#execution-request-format" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +105,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Client CLI
+              Execution request format
             
           </span>
         </div>
@@ -295,32 +291,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Client CLI
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../client-cli/" class="md-nav__link">
         
   
   
@@ -331,107 +305,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-configure" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client configure
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-list-processes" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client list-processes
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-get-process" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client get-process
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-validate-request" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client validate-request
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-execute-process" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client execute-process
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-list-jobs" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client list-jobs
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-get-job" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client get-job
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-dismiss-job" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client dismiss-job
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-get-job-results" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client get-job-results
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -544,95 +417,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-configure" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client configure
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-list-processes" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client list-processes
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-get-process" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client get-process
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-validate-request" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client validate-request
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-execute-process" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client execute-process
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-list-jobs" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client list-jobs
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-get-job" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client get-job
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-dismiss-job" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client dismiss-job
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#s2gos-client-get-job-results" class="md-nav__link">
-    <span class="md-ellipsis">
-      s2gos-client get-job-results
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -650,177 +434,8 @@
   
 
 
-<h1 id="client-cli-reference">Client CLI Reference</h1>
-<p><code>s2gos-client</code> is the client shell tool for the S2GOS service.</p>
-<p>The tool can be used to get the available processes, get process details,
-execute processes, and manage the jobs originating from the latter. 
-It herewith resembles the functionality of the OGC API Processes - Part 1.</p>
-<p>You can use shorter command name aliases, e.g., use command name <code>vr</code>
-for <code>validate-request</code>, or <code>lp</code> for <code>list-processes</code>.</p>
-<p><strong>Usage</strong>:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>ARGS<span class="o">]</span>...
-</code></pre></div>
-<p><strong>Options</strong>:</p>
-<ul>
-<li><code>--version</code>: Show version and exit.</li>
-<li><code>--traceback, --tb</code>: Show server exception traceback, if any.</li>
-<li><code>--install-completion</code>: Install completion for the current shell.</li>
-<li><code>--show-completion</code>: Show completion for the current shell, to copy it or customize the installation.</li>
-<li><code>--help</code>: Show this message and exit.</li>
-</ul>
-<p><strong>Commands</strong>:</p>
-<ul>
-<li><code>configure</code>: Configure the client tool.</li>
-<li><code>list-processes</code>: List available processes.</li>
-<li><code>get-process</code>: Get process details.</li>
-<li><code>validate-request</code>: Validate a process execution request.</li>
-<li><code>execute-process</code>: Execute a process in asynchronous mode.</li>
-<li><code>list-jobs</code>: List all jobs.</li>
-<li><code>get-job</code>: Get job details.</li>
-<li><code>dismiss-job</code>: Cancel a running or delete a finished job.</li>
-<li><code>get-job-results</code>: Get job results.</li>
-</ul>
-<h2 id="s2gos-client-configure"><code>s2gos-client configure</code></h2>
-<p>Configure the client tool.</p>
-<p><strong>Usage</strong>:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>configure<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
-</code></pre></div>
-<p><strong>Options</strong>:</p>
-<ul>
-<li><code>-u, --user TEXT</code>: Your user name.</li>
-<li><code>-t, --token TEXT</code>: Your personal access token.</li>
-<li><code>-s, --server TEXT</code>: The S2GOS service API URL.</li>
-<li><code>-c, --config PATH</code>: Client configuration file.</li>
-<li><code>--help</code>: Show this message and exit.</li>
-</ul>
-<h2 id="s2gos-client-list-processes"><code>s2gos-client list-processes</code></h2>
-<p>List available processes.</p>
-<p><strong>Usage</strong>:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>list-processes<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
-</code></pre></div>
-<p><strong>Options</strong>:</p>
-<ul>
-<li><code>-c, --config PATH</code>: Client configuration file.</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
-<li><code>--help</code>: Show this message and exit.</li>
-</ul>
-<h2 id="s2gos-client-get-process"><code>s2gos-client get-process</code></h2>
-<p>Get process details.</p>
-<p><strong>Usage</strong>:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>get-process<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>PROCESS_ID
-</code></pre></div>
-<p><strong>Arguments</strong>:</p>
-<ul>
-<li><code>PROCESS_ID</code>: Process identifier.  [required]</li>
-</ul>
-<p><strong>Options</strong>:</p>
-<ul>
-<li><code>-c, --config PATH</code>: Client configuration file.</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
-<li><code>--help</code>: Show this message and exit.</li>
-</ul>
-<h2 id="s2gos-client-validate-request"><code>s2gos-client validate-request</code></h2>
-<p>Validate a process execution request.</p>
-<p>The execution request to be validated may be read from a file given
-by <code>--request</code>, or from <code>stdin</code>, or from the <code>process_id</code> argument
-with zero, one, or more <code>--input</code> (or <code>-i</code>) options.</p>
-<p>The <code>process_id</code> argument and any given <code>--input</code> options will override
-settings with same name found in the given request file or <code>stdin</code>, if any.</p>
-<p><strong>Usage</strong>:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>validate-request<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>PROCESS_ID<span class="o">]</span>
-</code></pre></div>
-<p><strong>Arguments</strong>:</p>
-<ul>
-<li><code>[PROCESS_ID]</code>: Process identifier.</li>
-</ul>
-<p><strong>Options</strong>:</p>
-<ul>
-<li><code>-d, --dotpath</code>: Input names use dot-path notion to encode nested values, e.g., <code>-i scene.colors.bg=red</code>.</li>
-<li><code>-i, --input [NAME=VALUE]...</code>: Process input value.</li>
-<li><code>-r, --request PATH</code>: Execution request file. Use <code>-</code> to read from &lt;stdin&gt;.</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
-<li><code>--help</code>: Show this message and exit.</li>
-</ul>
-<h2 id="s2gos-client-execute-process"><code>s2gos-client execute-process</code></h2>
-<p>Execute a process in asynchronous mode.</p>
-<p>The execution request to be submitted may be read from a file given
-by <code>--request</code>, or from <code>stdin</code>, or from the <code>process_id</code> argument
-with zero, one, or more <code>--input</code> (or <code>-i</code>) options.</p>
-<p>The <code>process_id</code> argument and any given <code>--input</code> options will override
-settings with same name found in the given request file or <code>stdin</code>, if any.</p>
-<p><strong>Usage</strong>:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>execute-process<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>PROCESS_ID<span class="o">]</span>
-</code></pre></div>
-<p><strong>Arguments</strong>:</p>
-<ul>
-<li><code>[PROCESS_ID]</code>: Process identifier.</li>
-</ul>
-<p><strong>Options</strong>:</p>
-<ul>
-<li><code>-d, --dotpath</code>: Input names use dot-path notion to encode nested values, e.g., <code>-i scene.colors.bg=red</code>.</li>
-<li><code>-i, --input [NAME=VALUE]...</code>: Process input value.</li>
-<li><code>-s, --subscriber [NAME=URL]...</code>: Process subscriber URL.</li>
-<li><code>-r, --request PATH</code>: Execution request file. Use <code>-</code> to read from &lt;stdin&gt;.</li>
-<li><code>-c, --config PATH</code>: Client configuration file.</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
-<li><code>--help</code>: Show this message and exit.</li>
-</ul>
-<h2 id="s2gos-client-list-jobs"><code>s2gos-client list-jobs</code></h2>
-<p>List all jobs.</p>
-<p><strong>Usage</strong>:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>list-jobs<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
-</code></pre></div>
-<p><strong>Options</strong>:</p>
-<ul>
-<li><code>-c, --config PATH</code>: Client configuration file.</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
-<li><code>--help</code>: Show this message and exit.</li>
-</ul>
-<h2 id="s2gos-client-get-job"><code>s2gos-client get-job</code></h2>
-<p>Get job details.</p>
-<p><strong>Usage</strong>:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>get-job<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>JOB_ID
-</code></pre></div>
-<p><strong>Arguments</strong>:</p>
-<ul>
-<li><code>JOB_ID</code>: Job identifier.  [required]</li>
-</ul>
-<p><strong>Options</strong>:</p>
-<ul>
-<li><code>-c, --config PATH</code>: Client configuration file.</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
-<li><code>--help</code>: Show this message and exit.</li>
-</ul>
-<h2 id="s2gos-client-dismiss-job"><code>s2gos-client dismiss-job</code></h2>
-<p>Cancel a running or delete a finished job.</p>
-<p><strong>Usage</strong>:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>dismiss-job<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>JOB_ID
-</code></pre></div>
-<p><strong>Arguments</strong>:</p>
-<ul>
-<li><code>JOB_ID</code>: Job identifier.  [required]</li>
-</ul>
-<p><strong>Options</strong>:</p>
-<ul>
-<li><code>-c, --config PATH</code>: Client configuration file.</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
-<li><code>--help</code>: Show this message and exit.</li>
-</ul>
-<h2 id="s2gos-client-get-job-results"><code>s2gos-client get-job-results</code></h2>
-<p>Get job results.</p>
-<p><strong>Usage</strong>:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>get-job-results<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>JOB_ID
-</code></pre></div>
-<p><strong>Arguments</strong>:</p>
-<ul>
-<li><code>JOB_ID</code>: Job identifier.  [required]</li>
-</ul>
-<p><strong>Options</strong>:</p>
-<ul>
-<li><code>-c, --config PATH</code>: Client configuration file.</li>
-<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
-<li><code>--help</code>: Show this message and exit.</li>
-</ul>
+<h1 id="execution-request-format">Execution request format</h1>
+<p>TODO</p>
 
 
 

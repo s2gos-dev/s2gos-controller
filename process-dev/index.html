@@ -434,11 +434,53 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#application-example" class="md-nav__link">
+  <a href="#usage-example" class="md-nav__link">
     <span class="md-ellipsis">
-      Application Example
+      Usage Example
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Usage Example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-project-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example project setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-process-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting process information
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#executing-a-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      Executing a process
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execution-request-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Execution request files
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -564,6 +606,15 @@
   <a href="#s2gos_common.process.get_cli" class="md-nav__link">
     <span class="md-ellipsis">
       get_cli
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.ExecutionRequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      ExecutionRequest
     </span>
   </a>
   
@@ -695,11 +746,53 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#application-example" class="md-nav__link">
+  <a href="#usage-example" class="md-nav__link">
     <span class="md-ellipsis">
-      Application Example
+      Usage Example
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Usage Example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-project-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example project setup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-process-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting process information
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#executing-a-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      Executing a process
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execution-request-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Execution request files
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -830,6 +923,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.ExecutionRequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      ExecutionRequest
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -912,10 +1014,39 @@ or declare it as a function argument of type <code>JobContext</code>.</p>
 can be further specified by 
 <a href="https://docs.pydantic.dev/latest/concepts/fields/"><code>pydantic.Field</code></a> annotations.
 Field annotations for an argument can be provided via the <code>input_fields</code> dictionary 
-passed  to the <a class="autorefs autorefs-internal" title="process(function=None, /, *, id=None, version=None, title=None, description=None, input_fields=None, output_fields=None)" href="#s2gos_common.process.ProcessRegistry.process"><code>process</code></a> decorator, 
+passed  to the <a class="autorefs autorefs-internal" title="process(function=None, /, *, id=None, version=None, title=None, description=None, input_fields=None, output_fields=None, inputs_arg=False)" href="#s2gos_common.process.ProcessRegistry.process"><code>process</code></a> decorator, 
 or preferably as part of the type declaration using the Python <code>Annotated</code> 
 special form. An example for the latter is
 <code>factor: Annotated[float, Field(title="Scaling factor", gt=0., le=10.)] = 1.0</code>.</p>
+<p>Should your process have many arguments, you may consider defining them elsewhere
+in a dedicated <em>pydantic Model</em> derived from 
+<a href="https://docs.pydantic.dev/latest/concepts/models/"><code>pydantic.BaseModel</code></a>, pass 
+it as single parameter to your function, and pass <code>inputs_arg=True</code> to the 
+<code>@process</code> decorator. Now the generated process description will report the class' 
+fields as inputs rather than the model class as single input. Conceptually:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">s2gos_common.process</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobContext</span><span class="p">,</span> <span class="n">ProcessRegistry</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ArgsModel</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="c1"># Required positional arguments</span>
+    <span class="n">arg1</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Type1</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="o">**</span><span class="n">Specs1</span><span class="p">]</span>
+    <span class="n">arg2</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Type2</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="o">**</span><span class="n">Specs2</span><span class="p">]</span>
+    <span class="c1"># ...</span>
+    <span class="c1"># Optional keyword arguments</span>
+    <span class="n">kwarg1</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Type1</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">Specs1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Default1</span>
+    <span class="n">kwarg2</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="n">Type2</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">Specs2</span><span class="p">]</span> <span class="o">=</span> <span class="n">Default2</span>
+    <span class="c1"># ...</span>
+
+
+<span class="n">registry</span> <span class="o">=</span> <span class="n">ProcessRegistry</span><span class="p">()</span>
+
+<span class="nd">@registry</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">inputs_arg</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_func</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">ArgsModel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MyResult</span><span class="p">:</span>
+    <span class="o">...</span>
+</code></pre></div>
 <h3 id="2-define-cli-instance">2. Define CLI instance</h3>
 <p>In a second step you define an instance of a common process CLI and pass it 
 a reference to your registry instance. In <code>my_package/cli.py</code>:</p>
@@ -929,7 +1060,8 @@ a reference to your registry instance. In <code>my_package/cli.py</code>:</p>
 <p>You could also pass the imported registry directly, but using a 
 reference string defers importing the registry instance until it is 
 needed. This makes the CLI much faster if it is just called with
-the <code>--help</code> option and hence no processing takes place. </p>
+the <code>--help</code> option and hence no importing of yet unused libraries 
+takes place. </p>
 <h3 id="3-define-entry-point-script">3. Define entry point script</h3>
 <p>In a last step you expose the CLI as an entry point script of your package. 
 In your <code>pyproject.toml</code>:</p>
@@ -939,9 +1071,88 @@ In your <code>pyproject.toml</code>:</p>
 <p>After installing <code>my_package</code> in a Python environment using <code>pip</code> or <code>pixi</code>
 you can run your CLI as an executable and <code>my-tool --help</code> will output:</p>
 <p><img alt="process-cli.png" src="../assets/process-cli.png" /></p>
-<h2 id="application-example">Application Example</h2>
+<h2 id="usage-example">Usage Example</h2>
+<h3 id="example-project-setup">Example project setup</h3>
 <p>An application example that can serve as a starting point is provided in the workspace 
-<a href="https://github.com/s2gos-dev/s2gos-controller/tree/main/s2gos-app-ex">s2gos-app-ex</a>.</p>
+<a href="https://github.com/s2gos-dev/s2gos-controller/tree/main/s2gos-app-ex">s2gos-app-ex</a>. Please check out its <code>README.md</code> to install and run it.</p>
+<p>The application's primary user interface is its simple, generated CLI 
+(you can extend it, if you like). For the above application example the CLI tool
+is named <code>s2gos-app-ex</code>. </p>
+<h3 id="getting-process-information">Getting process information</h3>
+<p>Use <code>list-processes</code> (or short <code>lp</code>) subcommand to list the published processes, and use 
+<code>get-process</code> (or short <code>gp</code>) to get the details like the inputs of your your process.
+The command <code>s2gos-app-ex gp primes_between</code> will give you the input specs of the 
+published process <code>primes_between</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Prime Generator&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Computes the list of prime numbers within an integer value range.&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;primes_between&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0.0.0&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;inputs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;min_val&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Minimum value of search range&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;minOccurs&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;minimum&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;max_val&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Maximum value of search range&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;minOccurs&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;minimum&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;outputs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;return_value&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Return Value&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;array&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;integer&quot;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="executing-a-process">Executing a process</h3>
+<p>To execute your processes, see help for the <code>execute-process</code> (or short <code>ep</code>) 
+subcommand:  </p>
+<p><img alt="process-ep-cli.png" src="../assets/process-ep-cli.png" /></p>
+<h3 id="execution-request-files">Execution request files</h3>
+<p>For larger or complex sets of input parameters it is recommended to use a 
+<em>execution request file</em> in JSON or YAML format. The structure is simple, for example:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;process_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;primes_between&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;inputs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;min_val&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;max_val&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The process request file format in detail:</p>
+<ul>
+<li><code>process_id</code>: Process identifier</li>
+<li><code>dotpath</code>: Whether dots in input names should be used to create
+    nested object values. Defaults to <code>False</code>.</li>
+<li><code>inputs</code>: Optional process inputs given as key-value mapping.
+    Values may be of any JSON-serializable type accepted by
+    the given process.</li>
+<li><code>outputs</code>: Optional process outputs given as key-value mapping.
+    Values are of type [Output][s2gos_common.models.Output] 
+    and should be supported by the given process.</li>
+<li><code>subscriber</code>: Optional object comprising callback
+    URLs that are informed about process status changes
+    while the processing takes place. The URLs are <code>successUri</code>,
+    <code>inProgressUri</code>, and <code>failedUri</code> and none is required.
+    See also [Subscriber][s2gos_common.models.Subscriber].</li>
+</ul>
 <h2 id="framework-api">Framework API</h2>
 
 
@@ -999,7 +1210,7 @@ you can run your CLI as an executable and <code>my-tool --help</code> will outpu
 
 
 <h4 id="s2gos_common.process.ProcessRegistry.process" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">process</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">input_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">process</span><span class="p">(</span><span class="n">function</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">input_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inputs_arg</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 </h4>
 
@@ -1031,8 +1242,8 @@ register it as a process in this registry.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The decorated function that is passed automatically
-since <code>process()</code> is a decorator function.</p>
+                <p>The decorated function that is passed automatically since
+<code>process()</code> is a decorator function.</p>
               </div>
             </td>
             <td>
@@ -1065,8 +1276,8 @@ If not provided, the fully qualified function name will be used.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Optional version identifier.
-If not provided, <code>"0.0.0"</code> will be used.</p>
+                <p>Optional version identifier. If not provided, <code>"0.0.0"</code>
+will be used.</p>
               </div>
             </td>
             <td>
@@ -1098,8 +1309,8 @@ If not provided, <code>"0.0.0"</code> will be used.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Optional, detailed description of the process.
-If not provided, the function's docstring, if any, will be used.</p>
+                <p>Optional, detailed description of the process. If not
+provided, the function's docstring, if any, will be used.</p>
               </div>
             </td>
             <td>
@@ -1134,8 +1345,8 @@ as described in <a href="https://docs.pydantic.dev/latest/concepts/fields/#the-a
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Mapping from output names
-to <a href="https://docs.pydantic.dev/latest/concepts/fields/"><code>pydantic.Field</code></a>
+                <p>Mapping from output names to
+<a href="https://docs.pydantic.dev/latest/concepts/fields/"><code>pydantic.Field</code></a>
 annotations. Required, if you have multiple outputs returned as a
 dictionary. In this case, output names are the keys of your returned
 dictionary.</p>
@@ -1143,6 +1354,27 @@ dictionary.</p>
             </td>
             <td>
                   <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>inputs_arg</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span> | <span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Specifies the use of an <em>inputs argument</em>. An inputs argument
+is a container for the actual process inputs. If specified, it must
+be the only function argument (besides an optional job context
+argument) and must be a subclass of <code>pydantic.BaseModel</code>.
+If <code>inputs_arg</code> is <code>True</code> the only argument will be the input argument,
+if <code>inputs_arg</code> is a <code>str</code> it must be the name of the only argument.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
             </td>
           </tr>
       </tbody>
@@ -1218,9 +1450,9 @@ in form of a Python function.</p>
             </td>
           </tr>
           <tr class="doc-section-item">
-            <td><code><span title="s2gos_common.process.Process.job_ctx_args">job_ctx_args</span></code></td>
+            <td><code><span title="s2gos_common.process.Process.job_ctx_arg">job_ctx_arg</span></code></td>
             <td>
-                  <code><span title="list">list</span>[<span title="str">str</span>]</code>
+                  <code><span title="str">str</span> | None</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1277,7 +1509,7 @@ in form of a Python function.</p>
 
 
 <h4 id="s2gos_common.process.Process.create" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">create</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">input_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">create</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">input_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inputs_arg</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
@@ -1681,6 +1913,151 @@ function that returns a registry instance.</p>
       </tbody>
     </table>
 
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="s2gos_common.process.ExecutionRequest" class="doc doc-heading">
+            <code>s2gos_common.process.ExecutionRequest</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="s2gos_common.models.ProcessRequest">ProcessRequest</span></code></p>
+
+
+        <p>Process execution request as used by the CLI.
+Extends [ProcessRequest][] to allow the process
+identifier being part of the request.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>process_id</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Process identifier</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>dotpath</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Whether dots in input names should be used to create
+nested object values. Defaults to <code>False</code>.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>inputs</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Optional process inputs given as key-value mapping.
+Values may be of any JSON-serializable type accepted by
+the given process.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>outputs</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Optional process outputs given as key-value mapping.
+Values are of type [Output][s2gos_common.models.Output]
+supported by the given process.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>subscriber</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Optional subscriber of type
+[Subscriber][s2gos_common.models.Subscriber] comprising callback
+URLs that are informed about process status changes
+while the processing takes place.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
 
     </div>
 
