@@ -71,6 +71,38 @@ or preferably as part of the type declaration using the Python `Annotated`
 special form. An example for the latter is
 `factor: Annotated[float, Field(title="Scaling factor", gt=0., le=10.)] = 1.0`.
 
+Should your process have many arguments, you may consider defining them elsewhere
+in a dedicated _pydantic Model_ derived from 
+[`pydantic.BaseModel`](https://docs.pydantic.dev/latest/concepts/models/), pass 
+it as single parameter to your function, and pass `inputs_arg=True` to the 
+`@process` decorator. Now the generated process description will report the class' 
+fields as inputs rather than the model class as single input. Conceptually:
+
+```python
+from typing import Annotated
+
+from pydantic import BaseModel, Field
+from s2gos_common.process import JobContext, ProcessRegistry
+
+
+class ArgsModel(BaseModel):
+    # Required positional arguments
+    arg1: Annotated[Type1, Field(..., **Specs1]
+    arg2: Annotated[Type2, Field(..., **Specs2]
+    # ...
+    # Optional keyword arguments
+    kwarg1: Annotated[Type1, Field(..., Specs1] = Default1
+    kwarg2: Annotated[Type2, Field(..., Specs2] = Default2
+    # ...
+
+    
+registry = ProcessRegistry()
+
+@registry.process(inputs_arg=True)
+def my_func(args: ArgsModel) -> MyResult:
+    ...
+```
+
 ### 2. Define CLI instance
 
 In a second step you define an instance of a common process CLI and pass it 
