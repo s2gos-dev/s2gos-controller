@@ -1,6 +1,6 @@
 # DevOps Tools – High-Level Overview
 
-![Deployment](/assets/deployment.png)
+![Deployment](assets/deployment.png)
 
 To deliver and operate the S2GOS service efficiently, we apply modern DevOps practices.
 These ensure that software is built, tested, and deployed in a reliable, repeatable, 
