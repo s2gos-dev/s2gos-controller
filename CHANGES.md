@@ -20,6 +20,8 @@
   and `execute-process` of `s2gos-client` and `s2gos-common`. 
   If set, allows for passing input names using a dot-path notion
   to encode nested values (e.g., `-i scene.colors.bg=red`).
+- Added high level overview of various DevOps tools which will be used in the 
+  development of services.
 
 ## Changes in version 0.0.3
 
