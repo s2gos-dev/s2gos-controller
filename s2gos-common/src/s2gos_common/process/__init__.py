@@ -3,7 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 from .cli.cli import get_cli
-from .cli.request import ExecutionRequest
+from .request import ExecutionRequest
 from .job import Job, JobCancelledException, JobContext
 from .process import Process
 from .registry import ProcessRegistry

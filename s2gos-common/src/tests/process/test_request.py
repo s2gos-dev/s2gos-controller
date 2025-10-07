@@ -11,7 +11,7 @@ import click
 import pytest
 
 from s2gos_common.models import ProcessRequest, Subscriber
-from s2gos_common.process.cli.request import ExecutionRequest
+from s2gos_common.process.request import ExecutionRequest
 
 REQUEST_PATH = "test-request.yaml"
 
