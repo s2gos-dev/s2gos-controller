@@ -141,12 +141,9 @@ class AirflowService(ServiceBase):
             conf=process_request.inputs,
             logical_date=logical_date,
         )
-        print("execute_process #1")
         try:
             dag_run = self.airflow_dag_run_api.trigger_dag_run(process_id, dag_run_body)
-            print("execute_process #2", dag_run)
         except ApiException as e:
-            print("execute_process #3", e)
             raise ServiceException(e.status, e.reason, exception=e) from e
         return self.dag_run_to_job_info(dag_run)
 

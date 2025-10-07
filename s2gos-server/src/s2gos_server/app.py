@@ -61,4 +61,4 @@ class LogMessageFilter(logging.Filter):
 
 
 # Apply the filter to the uvicorn.access logger
-logging.getLogger("uvicorn.access").addFilter(LogMessageFilter())
+logging.getLogger("uvicorn.access").addFilter(LogMessageFilter("/jobs"))
