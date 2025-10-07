@@ -28,7 +28,7 @@ changes are made. This reduces errors and speeds up development.
 reflected in the running system. It continuously monitors and synchronizes deployments, 
 reducing manual intervention.
 
-3. **Monitoring & Observability** 
+3. **Monitoring and Observability** 
 
 - `Prometheus and Grafana` – provide live insights into the system’s health and 
 performance (e.g., resource usage, response times). This allows early detection of 
@@ -36,3 +36,11 @@ issues and helps optimize resources.
 
 - `Jaeger` – used for tracing requests across services, which helps diagnose problems 
 and improve efficiency of workflows. 
+
+4. **Security and Access**
+
+- `Keycloak` – a central system for user authentication and authorisation. 
+   It enables single sign-on and ensures that only authorised users can access services.
+
+- `Sealed Secrets` - allows us to store passwords and keys safely in Kubernetes without
+   exposing them in plain text.
