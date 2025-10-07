@@ -7,7 +7,7 @@ from unittest import TestCase
 
 from fastapi.testclient import TestClient
 
-from s2gos_server.app import LogMessageFilter
+from s2gos_server.logging import LogMessageFilter
 from s2gos_server.main import app
 from s2gos_server.provider import ServiceProvider
 from s2gos_server.services.local.testing import service
