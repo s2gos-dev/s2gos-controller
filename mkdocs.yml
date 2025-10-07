@@ -16,7 +16,6 @@ nav:
   - Process Development: process-dev.md
   - Contributing: contributing.md
   - Roadmap: roadmap.md
-  - Deployment: deployment.md
 
 theme:
   name: material
