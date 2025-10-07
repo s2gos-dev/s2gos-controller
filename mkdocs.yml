@@ -13,7 +13,7 @@ nav:
   - Architecture: architecture.md
   - Client CLI: client-cli.md
   - Client API: client-api.md
-  - Notebooks:
+  - Client Usage:
         - notebooks/client-gui.ipynb
         - notebooks/client-api.ipynb
         - notebooks/client-api-airflow.ipynb
