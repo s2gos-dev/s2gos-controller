@@ -13,6 +13,11 @@ nav:
   - Architecture: architecture.md
   - Client CLI: client-cli.md
   - Client API: client-api.md
+  - Client Usage:
+        - notebooks/client-gui.ipynb
+        - notebooks/client-api.ipynb
+        - notebooks/client-api-airflow.ipynb
+        - notebooks/client-cli.ipynb
   - Process Development: process-dev.md
   - Contributing: contributing.md
   - Roadmap: roadmap.md
@@ -34,6 +39,7 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+  custom_dir: docs\overrides
 
 markdown_extensions:
   - attr_list
@@ -62,6 +68,7 @@ plugins:
   - search
   - autorefs
   - mermaid2
+  - mkdocs-jupyter
   - mkdocstrings:
       handlers:
         python:
@@ -73,3 +80,9 @@ plugins:
             heading_level: 2
             annotations_path: brief
             members_order: source
+
+extra_css:
+    - overrides/css/custom.css
+
+hooks:
+    - docs\hooks\notebooks_json_output.py

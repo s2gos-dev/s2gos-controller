@@ -41,6 +41,7 @@ class ExecutionRequest(ProcessRequest):
             URLs that are informed about process status changes
             while the processing takes place.
     """
+
     process_id: Annotated[str, Field(title="Process identifier", min_length=1)]
     dotpath: Annotated[
         bool, Field(title="Whether to encode nested input values using dots ('.').")

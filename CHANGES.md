@@ -1,5 +1,9 @@
 ## Changes in version 0.0.4 (in development)
 
+- Added a keyword-argument `inputs_arg: str | bool` to the `ProcessRegistry.process`
+  decorator. If specified, it defines an _inputs argument_, which is used to 
+  define the process inputs in form of a dataclass derived from 
+  `pydantic.BaseModel`. (#35)
 - Now supporting the OpenAPI/JSON Schema `disscriminator` property 
   in `tools/openapi.yaml/schemas/schema` and generated models. (#36)
 - Renamed `s2gos_common.process.cli.ProcessingRequest` into
@@ -22,6 +26,8 @@
   to encode nested values (e.g., `-i scene.colors.bg=red`).
 - Added high level overview of various DevOps tools which will be used in the 
   development of services.
+- Added Jupyter Notebooks to documentation.
+
 
 ## Changes in version 0.0.3
 

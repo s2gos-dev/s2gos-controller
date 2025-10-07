@@ -243,9 +243,9 @@ class Job(JobContext):
         ctx = __job_context__ = self  # noqa: F841
 
         # check if we need to inject job context
-        ctx_args = self.process.job_ctx_args
-        if ctx_args:
-            function_kwargs = {**{k: ctx for k in ctx_args}, **self.function_kwargs}
+        ctx_arg = self.process.job_ctx_arg
+        if ctx_arg:
+            function_kwargs = {**self.function_kwargs, ctx_arg: ctx}
         else:
             function_kwargs = self.function_kwargs
 
