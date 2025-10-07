@@ -53,6 +53,8 @@ mkdocs-autorefs = "*"
 mkdocs-material = "*"
 mkdocstrings = "*"
 mkdocstrings-python = "*"
+mkdocs-jupyter = "*"
+nbformat = "*"
 # For mermaid diagrams
 pymdown-extensions = "*"
 

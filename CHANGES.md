@@ -24,6 +24,7 @@
   and `execute-process` of `s2gos-client` and `s2gos-common`. 
   If set, allows for passing input names using a dot-path notion
   to encode nested values (e.g., `-i scene.colors.bg=red`).
+- Added Jupyter Notebooks to documentation.
 
 ## Changes in version 0.0.3
 
