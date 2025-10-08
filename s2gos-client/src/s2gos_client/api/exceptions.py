@@ -14,7 +14,7 @@ class ClientException(Exception):
     - the received JSON response is not parsable.
 
     Args:
-        message: the error message
+        message: The error message
         api_error: The details describing the error that occurred on the server
             or the details that describe a non-expected response from the server.
     """
