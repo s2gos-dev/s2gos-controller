@@ -2,6 +2,7 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+import logging
 from typing import Annotated, Optional
 
 import typer
@@ -13,6 +14,7 @@ from s2gos_server.constants import (
     ENV_VAR_SERVER_PORT,
     ENV_VAR_SERVICE,
 )
+from s2gos_server.logging import LogMessageFilter
 
 CLI_HELP = """
 Server for the ESA synthetic scene generator service DTE-S2GOS.
@@ -121,6 +123,9 @@ def run_server(**kwargs):
     service = kwargs.pop("service", None)
     if isinstance(service, list) and service:
         os.environ[ENV_VAR_SERVICE] = shlex.join(service)
+
+    # Apply the filter to the uvicorn.access logger
+    logging.getLogger("uvicorn.access").addFilter(LogMessageFilter("/jobs"))
 
     uvicorn.run("s2gos_server.main:app", **kwargs)
 

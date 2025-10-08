@@ -9,15 +9,13 @@ import param
 
 from s2gos_client.api.exceptions import ClientException
 from s2gos_common.models import (
-    Format,
     JobInfo,
     JobList,
-    Output,
     ProcessDescription,
     ProcessList,
     ProcessRequest,
-    TransmissionMode,
 )
+from s2gos_common.process import ExecutionRequest
 
 from .component.container import ComponentContainer
 from .job_info_panel import JobInfoPanel
@@ -179,10 +177,12 @@ class MainPanel(pn.viewable.Viewer):
             self._outputs_panel[:] = []
 
     def _on_execute_button_clicked(self, _event: Any = None):
-        process_id, process_request = self._new_process_request()
+        execution_request = self._new_execution_request()
         try:
             self._execute_button.disabled = True
-            job_info = self._on_execute_process(process_id, process_request)
+            job_info = self._on_execute_process(
+                execution_request.process_id, execution_request.to_process_request()
+            )
             self._job_info_panel.job_info = job_info
         except ClientException as e:
             self._job_info_panel.client_error = e
@@ -205,15 +205,14 @@ class MainPanel(pn.viewable.Viewer):
         # noinspection PyProtectedMember
         from IPython import get_ipython
 
-        _, process_request = self._new_process_request()
         var_name = "_request"
-        get_ipython().user_ns[var_name] = process_request
+        get_ipython().user_ns[var_name] = self._new_execution_request()
 
     def _update_buttons(self):
         # TODO implement action enablement
         pass
 
-    def _new_process_request(self) -> tuple[str, ProcessRequest]:
+    def _new_execution_request(self) -> ExecutionRequest:
         process_id = self._process_select.value
         assert process_id is not None
 
@@ -223,19 +222,10 @@ class MainPanel(pn.viewable.Viewer):
         component_container = self._component_container
         assert component_container is not None
 
-        return process_id, ProcessRequest(
+        return ExecutionRequest(
+            process_id=process_id,
+            dotpath=True,
             inputs=component_container.get_json_values(),
-            outputs={
-                k: Output(
-                    format=Format(
-                        mediaType="application/json",
-                        encoding="UTF-8",
-                        schema=v.schema_,
-                    ),
-                    transmissionMode=TransmissionMode.value,
-                )
-                for k, v in process_description.outputs.items()
-            },
         )
 
 

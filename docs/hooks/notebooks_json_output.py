@@ -6,7 +6,6 @@ from pathlib import Path
 import nbformat as nbf
 
 
-
 def on_pre_build(config):
     """
     Runs the updates once before the build of the documentation

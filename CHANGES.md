@@ -1,10 +1,16 @@
 ## Changes in version 0.0.4 (in development)
 
+- Prevent server from logging `/jobs` request, as they are used for polling. 
+- Prevent client from logging at all if we are not debugging. 
+- Client GUI uses `ExecutionRequest` rather than `ProcessRequest` to 
+  allow users copying the processing request into a file for the CLI. 
+  Therefore, `s2gos_common.process.ExecutionRequest` is now a 
+  public API class.
 - Added a keyword-argument `inputs_arg: str | bool` to the `ProcessRegistry.process`
   decorator. If specified, it defines an _inputs argument_, which is used to 
   define the process inputs in form of a dataclass derived from 
   `pydantic.BaseModel`. (#35)
-- Now supporting the OpenAPI/JSON Schema `disscriminator` property 
+- Now supporting the OpenAPI/JSON Schema `discriminator` property 
   in `tools/openapi.yaml/schemas/schema` and generated models. (#36)
 - Renamed `s2gos_common.process.cli.ProcessingRequest` into
   `s2gos_common.process.cli.ExecutionRequest`.

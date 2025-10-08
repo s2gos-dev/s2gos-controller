@@ -2,6 +2,7 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+import logging
 from typing import Any
 
 import httpx
@@ -21,6 +22,11 @@ class HttpxTransport(Transport, AsyncTransport):
         self.debug = debug
         self.sync_httpx: httpx.Client | None = None
         self.async_httpx: httpx.AsyncClient | None = None
+        # Note, by default, we silence the httpx logger, however it may be
+        #   useful to make that configurable
+        logging.getLogger("httpx").setLevel(
+            logging.DEBUG if debug else logging.CRITICAL
+        )
 
     def call(self, args: TransportArgs) -> Any:
         if self.sync_httpx is None:

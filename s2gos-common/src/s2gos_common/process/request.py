@@ -22,9 +22,11 @@ SUBSCRIBER_EVENTS = {
 
 class ExecutionRequest(ProcessRequest):
     """
-    Process execution request as used by the CLI.
-    Extends [ProcessRequest][ProcessRequest] to allow the process
-    identifier being part of the request.
+    Process execution request.
+    Extends [ProcessRequest][ProcessRequest]
+
+    - to allow the process identifier being part of the request,
+    - to allow creating nested object values for input names with dots.
 
     Args:
         process_id: Process identifier

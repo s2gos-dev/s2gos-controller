@@ -122,7 +122,7 @@ def execute_process(
     settings with same name found in the given request file or `stdin`, if any.
     """
     from s2gos_common.process import Job
-    from s2gos_common.process.cli.request import ExecutionRequest
+    from s2gos_common.process.request import ExecutionRequest
 
     process_registry = _get_process_registry(ctx)
     execution_request = ExecutionRequest.create(
