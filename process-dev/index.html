@@ -9,7 +9,7 @@
       
       
       
-        <link rel="prev" href="../client-api/">
+        <link rel="prev" href="../notebooks/client-cli/">
       
       
         <link rel="next" href="../contributing/">
@@ -47,6 +47,8 @@
     
     
       <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../overrides/css/custom.css">
     
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -339,6 +341,143 @@
       
   
   
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Client Usage
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Client Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notebooks/client-gui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    GUI usage
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notebooks/client-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Python API usage
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notebooks/client-api-airflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Airflow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notebooks/client-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CLI usage
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -617,6 +756,30 @@
       ExecutionRequest
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="ExecutionRequest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.ExecutionRequest.to_process_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_process_request
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.ExecutionRequest.from_process_description" class="md-nav__link">
+    <span class="md-ellipsis">
+      from_process_description
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -929,6 +1092,30 @@
       ExecutionRequest
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="ExecutionRequest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.ExecutionRequest.to_process_request" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_process_request
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s2gos_common.process.ExecutionRequest.from_process_description" class="md-nav__link">
+    <span class="md-ellipsis">
+      from_process_description
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -1934,9 +2121,12 @@ function that returns a registry instance.</p>
               Bases: <code><span title="s2gos_common.models.ProcessRequest">ProcessRequest</span></code></p>
 
 
-        <p>Process execution request as used by the CLI.
-Extends [ProcessRequest][] to allow the process
-identifier being part of the request.</p>
+        <p>Process execution request.
+Extends [ProcessRequest][]</p>
+<ul>
+<li>to allow the process identifier being part of the request,</li>
+<li>to allow creating nested object values for input names with dots.</li>
+</ul>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2054,6 +2244,121 @@ while the processing takes place.</p>
 
 
 
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="s2gos_common.process.ExecutionRequest.to_process_request" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">to_process_request</span><span class="p">()</span></code>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Convert this execution request into a process request as used by the
+<code>execute-process</code> operation.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="s2gos_common.process.ExecutionRequest.from_process_description" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">from_process_description</span><span class="p">(</span><span class="n">process_description</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Create a execution request from the given process description.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>process_description</code>
+            </td>
+            <td>
+                  <code><span title="s2gos_common.models.ProcessDescription">ProcessDescription</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The process description</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>format</code>
+            </td>
+            <td>
+                  <code><span title="typing.Literal">Literal</span>[&#39;obj&#39;, &#39;dict&#39;, &#39;yaml&#39;, &#39;json&#39;] | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The format of the returned value.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="s2gos_common.process.ExecutionRequest (s2gos_common.process.request.ExecutionRequest)" href="#s2gos_common.process.ExecutionRequest">ExecutionRequest</a>, <span title="dict">dict</span>, <span title="str">str</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The returned type and form depends on the <code>format</code> argument:
+- <code>"obj"</code> or <code>None</code>: type <code>ExecutionRequest</code> (the default),
+- <code>"dict"</code>: type <code>dict</code>, plain dictionary,
+- <code>"yaml"</code>: type <code>str</code> using YAML format,
+- <code>"json"</code>: type <code>str</code> using JSON format.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
 
 
 

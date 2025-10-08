@@ -16,7 +16,7 @@
     
     
       
-        <title>Execution request format - ESA DTE-S2GOS Controller</title>
+        <title>DevOps Tools – High-Level Overview - ESA DTE-S2GOS Controller</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#execution-request-format" class="md-skip">
+        <a href="#devops-tools-high-level-overview" class="md-skip">
           Skip to content
         </a>
       
@@ -107,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Execution request format
+              DevOps Tools – High-Level Overview
             
           </span>
         </div>
@@ -573,8 +573,65 @@
   
 
 
-<h1 id="execution-request-format">Execution request format</h1>
-<p>TODO</p>
+<h1 id="devops-tools-high-level-overview">DevOps Tools – High-Level Overview</h1>
+<p><img alt="Deployment" src="../assets/deployment.png" /></p>
+<p>To deliver and operate the S2GOS service efficiently, we apply modern DevOps practices.
+These ensure that software is built, tested, and deployed in a reliable, repeatable, 
+and secure way. The main tools can be grouped as follows: </p>
+<ol>
+<li>
+<p><strong>Infrastructure &amp; Deployment</strong> </p>
+</li>
+<li>
+<p><code>Kubernetes</code> – the platform on which all services run. It allows applications 
+   to scale automatically, restart when needed, and be isolated for reliability. </p>
+</li>
+<li>
+<p><code>Helm</code> – a package manager for Kubernetes. It makes deploying complex applications 
+much simpler and ensures they can be installed the same way across different 
+environments. </p>
+</li>
+<li>
+<p><code>Terraform</code> – used to set up the underlying cloud resources (servers, storage, 
+networks). It guarantees that infrastructure is defined in code, so it can be 
+  reproduced, audited, and updated consistently.</p>
+</li>
+<li>
+<p><strong>Continuous Integration &amp; Delivery (CI/CD)</strong> </p>
+</li>
+<li>
+<p><code>GitHub Actions</code> – automates testing and building of the software whenever code 
+changes are made. This reduces errors and speeds up development. </p>
+</li>
+<li>
+<p><code>ArgoCD</code> – ensures that what is defined in the project repositories is always 
+reflected in the running system. It continuously monitors and synchronizes deployments, 
+reducing manual intervention.</p>
+</li>
+<li>
+<p><strong>Monitoring and Observability</strong> </p>
+</li>
+<li>
+<p><code>Prometheus and Grafana</code> – provide live insights into the system’s health and 
+performance (e.g., resource usage, response times). This allows early detection of 
+issues and helps optimize resources. </p>
+</li>
+<li>
+<p><code>Jaeger</code> – used for tracing requests across services, which helps diagnose problems 
+and improve efficiency of workflows. </p>
+</li>
+<li>
+<p><strong>Security and Access</strong></p>
+</li>
+<li>
+<p><code>Keycloak</code> – a central system for user authentication and authorisation. 
+   It enables single sign-on and ensures that only authorised users can access services.</p>
+</li>
+<li>
+<p><code>Sealed Secrets</code> - allows us to store passwords and keys safely in Kubernetes without
+   exposing them in plain text.</p>
+</li>
+</ol>
 
 
 
