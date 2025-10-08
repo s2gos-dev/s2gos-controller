@@ -255,19 +255,14 @@ class ExecutionRequestFromProcessDescriptionTest(TestCase):
         [None, Schema(nullable=True)],
     ]
 
-    # noinspection PyShadowingBuiltins
-    def get_actual_execution_request(self, format: str | None = None):
-        return ExecutionRequest.from_process_description(
-            ProcessDescription(
-                id="T13",
-                version="0",
-                inputs={
-                    f"p{i}": InputDescription(schema=schema)
-                    for i, (_, schema) in enumerate(self.cases)
-                },
-            ),
-            format=format,
-        )
+    process_description = ProcessDescription(
+        id="T13",
+        version="0",
+        inputs={
+            f"p{i}": InputDescription(schema=schema)
+            for i, (_, schema) in enumerate(cases)
+        },
+    )
 
     def get_expected_execution_request(self):
         return ExecutionRequest(
@@ -290,13 +285,18 @@ class ExecutionRequestFromProcessDescriptionTest(TestCase):
     def test_obj_no_arg(self):
         self.assertEqual(
             self.get_expected_execution_request(),
-            self.get_actual_execution_request(),
+            ExecutionRequest.from_process_description(
+                self.process_description,
+            ),
         )
 
     def test_obj(self):
         self.assertEqual(
             self.get_expected_execution_request(),
-            self.get_actual_execution_request(format="obj"),
+            ExecutionRequest.from_process_description(
+                self.process_description,
+                format="obj",
+            ),
         )
 
     def test_dict(self):
@@ -304,7 +304,10 @@ class ExecutionRequestFromProcessDescriptionTest(TestCase):
             self.get_expected_execution_request().model_dump(
                 mode="json", exclude_unset=True
             ),
-            self.get_actual_execution_request(format="dict"),
+            ExecutionRequest.from_process_description(
+                self.process_description,
+                format="dict",
+            ),
         )
 
     def test_json(self):
@@ -312,7 +315,10 @@ class ExecutionRequestFromProcessDescriptionTest(TestCase):
             self.get_expected_execution_request().model_dump_json(
                 exclude_unset=True, indent=2
             ),
-            self.get_actual_execution_request(format="json"),
+            ExecutionRequest.from_process_description(
+                self.process_description,
+                format="json",
+            ),
         )
 
     def test_yaml(self):
@@ -323,7 +329,10 @@ class ExecutionRequestFromProcessDescriptionTest(TestCase):
                 self.get_expected_execution_request().model_dump(exclude_unset=True),
                 indent=2,
             ),
-            self.get_actual_execution_request(format="yaml"),
+            ExecutionRequest.from_process_description(
+                self.process_description,
+                format="yaml",
+            ),
         )
 
 
