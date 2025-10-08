@@ -3,20 +3,26 @@
 #  https://opensource.org/license/apache-2-0.
 
 import os
-import unittest
+from unittest import TestCase
 from io import StringIO
 from unittest.mock import patch
 
 import click
 import pytest
 
-from s2gos_common.models import ProcessRequest, Subscriber
+from s2gos_common.models import (
+    ProcessRequest,
+    Subscriber,
+    ProcessDescription,
+    InputDescription,
+    Schema,
+)
 from s2gos_common.process.request import ExecutionRequest
 
 REQUEST_PATH = "test-request.yaml"
 
 
-class ExecutionRequestTest(unittest.TestCase):
+class ExecutionRequestTest(TestCase):
     def tearDown(self):
         if os.path.exists(REQUEST_PATH):
             os.remove(REQUEST_PATH)
@@ -232,7 +238,96 @@ class ExecutionRequestTest(unittest.TestCase):
             )
 
 
-class ExecutionRequestHelpersTest(unittest.TestCase):
+class ExecutionRequestFromProcessDescriptionTest(TestCase):
+    # noinspection PyArgumentList
+    cases = [
+        [None, {}],
+        [None, Schema()],
+        [983, Schema(default=983)],
+        ["bibo", Schema(default="bibo", type="string")],
+        [False, Schema(type="boolean")],
+        [0, Schema(type="integer")],
+        [0, Schema(type="number")],
+        ["", Schema(type="string")],
+        [[], Schema(type="array")],
+        [{}, Schema(type="object")],
+        ["bert", Schema(enum=["bert", "ernie"])],
+        [None, Schema(nullable=True)],
+    ]
+
+    # noinspection PyShadowingBuiltins
+    def get_actual_execution_request(self, format: str | None = None):
+        return ExecutionRequest.from_process_description(
+            ProcessDescription(
+                id="T13",
+                version="0",
+                inputs={
+                    f"p{i}": InputDescription(schema=schema)
+                    for i, (_, schema) in enumerate(self.cases)
+                },
+            ),
+            format=format,
+        )
+
+    def get_expected_execution_request(self):
+        return ExecutionRequest(
+            process_id="T13",
+            inputs={
+                f"p{i}": expected_value
+                for i, (expected_value, _) in enumerate(self.cases)
+            },
+            outputs={},
+        )
+
+    def test_obj_no_inputs(self):
+        self.assertEqual(
+            ExecutionRequest(process_id="T13", inputs={}, outputs={}),
+            ExecutionRequest.from_process_description(
+                ProcessDescription(id="T13", version="0")
+            ),
+        )
+
+    def test_obj_no_arg(self):
+        self.assertEqual(
+            self.get_expected_execution_request(),
+            self.get_actual_execution_request(),
+        )
+
+    def test_obj(self):
+        self.assertEqual(
+            self.get_expected_execution_request(),
+            self.get_actual_execution_request(format="obj"),
+        )
+
+    def test_dict(self):
+        self.assertEqual(
+            self.get_expected_execution_request().model_dump(
+                mode="json", exclude_unset=True
+            ),
+            self.get_actual_execution_request(format="dict"),
+        )
+
+    def test_json(self):
+        self.assertEqual(
+            self.get_expected_execution_request().model_dump_json(
+                exclude_unset=True, indent=2
+            ),
+            self.get_actual_execution_request(format="json"),
+        )
+
+    def test_yaml(self):
+        import yaml
+
+        self.assertEqual(
+            yaml.dump(
+                self.get_expected_execution_request().model_dump(exclude_unset=True),
+                indent=2,
+            ),
+            self.get_actual_execution_request(format="yaml"),
+        )
+
+
+class ExecutionRequestHelpersTest(TestCase):
     def test_nest_dict(self):
         self.assertEqual(
             {"a": 1, "b": True}, ExecutionRequest._nest_dict({"a": 1, "b": True})

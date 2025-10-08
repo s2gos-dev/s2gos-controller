@@ -5,13 +5,13 @@
 import sys
 from io import StringIO
 from pathlib import Path
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal, Union
 
 import click
 import pydantic
 from pydantic import Field
 
-from s2gos_common.models import ProcessRequest
+from s2gos_common.models import ProcessRequest, ProcessDescription, InputDescription
 
 SUBSCRIBER_EVENTS = {
     "success": "successUri",
@@ -50,6 +50,10 @@ class ExecutionRequest(ProcessRequest):
     ] = False
 
     def to_process_request(self) -> ProcessRequest:
+        """
+        Convert this execution request into a process request as used by the
+        `execute-process` operation.
+        """
         inputs = self.inputs
         if inputs and self.dotpath:
             inputs = self._nest_dict(inputs)
@@ -59,6 +63,74 @@ class ExecutionRequest(ProcessRequest):
             response=self.response,
             subscriber=self.subscriber,
         )
+
+    # noinspection PyShadowingBuiltins
+    @classmethod
+    def from_process_description(
+        cls,
+        process_description: ProcessDescription,
+        format: Literal["obj"] | None = None,
+    ) -> "ExecutionRequest": ...
+    # noinspection PyShadowingBuiltins
+    @classmethod
+    def from_process_description(
+        cls,
+        process_description: ProcessDescription,
+        format: Literal["dict"],
+    ) -> dict[str, Any]: ...
+    # noinspection PyShadowingBuiltins
+    @classmethod
+    def from_process_description(
+        cls,
+        process_description: ProcessDescription,
+        format: Literal["yaml"],
+    ) -> str: ...
+    # noinspection PyShadowingBuiltins
+    @classmethod
+    def from_process_description(
+        cls,
+        process_description: ProcessDescription,
+        format: Literal["json"],
+    ) -> str: ...
+    # noinspection PyShadowingBuiltins
+    @classmethod
+    def from_process_description(
+        cls,
+        process_description: ProcessDescription,
+        format: Literal["obj", "dict", "yaml", "json"] | None = None,
+    ) -> Union["ExecutionRequest", dict, str]:
+        """
+        Create a execution request from the given process description.
+
+        Args:
+            process_description: The process description
+            format: The format of the returned value.
+
+        Returns:
+            The returned type and form depends on the `format` argument:
+                - `"obj"` or `None`: type `ExecutionRequest` (the default),
+                - `"dict"`: type `dict`, plain dictionary,
+                - `"yaml"`: type `str` using YAML format,
+                - `"json"`: type `str` using JSON format.
+
+        """
+        request = _from_process_description(process_description)
+
+        if format is None or format == "obj":
+            return request
+
+        if format == "dict":
+            return request.model_dump(exclude_unset=True)
+
+        if format == "json":
+            return request.model_dump_json(exclude_unset=True, indent=2)
+
+        if format == "yaml":
+            import yaml
+
+            return yaml.dump(request.model_dump(exclude_unset=True), indent=2)
+
+        raise ValueError(f"illegal format: {format!r}")
 
     @classmethod
     def create(
@@ -193,3 +265,48 @@ def _parse_subscriber_url(value: str):
     if not all([url.scheme in ("http", "https"), url.netloc]):
         raise click.ClickException(f"Invalid subscriber URL: {value!r}")
     return value
+
+
+# noinspection PyShadowingBuiltins
+def _from_process_description(
+    process_description: ProcessDescription,
+) -> ExecutionRequest:
+    return ExecutionRequest(
+        process_id=process_description.id,
+        inputs={
+            k: _get_input_default_value(v)
+            for k, v in (process_description.inputs or {}).items()
+        },
+        outputs={},
+    )
+
+
+_JSON_DATA_TYPE_DEFAULT_VALUES = {
+    "null": None,
+    "boolean": False,
+    "integer": 0,
+    "number": 0,
+    "string": "",
+    "array": [],
+    "object": {},
+}
+
+
+def _get_input_default_value(
+    input_description: InputDescription,
+) -> Any:
+    if input_description.schema_ is None:
+        return None
+    schema = input_description.schema_.model_dump(mode="json", exclude_unset=True)
+    print("schema:", schema)
+    if "default" in schema:
+        return schema["default"]
+    if "enum" in schema and isinstance(schema["enum"], list) and schema["enum"]:
+        return schema["enum"][0]
+    if "type" in schema and isinstance(schema["type"], str) and schema["type"]:
+        type_ = schema["type"]
+        print("type:", type_)
+        # TODO: if type == "object" we should create a default value from the
+        #   schema's "properties" and "required" properties
+        return _JSON_DATA_TYPE_DEFAULT_VALUES.get(type_)
+    return None
