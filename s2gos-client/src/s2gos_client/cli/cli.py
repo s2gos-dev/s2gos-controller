@@ -173,6 +173,33 @@ def get_process(
 
 
 @cli.command()
+def create_request(
+    ctx: typer.Context,
+    process_id: Annotated[Optional[str], PROCESS_ID_ARGUMENT] = None,
+    dotpath: Annotated[bool, DOT_PATH_OPTION] = False,
+    config_file: Annotated[Optional[str], CONFIG_OPTION] = None,
+    output_format: Annotated[OutputFormat, FORMAT_OPTION] = DEFAULT_OUTPUT_FORMAT,
+):
+    """
+    Validate a process execution request.
+
+    The execution request to be validated may be read from a file given
+    by `--request`, or from `stdin`, or from the `process_id` argument
+    with zero, one, or more `--input` (or `-i`) options.
+
+    The `process_id` argument and any given `--input` options will override
+    settings with same name found in the given request file or `stdin`, if any.
+    """
+    from .client import use_client
+    from .output import get_renderer, output
+
+    with use_client(ctx, config_file) as client:
+        request = client.create_execution_request_template(process_id)
+
+    output(get_renderer(output_format).render_execution_request_valid(request))
+
+
+@cli.command()
 def validate_request(
     process_id: Annotated[Optional[str], PROCESS_ID_ARGUMENT] = None,
     dotpath: Annotated[bool, DOT_PATH_OPTION] = False,
