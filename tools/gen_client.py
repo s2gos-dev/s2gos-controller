@@ -85,7 +85,7 @@ class {{ uc_async }}Client({{ uc_async }}ClientMixin):
 
     def _repr_json_(self):
         # noinspection PyProtectedMember
-        return self._config._repr_json_()
+        return self.config._repr_json_()
 
 {{ client_methods }}        
 """

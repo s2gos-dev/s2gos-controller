@@ -5,13 +5,14 @@
 import sys
 from io import StringIO
 from pathlib import Path
-from typing import Annotated, Any, Literal, Union
+from typing import Annotated, Any
 
 import click
 import pydantic
 from pydantic import Field
 
 from s2gos_common.models import ProcessRequest, ProcessDescription
+from s2gos_common.util.obj import nest_obj
 
 SUBSCRIBER_EVENTS = {
     "success": "successUri",
@@ -57,7 +58,7 @@ class ExecutionRequest(ProcessRequest):
         """
         inputs = self.inputs
         if inputs and self.dotpath:
-            inputs = self._nest_dict(inputs)
+            inputs = nest_obj(inputs)
         return ProcessRequest(
             inputs=inputs,
             outputs=self.outputs,
@@ -96,49 +97,20 @@ class ExecutionRequest(ProcessRequest):
     def from_process_description(
         cls,
         process_description: ProcessDescription,
-        dotpath: bool = False,
-        format: Literal["obj", "dict", "yaml", "json"] | None = None,
-    ) -> Union["ExecutionRequest", dict, str]:
+        dotpath: bool | None = None,
+    ) -> "ExecutionRequest":
         """
         Create an execution request from the given process description.
 
         Args:
             process_description: The process description
-            dotpath: Whether to create dot-separated input
+            dotpath: Whether to allow for dot-separated input
                 names for nested object values
-            format: The format of the returned value.
 
         Returns:
-            The returned type and form depends on the `format` argument:
-                - `"obj"` or `None`: type [`ExecutionRequest`][ExecutionRequest]
-                   (the default),
-                - `"dict"`: type `dict`, plain dictionary,
-                - `"yaml"`: type `str` using YAML format,
-                - `"json"`: type `str` using JSON format.
+            The execution requests populated with default values.
         """
-        request = _from_process_description(process_description, dotpath)
-        if format is None or format == "obj":
-            return request
-        if format == "dict":
-            return request.model_dump(exclude_unset=True)
-        if format == "json":
-            return request.model_dump_json(exclude_unset=True, indent=2)
-        if format == "yaml":
-            import yaml
-
-            return yaml.dump(request.model_dump(exclude_unset=True), indent=2)
-        raise ValueError(f"illegal format: {format!r}")
-
-    @classmethod
-    def _nest_dict(cls, flat_dict: dict[str, Any]) -> dict[str, Any]:
-        nested_dict: dict[str, Any] = {}
-        for key, value in flat_dict.items():
-            path = key.split(".")
-            current = nested_dict
-            for name in path[:-1]:
-                current = current.setdefault(name, {})
-            current[path[-1]] = value
-        return nested_dict
+        return _from_process_description(process_description, dotpath)
 
 
 def _read_execution_request(
@@ -237,13 +209,9 @@ def _parse_subscriber_url(value: str):
     return value
 
 
-def _flatten_inputs(inputs):
-    return inputs
-
-
 # noinspection PyShadowingBuiltins
 def _from_process_description(
-    process_description: ProcessDescription, dotpath: bool
+    process_description: ProcessDescription, dotpath: bool | None
 ) -> ExecutionRequest:
     inputs = {
         k: _get_schema_default_value(
@@ -251,13 +219,12 @@ def _from_process_description(
         )
         for k, v in (process_description.inputs or {}).items()
     }
-    if dotpath:
-        inputs = _flatten_inputs(inputs)
-    return ExecutionRequest(
-        process_id=process_description.id,
-        inputs=inputs,
-        outputs={},
-    )
+    if dotpath is None:
+        return ExecutionRequest(process_id=process_description.id, inputs=inputs)
+    else:
+        return ExecutionRequest(
+            process_id=process_description.id, dotpath=dotpath, inputs=inputs
+        )
 
 
 def _get_schema_default_value(schema: Any) -> Any:

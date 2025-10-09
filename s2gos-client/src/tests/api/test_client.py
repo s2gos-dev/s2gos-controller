@@ -4,6 +4,9 @@
 
 from unittest import TestCase
 
+import pytest
+
+from s2gos_common.process import ExecutionRequest
 from tests.helpers import MockTransport
 
 from s2gos_client import ClientConfig
@@ -36,6 +39,34 @@ class ClientTest(TestCase):
         self.assertIsInstance(data, dict)
         self.assertIsInstance(metadata, dict)
         self.assertEqual({"root": "Client configuration:"}, metadata)
+
+    def test_get_execution_request_template(self):
+        template = self.client.get_execution_request_template(process_id="gobabeb_1")
+        self.assertIsInstance(template, ExecutionRequest)
+        self.assertEqual(ExecutionRequest(process_id="ID-1", inputs={}), template)
+
+        template = self.client.get_execution_request_template(
+            process_id="gobabeb_1", mode="json"
+        )
+        self.assertEqual(
+            {"process_id": "ID-2", "dotpath": False, "inputs": {}},
+            template,
+        )
+
+        template = self.client.get_execution_request_template(
+            process_id="gobabeb_1", mode="json", dotpath=True
+        )
+        self.assertEqual(
+            # where is inputs gone? --> check flatten_obj()
+            {"process_id": "ID-3", "dotpath": True},
+            template,
+        )
+
+        with pytest.raises(ValueError):
+            # noinspection PyTypeChecker
+            self.client.get_execution_request_template(
+                process_id="gobabeb_1", mode="java"
+            )
 
     def test_get_capabilities(self):
         result = self.client.get_capabilities()
