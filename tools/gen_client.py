@@ -31,12 +31,14 @@ from typing import Any, Optional
 from s2gos_common.models import {{ model_imports }}
 
 from .config import ClientConfig
+from .async_client_mixin import AsyncClientMixin
+from .client_mixin import ClientMixin
 from .ishell import has_ishell as _  # noqa F401
 from .transport import {{ uc_async }}Transport, TransportArgs
 from .transport.httpx import HttpxTransport
 
 
-class {{ uc_async }}Client:
+class {{ uc_async }}Client({{ uc_async }}ClientMixin):
     \"\"\"    
     The client API for the web service ({{ hr_async }} mode).
 

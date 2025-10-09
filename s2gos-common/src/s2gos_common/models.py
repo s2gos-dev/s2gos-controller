@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from datetime import date
 from enum import Enum
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, Annotated
 
 from pydantic import AnyUrl, AwareDatetime, BaseModel, ConfigDict, Field, RootModel
 
@@ -138,7 +138,7 @@ class JobInfo(BaseModel):
     started: Optional[AwareDatetime] = None
     finished: Optional[AwareDatetime] = None
     updated: Optional[AwareDatetime] = None
-    progress: Optional[int] = Field(None, ge=0, le=100)
+    progress: Annotated[Optional[int], Field(None, ge=0, le=100)] = None
     links: Optional[list[Link]] = None
     traceback: Optional[list[str]] = None
 

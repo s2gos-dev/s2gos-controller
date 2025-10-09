@@ -11,7 +11,7 @@ import click
 import pydantic
 from pydantic import Field
 
-from s2gos_common.models import ProcessRequest, ProcessDescription, InputDescription
+from s2gos_common.models import ProcessRequest, ProcessDescription
 
 SUBSCRIBER_EVENTS = {
     "success": "successUri",
@@ -20,6 +20,7 @@ SUBSCRIBER_EVENTS = {
 }
 
 
+# noinspection PyShadowingBuiltins
 class ExecutionRequest(ProcessRequest):
     """
     Process execution request.
@@ -64,74 +65,6 @@ class ExecutionRequest(ProcessRequest):
             subscriber=self.subscriber,
         )
 
-    # noinspection PyShadowingBuiltins
-    @classmethod
-    def from_process_description(
-        cls,
-        process_description: ProcessDescription,
-        format: Literal["obj"] | None = None,
-    ) -> "ExecutionRequest": ...
-    # noinspection PyShadowingBuiltins
-    @classmethod
-    def from_process_description(
-        cls,
-        process_description: ProcessDescription,
-        format: Literal["dict"],
-    ) -> dict[str, Any]: ...
-    # noinspection PyShadowingBuiltins
-    @classmethod
-    def from_process_description(
-        cls,
-        process_description: ProcessDescription,
-        format: Literal["yaml"],
-    ) -> str: ...
-    # noinspection PyShadowingBuiltins
-    @classmethod
-    def from_process_description(
-        cls,
-        process_description: ProcessDescription,
-        format: Literal["json"],
-    ) -> str: ...
-    # noinspection PyShadowingBuiltins
-    @classmethod
-    def from_process_description(
-        cls,
-        process_description: ProcessDescription,
-        format: Literal["obj", "dict", "yaml", "json"] | None = None,
-    ) -> Union["ExecutionRequest", dict, str]:
-        """
-        Create a execution request from the given process description.
-
-        Args:
-            process_description: The process description
-            format: The format of the returned value.
-
-        Returns:
-            The returned type and form depends on the `format` argument:
-                - `"obj"` or `None`: type `ExecutionRequest` (the default),
-                - `"dict"`: type `dict`, plain dictionary,
-                - `"yaml"`: type `str` using YAML format,
-                - `"json"`: type `str` using JSON format.
-
-        """
-        request = _from_process_description(process_description)
-
-        if format is None or format == "obj":
-            return request
-
-        if format == "dict":
-            return request.model_dump(exclude_unset=True)
-
-        if format == "json":
-            return request.model_dump_json(exclude_unset=True, indent=2)
-
-        if format == "yaml":
-            import yaml
-
-            return yaml.dump(request.model_dump(exclude_unset=True), indent=2)
-
-        raise ValueError(f"illegal format: {format!r}")
-
     @classmethod
     def create(
         cls,
@@ -158,6 +91,43 @@ class ExecutionRequest(ProcessRequest):
             return ExecutionRequest(**request_dict)
         except pydantic.ValidationError as e:
             raise click.ClickException(f"Execution request is invalid: {e}")
+
+    @classmethod
+    def from_process_description(
+        cls,
+        process_description: ProcessDescription,
+        dotpath: bool = False,
+        format: Literal["obj", "dict", "yaml", "json"] | None = None,
+    ) -> Union["ExecutionRequest", dict, str]:
+        """
+        Create an execution request from the given process description.
+
+        Args:
+            process_description: The process description
+            dotpath: Whether to create dot-separated input
+                names for nested object values
+            format: The format of the returned value.
+
+        Returns:
+            The returned type and form depends on the `format` argument:
+                - `"obj"` or `None`: type [`ExecutionRequest`][ExecutionRequest]
+                   (the default),
+                - `"dict"`: type `dict`, plain dictionary,
+                - `"yaml"`: type `str` using YAML format,
+                - `"json"`: type `str` using JSON format.
+        """
+        request = _from_process_description(process_description, dotpath)
+        if format is None or format == "obj":
+            return request
+        if format == "dict":
+            return request.model_dump(exclude_unset=True)
+        if format == "json":
+            return request.model_dump_json(exclude_unset=True, indent=2)
+        if format == "yaml":
+            import yaml
+
+            return yaml.dump(request.model_dump(exclude_unset=True), indent=2)
+        raise ValueError(f"illegal format: {format!r}")
 
     @classmethod
     def _nest_dict(cls, flat_dict: dict[str, Any]) -> dict[str, Any]:
@@ -267,21 +237,49 @@ def _parse_subscriber_url(value: str):
     return value
 
 
+def _flatten_inputs(inputs):
+    return inputs
+
+
 # noinspection PyShadowingBuiltins
 def _from_process_description(
-    process_description: ProcessDescription,
+    process_description: ProcessDescription, dotpath: bool
 ) -> ExecutionRequest:
+    inputs = {
+        k: _get_schema_default_value(
+            v.schema_.model_dump(mode="json", exclude_unset=True) if v.schema else None
+        )
+        for k, v in (process_description.inputs or {}).items()
+    }
+    if dotpath:
+        inputs = _flatten_inputs(inputs)
     return ExecutionRequest(
         process_id=process_description.id,
-        inputs={
-            k: _get_input_default_value(v)
-            for k, v in (process_description.inputs or {}).items()
-        },
+        inputs=inputs,
         outputs={},
     )
 
 
-_JSON_DATA_TYPE_DEFAULT_VALUES = {
+def _get_schema_default_value(schema: Any) -> Any:
+    if schema and isinstance(schema, dict):
+        if "default" in schema:
+            return schema["default"]
+        if "enum" in schema and isinstance(schema["enum"], list) and schema["enum"]:
+            return schema["enum"][0]
+        if "type" in schema and isinstance(schema["type"], str) and schema["type"]:
+            type_ = schema["type"]
+            if type_ == "object" and "properties" in schema:
+                properties_ = schema["properties"]
+                if properties_ and isinstance(properties_, dict):
+                    return {
+                        p_name: _get_schema_default_value(p_schema)
+                        for p_name, p_schema in properties_
+                    }
+            return _JSON_DATA_TYPE_DEFAULT_VALUES.get(type_)
+    return None
+
+
+_JSON_DATA_TYPE_DEFAULT_VALUES: dict[str, Any] = {
     "null": None,
     "boolean": False,
     "integer": 0,
@@ -290,23 +288,3 @@ _JSON_DATA_TYPE_DEFAULT_VALUES = {
     "array": [],
     "object": {},
 }
-
-
-def _get_input_default_value(
-    input_description: InputDescription,
-) -> Any:
-    if input_description.schema_ is None:
-        return None
-    schema = input_description.schema_.model_dump(mode="json", exclude_unset=True)
-    print("schema:", schema)
-    if "default" in schema:
-        return schema["default"]
-    if "enum" in schema and isinstance(schema["enum"], list) and schema["enum"]:
-        return schema["enum"][0]
-    if "type" in schema and isinstance(schema["type"], str) and schema["type"]:
-        type_ = schema["type"]
-        print("type:", type_)
-        # TODO: if type == "object" we should create a default value from the
-        #   schema's "properties" and "required" properties
-        return _JSON_DATA_TYPE_DEFAULT_VALUES.get(type_)
-    return None
