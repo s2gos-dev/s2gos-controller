@@ -1,8 +1,9 @@
 from abc import abstractmethod, ABC
 from typing import Literal, Any, overload
 
+
 from s2gos_common.models import ProcessDescription
-from s2gos_common.process import ExecutionRequest
+from s2gos_common.process import ExecutionRequest, get_execution_request_template
 
 
 # noinspection PyShadowingBuiltins
@@ -13,30 +14,34 @@ class AsyncClientMixin(ABC):
 
     @abstractmethod
     async def get_process(self, process_id: str, **kwargs: Any) -> ProcessDescription:
-        """Will be overridden by actual client class."""
+        """Will be overridden by the actual client class."""
 
     @overload
-    async def create_execution_request_template(
-        self,
-        process_description: ProcessDescription,
-        format: Literal["obj"] | None = None,
-    ) -> ExecutionRequest: ...
-    @overload
-    async def create_execution_request_template(
-        self,
-        process_description: ProcessDescription,
-        format: Literal["dict"],
-    ) -> dict[str, Any]: ...
-    @overload
-    async def create_execution_request_template(
-        self,
-        process_description: ProcessDescription,
-        format: Literal["yaml", "json"],
-    ) -> str: ...
-    async def create_execution_request_template(
+    async def get_execution_request_template(
         self,
         process_id: str,
-        format: Literal["obj", "dict", "json", "yaml"] | None = None,
+    ) -> ExecutionRequest: ...
+    @overload
+    async def get_execution_request_template(
+        self,
+        process_id: str,
+        *,
+        mode: Literal["python"],
+    ) -> ExecutionRequest: ...
+    @overload
+    async def get_execution_request_template(
+        self,
+        process_id: str,
+        *,
+        mode: Literal["json"],
+        dotpath: bool = False,
+    ) -> dict[str, Any]: ...
+    async def get_execution_request_template(
+        self,
+        process_id: str,
+        *,
+        mode: Literal["python", "json"] | None = None,
+        dotpath: bool = False,
     ) -> ExecutionRequest | dict | str:
         """
         Create a template for an execution request
@@ -45,20 +50,20 @@ class AsyncClientMixin(ABC):
 
         Args:
             process_id: The process identifier
-            format: The format of the returned value.
+            mode: The mode which determines the type of the return value,
+            dotpath: Applies to `mode=="json"` only:
+                Whether to create dot-separated input
+                names for nested object values
 
         Returns:
             The returned type and form depends on the `format` argument:
-                - `"obj"` or `None`: type `ExecutionRequest` (the default),
-                - `"dict"`: type `dict`, plain dictionary,
-                - `"yaml"`: type `str` using YAML format,
-                - `"json"`: type `str` using JSON format.
+                - `"python"` or `None`: type `ExecutionRequest` (the default),
+                - `"json"`: type `dict`, a JSON-serializable dictionary.
 
         Raises:
             ClientException: if an error occurs
         """
         process_description = await self.get_process(process_id)
-        # noinspection PyTypeChecker
-        return ExecutionRequest.from_process_description(
-            process_description, format=format
+        return get_execution_request_template(
+            process_description, mode=mode, dotpath=dotpath
         )

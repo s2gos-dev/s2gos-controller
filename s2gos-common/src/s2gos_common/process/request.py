@@ -12,7 +12,7 @@ import pydantic
 from pydantic import Field
 
 from s2gos_common.models import ProcessRequest, ProcessDescription
-from s2gos_common.util.obj import nest_obj
+from s2gos_common.util.obj import nest_obj, flatten_obj
 
 SUBSCRIBER_EVENTS = {
     "success": "successUri",
@@ -111,6 +111,45 @@ class ExecutionRequest(ProcessRequest):
             The execution requests populated with default values.
         """
         return _from_process_description(process_description, dotpath)
+
+
+def get_execution_request_template(
+    process_description: ProcessDescription,
+    *,
+    mode: Literal["python", "json"] | None = None,
+    dotpath: bool = False,
+) -> ExecutionRequest | dict | str:
+    """
+    Create a template for an execution request
+    generated from the given process description.
+
+    Args:
+        process_description: The process description
+        mode: The mode which determines the type of the return value,
+        dotpath: Applies to `mode=="json"` only:
+            Whether to create dot-separated input
+            names for nested object values
+
+    Returns:
+        The returned type and form depends on the `format` argument:
+            - `"python"` or `None`: type `ExecutionRequest` (the default),
+            - `"json"`: type `dict`, a JSON-serializable dictionary.
+
+    Raises:
+        ClientException: if an error occurs
+    """
+    request = ExecutionRequest.from_process_description(
+        process_description, dotpath=dotpath
+    )
+    if mode is None or mode == "python":
+        return request
+    elif mode == "json":
+        request_dict = request.model_dump(mode="json", exclude_unset=True)
+        if request.dotpath:
+            return flatten_obj(request_dict)
+        return request_dict
+    else:
+        raise ValueError(f"unsupported mode {mode!r}")
 
 
 def _read_execution_request(

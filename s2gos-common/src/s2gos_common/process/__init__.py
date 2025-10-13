@@ -6,7 +6,7 @@ from .cli.cli import get_cli
 from .job import Job, JobCancelledException, JobContext
 from .process import Process
 from .registry import ProcessRegistry
-from .request import ExecutionRequest
+from .request import ExecutionRequest, get_execution_request_template
 
 """Processes development API."""
 
@@ -18,4 +18,5 @@ __all__ = [
     "ProcessRegistry",
     "Process",
     "get_cli",
+    "get_execution_request_template",
 ]

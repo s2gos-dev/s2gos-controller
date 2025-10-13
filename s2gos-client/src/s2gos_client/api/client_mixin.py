@@ -3,8 +3,7 @@ from typing import Literal, Any, overload
 
 
 from s2gos_common.models import ProcessDescription
-from s2gos_common.process import ExecutionRequest
-from s2gos_common.util.obj import flatten_obj
+from s2gos_common.process import ExecutionRequest, get_execution_request_template
 
 
 # noinspection PyShadowingBuiltins
@@ -15,7 +14,7 @@ class ClientMixin(ABC):
 
     @abstractmethod
     def get_process(self, process_id: str, **kwargs: Any) -> ProcessDescription:
-        """Will be overridden by actual client class."""
+        """Will be overridden by the actual client class."""
 
     @overload
     def get_execution_request_template(
@@ -65,15 +64,6 @@ class ClientMixin(ABC):
             ClientException: if an error occurs
         """
         process_description = self.get_process(process_id)
-        request = ExecutionRequest.from_process_description(
-            process_description, dotpath=dotpath
+        return get_execution_request_template(
+            process_description, mode=mode, dotpath=dotpath
         )
-        if mode is None or mode == "python":
-            return request
-        elif mode == "json":
-            request_dict = request.model_dump(mode="json", exclude_unset=True)
-            if request.dotpath:
-                return flatten_obj(request_dict)
-            return request_dict
-        else:
-            raise ValueError(f"unsupported mode {mode!r}")
