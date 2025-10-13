@@ -4,6 +4,7 @@
 
 from unittest import TestCase
 
+import pydantic
 import pytest
 
 from s2gos_common.models import JobResults, JobStatus, ProcessRequest, Subscriber
@@ -41,6 +42,17 @@ def fn_success_arg_ctx(ctx: JobContext, path: str) -> str:
     ctx.report_progress(progress=50, message="Almost done")
     ctx.report_progress(progress=100)
     return path + "/result2.zarr"
+
+
+class Params(pydantic.BaseModel):
+    p1: bool
+    p2: float
+    p3: str
+
+
+def fn_success_inputs_arg(ctx: JobContext, params: Params) -> str:
+    ctx.report_progress(message="Done!")
+    return f"{params.p1!r}-{params.p2!r}-{params.p3!r}"
 
 
 # noinspection PyUnusedLocal
@@ -147,6 +159,21 @@ class JobTest(TestCase):
         self.assertEqual(JobStatus.successful, job.job_info.status)
         self.assertEqual(100, job.job_info.progress)
         self.assertEqual("Almost done", job.job_info.message)
+
+    def test_run_success_input_args(self):
+        job = Job.create(
+            process=Process.create(
+                fn_success_inputs_arg, id="fn_success_inputs_arg", inputs_arg=True
+            ),
+            job_id="job_42",
+            request=ProcessRequest(inputs={"p1": True, "p2": 0.5, "p3": "abc"}),
+        )
+        job_results = job.run()
+        # noinspection PyArgumentList
+        self.assertEqual(JobResults({"return_value": "True-0.5-'abc'"}), job_results)
+        self.assertEqual(JobStatus.successful, job.job_info.status)
+        self.assertEqual(None, job.job_info.progress)
+        self.assertEqual("Done!", job.job_info.message)
 
     def test_run_exc(self):
         job = Job.create(
