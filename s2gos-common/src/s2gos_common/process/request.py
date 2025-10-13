@@ -5,7 +5,7 @@
 import sys
 from io import StringIO
 from pathlib import Path
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 import click
 import pydantic
