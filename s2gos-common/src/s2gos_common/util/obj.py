@@ -43,62 +43,60 @@ def flatten_obj(
     return items
 
 
-# I avoided recursion for nest_obj because building a structure
-# from paths is a more natural fit for an iterative approach,
-# while flattening is inherently recursive.
-#
-def nest_obj(flattened_dict: dict[str, Any], *, sep: str = ".") -> dict | list:
+def nest_obj(
+    flatted_dict: dict[str, Any], *, sep: str = ".", flatten_lists: bool = False
+) -> dict[str, Any] | list[Any] | None:
     """Nest a flat dict with sep-delimited keys back into dicts/lists."""
-    root: dict[str, Any] = {}
-
-    for flat_key, value in flattened_dict.items():
-        path = flat_key.split(sep)
-        current: dict | list = root
-        parent: dict | list | None = None
-        parent_key: str | int | None = None
-
-        for i, part in enumerate(path):
-            is_last = i == len(path) - 1
-
-            # Try to interpret part as a list index
-            try:
-                index: int | None = int(part)
-            except ValueError:
-                index = None
-
-            if is_last:
-                if index is not None:
-                    if not isinstance(current, list):
-                        if parent is not None:
-                            parent[parent_key] = []
-                            current = parent[parent_key]
-                        else:
-                            current = []
-                            root = current
-                    while len(current) <= index:
-                        current.append(None)
-                    current[index] = value
-                else:
-                    current[part] = value
-            else:
-                if index is not None:
-                    if not isinstance(current, list):
-                        if parent is not None:
-                            parent[parent_key] = []
-                            current = parent[parent_key]
-                        else:
-                            current = []
-                            root = current
-                    while len(current) <= index:
-                        current.append({})
-                    if not isinstance(current[index], (dict, list)):
-                        current[index] = {}
-                    parent, parent_key, current = current, index, current[index]
-                else:
-                    if part not in current or not isinstance(
-                        current[part], (dict, list)
-                    ):
-                        current[part] = {}
-                    parent, parent_key, current = current, part, current[part]
-
+    root: dict[str, Any] | list[Any] | None = None
+    for k, v in flatted_dict.items():
+        root = _nest_one(root, k, v, sep=sep)
     return root
+
+
+def _nest_one(
+    root: dict[str, Any] | list[Any] | None, name: str, value: Any, sep: str = "."
+) -> dict[str, Any] | list[Any]:
+    keys = _parse_path(name, sep)
+
+    current: dict[str, Any] | list[Any] | None = None
+    prev: dict[str, Any] | list[Any] | None = None
+
+    for i, key_or_index in enumerate(keys):
+        if root is None:
+            root = [] if isinstance(key_or_index, int) else {}
+        if i == 0:
+            current = root
+        if current is None and prev is not None:
+            current = prev[keys[i - 1]] = [] if isinstance(key_or_index, int) else {}
+        prev = current
+        current = _prepare_path(prev, key_or_index)
+
+    assert prev is not None
+    prev[keys[-1]] = value
+    return root
+
+
+def _prepare_path(current: dict[str, Any] | list[Any], key_or_index: str | int) -> Any:
+    is_index = isinstance(key_or_index, int)
+    if isinstance(current, list):
+        if not is_index:
+            raise TypeError(f"expected index of type int, got {type(current).__name__}")
+        index: int = key_or_index
+        current_list: list[Any] = current
+        while len(current_list) <= index:
+            current_list.append(None)  # This is a Fill-value
+        return current_list[index]
+    elif isinstance(current, dict):
+        if is_index:
+            raise TypeError(f"expected key of type str, got {type(current).__name__}")
+        key: str = key_or_index
+        current_dict: dict[str, Any] = current
+        if key not in current_dict:
+            current_dict[key] = None  # This is a Fill-value
+        return current_dict[key]
+    raise TypeError(f"expected a list or a dict, got {type(current).__name__}")
+
+
+def _parse_path(name: str, sep: str = ".") -> list[str | int]:
+    keys: list[str] = name.split(sep)
+    return [(int(key) if all(c.isdigit() for c in key) else key) for key in keys]

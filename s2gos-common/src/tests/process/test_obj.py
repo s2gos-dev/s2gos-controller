@@ -2,7 +2,12 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+import pytest
+
 from s2gos_common.util.obj import flatten_obj, nest_obj
+
+# noinspection PyProtectedMember
+from s2gos_common.util.obj import _nest_one
 
 
 def test_flatten_and_nest_dict_only():
@@ -31,3 +36,34 @@ def test_overwrite_and_sparse_lists():
     nested = nest_obj(flat)
     assert nested == {"a": ["first", None, "third"]}
     assert flatten_obj(nested, flatten_lists=True) == flat
+
+
+def test_nest_one_into_dict():
+    nested = _nest_one({}, "a", 13)
+    assert nested == {"a": 13}
+
+    nested = _nest_one({}, "a.b", 13)
+    assert nested == {"a": {"b": 13}}
+
+    nested = _nest_one({}, "a.b.c", 13)
+    assert nested == {"a": {"b": {"c": 13}}}
+
+    with pytest.raises(TypeError):
+        _nest_one([], "a.b.c", 13)
+
+
+def test_nest_one_into_list():
+    nested = _nest_one([], "0", 13)
+    assert nested == [13]
+
+    nested = _nest_one([], "0.b", 13)
+    assert nested == [{"b": 13}]
+
+    nested = _nest_one([], "0.b.c", 13)
+    assert nested == [{"b": {"c": 13}}]
+
+    with pytest.raises(TypeError):
+        _nest_one([], "a", 13)
+
+    # nested = nest_one({}, "0.a.b", 13)
+    # assert nested == [{"a": {"b": 13}}]
