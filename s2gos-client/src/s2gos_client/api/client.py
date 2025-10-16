@@ -17,13 +17,14 @@ from s2gos_common.models import (
     ProcessRequest,
 )
 
+from .client_mixin import ClientMixin
 from .config import ClientConfig
 from .ishell import has_ishell as _  # noqa F401
 from .transport import Transport, TransportArgs
 from .transport.httpx import HttpxTransport
 
 
-class Client:
+class Client(ClientMixin):
     """
     The client API for the web service (synchronous mode).
 
@@ -70,7 +71,7 @@ class Client:
 
     def _repr_json_(self):
         # noinspection PyProtectedMember
-        return self._config._repr_json_()
+        return self.config._repr_json_()
 
     def get_capabilities(self, **kwargs: Any) -> Capabilities:
         """

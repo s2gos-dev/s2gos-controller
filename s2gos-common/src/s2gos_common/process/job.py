@@ -12,7 +12,6 @@ from concurrent.futures import Future
 from typing import Any, Optional
 
 import pydantic
-from pydantic import AnyUrl
 
 from s2gos_common.models import (
     JobInfo,
@@ -136,7 +135,7 @@ class Job(JobContext):
         Args:
             process: The process.
             request: The process request.
-                Names of request inputs must be valid Python identifiers or a
+                Names of request inputs must be valid Python identifiers or
                 sequences of Python identifiers separated by the dot
                 (`.`) character. The latter is used to set nested input objects.
             job_id: Optional job identifier.
@@ -191,6 +190,7 @@ class Job(JobContext):
         Use `Job.create() instead.`
         """
         self.process = process
+        # noinspection PyTypeChecker
         self.job_info = JobInfo(  # noqa [call-arg]
             type=JobType.process,
             processID=process.description.id,
@@ -214,6 +214,7 @@ class Job(JobContext):
         self, progress: Optional[int] = None, message: Optional[str] = None
     ):
         self.check_cancelled()
+        # noinspection PyTypeChecker
         self.job_info.updated = self._now()
         if progress is not None:
             self.job_info.progress = progress
@@ -242,15 +243,21 @@ class Job(JobContext):
         # through the local variable __job_context__
         ctx = __job_context__ = self  # noqa: F841
 
-        # check if we need to inject job context
+        function_kwargs: dict[str, Any] = dict(self.function_kwargs)
+
+        # use "inputs arg", if needed
+        inputs_arg = self.process.inputs_arg
+        if inputs_arg:
+            function_kwargs.pop(inputs_arg, None)
+            function_kwargs = {inputs_arg: self.process.model_class(**function_kwargs)}
+
+        # inject job context, if needed
         ctx_arg = self.process.job_ctx_arg
         if ctx_arg:
-            function_kwargs = {**self.function_kwargs, ctx_arg: ctx}
-        else:
-            function_kwargs = self.function_kwargs
+            function_kwargs.pop(ctx_arg, None)
+            function_kwargs = {ctx_arg: ctx, **function_kwargs}
 
         self._start_job()
-
         try:
             self.check_cancelled()
             function_result = self.process.function(**function_kwargs)
@@ -281,10 +288,12 @@ class Job(JobContext):
         )
 
     def _start_job(self):
+        # noinspection PyTypeChecker
         self.job_info.started = self._now()
         self.job_info.status = JobStatus.running
 
     def _finish_job(self, job_status: JobStatus, exception: Optional[Exception] = None):
+        # noinspection PyTypeChecker
         self.job_info.finished = self._now()
         self.job_info.status = job_status
         if exception is not None:
@@ -307,7 +316,7 @@ class Job(JobContext):
         if self.subscriber is not None:
             self._maybe_notify_current_job_info(self.subscriber.inProgressUri)
 
-    def _maybe_notify_current_job_info(self, url: AnyUrl | None):
+    def _maybe_notify_current_job_info(self, url: pydantic.AnyUrl | None):
         if url is not None:
             data = self.job_info.model_dump(
                 mode="json",
@@ -319,6 +328,7 @@ class Job(JobContext):
 
     @staticmethod
     def _now() -> datetime.datetime:
+        # noinspection PyTypeChecker
         return datetime.datetime.now(tz=datetime.timezone.utc)
 
 

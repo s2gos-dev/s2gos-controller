@@ -588,8 +588,6 @@ components:
           minItems: 1
           uniqueItems: false
           type: array
-          items:
-            type: object
         type:
           $ref: '#/components/schemas/DataType'
         not:
