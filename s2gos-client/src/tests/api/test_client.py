@@ -40,28 +40,34 @@ class ClientTest(TestCase):
         self.assertIsInstance(metadata, dict)
         self.assertEqual({"root": "Client configuration:"}, metadata)
 
-    def test_get_execution_request_template(self):
+    def test_get_execution_request_template_empty(self):
         template = self.client.get_execution_request_template(process_id="gobabeb_1")
         self.assertIsInstance(template, ExecutionRequest)
         self.assertEqual(ExecutionRequest(process_id="ID-1", inputs={}), template)
 
+    def test_get_execution_request_template(self):
         template = self.client.get_execution_request_template(
             process_id="gobabeb_1", mode="json"
         )
         self.assertEqual(
-            {"process_id": "ID-2", "dotpath": False, "inputs": {}},
+            {
+                "process_id": "ID-1",
+                "inputs": {},
+                "dotpath": False,
+            },
             template,
         )
 
+    def test_get_execution_request_template_dotpath(self):
         template = self.client.get_execution_request_template(
             process_id="gobabeb_1", mode="json", dotpath=True
         )
         self.assertEqual(
-            # where is inputs gone? --> check flatten_obj()
-            {"process_id": "ID-3", "dotpath": True},
+            {"process_id": "ID-1", "inputs.": {}, "dotpath": True},
             template,
         )
 
+    def test_get_execution_request_template_fail(self):
         with pytest.raises(ValueError):
             # noinspection PyTypeChecker
             self.client.get_execution_request_template(

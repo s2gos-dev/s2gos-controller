@@ -36,19 +36,19 @@ def _flatten_obj(
 
     if isinstance(obj, dict) and len(obj) > 0:
         for k, v in obj.items():
-            braaatz(k, v, parent_key, flatten_lists, sep, items)
+            _update_flattened_items(k, v, parent_key, flatten_lists, sep, items)
     elif isinstance(obj, list) and len(obj) > 0 and flatten_lists:
         for i, v in enumerate(obj):
             if v is None:  # skip None placeholders
                 continue
-            braaatz(i, v, parent_key, flatten_lists, sep, items)
+            _update_flattened_items(i, v, parent_key, flatten_lists, sep, items)
     else:
         items[parent_key] = obj
 
     return items
 
 
-def braaatz(
+def _update_flattened_items(
     k,
     v,
     parent_key: str,
