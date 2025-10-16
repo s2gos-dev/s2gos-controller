@@ -33,6 +33,7 @@
 - Added high level overview of various DevOps tools which will be used in the 
   development of services.
 - Added Jupyter Notebooks to documentation.
+- Fixed formatting and links for Client API documentation. (#48)
 
 
 ## Changes in version 0.0.3
