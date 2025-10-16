@@ -12,7 +12,7 @@ import pydantic
 from pydantic import Field
 
 from s2gos_common.models import ProcessRequest, ProcessDescription
-from s2gos_common.util.obj import nest_obj, flatten_obj
+from s2gos_common.util.obj import flatten_obj, nest_dict
 
 SUBSCRIBER_EVENTS = {
     "success": "successUri",
@@ -58,7 +58,7 @@ class ExecutionRequest(ProcessRequest):
         """
         inputs = self.inputs
         if inputs and self.dotpath:
-            inputs = nest_obj(inputs)
+            inputs = nest_dict(inputs)
         return ProcessRequest(
             inputs=inputs,
             outputs=self.outputs,
@@ -254,11 +254,15 @@ def _from_process_description(
 ) -> ExecutionRequest:
     inputs = {
         k: _get_schema_default_value(
-            v.schema_.model_dump(mode="json", exclude_unset=True) if v.schema else None
+            v.schema_.model_dump(mode="json", exclude_unset=True) if v.schema_ else None
         )
         for k, v in (process_description.inputs or {}).items()
     }
-    if dotpath is None:
+    if dotpath:
+        return ExecutionRequest(
+            process_id=process_description.id, dotpath=True, inputs=flatten_obj(inputs)
+        )
+    elif dotpath is None:
         return ExecutionRequest(process_id=process_description.id, inputs=inputs)
     else:
         return ExecutionRequest(
@@ -279,7 +283,7 @@ def _get_schema_default_value(schema: Any) -> Any:
                 if properties_ and isinstance(properties_, dict):
                     return {
                         p_name: _get_schema_default_value(p_schema)
-                        for p_name, p_schema in properties_
+                        for p_name, p_schema in properties_.items()
                     }
             return _JSON_DATA_TYPE_DEFAULT_VALUES.get(type_)
     return None

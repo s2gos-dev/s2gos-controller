@@ -264,84 +264,97 @@ class ExecutionRequestFromProcessDescriptionTest(TestCase):
         },
     )
 
-    def get_expected_execution_request(self):
-        return ExecutionRequest(
-            process_id="T13",
+    def test_all_types(self):
+        process_description = ProcessDescription(
+            id="T13",
+            version="0",
             inputs={
-                f"p{i}": expected_value
-                for i, (expected_value, _) in enumerate(self.cases)
+                f"p{i}": InputDescription(schema=schema)
+                for i, (_, schema) in enumerate(self.cases)
             },
-            outputs={},
+        )
+        self.assertEqual(
+            ExecutionRequest(
+                process_id="T13",
+                inputs={
+                    f"p{i}": expected_value
+                    for i, (expected_value, _) in enumerate(self.cases)
+                },
+                outputs=None,
+            ),
+            ExecutionRequest.from_process_description(
+                process_description,
+            ),
         )
 
-    def test_obj_no_inputs(self):
+    def test_nested(self):
+        process_description = ProcessDescription(
+            id="T13",
+            version="8",
+            inputs={
+                "a": InputDescription(
+                    schema=Schema(
+                        **{
+                            "type": "object",
+                            "properties": {
+                                "b": Schema(**{"type": "object"}),
+                                "d": Schema(**{"type": "object"}),
+                            },
+                        }
+                    ),
+                ),
+                "f": InputDescription(
+                    schema=Schema(**{"type": "number"}),
+                ),
+            },
+        )
         self.assertEqual(
-            ExecutionRequest(process_id="T13", inputs={}, outputs={}),
+            ExecutionRequest(
+                process_id="T13",
+                dotpath=False,
+                inputs={"a": {"b": {}, "d": {}}, "f": 0},
+                outputs=None,
+            ),
+            ExecutionRequest.from_process_description(process_description),
+        )
+
+    def test_nested_dotpath(self):
+        process_description = ProcessDescription(
+            id="T13",
+            version="8",
+            inputs={
+                "a": InputDescription(
+                    schema=Schema(
+                        **{
+                            "type": "object",
+                            "properties": {
+                                "b": Schema(**{"type": "object"}),
+                                "d": Schema(**{"type": "object"}),
+                            },
+                        }
+                    ),
+                ),
+                "f": InputDescription(
+                    schema=Schema(**{"type": "number"}),
+                ),
+            },
+        )
+        self.assertEqual(
+            ExecutionRequest(
+                process_id="T13",
+                dotpath=True,
+                inputs={"a.b": {}, "a.d": {}, "f": 0},
+                outputs=None,
+            ),
+            ExecutionRequest.from_process_description(
+                process_description, dotpath=True
+            ),
+        )
+
+    def test_no_inputs(self):
+        self.assertEqual(
+            ExecutionRequest(process_id="T13", inputs={}, outputs=None),
             ExecutionRequest.from_process_description(
                 ProcessDescription(id="T13", version="0")
             ),
-        )
-
-    def test_obj_no_arg(self):
-        self.assertEqual(
-            self.get_expected_execution_request(),
-            ExecutionRequest.from_process_description(
-                self.process_description,
-            ),
-        )
-
-    def test_obj(self):
-        self.assertEqual(
-            self.get_expected_execution_request(),
-            ExecutionRequest.from_process_description(
-                self.process_description,
-                format="obj",
-            ),
-        )
-
-    def test_dict(self):
-        self.assertEqual(
-            self.get_expected_execution_request().model_dump(
-                mode="json", exclude_unset=True
-            ),
-            ExecutionRequest.from_process_description(
-                self.process_description,
-                format="dict",
-            ),
-        )
-
-    def test_json(self):
-        self.assertEqual(
-            self.get_expected_execution_request().model_dump_json(
-                exclude_unset=True, indent=2
-            ),
-            ExecutionRequest.from_process_description(
-                self.process_description,
-                format="json",
-            ),
-        )
-
-    def test_yaml(self):
-        import yaml
-
-        self.assertEqual(
-            yaml.dump(
-                self.get_expected_execution_request().model_dump(exclude_unset=True),
-                indent=2,
-            ),
-            ExecutionRequest.from_process_description(
-                self.process_description,
-                format="yaml",
-            ),
-        )
-
-
-class ExecutionRequestHelpersTest(TestCase):
-    def test_nest_dict(self):
-        self.assertEqual(
-            {"a": 1, "b": True}, ExecutionRequest._nest_dict({"a": 1, "b": True})
-        )
-        self.assertEqual(
-            {"a": 1, "b": {"x": 0.3, "y": -0.1}},
-            ExecutionRequest._nest_dict({"a": 1, "b.x": 0.3, "b.y": -0.1}),
         )

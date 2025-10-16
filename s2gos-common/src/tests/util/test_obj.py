@@ -4,10 +4,24 @@
 
 import pytest
 
-from s2gos_common.util.obj import flatten_obj, nest_obj
+from s2gos_common.util.obj import flatten_obj, nest_obj, nest_dict
 
 # noinspection PyProtectedMember
 from s2gos_common.util.obj import _nest_one
+
+
+def test_flatten_and_nest_dict_1():
+    nested = {"a": {"b": {"c": 1}}}
+    flat = flatten_obj(nested)
+    assert flat == {"a.b.c": 1}
+    assert nest_dict(flat) == nested
+
+
+def test_flatten_and_nest_dict_2():
+    nested = {"a": {"b": {}, "d": {}}, "f": 0}
+    flat = flatten_obj(nested)
+    assert flat == {"a.b": {}, "a.d": {}, "f": 0}
+    assert nest_dict(flat) == nested
 
 
 def test_flatten_and_nest_dict_only():
