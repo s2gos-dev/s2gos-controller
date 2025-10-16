@@ -181,20 +181,18 @@ def create_request(
     output_format: Annotated[OutputFormat, FORMAT_OPTION] = DEFAULT_OUTPUT_FORMAT,
 ):
     """
-    Validate a process execution request.
+    Create an execution request (template) for a given process.
 
-    The execution request to be validated may be read from a file given
-    by `--request`, or from `stdin`, or from the `process_id` argument
-    with zero, one, or more `--input` (or `-i`) options.
-
-    The `process_id` argument and any given `--input` options will override
-    settings with same name found in the given request file or `stdin`, if any.
+    The generated template comprises generated default values for all inputs.
+    Note that they might not necessarily be valid.
+    The generated template request may serve as a starting point for the actual,
+    valid execution request.
     """
     from .client import use_client
     from .output import get_renderer, output
 
     with use_client(ctx, config_file) as client:
-        request = client.create_execution_request_template(process_id)
+        request = client.create_execution_request(process_id, dotpath=dotpath)
 
     output(get_renderer(output_format).render_execution_request_valid(request))
 
@@ -215,7 +213,7 @@ def validate_request(
     with zero, one, or more `--input` (or `-i`) options.
 
     The `process_id` argument and any given `--input` options will override
-    settings with same name found in the given request file or `stdin`, if any.
+    settings with the same name found in the given request file or `stdin`, if any.
     """
     from s2gos_common.process.request import ExecutionRequest
 

@@ -58,6 +58,14 @@ class CliTest(TestCase):
         self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
         self.assertEqual("id: ID-1\nversion: ''\n\n", result.output)
 
+    def test_create_request(self):
+        result = invoke_cli("create-request", "sleep_a_while")
+        self.assertEqual(0, result.exit_code, msg=self.get_result_msg(result))
+        self.assertEqual(
+            "inputs: {}\nprocess_id: ID-1\n\n",
+            result.output,
+        )
+
     def test_validate_request(self):
         result = invoke_cli(
             "validate-request", "sleep_a_while", "-i", "duration=120", "-i", "fail=true"
