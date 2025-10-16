@@ -112,7 +112,9 @@ def _nest_one(
 def _prepare_path(current: dict[str, Any] | list[Any], key_or_index: str | int) -> Any:
     if isinstance(current, list):
         if not isinstance(key_or_index, int):
-            raise TypeError(f"expected index of type int, got {type(current).__name__}")
+            raise TypeError(
+                f"expected index of type int, got {type(key_or_index).__name__}"
+            )
         index: int = key_or_index
         current_list: list[Any] = current
         while len(current_list) <= index:
@@ -120,7 +122,9 @@ def _prepare_path(current: dict[str, Any] | list[Any], key_or_index: str | int) 
         return current_list[index]
     elif isinstance(current, dict):
         if isinstance(key_or_index, int):
-            raise TypeError(f"expected key of type str, got {type(current).__name__}")
+            raise TypeError(
+                f"expected key of type str, got {type(key_or_index).__name__}"
+            )
         key: str = key_or_index
         current_dict: dict[str, Any] = current
         if key not in current_dict:

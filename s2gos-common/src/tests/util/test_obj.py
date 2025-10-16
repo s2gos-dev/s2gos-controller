@@ -50,6 +50,18 @@ def test_overwrite_and_sparse_lists():
     assert flatten_obj(nested, flatten_lists=True) == flat
 
 
+def test_nest_fail():
+    with pytest.raises(TypeError, match="expected key of type str, got int"):
+        nest_obj({"a.b": 13, "a.0": 14})
+
+    with pytest.raises(TypeError, match="expected index of type int, got str"):
+        nest_obj({"a.0": 13, "a.b": 14})
+
+    with pytest.raises(TypeError, match="expected a list or a dict, got int"):
+        # noinspection PyTypeChecker
+        nest_obj({"a.b": 13, "a.c": 14}, root=0)
+
+
 def test_nest_one_into_dict():
     nested = _nest_one({}, "a", 13)
     assert nested == {"a": 13}

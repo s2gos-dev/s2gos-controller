@@ -317,6 +317,17 @@ class ExecutionRequestFromProcessDescriptionTest(TestCase):
             ),
             ExecutionRequest.from_process_description(process_description),
         )
+        self.assertEqual(
+            ExecutionRequest(
+                process_id="T13",
+                dotpath=False,
+                inputs={"a": {"b": {}, "d": {}}, "f": 0},
+                outputs=None,
+            ),
+            ExecutionRequest.from_process_description(
+                process_description, dotpath=False
+            ),
+        )
 
     def test_nested_dotpath(self):
         process_description = ProcessDescription(
@@ -329,7 +340,7 @@ class ExecutionRequestFromProcessDescriptionTest(TestCase):
                             "type": "object",
                             "properties": {
                                 "b": Schema(**{"type": "object"}),
-                                "d": Schema(**{"type": "object"}),
+                                "d": Schema(**{"type": "array"}),
                             },
                         }
                     ),
@@ -343,7 +354,7 @@ class ExecutionRequestFromProcessDescriptionTest(TestCase):
             ExecutionRequest(
                 process_id="T13",
                 dotpath=True,
-                inputs={"a.b": {}, "a.d": {}, "f": 0},
+                inputs={"a.b": {}, "a.d": [], "f": 0},
                 outputs=None,
             ),
             ExecutionRequest.from_process_description(

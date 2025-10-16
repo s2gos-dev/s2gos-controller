@@ -97,7 +97,7 @@ class ExecutionRequest(ProcessRequest):
     def from_process_description(
         cls,
         process_description: ProcessDescription,
-        dotpath: bool | None = None,
+        dotpath: bool = False,
     ) -> "ExecutionRequest":
         """
         Create an execution request from the given process description.
@@ -211,7 +211,7 @@ def _parse_subscriber_url(value: str):
 
 # noinspection PyShadowingBuiltins
 def _from_process_description(
-    process_description: ProcessDescription, dotpath: bool | None
+    process_description: ProcessDescription, dotpath: bool
 ) -> ExecutionRequest:
     inputs = {
         k: _get_schema_default_value(
@@ -220,15 +220,10 @@ def _from_process_description(
         for k, v in (process_description.inputs or {}).items()
     }
     if dotpath:
-        return ExecutionRequest(
-            process_id=process_description.id, dotpath=True, inputs=flatten_obj(inputs)
-        )
-    elif dotpath is None:
-        return ExecutionRequest(process_id=process_description.id, inputs=inputs)
-    else:
-        return ExecutionRequest(
-            process_id=process_description.id, dotpath=dotpath, inputs=inputs
-        )
+        inputs = flatten_obj(inputs)
+    return ExecutionRequest(
+        process_id=process_description.id, dotpath=dotpath, inputs=inputs
+    )
 
 
 def _get_schema_default_value(schema: Any) -> Any:
