@@ -1,3 +1,6 @@
+## Changes in version 0.0.5 (in development)
+
+
 ## Changes in version 0.0.4
 
 - Prevent server from logging `/jobs` request, as they are used for polling. 
