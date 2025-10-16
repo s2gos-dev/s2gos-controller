@@ -4,10 +4,8 @@
 
 import pytest
 
-from s2gos_common.util.obj import flatten_obj, nest_obj, nest_dict
-
 # noinspection PyProtectedMember
-from s2gos_common.util.obj import _nest_one
+from s2gos_common.util.obj import _nest_one, flatten_obj, nest_dict, nest_obj
 
 
 def test_flatten_and_nest_dict_1():

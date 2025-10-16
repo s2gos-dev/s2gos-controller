@@ -1,6 +1,5 @@
-from abc import abstractmethod, ABC
+from abc import ABC, abstractmethod
 from typing import Any
-
 
 from s2gos_common.models import ProcessDescription
 from s2gos_common.process import ExecutionRequest

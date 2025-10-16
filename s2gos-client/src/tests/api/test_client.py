@@ -4,9 +4,6 @@
 
 from unittest import TestCase
 
-import pytest
-
-from s2gos_common.process import ExecutionRequest
 from tests.helpers import MockTransport
 
 from s2gos_client import ClientConfig
@@ -21,6 +18,7 @@ from s2gos_common.models import (
     ProcessList,
     ProcessRequest,
 )
+from s2gos_common.process import ExecutionRequest
 
 
 class ClientTest(TestCase):

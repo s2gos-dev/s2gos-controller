@@ -11,7 +11,7 @@ import click
 import pydantic
 from pydantic import Field
 
-from s2gos_common.models import ProcessRequest, ProcessDescription
+from s2gos_common.models import ProcessDescription, ProcessRequest
 from s2gos_common.util.obj import flatten_obj, nest_dict
 
 SUBSCRIBER_EVENTS = {

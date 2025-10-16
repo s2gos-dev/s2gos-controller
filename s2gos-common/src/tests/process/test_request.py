@@ -3,19 +3,19 @@
 #  https://opensource.org/license/apache-2-0.
 
 import os
-from unittest import TestCase
 from io import StringIO
+from unittest import TestCase
 from unittest.mock import patch
 
 import click
 import pytest
 
 from s2gos_common.models import (
-    ProcessRequest,
-    Subscriber,
-    ProcessDescription,
     InputDescription,
+    ProcessDescription,
+    ProcessRequest,
     Schema,
+    Subscriber,
 )
 from s2gos_common.process.request import ExecutionRequest
 
