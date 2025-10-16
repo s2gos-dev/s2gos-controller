@@ -42,7 +42,7 @@ def _flatten_obj(
             if v is None:  # skip None placeholders
                 continue
             _update_flattened_items(i, v, parent_key, flatten_lists, sep, items)
-    else:
+    elif parent_key:
         items[parent_key] = obj
 
     return items

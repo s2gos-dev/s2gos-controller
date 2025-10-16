@@ -40,39 +40,19 @@ class ClientTest(TestCase):
         self.assertIsInstance(metadata, dict)
         self.assertEqual({"root": "Client configuration:"}, metadata)
 
-    def test_get_execution_request_template_empty(self):
-        template = self.client.get_execution_request_template(process_id="gobabeb_1")
-        self.assertIsInstance(template, ExecutionRequest)
-        self.assertEqual(ExecutionRequest(process_id="ID-1", inputs={}), template)
-
-    def test_get_execution_request_template(self):
-        template = self.client.get_execution_request_template(
-            process_id="gobabeb_1", mode="json"
-        )
+    def test_create_execution_request(self):
         self.assertEqual(
-            {
-                "process_id": "ID-1",
-                "inputs": {},
-                "dotpath": False,
-            },
-            template,
+            ExecutionRequest(process_id="ID-1", inputs={}),
+            self.client.create_execution_request(
+                process_id="ID-1",
+            ),
         )
 
-    def test_get_execution_request_template_dotpath(self):
-        template = self.client.get_execution_request_template(
-            process_id="gobabeb_1", mode="json", dotpath=True
-        )
+    def test_create_execution_request_dotpath(self):
         self.assertEqual(
-            {"process_id": "ID-1", "inputs.": {}, "dotpath": True},
-            template,
+            ExecutionRequest(process_id="ID-1", inputs={}, dotpath=True),
+            self.client.create_execution_request(process_id="ID-1", dotpath=True),
         )
-
-    def test_get_execution_request_template_fail(self):
-        with pytest.raises(ValueError):
-            # noinspection PyTypeChecker
-            self.client.get_execution_request_template(
-                process_id="gobabeb_1", mode="java"
-            )
 
     def test_get_capabilities(self):
         result = self.client.get_capabilities()
