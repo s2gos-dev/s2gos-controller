@@ -2268,7 +2268,7 @@ while the processing takes place.</p>
 
 
 <h4 id="s2gos_common.process.ExecutionRequest.from_process_description" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">from_process_description</span><span class="p">(</span><span class="n">process_description</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">from_process_description</span><span class="p">(</span><span class="n">process_description</span><span class="p">,</span> <span class="n">dotpath</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
@@ -2279,7 +2279,7 @@ while the processing takes place.</p>
 
     <div class="doc doc-contents ">
 
-        <p>Create a execution request from the given process description.</p>
+        <p>Create an execution request from the given process description.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2311,18 +2311,19 @@ while the processing takes place.</p>
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>format</code>
+                <code>dotpath</code>
             </td>
             <td>
-                  <code><span title="typing.Literal">Literal</span>[&#39;obj&#39;, &#39;dict&#39;, &#39;yaml&#39;, &#39;json&#39;] | None</code>
+                  <code><span title="bool">bool</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The format of the returned value.</p>
+                <p>Whether to allow for dot-separated input
+names for nested object values</p>
               </div>
             </td>
             <td>
-                  <code>None</code>
+                  <code>False</code>
             </td>
           </tr>
       </tbody>
@@ -2340,15 +2341,11 @@ while the processing takes place.</p>
       <tbody>
           <tr class="doc-section-item">
             <td>
-                  <code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="s2gos_common.process.ExecutionRequest (s2gos_common.process.request.ExecutionRequest)" href="#s2gos_common.process.ExecutionRequest">ExecutionRequest</a>, <span title="dict">dict</span>, <span title="str">str</span>]</code>
+                  <code><a class="autorefs autorefs-internal" title="s2gos_common.process.ExecutionRequest (s2gos_common.process.request.ExecutionRequest)" href="#s2gos_common.process.ExecutionRequest">ExecutionRequest</a></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The returned type and form depends on the <code>format</code> argument:
-- <code>"obj"</code> or <code>None</code>: type <code>ExecutionRequest</code> (the default),
-- <code>"dict"</code>: type <code>dict</code>, plain dictionary,
-- <code>"yaml"</code>: type <code>str</code> using YAML format,
-- <code>"json"</code>: type <code>str</code> using JSON format.</p>
+                <p>The execution requests populated with default values.</p>
               </div>
             </td>
           </tr>

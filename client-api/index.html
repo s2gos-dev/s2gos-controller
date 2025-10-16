@@ -895,6 +895,8 @@ may raise a <a href="#s2gos_client.ClientException"><code>ClientException</code>
 
 
     <div class="doc doc-contents first">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="s2gos_client.api.client_mixin.ClientMixin">ClientMixin</span></code></p>
 
 
         <p>The client API for the web service (synchronous mode).</p>
@@ -1003,8 +1005,7 @@ other configuration arguments are ignored.</p>
 
               <details class="quote">
                 <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 26</span>
-<span class="normal"> 27</span>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 27</span>
 <span class="normal"> 28</span>
 <span class="normal"> 29</span>
 <span class="normal"> 30</span>
@@ -1353,7 +1354,16 @@ other configuration arguments are ignored.</p>
 <span class="normal">373</span>
 <span class="normal">374</span>
 <span class="normal">375</span>
-<span class="normal">376</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Client</span><span class="p">:</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Client</span><span class="p">(</span><span class="n">ClientMixin</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The client API for the web service (synchronous mode).</span>
 
@@ -1400,7 +1410,7 @@ other configuration arguments are ignored.</p>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_repr_json_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># noinspection PyProtectedMember</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="o">.</span><span class="n">_repr_json_</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">_repr_json_</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_capabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Capabilities</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1411,18 +1421,19 @@ other configuration arguments are ignored.</p>
 <span class="sd">          * The endpoint for job monitoring (path /jobs).</span>
 
 <span class="sd">        For more information, see [Section</span>
-<span class="sd">        7.2](https://docs.ogc.org/is/18-062/18-062.html#sc_landing_page).</span>
+<span class="sd">        7.2](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_landing_page).</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">          Capabilities: The landing page provides links to the API definition</span>
 <span class="sd">            (link relations `service-desc` and `service-doc`),</span>
 <span class="sd">            the Conformance declaration (path `/conformance`,</span>
 <span class="sd">            link relation `http://www.opengis.net/def/rel/ogc/1.0/conformance`),</span>
-<span class="sd">        and to other resources.</span>
+<span class="sd">            and to other resources.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">          ClientError: if the call to the web service fails</span>
+<span class="sd">          ClientError: If the call to the web service fails</span>
 <span class="sd">            with a status code != `2xx`.</span>
+
 <span class="sd">            - `500`: A server error occurred.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
@@ -1451,21 +1462,21 @@ other configuration arguments are ignored.</p>
 <span class="sd">        |Callback|http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/callback|</span>
 <span class="sd">        |Dismiss|http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/dismiss|</span>
 
-<span class="sd">        For more information, see [Section</span>
-<span class="sd">        7.4](https://docs.ogc.org/is/18-062/18-062.html#sc_conformance_classes).</span>
+<span class="sd">        For more information, see [Section 7.4](https://docs.ogc.org/is/18-</span>
+<span class="sd">        062r2/18-062r2.html#sc_conformance_classes).</span>
 
 
 <span class="sd">        Returns:</span>
 <span class="sd">          ConformanceDeclaration: The URIs of all conformance classes supported</span>
-<span class="sd">        by the server.</span>
-<span class="sd">            To support &quot;generic&quot; clients that want to access multiple</span>
-<span class="sd">            OGC API - Processes implementations - and not &quot;just&quot; a specific</span>
-<span class="sd">            API / server, the server declares the conformance</span>
-<span class="sd">            classes it implements and conforms to.</span>
+<span class="sd">            by the server. To support &quot;generic&quot; clients that want</span>
+<span class="sd">            to access multiple OGC API - Processes implementations - and</span>
+<span class="sd">            not &quot;just&quot; a specific API / server, the server declares</span>
+<span class="sd">            the conformance classes it implements and conforms to.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">          ClientError: if the call to the web service fails</span>
+<span class="sd">          ClientError: If the call to the web service fails</span>
 <span class="sd">            with a status code != `2xx`.</span>
+
 <span class="sd">            - `500`: A server error occurred.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
@@ -1485,14 +1496,14 @@ other configuration arguments are ignored.</p>
 <span class="sd">        the process.</span>
 
 <span class="sd">        For more information, see [Section</span>
-<span class="sd">        7.9](https://docs.ogc.org/is/18-062/18-062.html#sc_process_list).</span>
+<span class="sd">        7.9](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_process_list).</span>
 
 
 <span class="sd">        Returns:</span>
 <span class="sd">          ProcessList: Information about the available processes</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">          ClientError: if the call to the web service fails</span>
+<span class="sd">          ClientError: If the call to the web service fails</span>
 <span class="sd">            with a status code != `2xx`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
@@ -1512,10 +1523,11 @@ other configuration arguments are ignored.</p>
 <span class="sd">        interface of a process. That said, the Core requirements class makes the</span>
 <span class="sd">        following recommendation:</span>
 
-<span class="sd">        Implementations SHOULD consider supporting the OGC process description.</span>
+<span class="sd">        Implementations **should** consider supporting the OGC process</span>
+<span class="sd">        description.</span>
 
 <span class="sd">        For more information, see [Section 7.10](https://docs.ogc.org/is/18-</span>
-<span class="sd">        062/18-062.html#sc_process_description).</span>
+<span class="sd">        062r2/18-062r2.html#sc_process_description).</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">          process_id:</span>
@@ -1526,8 +1538,9 @@ other configuration arguments are ignored.</p>
 <span class="sd">          ProcessDescription: A process description.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">          ClientError: if the call to the web service fails</span>
+<span class="sd">          ClientError: If the call to the web service fails</span>
 <span class="sd">            with a status code != `2xx`.</span>
+
 <span class="sd">            - `404`: The requested URI was not found.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
@@ -1548,7 +1561,7 @@ other configuration arguments are ignored.</p>
 <span class="sd">        Create a new job.</span>
 
 <span class="sd">        For more information, see [Section</span>
-<span class="sd">        7.11](https://docs.ogc.org/is/18-062/18-062.html#sc_create_job).</span>
+<span class="sd">        7.11](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_create_job).</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">          process_id:</span>
@@ -1560,8 +1573,9 @@ other configuration arguments are ignored.</p>
 <span class="sd">          JobInfo: Started asynchronous execution. Created job.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">          ClientError: if the call to the web service fails</span>
+<span class="sd">          ClientError: If the call to the web service fails</span>
 <span class="sd">            with a status code != `2xx`.</span>
+
 <span class="sd">            - `404`: The requested URI was not found.</span>
 <span class="sd">            - `500`: A server error occurred.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1579,18 +1593,19 @@ other configuration arguments are ignored.</p>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobList</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Lists available jobs.</span>
+<span class="sd">        List available jobs.</span>
 
 <span class="sd">        For more information, see [Section</span>
-<span class="sd">        11](https://docs.ogc.org/is/18-062/18-062.html#sc_job_list).</span>
+<span class="sd">        11](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_job_list).</span>
 
 
 <span class="sd">        Returns:</span>
 <span class="sd">          JobList: A list of jobs for this process.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">          ClientError: if the call to the web service fails</span>
+<span class="sd">          ClientError: If the call to the web service fails</span>
 <span class="sd">            with a status code != `2xx`.</span>
+
 <span class="sd">            - `404`: The requested URI was not found.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
@@ -1605,13 +1620,13 @@ other configuration arguments are ignored.</p>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobInfo</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Shows the status of a job.</span>
+<span class="sd">        Show the status of a job.</span>
 
 <span class="sd">        For more information, see [Section 7.12](https://docs.ogc.org/is/18-</span>
-<span class="sd">        062/18-062.html#sc_retrieve_status_info).</span>
+<span class="sd">        062r2/18-062r2.html#sc_retrieve_status_info).</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">          job_id: local identifier of a job</span>
+<span class="sd">          job_id: Local identifier of a job</span>
 <span class="sd">          kwargs: Optional keyword arguments that may be</span>
 <span class="sd">            used by the underlying transport.</span>
 
@@ -1619,8 +1634,9 @@ other configuration arguments are ignored.</p>
 <span class="sd">          JobInfo: The status of a job.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">          ClientError: if the call to the web service fails</span>
+<span class="sd">          ClientError: If the call to the web service fails</span>
 <span class="sd">            with a status code != `2xx`.</span>
+
 <span class="sd">            - `404`: The requested URI was not found.</span>
 <span class="sd">            - `500`: A server error occurred.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1637,13 +1653,13 @@ other configuration arguments are ignored.</p>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">dismiss_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobInfo</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Cancel a job execution and remove it from the jobs list.</span>
+<span class="sd">        Cancel a job execution and removes it from the jobs list.</span>
 
 <span class="sd">        For more information, see [Section</span>
-<span class="sd">        13](https://docs.ogc.org/is/18-062/18-062.html#Dismiss).</span>
+<span class="sd">        13](https://docs.ogc.org/is/18-062r2/18-062r2.html#Dismiss).</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">          job_id: local identifier of a job</span>
+<span class="sd">          job_id: Local identifier of a job</span>
 <span class="sd">          kwargs: Optional keyword arguments that may be</span>
 <span class="sd">            used by the underlying transport.</span>
 
@@ -1651,8 +1667,9 @@ other configuration arguments are ignored.</p>
 <span class="sd">          JobInfo: Information about the job.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">          ClientError: if the call to the web service fails</span>
+<span class="sd">          ClientError: If the call to the web service fails</span>
 <span class="sd">            with a status code != `2xx`.</span>
+
 <span class="sd">            - `404`: The requested URI was not found.</span>
 <span class="sd">            - `500`: A server error occurred.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1669,14 +1686,14 @@ other configuration arguments are ignored.</p>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_job_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobResults</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Lists available results of a job. In case of a failure, lists errors</span>
+<span class="sd">        List available results of a job. In case of a failure, list errors</span>
 <span class="sd">        instead.</span>
 
 <span class="sd">        For more information, see [Section 7.13](https://docs.ogc.org/is/18-</span>
-<span class="sd">        062/18-062.html#sc_retrieve_job_results).</span>
+<span class="sd">        062r2/18-062r2.html#sc_retrieve_job_results).</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">          job_id: local identifier of a job</span>
+<span class="sd">          job_id: Local identifier of a job</span>
 <span class="sd">          kwargs: Optional keyword arguments that may be</span>
 <span class="sd">            used by the underlying transport.</span>
 
@@ -1684,8 +1701,9 @@ other configuration arguments are ignored.</p>
 <span class="sd">          JobResults: The results of a job.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">          ClientError: if the call to the web service fails</span>
+<span class="sd">          ClientError: If the call to the web service fails</span>
 <span class="sd">            with a status code != `2xx`.</span>
+
 <span class="sd">            - `404`: The requested URI was not found.</span>
 <span class="sd">            - `500`: A server error occurred.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1701,7 +1719,7 @@ other configuration arguments are ignored.</p>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Closes this client.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close this client.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
@@ -1740,7 +1758,7 @@ other configuration arguments are ignored.</p>
 <li>The processes metadata (path /processes),</li>
 <li>The endpoint for job monitoring (path /jobs).</li>
 </ul>
-</details>        <p>For more information, see <a href="https://docs.ogc.org/is/18-062/18-062.html#sc_landing_page">Section
+</details>        <p>For more information, see <a href="https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_landing_page">Section
 7.2</a>.</p>
 
 
@@ -1762,13 +1780,13 @@ other configuration arguments are ignored.</p>
                 <p>The landing page provides links to the API definition
 (link relations <code>service-desc</code> and <code>service-doc</code>),
 the Conformance declaration (path <code>/conformance</code>,
-link relation <code>http://www.opengis.net/def/rel/ogc/1.0/conformance</code>),</p>
+link relation <code>http://www.opengis.net/def/rel/ogc/1.0/conformance</code>),
+and to other resources.</p>
               </div>
             </td>
           </tr>
       </tbody>
     </table>
-        <p>and to other resources.</p>
 
 
 <p><span class="doc-section-title">Raises:</span></p>
@@ -1786,9 +1804,11 @@ link relation <code>http://www.opengis.net/def/rel/ogc/1.0/conformance</code>),<
             </td>
             <td>
               <div class="doc-md-description">
-                <p>if the call to the web service fails
-with a status code != <code>2xx</code>.
-- <code>500</code>: A server error occurred.</p>
+                <p>If the call to the web service fails
+with a status code != <code>2xx</code>.</p>
+<ul>
+<li><code>500</code>: A server error occurred.</li>
+</ul>
               </div>
             </td>
           </tr>
@@ -1798,8 +1818,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 75</span>
-<span class="normal"> 76</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 76</span>
 <span class="normal"> 77</span>
 <span class="normal"> 78</span>
 <span class="normal"> 79</span>
@@ -1829,7 +1848,9 @@ with a status code != <code>2xx</code>.
 <span class="normal">103</span>
 <span class="normal">104</span>
 <span class="normal">105</span>
-<span class="normal">106</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_capabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Capabilities</span><span class="p">:</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_capabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Capabilities</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The landing page provides links to the:</span>
 <span class="sd">      * The OpenAPI-definition (no fixed path),</span>
@@ -1838,18 +1859,19 @@ with a status code != <code>2xx</code>.
 <span class="sd">      * The endpoint for job monitoring (path /jobs).</span>
 
 <span class="sd">    For more information, see [Section</span>
-<span class="sd">    7.2](https://docs.ogc.org/is/18-062/18-062.html#sc_landing_page).</span>
+<span class="sd">    7.2](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_landing_page).</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">      Capabilities: The landing page provides links to the API definition</span>
 <span class="sd">        (link relations `service-desc` and `service-doc`),</span>
 <span class="sd">        the Conformance declaration (path `/conformance`,</span>
 <span class="sd">        link relation `http://www.opengis.net/def/rel/ogc/1.0/conformance`),</span>
-<span class="sd">    and to other resources.</span>
+<span class="sd">        and to other resources.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">      ClientError: if the call to the web service fails</span>
+<span class="sd">      ClientError: If the call to the web service fails</span>
 <span class="sd">        with a status code != `2xx`.</span>
+
 <span class="sd">        - `500`: A server error occurred.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
@@ -1922,8 +1944,8 @@ server conforms to.</p>
 </tr>
 </tbody>
 </table>
-<p>For more information, see <a href="https://docs.ogc.org/is/18-062/18-062.html#sc_conformance_classes">Section
-7.4</a>.</p>
+<p>For more information, see <a href="https://docs.ogc.org/is/18-
+062r2/18-062r2.html#sc_conformance_classes">Section 7.4</a>.</p>
 
 
     <p><span class="doc-section-title">Returns:</span></p>
@@ -1941,17 +1963,16 @@ server conforms to.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The URIs of all conformance classes supported</p>
+                <p>The URIs of all conformance classes supported
+by the server. To support "generic" clients that want
+to access multiple OGC API - Processes implementations - and
+not "just" a specific API / server, the server declares
+the conformance classes it implements and conforms to.</p>
               </div>
             </td>
           </tr>
       </tbody>
     </table>
-        <p>by the server.
-    To support "generic" clients that want to access multiple
-    OGC API - Processes implementations - and not "just" a specific
-    API / server, the server declares the conformance
-    classes it implements and conforms to.</p>
 
 
 <p><span class="doc-section-title">Raises:</span></p>
@@ -1969,9 +1990,11 @@ server conforms to.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>if the call to the web service fails
-with a status code != <code>2xx</code>.
-- <code>500</code>: A server error occurred.</p>
+                <p>If the call to the web service fails
+with a status code != <code>2xx</code>.</p>
+<ul>
+<li><code>500</code>: A server error occurred.</li>
+</ul>
               </div>
             </td>
           </tr>
@@ -1981,9 +2004,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">108</span>
-<span class="normal">109</span>
-<span class="normal">110</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">110</span>
 <span class="normal">111</span>
 <span class="normal">112</span>
 <span class="normal">113</span>
@@ -2022,7 +2043,9 @@ with a status code != <code>2xx</code>.
 <span class="normal">146</span>
 <span class="normal">147</span>
 <span class="normal">148</span>
-<span class="normal">149</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_conformance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConformanceDeclaration</span><span class="p">:</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_conformance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConformanceDeclaration</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A list of all conformance classes, specified in a standard, that the</span>
 <span class="sd">    server conforms to.</span>
@@ -2038,21 +2061,21 @@ with a status code != <code>2xx</code>.
 <span class="sd">    |Callback|http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/callback|</span>
 <span class="sd">    |Dismiss|http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/dismiss|</span>
 
-<span class="sd">    For more information, see [Section</span>
-<span class="sd">    7.4](https://docs.ogc.org/is/18-062/18-062.html#sc_conformance_classes).</span>
+<span class="sd">    For more information, see [Section 7.4](https://docs.ogc.org/is/18-</span>
+<span class="sd">    062r2/18-062r2.html#sc_conformance_classes).</span>
 
 
 <span class="sd">    Returns:</span>
 <span class="sd">      ConformanceDeclaration: The URIs of all conformance classes supported</span>
-<span class="sd">    by the server.</span>
-<span class="sd">        To support &quot;generic&quot; clients that want to access multiple</span>
-<span class="sd">        OGC API - Processes implementations - and not &quot;just&quot; a specific</span>
-<span class="sd">        API / server, the server declares the conformance</span>
-<span class="sd">        classes it implements and conforms to.</span>
+<span class="sd">        by the server. To support &quot;generic&quot; clients that want</span>
+<span class="sd">        to access multiple OGC API - Processes implementations - and</span>
+<span class="sd">        not &quot;just&quot; a specific API / server, the server declares</span>
+<span class="sd">        the conformance classes it implements and conforms to.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">      ClientError: if the call to the web service fails</span>
+<span class="sd">      ClientError: If the call to the web service fails</span>
 <span class="sd">        with a status code != `2xx`.</span>
+
 <span class="sd">        - `500`: A server error occurred.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
@@ -2084,7 +2107,7 @@ with a status code != <code>2xx</code>.
         <p>The list of processes contains a summary of each process the OGC API -
 Processes offers, including the link to a more detailed description of
 the process.</p>
-<p>For more information, see <a href="https://docs.ogc.org/is/18-062/18-062.html#sc_process_list">Section
+<p>For more information, see <a href="https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_process_list">Section
 7.9</a>.</p>
 
 
@@ -2126,7 +2149,7 @@ the process.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>if the call to the web service fails
+                <p>If the call to the web service fails
 with a status code != <code>2xx</code>.</p>
               </div>
             </td>
@@ -2137,9 +2160,7 @@ with a status code != <code>2xx</code>.</p>
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">151</span>
-<span class="normal">152</span>
-<span class="normal">153</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">153</span>
 <span class="normal">154</span>
 <span class="normal">155</span>
 <span class="normal">156</span>
@@ -2161,21 +2182,23 @@ with a status code != <code>2xx</code>.</p>
 <span class="normal">172</span>
 <span class="normal">173</span>
 <span class="normal">174</span>
-<span class="normal">175</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_processes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProcessList</span><span class="p">:</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_processes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProcessList</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The list of processes contains a summary of each process the OGC API -</span>
 <span class="sd">    Processes offers, including the link to a more detailed description of</span>
 <span class="sd">    the process.</span>
 
 <span class="sd">    For more information, see [Section</span>
-<span class="sd">    7.9](https://docs.ogc.org/is/18-062/18-062.html#sc_process_list).</span>
+<span class="sd">    7.9](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_process_list).</span>
 
 
 <span class="sd">    Returns:</span>
 <span class="sd">      ProcessList: Information about the available processes</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">      ClientError: if the call to the web service fails</span>
+<span class="sd">      ClientError: If the call to the web service fails</span>
 <span class="sd">        with a status code != `2xx`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
@@ -2208,9 +2231,10 @@ and a link to the execution-endpoint for the process. The Core does not
 mandate the use of a specific process description to specify the
 interface of a process. That said, the Core requirements class makes the
 following recommendation:</p>
-<p>Implementations SHOULD consider supporting the OGC process description.</p>
+<p>Implementations <strong>should</strong> consider supporting the OGC process
+description.</p>
 <p>For more information, see <a href="https://docs.ogc.org/is/18-
-062/18-062.html#sc_process_description">Section 7.10</a>.</p>
+062r2/18-062r2.html#sc_process_description">Section 7.10</a>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2299,9 +2323,11 @@ used by the underlying transport.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>if the call to the web service fails
-with a status code != <code>2xx</code>.
-- <code>404</code>: The requested URI was not found.</p>
+                <p>If the call to the web service fails
+with a status code != <code>2xx</code>.</p>
+<ul>
+<li><code>404</code>: The requested URI was not found.</li>
+</ul>
               </div>
             </td>
           </tr>
@@ -2311,9 +2337,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">177</span>
-<span class="normal">178</span>
-<span class="normal">179</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">179</span>
 <span class="normal">180</span>
 <span class="normal">181</span>
 <span class="normal">182</span>
@@ -2346,7 +2370,11 @@ with a status code != <code>2xx</code>.
 <span class="normal">209</span>
 <span class="normal">210</span>
 <span class="normal">211</span>
-<span class="normal">212</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProcessDescription</span><span class="p">:</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProcessDescription</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The process description contains information about inputs and outputs</span>
 <span class="sd">    and a link to the execution-endpoint for the process. The Core does not</span>
@@ -2354,10 +2382,11 @@ with a status code != <code>2xx</code>.
 <span class="sd">    interface of a process. That said, the Core requirements class makes the</span>
 <span class="sd">    following recommendation:</span>
 
-<span class="sd">    Implementations SHOULD consider supporting the OGC process description.</span>
+<span class="sd">    Implementations **should** consider supporting the OGC process</span>
+<span class="sd">    description.</span>
 
 <span class="sd">    For more information, see [Section 7.10](https://docs.ogc.org/is/18-</span>
-<span class="sd">    062/18-062.html#sc_process_description).</span>
+<span class="sd">    062r2/18-062r2.html#sc_process_description).</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">      process_id:</span>
@@ -2368,8 +2397,9 @@ with a status code != <code>2xx</code>.
 <span class="sd">      ProcessDescription: A process description.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">      ClientError: if the call to the web service fails</span>
+<span class="sd">      ClientError: If the call to the web service fails</span>
 <span class="sd">        with a status code != `2xx`.</span>
+
 <span class="sd">        - `404`: The requested URI was not found.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
@@ -2400,7 +2430,7 @@ with a status code != <code>2xx</code>.
     <div class="doc doc-contents ">
 
         <p>Create a new job.</p>
-<p>For more information, see <a href="https://docs.ogc.org/is/18-062/18-062.html#sc_create_job">Section
+<p>For more information, see <a href="https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_create_job">Section
 7.11</a>.</p>
 
 
@@ -2506,10 +2536,12 @@ used by the underlying transport.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>if the call to the web service fails
-with a status code != <code>2xx</code>.
-- <code>404</code>: The requested URI was not found.
-- <code>500</code>: A server error occurred.</p>
+                <p>If the call to the web service fails
+with a status code != <code>2xx</code>.</p>
+<ul>
+<li><code>404</code>: The requested URI was not found.</li>
+<li><code>500</code>: A server error occurred.</li>
+</ul>
               </div>
             </td>
           </tr>
@@ -2519,11 +2551,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">214</span>
-<span class="normal">215</span>
-<span class="normal">216</span>
-<span class="normal">217</span>
-<span class="normal">218</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">218</span>
 <span class="normal">219</span>
 <span class="normal">220</span>
 <span class="normal">221</span>
@@ -2553,14 +2581,19 @@ with a status code != <code>2xx</code>.
 <span class="normal">245</span>
 <span class="normal">246</span>
 <span class="normal">247</span>
-<span class="normal">248</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">execute_process</span><span class="p">(</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">execute_process</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">process_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">ProcessRequest</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobInfo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a new job.</span>
 
 <span class="sd">    For more information, see [Section</span>
-<span class="sd">    7.11](https://docs.ogc.org/is/18-062/18-062.html#sc_create_job).</span>
+<span class="sd">    7.11](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_create_job).</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">      process_id:</span>
@@ -2572,8 +2605,9 @@ with a status code != <code>2xx</code>.
 <span class="sd">      JobInfo: Started asynchronous execution. Created job.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">      ClientError: if the call to the web service fails</span>
+<span class="sd">      ClientError: If the call to the web service fails</span>
 <span class="sd">        with a status code != `2xx`.</span>
+
 <span class="sd">        - `404`: The requested URI was not found.</span>
 <span class="sd">        - `500`: A server error occurred.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2605,8 +2639,8 @@ with a status code != <code>2xx</code>.
 
     <div class="doc doc-contents ">
 
-        <p>Lists available jobs.</p>
-<p>For more information, see <a href="https://docs.ogc.org/is/18-062/18-062.html#sc_job_list">Section
+        <p>List available jobs.</p>
+<p>For more information, see <a href="https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_job_list">Section
 11</a>.</p>
 
 
@@ -2648,9 +2682,11 @@ with a status code != <code>2xx</code>.
             </td>
             <td>
               <div class="doc-md-description">
-                <p>if the call to the web service fails
-with a status code != <code>2xx</code>.
-- <code>404</code>: The requested URI was not found.</p>
+                <p>If the call to the web service fails
+with a status code != <code>2xx</code>.</p>
+<ul>
+<li><code>404</code>: The requested URI was not found.</li>
+</ul>
               </div>
             </td>
           </tr>
@@ -2660,12 +2696,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">250</span>
-<span class="normal">251</span>
-<span class="normal">252</span>
-<span class="normal">253</span>
-<span class="normal">254</span>
-<span class="normal">255</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">255</span>
 <span class="normal">256</span>
 <span class="normal">257</span>
 <span class="normal">258</span>
@@ -2684,20 +2715,27 @@ with a status code != <code>2xx</code>.
 <span class="normal">271</span>
 <span class="normal">272</span>
 <span class="normal">273</span>
-<span class="normal">274</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobList</span><span class="p">:</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobList</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Lists available jobs.</span>
+<span class="sd">    List available jobs.</span>
 
 <span class="sd">    For more information, see [Section</span>
-<span class="sd">    11](https://docs.ogc.org/is/18-062/18-062.html#sc_job_list).</span>
+<span class="sd">    11](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_job_list).</span>
 
 
 <span class="sd">    Returns:</span>
 <span class="sd">      JobList: A list of jobs for this process.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">      ClientError: if the call to the web service fails</span>
+<span class="sd">      ClientError: If the call to the web service fails</span>
 <span class="sd">        with a status code != `2xx`.</span>
+
 <span class="sd">        - `404`: The requested URI was not found.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
@@ -2726,9 +2764,9 @@ with a status code != <code>2xx</code>.
 
     <div class="doc doc-contents ">
 
-        <p>Shows the status of a job.</p>
+        <p>Show the status of a job.</p>
 <p>For more information, see <a href="https://docs.ogc.org/is/18-
-062/18-062.html#sc_retrieve_status_info">Section 7.12</a>.</p>
+062r2/18-062r2.html#sc_retrieve_status_info">Section 7.12</a>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -2751,7 +2789,7 @@ with a status code != <code>2xx</code>.
             </td>
             <td>
               <div class="doc-md-description">
-                <p>local identifier of a job</p>
+                <p>Local identifier of a job</p>
               </div>
             </td>
             <td>
@@ -2817,10 +2855,12 @@ used by the underlying transport.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>if the call to the web service fails
-with a status code != <code>2xx</code>.
-- <code>404</code>: The requested URI was not found.
-- <code>500</code>: A server error occurred.</p>
+                <p>If the call to the web service fails
+with a status code != <code>2xx</code>.</p>
+<ul>
+<li><code>404</code>: The requested URI was not found.</li>
+<li><code>500</code>: A server error occurred.</li>
+</ul>
               </div>
             </td>
           </tr>
@@ -2830,13 +2870,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">276</span>
-<span class="normal">277</span>
-<span class="normal">278</span>
-<span class="normal">279</span>
-<span class="normal">280</span>
-<span class="normal">281</span>
-<span class="normal">282</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">282</span>
 <span class="normal">283</span>
 <span class="normal">284</span>
 <span class="normal">285</span>
@@ -2860,15 +2894,22 @@ with a status code != <code>2xx</code>.
 <span class="normal">303</span>
 <span class="normal">304</span>
 <span class="normal">305</span>
-<span class="normal">306</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobInfo</span><span class="p">:</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobInfo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Shows the status of a job.</span>
+<span class="sd">    Show the status of a job.</span>
 
 <span class="sd">    For more information, see [Section 7.12](https://docs.ogc.org/is/18-</span>
-<span class="sd">    062/18-062.html#sc_retrieve_status_info).</span>
+<span class="sd">    062r2/18-062r2.html#sc_retrieve_status_info).</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">      job_id: local identifier of a job</span>
+<span class="sd">      job_id: Local identifier of a job</span>
 <span class="sd">      kwargs: Optional keyword arguments that may be</span>
 <span class="sd">        used by the underlying transport.</span>
 
@@ -2876,8 +2917,9 @@ with a status code != <code>2xx</code>.
 <span class="sd">      JobInfo: The status of a job.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">      ClientError: if the call to the web service fails</span>
+<span class="sd">      ClientError: If the call to the web service fails</span>
 <span class="sd">        with a status code != `2xx`.</span>
+
 <span class="sd">        - `404`: The requested URI was not found.</span>
 <span class="sd">        - `500`: A server error occurred.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2908,8 +2950,8 @@ with a status code != <code>2xx</code>.
 
     <div class="doc doc-contents ">
 
-        <p>Cancel a job execution and remove it from the jobs list.</p>
-<p>For more information, see <a href="https://docs.ogc.org/is/18-062/18-062.html#Dismiss">Section
+        <p>Cancel a job execution and removes it from the jobs list.</p>
+<p>For more information, see <a href="https://docs.ogc.org/is/18-062r2/18-062r2.html#Dismiss">Section
 13</a>.</p>
 
 
@@ -2933,7 +2975,7 @@ with a status code != <code>2xx</code>.
             </td>
             <td>
               <div class="doc-md-description">
-                <p>local identifier of a job</p>
+                <p>Local identifier of a job</p>
               </div>
             </td>
             <td>
@@ -2999,10 +3041,12 @@ used by the underlying transport.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>if the call to the web service fails
-with a status code != <code>2xx</code>.
-- <code>404</code>: The requested URI was not found.
-- <code>500</code>: A server error occurred.</p>
+                <p>If the call to the web service fails
+with a status code != <code>2xx</code>.</p>
+<ul>
+<li><code>404</code>: The requested URI was not found.</li>
+<li><code>500</code>: A server error occurred.</li>
+</ul>
               </div>
             </td>
           </tr>
@@ -3012,14 +3056,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">308</span>
-<span class="normal">309</span>
-<span class="normal">310</span>
-<span class="normal">311</span>
-<span class="normal">312</span>
-<span class="normal">313</span>
-<span class="normal">314</span>
-<span class="normal">315</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">315</span>
 <span class="normal">316</span>
 <span class="normal">317</span>
 <span class="normal">318</span>
@@ -3042,15 +3079,23 @@ with a status code != <code>2xx</code>.
 <span class="normal">335</span>
 <span class="normal">336</span>
 <span class="normal">337</span>
-<span class="normal">338</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">dismiss_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobInfo</span><span class="p">:</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">dismiss_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobInfo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Cancel a job execution and remove it from the jobs list.</span>
+<span class="sd">    Cancel a job execution and removes it from the jobs list.</span>
 
 <span class="sd">    For more information, see [Section</span>
-<span class="sd">    13](https://docs.ogc.org/is/18-062/18-062.html#Dismiss).</span>
+<span class="sd">    13](https://docs.ogc.org/is/18-062r2/18-062r2.html#Dismiss).</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">      job_id: local identifier of a job</span>
+<span class="sd">      job_id: Local identifier of a job</span>
 <span class="sd">      kwargs: Optional keyword arguments that may be</span>
 <span class="sd">        used by the underlying transport.</span>
 
@@ -3058,8 +3103,9 @@ with a status code != <code>2xx</code>.
 <span class="sd">      JobInfo: Information about the job.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">      ClientError: if the call to the web service fails</span>
+<span class="sd">      ClientError: If the call to the web service fails</span>
 <span class="sd">        with a status code != `2xx`.</span>
+
 <span class="sd">        - `404`: The requested URI was not found.</span>
 <span class="sd">        - `500`: A server error occurred.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -3090,10 +3136,10 @@ with a status code != <code>2xx</code>.
 
     <div class="doc doc-contents ">
 
-        <p>Lists available results of a job. In case of a failure, lists errors
+        <p>List available results of a job. In case of a failure, list errors
 instead.</p>
 <p>For more information, see <a href="https://docs.ogc.org/is/18-
-062/18-062.html#sc_retrieve_job_results">Section 7.13</a>.</p>
+062r2/18-062r2.html#sc_retrieve_job_results">Section 7.13</a>.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -3116,7 +3162,7 @@ instead.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>local identifier of a job</p>
+                <p>Local identifier of a job</p>
               </div>
             </td>
             <td>
@@ -3182,10 +3228,12 @@ used by the underlying transport.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>if the call to the web service fails
-with a status code != <code>2xx</code>.
-- <code>404</code>: The requested URI was not found.
-- <code>500</code>: A server error occurred.</p>
+                <p>If the call to the web service fails
+with a status code != <code>2xx</code>.</p>
+<ul>
+<li><code>404</code>: The requested URI was not found.</li>
+<li><code>500</code>: A server error occurred.</li>
+</ul>
               </div>
             </td>
           </tr>
@@ -3195,15 +3243,7 @@ with a status code != <code>2xx</code>.
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">340</span>
-<span class="normal">341</span>
-<span class="normal">342</span>
-<span class="normal">343</span>
-<span class="normal">344</span>
-<span class="normal">345</span>
-<span class="normal">346</span>
-<span class="normal">347</span>
-<span class="normal">348</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">348</span>
 <span class="normal">349</span>
 <span class="normal">350</span>
 <span class="normal">351</span>
@@ -3226,16 +3266,25 @@ with a status code != <code>2xx</code>.
 <span class="normal">368</span>
 <span class="normal">369</span>
 <span class="normal">370</span>
-<span class="normal">371</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_job_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobResults</span><span class="p">:</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_job_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobResults</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Lists available results of a job. In case of a failure, lists errors</span>
+<span class="sd">    List available results of a job. In case of a failure, list errors</span>
 <span class="sd">    instead.</span>
 
 <span class="sd">    For more information, see [Section 7.13](https://docs.ogc.org/is/18-</span>
-<span class="sd">    062/18-062.html#sc_retrieve_job_results).</span>
+<span class="sd">    062r2/18-062r2.html#sc_retrieve_job_results).</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">      job_id: local identifier of a job</span>
+<span class="sd">      job_id: Local identifier of a job</span>
 <span class="sd">      kwargs: Optional keyword arguments that may be</span>
 <span class="sd">        used by the underlying transport.</span>
 
@@ -3243,8 +3292,9 @@ with a status code != <code>2xx</code>.
 <span class="sd">      JobResults: The results of a job.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">      ClientError: if the call to the web service fails</span>
+<span class="sd">      ClientError: If the call to the web service fails</span>
 <span class="sd">        with a status code != `2xx`.</span>
+
 <span class="sd">        - `404`: The requested URI was not found.</span>
 <span class="sd">        - `500`: A server error occurred.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -3275,16 +3325,16 @@ with a status code != <code>2xx</code>.
 
     <div class="doc doc-contents ">
 
-        <p>Closes this client.</p>
+        <p>Close this client.</p>
 
 
             <details class="quote">
               <summary>Source code in <code>s2gos-client\src\s2gos_client\api\client.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">373</span>
-<span class="normal">374</span>
-<span class="normal">375</span>
-<span class="normal">376</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Closes this client.&quot;&quot;&quot;</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Close this client.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_transport</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>
@@ -3653,7 +3703,7 @@ with a status code != <code>2xx</code>.
             </td>
             <td>
               <div class="doc-md-description">
-                <p>the error message</p>
+                <p>The error message</p>
               </div>
             </td>
             <td>
@@ -3713,7 +3763,7 @@ or the details that describe a non-expected response from the server.</p>
 <span class="sd">    - the received JSON response is not parsable.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        message: the error message</span>
+<span class="sd">        message: The error message</span>
 <span class="sd">        api_error: The details describing the error that occurred on the server</span>
 <span class="sd">            or the details that describe a non-expected response from the server.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

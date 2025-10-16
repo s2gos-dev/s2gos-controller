@@ -377,6 +377,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#s2gos-client-create-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      s2gos-client create-request
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#s2gos-client-validate-request" class="md-nav__link">
     <span class="md-ellipsis">
       s2gos-client validate-request
@@ -717,6 +726,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#s2gos-client-create-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      s2gos-client create-request
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#s2gos-client-validate-request" class="md-nav__link">
     <span class="md-ellipsis">
       s2gos-client validate-request
@@ -812,6 +830,7 @@ for <code>validate-request</code>, or <code>lp</code> for <code>list-processes</
 <li><code>configure</code>: Configure the client tool.</li>
 <li><code>list-processes</code>: List available processes.</li>
 <li><code>get-process</code>: Get process details.</li>
+<li><code>create-request</code>: Create an execution request (template) for...</li>
 <li><code>validate-request</code>: Validate a process execution request.</li>
 <li><code>execute-process</code>: Execute a process in asynchronous mode.</li>
 <li><code>list-jobs</code>: List all jobs.</li>
@@ -858,13 +877,33 @@ for <code>validate-request</code>, or <code>lp</code> for <code>list-processes</
 <li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
+<h2 id="s2gos-client-create-request"><code>s2gos-client create-request</code></h2>
+<p>Create an execution request (template) for a given process.</p>
+<p>The generated template comprises generated default values for all inputs.
+Note that they might not necessarily be valid.
+The generated template request may serve as a starting point for the actual,
+valid execution request.</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>create-request<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>PROCESS_ID<span class="o">]</span>
+</code></pre></div>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[PROCESS_ID]</code>: Process identifier.</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>-d, --dotpath</code>: Input names use dot-path notion to encode nested values, e.g., <code>-i scene.colors.bg=red</code>.</li>
+<li><code>-c, --config PATH</code>: Client configuration file.</li>
+<li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
 <h2 id="s2gos-client-validate-request"><code>s2gos-client validate-request</code></h2>
 <p>Validate a process execution request.</p>
 <p>The execution request to be validated may be read from a file given
 by <code>--request</code>, or from <code>stdin</code>, or from the <code>process_id</code> argument
 with zero, one, or more <code>--input</code> (or <code>-i</code>) options.</p>
 <p>The <code>process_id</code> argument and any given <code>--input</code> options will override
-settings with same name found in the given request file or <code>stdin</code>, if any.</p>
+settings with the same name found in the given request file or <code>stdin</code>, if any.</p>
 <p><strong>Usage</strong>:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>validate-request<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>PROCESS_ID<span class="o">]</span>
 </code></pre></div>
