@@ -173,6 +173,31 @@ def get_process(
 
 
 @cli.command()
+def create_request(
+    ctx: typer.Context,
+    process_id: Annotated[Optional[str], PROCESS_ID_ARGUMENT] = None,
+    dotpath: Annotated[bool, DOT_PATH_OPTION] = False,
+    config_file: Annotated[Optional[str], CONFIG_OPTION] = None,
+    output_format: Annotated[OutputFormat, FORMAT_OPTION] = DEFAULT_OUTPUT_FORMAT,
+):
+    """
+    Create an execution request (template) for a given process.
+
+    The generated template comprises generated default values for all inputs.
+    Note that they might not necessarily be valid.
+    The generated template request may serve as a starting point for the actual,
+    valid execution request.
+    """
+    from .client import use_client
+    from .output import get_renderer, output
+
+    with use_client(ctx, config_file) as client:
+        request = client.create_execution_request(process_id, dotpath=dotpath)
+
+    output(get_renderer(output_format).render_execution_request_valid(request))
+
+
+@cli.command()
 def validate_request(
     process_id: Annotated[Optional[str], PROCESS_ID_ARGUMENT] = None,
     dotpath: Annotated[bool, DOT_PATH_OPTION] = False,
@@ -188,7 +213,7 @@ def validate_request(
     with zero, one, or more `--input` (or `-i`) options.
 
     The `process_id` argument and any given `--input` options will override
-    settings with same name found in the given request file or `stdin`, if any.
+    settings with the same name found in the given request file or `stdin`, if any.
     """
     from s2gos_common.process.request import ExecutionRequest
 

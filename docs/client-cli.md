@@ -28,6 +28,7 @@ $ s2gos-client [OPTIONS] COMMAND [ARGS]...
 * `configure`: Configure the client tool.
 * `list-processes`: List available processes.
 * `get-process`: Get process details.
+* `create-request`: Create an execution request (template) for...
 * `validate-request`: Validate a process execution request.
 * `execute-process`: Execute a process in asynchronous mode.
 * `list-jobs`: List all jobs.
@@ -89,6 +90,32 @@ $ s2gos-client get-process [OPTIONS] PROCESS_ID
 * `-f, --format [simple|json|yaml]`: Output format.  [default: yaml]
 * `--help`: Show this message and exit.
 
+## `s2gos-client create-request`
+
+Create an execution request (template) for a given process.
+
+The generated template comprises generated default values for all inputs.
+Note that they might not necessarily be valid.
+The generated template request may serve as a starting point for the actual,
+valid execution request.
+
+**Usage**:
+
+```console
+$ s2gos-client create-request [OPTIONS] [PROCESS_ID]
+```
+
+**Arguments**:
+
+* `[PROCESS_ID]`: Process identifier.
+
+**Options**:
+
+* `-d, --dotpath`: Input names use dot-path notion to encode nested values, e.g., `-i scene.colors.bg=red`.
+* `-c, --config PATH`: Client configuration file.
+* `-f, --format [simple|json|yaml]`: Output format.  [default: yaml]
+* `--help`: Show this message and exit.
+
 ## `s2gos-client validate-request`
 
 Validate a process execution request.
@@ -98,7 +125,7 @@ by `--request`, or from `stdin`, or from the `process_id` argument
 with zero, one, or more `--input` (or `-i`) options.
 
 The `process_id` argument and any given `--input` options will override
-settings with same name found in the given request file or `stdin`, if any.
+settings with the same name found in the given request file or `stdin`, if any.
 
 **Usage**:
 

@@ -15,6 +15,9 @@ GetClient: TypeAlias = Callable[[str | None], Client]
 
 
 def use_client(ctx: typer.Context, config_file: str | None) -> "UseClient":
+    """
+    Context manager
+    """
     return UseClient(ctx, config_file)
 
 
