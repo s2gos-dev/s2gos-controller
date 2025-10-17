@@ -10,7 +10,7 @@ import httpx
 import pytest
 
 from s2gos_client.api.exceptions import ClientException
-from s2gos_client.api.transport import TransportArgs
+from s2gos_client.api.transport import TransportArgs, TransportException
 from s2gos_client.api.transport.httpx import HttpxTransport
 from s2gos_common.models import ApiError, ConformanceDeclaration
 
@@ -45,7 +45,7 @@ class HttpxSyncTransportTest(TestCase):
     def test_sync_call_initializes_correctly(self):
         transport = HttpxTransport(server_url="https://api.example.com")
         self.assertIsNone(transport.sync_httpx)
-        with pytest.raises(httpx.ConnectError):
+        with pytest.raises(TransportException):
             transport.call(TransportArgs("/"))
         self.assertIsInstance(transport.sync_httpx, httpx.Client)
 
@@ -176,7 +176,7 @@ class HttpxAsyncTransportTest(IsolatedAsyncioTestCase):
     async def test_async_call_initializes_correctly(self):
         transport = HttpxTransport(server_url="https://api.example.com")
         self.assertIsNone(transport.async_httpx)
-        with pytest.raises(httpx.ConnectError):
+        with pytest.raises(TransportException):
             await transport.async_call(TransportArgs("/"))
         self.assertIsInstance(transport.async_httpx, httpx.AsyncClient)
 
