@@ -18,6 +18,7 @@ from s2gos_common.models import (
     ProcessList,
     ProcessRequest,
 )
+from s2gos_common.process import ExecutionRequest
 
 
 class ClientTest(TestCase):
@@ -36,6 +37,20 @@ class ClientTest(TestCase):
         self.assertIsInstance(data, dict)
         self.assertIsInstance(metadata, dict)
         self.assertEqual({"root": "Client configuration:"}, metadata)
+
+    def test_create_execution_request(self):
+        self.assertEqual(
+            ExecutionRequest(process_id="ID-1", inputs={}),
+            self.client.create_execution_request(
+                process_id="ID-1",
+            ),
+        )
+
+    def test_create_execution_request_dotpath(self):
+        self.assertEqual(
+            ExecutionRequest(process_id="ID-1", inputs={}, dotpath=True),
+            self.client.create_execution_request(process_id="ID-1", dotpath=True),
+        )
 
     def test_get_capabilities(self):
         result = self.client.get_capabilities()

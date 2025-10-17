@@ -3,20 +3,26 @@
 #  https://opensource.org/license/apache-2-0.
 
 import os
-import unittest
 from io import StringIO
+from unittest import TestCase
 from unittest.mock import patch
 
 import click
 import pytest
 
-from s2gos_common.models import ProcessRequest, Subscriber
+from s2gos_common.models import (
+    InputDescription,
+    ProcessDescription,
+    ProcessRequest,
+    Schema,
+    Subscriber,
+)
 from s2gos_common.process.request import ExecutionRequest
 
 REQUEST_PATH = "test-request.yaml"
 
 
-class ExecutionRequestTest(unittest.TestCase):
+class ExecutionRequestTest(TestCase):
     def tearDown(self):
         if os.path.exists(REQUEST_PATH):
             os.remove(REQUEST_PATH)
@@ -232,12 +238,134 @@ class ExecutionRequestTest(unittest.TestCase):
             )
 
 
-class ExecutionRequestHelpersTest(unittest.TestCase):
-    def test_nest_dict(self):
-        self.assertEqual(
-            {"a": 1, "b": True}, ExecutionRequest._nest_dict({"a": 1, "b": True})
+class ExecutionRequestFromProcessDescriptionTest(TestCase):
+    # noinspection PyArgumentList
+    cases = [
+        [None, {}],
+        [None, Schema()],
+        [983, Schema(default=983)],
+        ["bibo", Schema(default="bibo", type="string")],
+        [False, Schema(type="boolean")],
+        [0, Schema(type="integer")],
+        [0, Schema(type="number")],
+        ["", Schema(type="string")],
+        [[], Schema(type="array")],
+        [{}, Schema(type="object")],
+        ["bert", Schema(enum=["bert", "ernie"])],
+        [None, Schema(nullable=True)],
+    ]
+
+    process_description = ProcessDescription(
+        id="T13",
+        version="0",
+        inputs={
+            f"p{i}": InputDescription(schema=schema)
+            for i, (_, schema) in enumerate(cases)
+        },
+    )
+
+    def test_all_types(self):
+        process_description = ProcessDescription(
+            id="T13",
+            version="0",
+            inputs={
+                f"p{i}": InputDescription(schema=schema)
+                for i, (_, schema) in enumerate(self.cases)
+            },
         )
         self.assertEqual(
-            {"a": 1, "b": {"x": 0.3, "y": -0.1}},
-            ExecutionRequest._nest_dict({"a": 1, "b.x": 0.3, "b.y": -0.1}),
+            ExecutionRequest(
+                process_id="T13",
+                inputs={
+                    f"p{i}": expected_value
+                    for i, (expected_value, _) in enumerate(self.cases)
+                },
+                outputs=None,
+            ),
+            ExecutionRequest.from_process_description(
+                process_description,
+            ),
+        )
+
+    def test_nested(self):
+        process_description = ProcessDescription(
+            id="T13",
+            version="8",
+            inputs={
+                "a": InputDescription(
+                    schema=Schema(
+                        **{
+                            "type": "object",
+                            "properties": {
+                                "b": Schema(**{"type": "object"}),
+                                "d": Schema(**{"type": "object"}),
+                            },
+                        }
+                    ),
+                ),
+                "f": InputDescription(
+                    schema=Schema(**{"type": "number"}),
+                ),
+            },
+        )
+        self.assertEqual(
+            ExecutionRequest(
+                process_id="T13",
+                dotpath=False,
+                inputs={"a": {"b": {}, "d": {}}, "f": 0},
+                outputs=None,
+            ),
+            ExecutionRequest.from_process_description(process_description),
+        )
+        self.assertEqual(
+            ExecutionRequest(
+                process_id="T13",
+                dotpath=False,
+                inputs={"a": {"b": {}, "d": {}}, "f": 0},
+                outputs=None,
+            ),
+            ExecutionRequest.from_process_description(
+                process_description, dotpath=False
+            ),
+        )
+
+    def test_nested_dotpath(self):
+        process_description = ProcessDescription(
+            id="T13",
+            version="8",
+            inputs={
+                "a": InputDescription(
+                    schema=Schema(
+                        **{
+                            "type": "object",
+                            "properties": {
+                                "b": Schema(**{"type": "object"}),
+                                "d": Schema(**{"type": "array"}),
+                            },
+                        }
+                    ),
+                ),
+                "f": InputDescription(
+                    schema=Schema(**{"type": "number"}),
+                ),
+            },
+        )
+        self.assertEqual(
+            ExecutionRequest(
+                process_id="T13",
+                dotpath=True,
+                inputs={"a.b": {}, "a.d": [], "f": 0},
+                outputs=None,
+            ),
+            ExecutionRequest.from_process_description(
+                process_description, dotpath=True
+            ),
+        )
+
+    def test_no_inputs(self):
+        self.assertEqual(
+            ExecutionRequest(process_id="T13", inputs={}, outputs=None),
+            ExecutionRequest.from_process_description(
+                ProcessDescription(id="T13", version="0")
+            ),
         )

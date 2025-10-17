@@ -11,7 +11,8 @@ import click
 import pydantic
 from pydantic import Field
 
-from s2gos_common.models import ProcessRequest
+from s2gos_common.models import ProcessDescription, ProcessRequest
+from s2gos_common.util.obj import flatten_obj, nest_dict
 
 SUBSCRIBER_EVENTS = {
     "success": "successUri",
@@ -20,6 +21,7 @@ SUBSCRIBER_EVENTS = {
 }
 
 
+# noinspection PyShadowingBuiltins
 class ExecutionRequest(ProcessRequest):
     """
     Process execution request.
@@ -50,9 +52,13 @@ class ExecutionRequest(ProcessRequest):
     ] = False
 
     def to_process_request(self) -> ProcessRequest:
+        """
+        Convert this execution request into a process request as used by the
+        `execute-process` operation.
+        """
         inputs = self.inputs
         if inputs and self.dotpath:
-            inputs = self._nest_dict(inputs)
+            inputs = nest_dict(inputs)
         return ProcessRequest(
             inputs=inputs,
             outputs=self.outputs,
@@ -88,15 +94,23 @@ class ExecutionRequest(ProcessRequest):
             raise click.ClickException(f"Execution request is invalid: {e}")
 
     @classmethod
-    def _nest_dict(cls, flat_dict: dict[str, Any]) -> dict[str, Any]:
-        nested_dict: dict[str, Any] = {}
-        for key, value in flat_dict.items():
-            path = key.split(".")
-            current = nested_dict
-            for name in path[:-1]:
-                current = current.setdefault(name, {})
-            current[path[-1]] = value
-        return nested_dict
+    def from_process_description(
+        cls,
+        process_description: ProcessDescription,
+        dotpath: bool = False,
+    ) -> "ExecutionRequest":
+        """
+        Create an execution request from the given process description.
+
+        Args:
+            process_description: The process description
+            dotpath: Whether to allow for dot-separated input
+                names for nested object values
+
+        Returns:
+            The execution requests populated with default values.
+        """
+        return _from_process_description(process_description, dotpath)
 
 
 def _read_execution_request(
@@ -193,3 +207,50 @@ def _parse_subscriber_url(value: str):
     if not all([url.scheme in ("http", "https"), url.netloc]):
         raise click.ClickException(f"Invalid subscriber URL: {value!r}")
     return value
+
+
+# noinspection PyShadowingBuiltins
+def _from_process_description(
+    process_description: ProcessDescription, dotpath: bool
+) -> ExecutionRequest:
+    inputs = {
+        k: _get_schema_default_value(
+            v.schema_.model_dump(mode="json", exclude_unset=True) if v.schema_ else None
+        )
+        for k, v in (process_description.inputs or {}).items()
+    }
+    if dotpath:
+        inputs = flatten_obj(inputs)
+    return ExecutionRequest(
+        process_id=process_description.id, dotpath=dotpath, inputs=inputs
+    )
+
+
+def _get_schema_default_value(schema: Any) -> Any:
+    if schema and isinstance(schema, dict):
+        if "default" in schema:
+            return schema["default"]
+        if "enum" in schema and isinstance(schema["enum"], list) and schema["enum"]:
+            return schema["enum"][0]
+        if "type" in schema and isinstance(schema["type"], str) and schema["type"]:
+            type_ = schema["type"]
+            if type_ == "object" and "properties" in schema:
+                properties_ = schema["properties"]
+                if properties_ and isinstance(properties_, dict):
+                    return {
+                        p_name: _get_schema_default_value(p_schema)
+                        for p_name, p_schema in properties_.items()
+                    }
+            return _JSON_DATA_TYPE_DEFAULT_VALUES.get(type_)
+    return None
+
+
+_JSON_DATA_TYPE_DEFAULT_VALUES: dict[str, Any] = {
+    "null": None,
+    "boolean": False,
+    "integer": 0,
+    "number": 0,
+    "string": "",
+    "array": [],
+    "object": {},
+}

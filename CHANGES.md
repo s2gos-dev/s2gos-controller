@@ -1,4 +1,7 @@
-## Changes in version 0.0.4 (in development)
+## Changes in version 0.0.5 (in development)
+
+
+## Changes in version 0.0.4
 
 - Prevent server from logging `/jobs` request, as they are used for polling. 
 - Prevent client from logging at all if we are not debugging. 
@@ -33,6 +36,7 @@
 - Added high level overview of various DevOps tools which will be used in the 
   development of services.
 - Added Jupyter Notebooks to documentation.
+- Fixed formatting and links for Client API documentation. (#48)
 
 
 ## Changes in version 0.0.3

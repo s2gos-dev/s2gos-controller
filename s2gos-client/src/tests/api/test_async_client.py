@@ -18,6 +18,7 @@ from s2gos_common.models import (
     ProcessList,
     ProcessRequest,
 )
+from s2gos_common.process import ExecutionRequest
 
 
 class AsyncClientTest(IsolatedAsyncioTestCase):
@@ -37,6 +38,24 @@ class AsyncClientTest(IsolatedAsyncioTestCase):
         self.assertIsInstance(data, dict)
         self.assertIsInstance(metadata, dict)
         self.assertEqual({"root": "Client configuration:"}, metadata)
+
+    async def test_create_execution_request(self):
+        request = await self.client.create_execution_request(
+            process_id="ID-1",
+        )
+        self.assertEqual(
+            ExecutionRequest(process_id="ID-1", inputs={}),
+            request,
+        )
+
+    async def test_create_execution_request_dotpath(self):
+        request = await self.client.create_execution_request(
+            process_id="ID-1", dotpath=True
+        )
+        self.assertEqual(
+            ExecutionRequest(process_id="ID-1", inputs={}, dotpath=True),
+            request,
+        )
 
     async def test_get_capabilities(self):
         result = await self.client.get_capabilities()

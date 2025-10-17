@@ -26,7 +26,7 @@ paths:
           * The processes metadata (path /processes),
           * The endpoint for job monitoring (path /jobs).
 
-        For more information, see [Section 7.2](https://docs.ogc.org/is/18-062/18-062.html#sc_landing_page).
+        For more information, see [OGC API — Processes — Part 1 Section 7.2](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_landing_page).
       operationId: getCapabilities
       responses:
         "200":
@@ -34,7 +34,8 @@ paths:
             The landing page provides links to the API definition
             (link relations `service-desc` and `service-doc`),
             the Conformance declaration (path `/conformance`,
-            link relation `http://www.opengis.net/def/rel/ogc/1.0/conformance`), and to other resources.
+            link relation `http://www.opengis.net/def/rel/ogc/1.0/conformance`), 
+            and to other resources.
           content:
             application/json:
               schema:
@@ -70,17 +71,16 @@ paths:
         |Callback|http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/callback|
         |Dismiss|http://www.opengis.net/spec/ogcapi-processes-1/1.0/conf/dismiss|
 
-        For more information, see [Section 7.4](https://docs.ogc.org/is/18-062/18-062.html#sc_conformance_classes).
+        For more information, see [OGC API — Processes — Part 1 Section 7.4](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_conformance_classes).
       operationId: getConformance
       responses:
         "200":
-          description: |-
-            The URIs of all conformance classes supported by the server.
-
-            To support "generic" clients that want to access multiple
-            OGC API - Processes implementations - and not "just" a specific
-            API / server, the server declares the conformance
-            classes it implements and conforms to.
+          description: |
+            The URIs of all conformance classes supported 
+            by the server. To support "generic" clients that want 
+            to access multiple OGC API - Processes implementations - and 
+            not "just" a specific API / server, the server declares 
+            the conformance classes it implements and conforms to.
           content:
             application/json:
               schema:
@@ -108,7 +108,7 @@ paths:
       description: |
         The list of processes contains a summary of each process the OGC API - Processes offers, including the link to a more detailed description of the process.
 
-        For more information, see [Section 7.9](https://docs.ogc.org/is/18-062/18-062.html#sc_process_list).
+        For more information, see [OGC API — Processes — Part 1 Section 7.9](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_process_list).
       operationId: getProcesses
       responses:
         "200":
@@ -125,9 +125,9 @@ paths:
       description: |
         The process description contains information about inputs and outputs and a link to the execution-endpoint for the process. The Core does not mandate the use of a specific process description to specify the interface of a process. That said, the Core requirements class makes the following recommendation:
 
-        Implementations SHOULD consider supporting the OGC process description.
+        Implementations **should** consider supporting the OGC process description.
 
-        For more information, see [Section 7.10](https://docs.ogc.org/is/18-062/18-062.html#sc_process_description).
+        For more information, see [OGC API — Processes — Part 1 Section 7.10](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_process_description).
       operationId: getProcess
       parameters:
       - name: processID
@@ -165,7 +165,7 @@ paths:
       description: |
         Create a new job.
 
-        For more information, see [Section 7.11](https://docs.ogc.org/is/18-062/18-062.html#sc_create_job).
+        For more information, see [OGC API — Processes — Part 1 Section 7.11](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_create_job).
       operationId: executeProcess
       parameters:
       - name: processID
@@ -238,9 +238,9 @@ paths:
       - JobList
       summary: retrieve the list of jobs.
       description: |
-        Lists available jobs.
+        List available jobs.
 
-        For more information, see [Section 11](https://docs.ogc.org/is/18-062/18-062.html#sc_job_list).
+        For more information, see [OGC API — Processes — Part 1 Section 11](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_job_list).
       operationId: getJobs
       responses:
         "200":
@@ -264,14 +264,14 @@ paths:
       - JobStatus
       summary: retrieve the status of a job
       description: |
-        Shows the status of a job.
+        Show the status of a job.
 
-        For more information, see [Section 7.12](https://docs.ogc.org/is/18-062/18-062.html#sc_retrieve_status_info).
+        For more information, see [OGC API — Processes — Part 1 Section 7.12](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_retrieve_status_info).
       operationId: getJob
       parameters:
       - name: jobId
         in: path
-        description: local identifier of a job
+        description: Local identifier of a job
         required: true
         schema:
           type: string
@@ -305,14 +305,14 @@ paths:
       - Dismiss
       summary: "cancel a job execution, remove a finished job"
       description: |
-        Cancel a job execution and remove it from the jobs list.
+        Cancel a job execution and removes it from the jobs list.
 
-        For more information, see [Section 13](https://docs.ogc.org/is/18-062/18-062.html#Dismiss).
+        For more information, see [OGC API — Processes — Part 1 Section 13](https://docs.ogc.org/is/18-062r2/18-062r2.html#Dismiss).
       operationId: dismissJob
       parameters:
       - name: jobId
         in: path
-        description: local identifier of a job
+        description: Local identifier of a job
         required: true
         schema:
           type: string
@@ -347,14 +347,14 @@ paths:
       - JobResults
       summary: retrieve the result(s) of a job
       description: |
-        Lists available results of a job. In case of a failure, lists errors instead.
+        List available results of a job. In case of a failure, list errors instead.
 
-        For more information, see [Section 7.13](https://docs.ogc.org/is/18-062/18-062.html#sc_retrieve_job_results).
+        For more information, see [OGC API — Processes — Part 1 Section 7.13](https://docs.ogc.org/is/18-062r2/18-062r2.html#sc_retrieve_job_results).
       operationId: getJobResults
       parameters:
       - name: jobId
         in: path
-        description: local identifier of a job
+        description: Local identifier of a job
         required: true
         schema:
           type: string
@@ -588,8 +588,6 @@ components:
           minItems: 1
           uniqueItems: false
           type: array
-          items:
-            type: object
         type:
           $ref: '#/components/schemas/DataType'
         not:

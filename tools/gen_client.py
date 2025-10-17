@@ -31,12 +31,14 @@ from typing import Any, Optional
 from s2gos_common.models import {{ model_imports }}
 
 from .config import ClientConfig
+from .async_client_mixin import AsyncClientMixin
+from .client_mixin import ClientMixin
 from .ishell import has_ishell as _  # noqa F401
 from .transport import {{ uc_async }}Transport, TransportArgs
 from .transport.httpx import HttpxTransport
 
 
-class {{ uc_async }}Client:
+class {{ uc_async }}Client({{ uc_async }}ClientMixin):
     \"\"\"    
     The client API for the web service ({{ hr_async }} mode).
 
@@ -83,7 +85,7 @@ class {{ uc_async }}Client:
 
     def _repr_json_(self):
         # noinspection PyProtectedMember
-        return self._config._repr_json_()
+        return self.config._repr_json_()
 
 {{ client_methods }}        
 """
@@ -236,14 +238,14 @@ def generate_close_method_code(is_async: bool) -> str:
     if is_async:
         return (
             f"{C_TAB}async def close(self):\n"
-            f'{C_TAB}{C_TAB}"""Closes this client."""\n'
+            f'{C_TAB}{C_TAB}"""Close this client."""\n'
             f"{C_TAB}{C_TAB}if self._transport is not None:"
             f"{C_TAB}{C_TAB}{C_TAB}await self._transport.async_close()"
         )
     else:
         return (
             f"{C_TAB}def close(self):\n"
-            f'{C_TAB}{C_TAB}"""Closes this client."""\n'
+            f'{C_TAB}{C_TAB}"""Close this client."""\n'
             f"{C_TAB}{C_TAB}if self._transport is not None:"
             f"{C_TAB}{C_TAB}{C_TAB}self._transport.close()"
         )
@@ -301,9 +303,10 @@ def generate_function_doc(method: OAMethod) -> str:
     ):
         lines.append("")
         lines.append("Raises:")
-        lines.append(f"{D_TAB}ClientError: if the call to the web service fails")
+        lines.append(f"{D_TAB}ClientError: If the call to the web service fails")
         lines.append(f"{D_TAB}{D_TAB}with a status code != `2xx`.")
         if resp_types:
+            lines.append("")
             for resp_code, (resp_type, desc_lines) in resp_types.items():
                 if desc_lines:
                     lines.append(f"{D_TAB}{D_TAB}- `{resp_code}`: {desc_lines[0]}")

@@ -13,7 +13,6 @@ from typing import Any, Optional
 
 import pydantic
 
-
 from s2gos_common.models import (
     JobInfo,
     JobResults,

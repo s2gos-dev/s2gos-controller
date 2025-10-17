@@ -20,6 +20,11 @@ class MockTransport(AsyncTransport, Transport):  # pragma: no cover
         self.calls: list[TransportArgs] = []
         self.async_calls: list[TransportArgs] = []
         self.closed = False
+        self.id_counter = 0
+
+    def new_id(self):
+        self.id_counter += 1
+        return f"ID-{self.id_counter}"
 
     def call(self, args: TransportArgs) -> Any:
         self.calls.append(args)
@@ -29,10 +34,9 @@ class MockTransport(AsyncTransport, Transport):  # pragma: no cover
         self.async_calls.append(args)
         return self._create_model_object(args)
 
-    @classmethod
-    def _create_model_object(cls, args: TransportArgs) -> Any:
+    def _create_model_object(self, args: TransportArgs) -> Any:
         return_type = args.return_types.get("200", args.return_types.get("201"))
-        return new_default_value(return_type) if return_type is not None else None
+        return self.new_default_value(return_type) if return_type is not None else None
 
     def close(self):
         self.closed = True
@@ -40,42 +44,45 @@ class MockTransport(AsyncTransport, Transport):  # pragma: no cover
     async def async_close(self):
         self.closed = True
 
-
-def new_default_value(t: type) -> Any:
-    # args = get_args(t)
-    # t = get_origin(t)
-    defaults: dict[type, Any] = {
-        Any: None,
-        NoneType: None,
-        bool: False,
-        bytes: b"",
-        dict: {},
-        float: 0.0,
-        int: 0,
-        list: [],
-        tuple: (),
-        set: set(),
-        str: "",
-    }
-    if t in defaults:
-        return defaults[t]
-    if inspect.isclass(t) and issubclass(t, Enum):
-        return next(iter(t))
-    if inspect.isclass(t) and issubclass(t, BaseModel):
-        model_cls: type[pydantic.BaseModel] = t
-        # noinspection PyTypeChecker
-        fields: dict[str, FieldInfo] = model_cls.model_fields
-        kwargs = {
-            k: (
-                v.default
-                if v.default is not PydanticUndefined
-                else (
-                    v.default_factory()
-                    if v.default_factory is not None
-                    else new_default_value(v.annotation)
-                )
-            )
-            for k, v in fields.items()
+    def new_default_value(self, t: type) -> Any:
+        # args = get_args(t)
+        # t = get_origin(t)
+        defaults: dict[type, Any] = {
+            Any: None,
+            NoneType: None,
+            bool: False,
+            bytes: b"",
+            dict: {},
+            float: 0.0,
+            int: 0,
+            list: [],
+            tuple: (),
+            set: set(),
+            str: "",
         }
-        return t(**kwargs)
-    return t()
+        if t in defaults:
+            return defaults[t]
+        if inspect.isclass(t) and issubclass(t, Enum):
+            return next(iter(t))
+        if inspect.isclass(t) and issubclass(t, BaseModel):
+            model_cls: type[pydantic.BaseModel] = t
+            # noinspection PyTypeChecker
+            fields: dict[str, FieldInfo] = model_cls.model_fields
+            kwargs = {
+                k: (
+                    v.default
+                    if v.default is not PydanticUndefined
+                    else (
+                        self.new_id()
+                        if k == "id"
+                        else (
+                            v.default_factory()
+                            if v.default_factory is not None
+                            else self.new_default_value(v.annotation)
+                        )
+                    )
+                )
+                for k, v in fields.items()
+            }
+            return t(**kwargs)
+        return t()
