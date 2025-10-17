@@ -35,7 +35,7 @@ class HttpxTransport(Transport, AsyncTransport):
         try:
             response = self.sync_httpx.request(*args_, **kwargs_)
         except httpx.HTTPError as e:
-            raise TransportException(f"httpx error: {e}") from e
+            raise TransportException(f"{e}") from e
         return self._process_response(args, response)
 
     async def async_call(self, args: TransportArgs) -> Any:
@@ -45,7 +45,7 @@ class HttpxTransport(Transport, AsyncTransport):
         try:
             response = await self.async_httpx.request(*args_, **kwargs_)
         except httpx.HTTPError as e:
-            raise TransportException(f"httpx error: {e}") from e
+            raise TransportException(f"{e}") from e
         return self._process_response(args, response)
 
     def _get_request_args(
