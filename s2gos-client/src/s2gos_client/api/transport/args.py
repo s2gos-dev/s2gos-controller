@@ -11,7 +11,7 @@ import pydantic
 import uri_template
 from pydantic import BaseModel
 
-from s2gos_client.api.exceptions import ClientException
+from s2gos_client.api.exceptions import ClientError
 from s2gos_common.models import ApiError
 
 
@@ -58,7 +58,7 @@ class TransportArgs:
         status_code: int,
         message: str,
         json_data: Optional[Any] = None,
-    ) -> ClientException:
+    ) -> ClientError:
         status_key = str(status_code)
         # Currently, all error types fall back to ApiError
         _return_type = self.error_types.get(status_key)
@@ -77,4 +77,4 @@ class TransportArgs:
                 title="Missing error details from API",
                 detail=f"JSON object expected, but got {type(json_data).__name__}",
             )
-        return ClientException(f"{message} (status {status_code})", api_error=api_error)
+        return ClientError(f"{message} (status {status_code})", api_error=api_error)

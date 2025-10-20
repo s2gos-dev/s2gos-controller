@@ -6,7 +6,7 @@ from unittest import TestCase
 
 from IPython.core.interactiveshell import InteractiveShell
 
-from s2gos_client import ClientException
+from s2gos_client import ClientError
 from s2gos_client.api.ishell import exception_handler, has_ishell
 from s2gos_common.models import ApiError
 
@@ -20,7 +20,7 @@ class IShellTest(TestCase):
         self.assertTrue(callable(exception_handler))
 
     def test_exception_handler_with_client_exception(self):
-        exc = ClientException(
+        exc = ClientError(
             "What the heck", ApiError(type="error", title="Don't worry, be happy")
         )
         result = exception_handler(

@@ -5,7 +5,7 @@
 from s2gos_common.models import ApiError
 
 
-class ClientException(Exception):
+class ClientError(Exception):
     """Raised if a web API call failed.
 
      The failure can have several reasons such as

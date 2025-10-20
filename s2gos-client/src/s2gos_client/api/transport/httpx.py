@@ -7,11 +7,11 @@ from typing import Any
 
 import httpx
 
-from s2gos_client.api.exceptions import ClientException
+from s2gos_client.api.exceptions import ClientError
 from s2gos_common.models import ApiError
 
 from .args import TransportArgs
-from .transport import AsyncTransport, Transport, TransportException
+from .transport import AsyncTransport, Transport, TransportError
 
 
 class HttpxTransport(Transport, AsyncTransport):
@@ -35,7 +35,7 @@ class HttpxTransport(Transport, AsyncTransport):
         try:
             response = self.sync_httpx.request(*args_, **kwargs_)
         except httpx.HTTPError as e:
-            raise TransportException(f"httpx error: {e}") from e
+            raise TransportError(f"{e}") from e
         return self._process_response(args, response)
 
     async def async_call(self, args: TransportArgs) -> Any:
@@ -45,7 +45,7 @@ class HttpxTransport(Transport, AsyncTransport):
         try:
             response = await self.async_httpx.request(*args_, **kwargs_)
         except httpx.HTTPError as e:
-            raise TransportException(f"httpx error: {e}") from e
+            raise TransportError(f"{e}") from e
         return self._process_response(args, response)
 
     def _get_request_args(
@@ -66,7 +66,7 @@ class HttpxTransport(Transport, AsyncTransport):
             # use args.return_types for this decision.
             response_json = response.json()
         except (ValueError, TypeError) as e:
-            raise ClientException(
+            raise ClientError(
                 f"{e}",
                 api_error=ApiError(
                     type=type(e).__name__,

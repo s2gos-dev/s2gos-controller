@@ -3,6 +3,6 @@
 #  https://opensource.org/license/apache-2-0.
 
 from .args import TransportArgs
-from .transport import AsyncTransport, Transport, TransportException
+from .transport import AsyncTransport, Transport, TransportError
 
-__all__ = ["AsyncTransport", "Transport", "TransportArgs", "TransportException"]
+__all__ = ["AsyncTransport", "Transport", "TransportArgs", "TransportError"]

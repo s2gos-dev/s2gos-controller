@@ -34,7 +34,7 @@ class ClientMixin(ABC):
             The execution request template.
 
         Raises:
-            ClientException: if an error occurs
+            ClientError: if an error occurs
         """
         process_description = self.get_process(process_id)
         return ExecutionRequest.from_process_description(

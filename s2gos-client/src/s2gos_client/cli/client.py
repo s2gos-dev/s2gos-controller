@@ -5,11 +5,11 @@
 from types import TracebackType
 from typing import Callable, Literal, Optional, TypeAlias
 
-import click
 import typer
 
 from s2gos_client.api.client import Client
-from s2gos_client.api.exceptions import ClientException
+from s2gos_client.api.exceptions import ClientError
+from s2gos_client.api.transport import TransportError
 
 GetClient: TypeAlias = Callable[[str | None], Client]
 
@@ -42,11 +42,13 @@ class UseClient:
             self.client.close()
             self.client = None
         show_traceback = self.ctx.obj.get("traceback", False)
-        if isinstance(exc_value, ClientException):
-            client_error: ClientException = exc_value
+        if isinstance(exc_value, ClientError):
+            # Note for the following it may be a good idea to
+            # to use rich.traceback for comprehensive output
+            client_error: ClientError = exc_value
             api_error = client_error.api_error
             message_lines = [
-                f"{client_error}",
+                f"❌ Error: {client_error}",
                 "Server-side error details:",
                 f"  title:  {api_error.title}",
                 f"  status: {api_error.status}",
@@ -56,5 +58,12 @@ class UseClient:
             if api_error.traceback and show_traceback:
                 message_lines.append("  traceback:")
                 message_lines.extend(api_error.traceback)
-            raise click.ClickException("\n".join(message_lines))
-        return False
+            typer.echo("\n".join(message_lines))
+            if not show_traceback:
+                raise typer.Exit(code=2)
+        elif isinstance(exc_value, TransportError):
+            typer.echo(f"❌ Transport error: {exc_value}")
+            if not show_traceback:
+                raise typer.Exit(code=3)
+
+        return False  # propagate exception

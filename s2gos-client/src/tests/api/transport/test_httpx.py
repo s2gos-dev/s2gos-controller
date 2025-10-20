@@ -9,8 +9,8 @@ from unittest.mock import AsyncMock, MagicMock
 import httpx
 import pytest
 
-from s2gos_client.api.exceptions import ClientException
-from s2gos_client.api.transport import TransportArgs, TransportException
+from s2gos_client.api.exceptions import ClientError
+from s2gos_client.api.transport import TransportArgs, TransportError
 from s2gos_client.api.transport.httpx import HttpxTransport
 from s2gos_common.models import ApiError, ConformanceDeclaration
 
@@ -45,7 +45,7 @@ class HttpxSyncTransportTest(TestCase):
     def test_sync_call_initializes_correctly(self):
         transport = HttpxTransport(server_url="https://api.example.com")
         self.assertIsNone(transport.sync_httpx)
-        with pytest.raises(TransportException):
+        with pytest.raises(TransportError):
             transport.call(TransportArgs("/"))
         self.assertIsInstance(transport.sync_httpx, httpx.Client)
 
@@ -129,9 +129,9 @@ class HttpxSyncTransportTest(TestCase):
             return_types={"200": ConformanceDeclaration},
             error_types={"401": ApiError},
         )
-        with pytest.raises(ClientException, match="Panic!") as e:
+        with pytest.raises(ClientError, match="Panic!") as e:
             transport.call(args)
-        ce: ClientException = e.value
+        ce: ClientError = e.value
         self.assertEqual("Panic! (status 401)", str(ce))
         self.assertEqual(ApiError(type="error", detail="So sorry"), ce.api_error)
 
@@ -149,9 +149,9 @@ class HttpxSyncTransportTest(TestCase):
             return_types={"200": ConformanceDeclaration},
             error_types={"401": ApiError},
         )
-        with pytest.raises(ClientException, match="This is no JSON") as e:
+        with pytest.raises(ClientError, match="This is no JSON") as e:
             transport.call(args)
-        ce: ClientException = e.value
+        ce: ClientError = e.value
         self.assertEqual("This is no JSON", str(ce))
         self.assertEqual(
             ApiError(
@@ -176,7 +176,7 @@ class HttpxAsyncTransportTest(IsolatedAsyncioTestCase):
     async def test_async_call_initializes_correctly(self):
         transport = HttpxTransport(server_url="https://api.example.com")
         self.assertIsNone(transport.async_httpx)
-        with pytest.raises(TransportException):
+        with pytest.raises(TransportError):
             await transport.async_call(TransportArgs("/"))
         self.assertIsInstance(transport.async_httpx, httpx.AsyncClient)
 

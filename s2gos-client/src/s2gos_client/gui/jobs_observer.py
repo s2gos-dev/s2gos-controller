@@ -4,7 +4,7 @@
 
 from abc import ABC, abstractmethod
 
-from s2gos_client import ClientException
+from s2gos_client import ClientError
 from s2gos_common.models import JobInfo, JobList
 
 
@@ -28,5 +28,5 @@ class JobsObserver(ABC):
         """Called after the current list of jobs changed."""
 
     @abstractmethod
-    def on_job_list_error(self, error: ClientException | None):
+    def on_job_list_error(self, error: ClientError | None):
         """Called if an error occurred while getting current list of jobs."""

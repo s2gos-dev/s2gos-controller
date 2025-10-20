@@ -4,7 +4,7 @@
 
 from unittest import TestCase
 
-from s2gos_client.api.exceptions import ClientException
+from s2gos_client.api.exceptions import ClientError
 from s2gos_client.api.transport import TransportArgs
 from s2gos_common.models import ApiError
 
@@ -17,7 +17,7 @@ class TransportArgsTest(TestCase):
             "Not implemented",
             {"type": "ValueError", "title": "No jobs", "status": 401},
         )
-        self.assertIsInstance(client_error, ClientException)
+        self.assertIsInstance(client_error, ClientError)
         self.assertEqual("Not implemented (status 401)", f"{client_error}")
         self.assertIsInstance(client_error.api_error, ApiError)
         self.assertEqual(
@@ -30,7 +30,7 @@ class TransportArgsTest(TestCase):
         client_error = args.get_exception_for_status(
             501, "Not implemented", {"message": "Wrong error"}
         )
-        self.assertIsInstance(client_error, ClientException)
+        self.assertIsInstance(client_error, ClientError)
         self.assertEqual("Not implemented (status 501)", f"{client_error}")
         self.assertIsInstance(client_error.api_error, ApiError)
         self.assertEqual("ValidationError", client_error.api_error.type)
@@ -38,7 +38,7 @@ class TransportArgsTest(TestCase):
     def test_get_error_for_json_fail_2(self):
         args = TransportArgs("/jobs", method="get")
         client_error = args.get_exception_for_status(501, "Not implemented", 13)
-        self.assertIsInstance(client_error, ClientException)
+        self.assertIsInstance(client_error, ClientError)
         self.assertEqual("Not implemented (status 501)", f"{client_error}")
         self.assertIsInstance(client_error.api_error, ApiError)
         self.assertEqual("ValidationError", client_error.api_error.type)

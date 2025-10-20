@@ -9,6 +9,17 @@ It herewith resembles the functionality of the OGC API Processes - Part 1.
 You can use shorter command name aliases, e.g., use command name `vr`
 for `validate-request`, or `lp` for `list-processes`.
 
+The tool&#x27;s exit codes are as follows:
+
+- `0` - normal exit
+- `1` - user errors, argument errors
+- `2` - remote API errors 
+- `3` - local network transport errors
+
+If the --traceback flag is set, the original Python exception traceback
+will be shown and the exit code will always be `1`. 
+Otherwise, only the error message is shown.
+
 **Usage**:
 
 ```console

@@ -8,7 +8,7 @@ import pandas as pd
 import panel as pn
 from pydantic import BaseModel
 
-from s2gos_client.api.exceptions import ClientException
+from s2gos_client.api.exceptions import ClientError
 from s2gos_common.models import JobInfo, JobList, JobResults, JobStatus
 
 from .jobs_observer import JobsObserver
@@ -27,7 +27,7 @@ class JobsPanel(pn.viewable.Viewer):
     ):
         super().__init__()
         self._jobs: list[JobInfo] = []
-        self._client_error: ClientException | None = None
+        self._client_error: ClientError | None = None
 
         self._on_delete_job = on_delete_job
         self._on_cancel_job = on_cancel_job
@@ -95,7 +95,7 @@ class JobsPanel(pn.viewable.Viewer):
         self._tabulator.value = dataframe
         self._update_buttons()
 
-    def on_job_list_error(self, error: ClientException | None):
+    def on_job_list_error(self, error: ClientError | None):
         # TODO: render error
         self._client_error = error
         self._update_buttons()
@@ -204,7 +204,7 @@ class JobsPanel(pn.viewable.Viewer):
                     messages.append(success_format.format(job=job_text))
                 elif callable(success_format):
                     messages.append(success_format(job_id, result).format(job=job_text))
-            except ClientException as e:
+            except ClientError as e:
                 # TODO: also show e.api_error.traceback, when user expands the message
                 messages.append(
                     error_format.format(
