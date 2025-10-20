@@ -22,18 +22,22 @@ class UseClientTest(TestCase):
 
     # noinspection PyMethodMayBeStatic
     def test_fail_with_client_error(self):
-        with pytest.raises(
-            click.ClickException,
-            match=(
-                "Not found\n"
-                "Server-side error details:\n"
-                "  title:  Not found\n"
-                "  status: 404\n"
-                "  type:   error\n"
-                "  detail: Something was not found\n"
-                "  traceback:\n"
-            ),
-        ):
+        with pytest.raises(click.exceptions.Exit):
+            with use_client(new_cli_context(), None):
+                raise ClientException(
+                    "Not found",
+                    api_error=ApiError(
+                        type="error",
+                        title="Not found",
+                        status=404,
+                        detail="Something was not found",
+                        traceback=["a", "b", "c"],
+                    ),
+                )
+
+    # noinspection PyMethodMayBeStatic
+    def test_fail_with_client_error_and_traceback(self):
+        with pytest.raises(ClientException, match="Not found"):
             with use_client(new_cli_context(traceback=True), None):
                 raise ClientException(
                     "Not found",

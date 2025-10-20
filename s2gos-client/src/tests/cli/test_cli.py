@@ -128,7 +128,7 @@ class CliWithRealClientTest(TestCase):
         result = runner.invoke(cli, ["list-processes"])
         # May succeed if dev server is running
         self.assertTrue(
-            result.exit_code in (0, 1), msg=f"exit code was {result.exit_code}"
+            result.exit_code in (0, 3), msg=f"exit code was {result.exit_code}"
         )
         if result.exit_code != 0:
             print(result.output)
