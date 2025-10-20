@@ -43,6 +43,8 @@ class UseClient:
             self.client = None
         show_traceback = self.ctx.obj.get("traceback", False)
         if isinstance(exc_value, ClientError):
+            # Note for the following it may be a good idea to
+            # to use rich.traceback for comprehensive output
             client_error: ClientError = exc_value
             api_error = client_error.api_error
             message_lines = [
