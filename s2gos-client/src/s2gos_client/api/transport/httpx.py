@@ -11,7 +11,7 @@ from s2gos_client.api.exceptions import ClientException
 from s2gos_common.models import ApiError
 
 from .args import TransportArgs
-from .transport import AsyncTransport, Transport
+from .transport import AsyncTransport, Transport, TransportException
 
 
 class HttpxTransport(Transport, AsyncTransport):
@@ -32,14 +32,20 @@ class HttpxTransport(Transport, AsyncTransport):
         if self.sync_httpx is None:
             self.sync_httpx = httpx.Client()
         args_, kwargs_ = self._get_request_args(args)
-        response = self.sync_httpx.request(*args_, **kwargs_)
+        try:
+            response = self.sync_httpx.request(*args_, **kwargs_)
+        except httpx.HTTPError as e:
+            raise TransportException(f"httpx error: {e}") from e
         return self._process_response(args, response)
 
     async def async_call(self, args: TransportArgs) -> Any:
         if self.async_httpx is None:
             self.async_httpx = httpx.AsyncClient()
         args_, kwargs_ = self._get_request_args(args)
-        response = await self.async_httpx.request(*args_, **kwargs_)
+        try:
+            response = await self.async_httpx.request(*args_, **kwargs_)
+        except httpx.HTTPError as e:
+            raise TransportException(f"httpx error: {e}") from e
         return self._process_response(args, response)
 
     def _get_request_args(

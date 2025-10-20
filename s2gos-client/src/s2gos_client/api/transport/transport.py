@@ -26,7 +26,7 @@ class Transport(ABC):
             The response data of a successful web API call.
 
         Raises:
-            TransportException: If the web API call failed.
+            TransportException: If an attempt to reach the server failed.
         """
 
     def close(self):
@@ -51,8 +51,12 @@ class AsyncTransport(ABC):
             The response data of a successful web API call.
 
         Raises:
-            TransportException: If the web API call failed.
+            TransportException: If an attempt to reach the server failed.
         """
 
     async def async_close(self):
         """Closes this transport."""
+
+
+class TransportException(Exception):
+    """Raised if an attempt to reach the server failed."""
