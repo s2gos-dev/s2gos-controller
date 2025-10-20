@@ -18,6 +18,7 @@
 - Added a keyword-argument `inputs_arg: str | bool` to the `ProcessRegistry.process`
   decorator. If specified, it defines an _inputs argument_, which is used to 
   define the process inputs in form of a dataclass derived from 
+- 
   `pydantic.BaseModel`. (#35)
 - Now supporting the OpenAPI/JSON Schema `discriminator` property 
   in `tools/openapi.yaml/schemas/schema` and generated models. (#36)
