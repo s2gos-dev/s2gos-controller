@@ -8,7 +8,7 @@ import panel
 import panel as pn
 import param
 
-from s2gos_client import ClientException
+from s2gos_client import ClientError
 from s2gos_common.models import JobInfo, JobList
 
 from .jobs_observer import JobsObserver
@@ -17,7 +17,7 @@ from .jobs_observer import JobsObserver
 class JobInfoPanel(pn.viewable.Viewer):
     job_info = param.ClassSelector(class_=JobInfo, allow_None=True, default=None)
     client_error = param.ClassSelector(
-        class_=ClientException, allow_None=True, default=None
+        class_=ClientError, allow_None=True, default=None
     )
 
     def __init__(self):
@@ -47,7 +47,7 @@ class JobInfoPanel(pn.viewable.Viewer):
         # Nothing to do
         pass
 
-    def on_job_list_error(self, client_error: ClientException | None):
+    def on_job_list_error(self, client_error: ClientError | None):
         self.client_error = client_error
 
     def _is_observed_job(self, job_info):

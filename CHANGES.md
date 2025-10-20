@@ -1,6 +1,12 @@
 ## Changes in version 0.0.5 (in development)
 
 
+- In `s2gos_client`:
+  - Improved error handling (#54)
+  - Renamed `ClientException` into `ClientError`. 
+  - Renamed `TransportException` into `TransportError`. 
+
+
 ## Changes in version 0.0.4
 
 - Prevent server from logging `/jobs` request, as they are used for polling. 

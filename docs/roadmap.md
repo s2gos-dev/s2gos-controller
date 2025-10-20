@@ -157,7 +157,7 @@ The output of `generators/gen_models` is not satisfying:
 
 * **DONE**: Include server traceback on internal server errors with 500 status
 * **DONE**: We currently have only little error management in client. 
-  Handle ClientException so users understand what went wrong:
+  Handle ClientError so users understand what went wrong:
   - **DONE**: Python API
   - **DONE**: CLI
   - **DONE**: GUI

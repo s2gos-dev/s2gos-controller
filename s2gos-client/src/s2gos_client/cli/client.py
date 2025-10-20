@@ -8,8 +8,8 @@ from typing import Callable, Literal, Optional, TypeAlias
 import typer
 
 from s2gos_client.api.client import Client
-from s2gos_client.api.exceptions import ClientException
-from s2gos_client.api.transport import TransportException
+from s2gos_client.api.exceptions import ClientError
+from s2gos_client.api.transport import TransportError
 
 GetClient: TypeAlias = Callable[[str | None], Client]
 
@@ -42,8 +42,8 @@ class UseClient:
             self.client.close()
             self.client = None
         show_traceback = self.ctx.obj.get("traceback", False)
-        if isinstance(exc_value, ClientException):
-            client_error: ClientException = exc_value
+        if isinstance(exc_value, ClientError):
+            client_error: ClientError = exc_value
             api_error = client_error.api_error
             message_lines = [
                 f"❌ Error: {client_error}",
@@ -59,7 +59,7 @@ class UseClient:
             typer.echo("\n".join(message_lines))
             if not show_traceback:
                 raise typer.Exit(code=2)
-        elif isinstance(exc_value, TransportException):
+        elif isinstance(exc_value, TransportError):
             typer.echo(f"❌ Transport error: {exc_value}")
             if not show_traceback:
                 raise typer.Exit(code=3)

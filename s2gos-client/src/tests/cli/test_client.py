@@ -8,7 +8,7 @@ import click
 import pytest
 import typer
 
-from s2gos_client import ClientException
+from s2gos_client import ClientError
 from s2gos_client.api.client import Client
 from s2gos_client.cli.cli import cli
 from s2gos_client.cli.client import use_client
@@ -24,7 +24,7 @@ class UseClientTest(TestCase):
     def test_fail_with_client_error(self):
         with pytest.raises(click.exceptions.Exit):
             with use_client(new_cli_context(), None):
-                raise ClientException(
+                raise ClientError(
                     "Not found",
                     api_error=ApiError(
                         type="error",
@@ -37,9 +37,9 @@ class UseClientTest(TestCase):
 
     # noinspection PyMethodMayBeStatic
     def test_fail_with_client_error_and_traceback(self):
-        with pytest.raises(ClientException, match="Not found"):
+        with pytest.raises(ClientError, match="Not found"):
             with use_client(new_cli_context(traceback=True), None):
-                raise ClientException(
+                raise ClientError(
                     "Not found",
                     api_error=ApiError(
                         type="error",

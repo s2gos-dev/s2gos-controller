@@ -5,11 +5,11 @@
 from .async_client import AsyncClient
 from .client import Client
 from .config import ClientConfig
-from .exceptions import ClientException
+from .exceptions import ClientError
 
 __all__ = [
     "AsyncClient",
     "Client",
     "ClientConfig",
-    "ClientException",
+    "ClientError",
 ]
