@@ -10,6 +10,7 @@ import typer
 
 from s2gos_client import ClientError
 from s2gos_client.api.client import Client
+from s2gos_client.api.transport import TransportError
 from s2gos_client.cli.cli import cli
 from s2gos_client.cli.client import use_client
 from s2gos_common.models import ApiError
@@ -51,7 +52,19 @@ class UseClientTest(TestCase):
                 )
 
     # noinspection PyMethodMayBeStatic
-    def test_fail_with_non_client_error(self):
+    def test_fail_with_transport_error(self):
+        with pytest.raises(click.exceptions.Exit):
+            with use_client(new_cli_context(), None):
+                raise TransportError("connection could not be established")
+
+    # noinspection PyMethodMayBeStatic
+    def test_fail_with_transport_error_and_traceback(self):
+        with pytest.raises(TransportError, match="connection could not be established"):
+            with use_client(new_cli_context(traceback=True), None):
+                raise TransportError("connection could not be established")
+
+    # noinspection PyMethodMayBeStatic
+    def test_fail_with_other_error(self):
         with pytest.raises(ValueError, match=r"path must be given"):
             with use_client(new_cli_context(), None):
                 raise ValueError("path must be given")
