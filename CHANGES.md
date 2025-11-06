@@ -1,3 +1,6 @@
+## Changes in version 0.0.6 (in development)
+
+
 ## Changes in version 0.0.5
 
 - In `s2gos_client`:

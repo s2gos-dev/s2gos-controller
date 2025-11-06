@@ -8731,8 +8731,8 @@ packages:
   editable: true
 - pypi: ./s2gos-client
   name: s2gos-client
-  version: 0.0.5
-  sha256: 4e77f36c91b27649db6e2dc0e765a33bfa9f1078ff34b4abffff4162a9332987
+  version: 0.0.6.dev0
+  sha256: ec734dcd0fdf156f41f654467b32408d54dd97f00d639c20c8ecf4b7c432813a
   requires_dist:
   - click
   - pydantic
@@ -8745,8 +8745,8 @@ packages:
   editable: true
 - pypi: ./s2gos-common
   name: s2gos-common
-  version: 0.0.5
-  sha256: d55cf227264878aabce077c49c92034dc716f1b190427551c8c01832380dbfc7
+  version: 0.0.6.dev0
+  sha256: 29bba461bdf0b50cf903ce0ef2cc318161518bd025e70f97d98203eb1fd92a88
   requires_dist:
   - pydantic
   - typer
@@ -8754,8 +8754,8 @@ packages:
   editable: true
 - pypi: ./s2gos-server
   name: s2gos-server
-  version: 0.0.5
-  sha256: e76fcb0ac41e85054cac0e96f7ab520d6f5190c6cd238ff627bd1a4913f8026e
+  version: 0.0.6.dev0
+  sha256: 08a7d558ff0af37d676cedb5dba41345302e60a6a1d5678f2e5232adbbc01999
   requires_dist:
   - fastapi
   - pydantic
