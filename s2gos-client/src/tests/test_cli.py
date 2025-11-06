@@ -2,10 +2,8 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-import panel as pn
+import s2gos_client.cli
 
-from .client import Client
 
-__all__ = ["Client"]
-
-pn.extension("ipywidgets", "tabulator", notifications=True)
+def test_cli_ok():
+    assert {"cli"}.issubset(dir(s2gos_client.cli))

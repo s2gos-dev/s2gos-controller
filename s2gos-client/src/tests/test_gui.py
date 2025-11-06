@@ -2,6 +2,8 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from .cli import cli
+import s2gos_client.gui
 
-__all__ = ["cli"]
+
+def test_gui_ok():
+    assert {"Client"}.issubset(dir(s2gos_client.gui))

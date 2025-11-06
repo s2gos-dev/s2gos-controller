@@ -2,7 +2,13 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from .args import TransportArgs
-from .transport import AsyncTransport, Transport, TransportError
+from cuiman.cli import get_cli
 
-__all__ = ["AsyncTransport", "Transport", "TransportArgs", "TransportError"]
+cli = get_cli("s2gos-client")
+
+__all__ = [
+    "cli",
+]
+
+if __name__ == "__main__":
+    cli()

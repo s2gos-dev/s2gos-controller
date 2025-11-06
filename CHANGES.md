@@ -1,5 +1,6 @@
 ## Changes in version 0.0.6 (in development)
 
+- Changed the `s2gos-client` to use the Eozilla `cuiman` package.
 
 ## Changes in version 0.0.5
 

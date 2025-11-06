@@ -4,10 +4,10 @@
 
 from importlib.metadata import version
 
-from .api.async_client import AsyncClient
-from .api.client import Client
-from .api.config import ClientConfig
-from .api.exceptions import ClientError
+from .api import AsyncClient
+from .api import Client
+from .api import ClientConfig
+from .api import ClientError
 
 __version__ = version("s2gos-client")
 

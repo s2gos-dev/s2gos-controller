@@ -66,6 +66,13 @@ s2gos-client = { path = "s2gos-client", editable = true }
 s2gos-common = { path = "s2gos-common", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
 s2gos-app-ex = { path = "s2gos-app-ex", editable = true }
+# TODO: once stable, move into project (conda-forge) dependencies
+appligator = { path = "../eozilla/appligator", editable = true }
+cuiman = { path = "../eozilla/cuiman", editable = true }
+gavicore = { path = "../eozilla/gavicore", editable = true }
+procodile = { path = "../eozilla/procodile", editable = true }
+wraptile = { path = "../eozilla/wraptile", editable = true }
+
 # Airflow is only available on PyPI
 apache-airflow-client = "==3.0.2"
 # Documentation
