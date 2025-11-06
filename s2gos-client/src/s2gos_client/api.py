@@ -2,10 +2,7 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from cuiman.api import Client
-from cuiman.api import AsyncClient
-from cuiman.api import ClientConfig
-from cuiman.api import ClientError
+from cuiman.api import AsyncClient, Client, ClientConfig, ClientError
 
 __all__ = [
     "AsyncClient",
