@@ -4,11 +4,13 @@
 
 from cuiman.cli import get_cli
 
-cli = get_cli("s2gos-client")
+from s2gos_server import __version__ as version
+
+cli = get_cli("s2gos-client", version=version)
 
 __all__ = [
     "cli",
 ]
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     cli()

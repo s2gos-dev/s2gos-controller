@@ -44,7 +44,7 @@ dependencies = [
   "typer",
   "uri-template",
   "httpx",
-  # local dependency
+  # Eozilla dependencies
   "cuiman",
   "gavicore",
 ]

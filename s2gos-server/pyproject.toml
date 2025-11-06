@@ -43,8 +43,9 @@ dependencies = [
   "pyyaml",
   "typer",
   "uvicorn",
-  # local dependency
-  "s2gos-common>=0.0.0",
+  # Eozilla dependencies
+  "gavicore",
+  "wraptile",
 ]
 
 [project.scripts]
