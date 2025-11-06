@@ -1,6 +1,8 @@
 ## Changes in version 0.0.6 (in development)
 
-- Changed the `s2gos-client` to use the Eozilla `cuiman` package.
+- Implementation code moved to [Eozilla](https://github.com/eo-tools/eozilla) (#39):
+  - Package `s2gos-client` now uses the Eozilla package `cuiman`.
+  - Package `s2gos-app-ex` now uses the Eozilla package `procodile`.
 
 ## Changes in version 0.0.5
 

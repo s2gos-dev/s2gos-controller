@@ -64,7 +64,9 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing-inspection-0.4.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.14.1-pyhe01879c_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025b-h78e105d_0.conda
-      - pypi: ../s2gos-common
+      - pypi: https://files.pythonhosted.org/packages/8a/6d/f596954df87cfa05b82a9f7f2bbda486b40465378c978998f06058eecdfa/gavicore-0.0.7-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/35/53/f31ab23c29a5a25084948774ee4a43d02d8b1076e8498de9152afda62768/procodile-0.0.7-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/8b/9d/b3589d3877982d4f2329302ef98a8026e7f4443c765c46cfecc8858c6b4b/pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: ./
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/annotated-types-0.7.0-pyhd8ed1ab_1.conda
@@ -114,7 +116,9 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc-14.3-h41ae7f8_31.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc14_runtime-14.44.35208-h818238b_31.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vcomp14-14.44.35208-h818238b_31.conda
-      - pypi: ../s2gos-common
+      - pypi: https://files.pythonhosted.org/packages/8a/6d/f596954df87cfa05b82a9f7f2bbda486b40465378c978998f06058eecdfa/gavicore-0.0.7-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/35/53/f31ab23c29a5a25084948774ee4a43d02d8b1076e8498de9152afda62768/procodile-0.0.7-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/86/bf/899e81e4cce32febab4fb42bb97dcdf66bc135272882d1987881a4b519e9/pyyaml-6.0.3-cp312-cp312-win_amd64.whl
       - pypi: ./
   production:
     channels:
@@ -164,7 +168,9 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing-inspection-0.4.1-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/typing_extensions-4.14.1-pyhe01879c_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/tzdata-2025b-h78e105d_0.conda
-      - pypi: ../s2gos-common
+      - pypi: https://files.pythonhosted.org/packages/8a/6d/f596954df87cfa05b82a9f7f2bbda486b40465378c978998f06058eecdfa/gavicore-0.0.7-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/35/53/f31ab23c29a5a25084948774ee4a43d02d8b1076e8498de9152afda62768/procodile-0.0.7-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/8b/9d/b3589d3877982d4f2329302ef98a8026e7f4443c765c46cfecc8858c6b4b/pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: ./
       win-64:
       - conda: https://conda.anaconda.org/conda-forge/noarch/annotated-types-0.7.0-pyhd8ed1ab_1.conda
@@ -199,7 +205,9 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc-14.3-h41ae7f8_31.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vc14_runtime-14.44.35208-h818238b_31.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/vcomp14-14.44.35208-h818238b_31.conda
-      - pypi: ../s2gos-common
+      - pypi: https://files.pythonhosted.org/packages/8a/6d/f596954df87cfa05b82a9f7f2bbda486b40465378c978998f06058eecdfa/gavicore-0.0.7-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/35/53/f31ab23c29a5a25084948774ee4a43d02d8b1076e8498de9152afda62768/procodile-0.0.7-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/86/bf/899e81e4cce32febab4fb42bb97dcdf66bc135272882d1987881a4b519e9/pyyaml-6.0.3-cp312-cp312-win_amd64.whl
       - pypi: ./
 packages:
 - conda: https://conda.anaconda.org/conda-forge/linux-64/_libgcc_mutex-0.1-conda_forge.tar.bz2
@@ -353,6 +361,14 @@ packages:
   - pkg:pypi/exceptiongroup?source=hash-mapping
   size: 21284
   timestamp: 1746947398083
+- pypi: https://files.pythonhosted.org/packages/8a/6d/f596954df87cfa05b82a9f7f2bbda486b40465378c978998f06058eecdfa/gavicore-0.0.7-py3-none-any.whl
+  name: gavicore
+  version: 0.0.7
+  sha256: a357a02d07607e60f11e64440282b08045c6b001aabdcb9dee1aba9460c4c23e
+  requires_dist:
+  - pydantic
+  - typer
+  requires_python: '>=3.10'
 - conda: https://conda.anaconda.org/conda-forge/linux-64/icu-75.1-he02047a_0.conda
   sha256: 71e750d509f5fa3421087ba88ef9a7b9be11c53174af3aa4d06aff4c18b38e8e
   md5: 8b189310083baabfb622af68fd9d3ae3
@@ -749,6 +765,16 @@ packages:
   - pkg:pypi/pluggy?source=hash-mapping
   size: 24246
   timestamp: 1747339794916
+- pypi: https://files.pythonhosted.org/packages/35/53/f31ab23c29a5a25084948774ee4a43d02d8b1076e8498de9152afda62768/procodile-0.0.7-py3-none-any.whl
+  name: procodile
+  version: 0.0.7
+  sha256: 7e50cf0f94cec1e1e796ddf18b49c2b2c3b8464f919472a96090f37abca86106
+  requires_dist:
+  - gavicore>=0.0.7
+  - pydantic
+  - pyyaml
+  - typer
+  requires_python: '>=3.10'
 - conda: https://conda.anaconda.org/conda-forge/linux-64/psutil-7.0.0-py312h66e93f0_0.conda
   sha256: 158047d7a80e588c846437566d0df64cec5b0284c7184ceb4f3c540271406888
   md5: 8e30db4239508a538e4a3b3cdf5b9616
@@ -935,6 +961,16 @@ packages:
   purls: []
   size: 6958
   timestamp: 1752805918820
+- pypi: https://files.pythonhosted.org/packages/86/bf/899e81e4cce32febab4fb42bb97dcdf66bc135272882d1987881a4b519e9/pyyaml-6.0.3-cp312-cp312-win_amd64.whl
+  name: pyyaml
+  version: 6.0.3
+  sha256: 5fcd34e47f6e0b794d17de1b4ff496c00986e1c83f7ab2fb8fcfe9616ff7477b
+  requires_python: '>=3.8'
+- pypi: https://files.pythonhosted.org/packages/8b/9d/b3589d3877982d4f2329302ef98a8026e7f4443c765c46cfecc8858c6b4b/pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
+  name: pyyaml
+  version: 6.0.3
+  sha256: ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc
+  requires_python: '>=3.8'
 - conda: https://conda.anaconda.org/conda-forge/linux-64/readline-8.2-h8c095d6_2.conda
   sha256: 2d6d0c026902561ed77cd646b5021aef2d4db22e57a5b0178dfc669231e06d2c
   md5: 283b96675859b20a825f8fa30f311446
@@ -993,16 +1029,7 @@ packages:
 - pypi: ./
   name: s2gos-app-ex
   version: 0.0.0
-  sha256: bcf9b35cf8dde8c393c51de92d933cf68c3f7e57765e239c71fadf6e0da497fa
-  requires_python: '>=3.10'
-  editable: true
-- pypi: ../s2gos-common
-  name: s2gos-common
-  version: 0.0.4.dev0
-  sha256: 18e640e32d505210d7bb0fbdf5695ca668a41489aa84cc5f41aa4fe658247c77
-  requires_dist:
-  - pydantic
-  - typer
+  sha256: fe053f016670ef03d9da693a3bfc9b912ad8dcb5dfe429ca625ffd59a768cc7d
   requires_python: '>=3.10'
   editable: true
 - conda: https://conda.anaconda.org/conda-forge/noarch/shellingham-1.5.4-pyhd8ed1ab_1.conda
