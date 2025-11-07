@@ -6,7 +6,11 @@ from cuiman.cli import get_cli
 
 from s2gos_server import __version__ as version
 
-cli = get_cli("s2gos-client", version=version)
+cli = get_cli(
+    "s2gos-client",
+    summary="Interact with the ESA DTE S2GOS service.",
+    version=version,
+)
 
 __all__ = [
     "cli",
