@@ -8782,8 +8782,8 @@ packages:
   timestamp: 1750189141795
 - pypi: ./s2gos-client
   name: s2gos-client
-  version: 0.0.6.dev0
-  sha256: 34ea841cfbfbace434b60202d06cbdd1409be7295fe481e2d6f9c5a117c016b5
+  version: 0.1.0.dev0
+  sha256: 169c3f4b20de4b2267e655681771927382285c53a4b4cc92bea887965d0df1d3
   requires_dist:
   - cuiman>=0.0.8
   - gavicore>=0.0.8
@@ -8791,8 +8791,8 @@ packages:
   editable: true
 - pypi: ./s2gos-server
   name: s2gos-server
-  version: 0.0.6.dev0
-  sha256: 23611f6817b11268d52492257c18c6a634f8cd7b27cb7adc746fa8135aee59ce
+  version: 0.1.0.dev0
+  sha256: f4c7000a30dba249ffdc11683ec6b64b912eb0d59aa5225ff5e497a5532e431f
   requires_dist:
   - gavicore>=0.0.8
   - wraptile>=0.0.8
