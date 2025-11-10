@@ -8783,30 +8783,19 @@ packages:
 - pypi: ./s2gos-client
   name: s2gos-client
   version: 0.0.6.dev0
-  sha256: 6d6090cfc42bd9ee1a015f10dc18f9643b61adeb3f07ad95f0de26bc66098ef6
+  sha256: 34ea841cfbfbace434b60202d06cbdd1409be7295fe481e2d6f9c5a117c016b5
   requires_dist:
-  - click
-  - pydantic
-  - pyyaml
-  - typer
-  - uri-template
-  - httpx
-  - cuiman
-  - gavicore
+  - cuiman>=0.0.8
+  - gavicore>=0.0.8
   requires_python: '>=3.10'
   editable: true
 - pypi: ./s2gos-server
   name: s2gos-server
   version: 0.0.6.dev0
-  sha256: 9689e8151fb46e2444a32f0e404c1bee19fd4ea5b4fe9e45ee1b72e3c60073b8
+  sha256: 23611f6817b11268d52492257c18c6a634f8cd7b27cb7adc746fa8135aee59ce
   requires_dist:
-  - fastapi
-  - pydantic
-  - pyyaml
-  - typer
-  - uvicorn
-  - gavicore
-  - wraptile
+  - gavicore>=0.0.8
+  - wraptile>=0.0.8
   requires_python: '>=3.10'
   editable: true
 - conda: https://conda.anaconda.org/conda-forge/linux-64/s2n-1.5.21-h7ab7c64_0.conda
