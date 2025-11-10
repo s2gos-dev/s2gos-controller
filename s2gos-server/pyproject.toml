@@ -38,14 +38,9 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-  "fastapi",
-  "pydantic",
-  "pyyaml",
-  "typer",
-  "uvicorn",
   # Eozilla dependencies
-  "gavicore",
-  "wraptile",
+  "gavicore >=0.0.8",
+  "wraptile >=0.0.8",
 ]
 
 [project.scripts]

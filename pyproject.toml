@@ -1,7 +1,7 @@
 [project]
 name = "s2gos-controller"
-version = "0.0.6.dev0"
-description = "S2GOS control layer comprising a server and client"
+version = "0.1.0.dev0"
+description = "S2GOS control layer comprising a gateway server and client"
 requires-python = ">=3.10"
 
 [tool.pixi.workspace]
@@ -63,9 +63,7 @@ pymdown-extensions = "*"
 # or even better "[tool.pixi.workspaces]".
 # See https://github.com/prefix-dev/pixi/issues/1417.
 s2gos-client = { path = "s2gos-client", editable = true }
-s2gos-common = { path = "s2gos-common", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
-s2gos-app-ex = { path = "s2gos-app-ex", editable = true }
 # TODO: once stable, move into project (conda-forge) dependencies
 appligator = { path = "../eozilla/appligator", editable = true }
 cuiman = { path = "../eozilla/cuiman", editable = true }
@@ -83,7 +81,7 @@ mkdocs-mermaid2-plugin = "*"
 skip = [".idea", ".github", ".pixi", "htmlcov", "site"]
 profile = "black"
 line_length = 88
-known_first_party = ["s2gos_common", "s2gos_client", "s2gos_server", "s2gos_app_ex"]
+known_first_party = ["s2gos_client", "s2gos_server"]
 
 [tool.black]
 line-length = 88
@@ -91,10 +89,8 @@ line-length = 88
 [tool.ruff]
 include = [
     "notebooks/**/*.py",
-    "s2gos-common/src/**/*.py",
-    "s2gos-server/src/**/*.py",
     "s2gos-client/src/**/*.py",
-    "s2gos-app-ex/src/**/*.py",
+    "s2gos-server/src/**/*.py",
     "tools/**/*.py",
 ]
 
@@ -105,51 +101,39 @@ per-file-ignores = { "*.ipynb" = ["E402"] }
 select = ["I", "F", "E"]
 
 [tool.coverage.report]
-omit = [
-    "s2gos-app-ex/src/s2gos_app_ex/**/*",
-    "s2gos-client/src/s2gos_client/gui/**/*",
-    "s2gos-server/src/s2gos_server/services/airflow/**/*",
-]
+omit = []
 
 [tool.mypy]
 python_version = "3.10"
 check_untyped_defs = true
 disable_error_code = ["valid-type", "import-untyped"]
 exclude = [
-    "s2gos-airflow",
-    "s2gos-app-ex/src/test",
     "s2gos-client/src/test",
-    "s2gos-common/src/test",
     "s2gos-server/src/test",
     "tools",
 ]
-[[tool.mypy.overrides]]
-module = "s2gos_common.models"
-disable_error_code = ["valid-type"]
 
 ########################## Tasks ###############################
 
 # pixi run test
 
 [tool.pixi.tasks.test]
-depends-on = ["test-common", "test-server", "test-client"]
-
-[tool.pixi.tasks.test-common]
-cmd = "pytest s2gos-common/src/tests"
-
-[tool.pixi.tasks.test-server]
-cmd = "pytest s2gos-server/src/tests"
+depends-on = ["test-client", "test-server"]
 
 [tool.pixi.tasks.test-client]
-cmd = "pytest s2gos-client/src/tests"
+cmd = "pytest s2gos-client/tests"
+
+[tool.pixi.tasks.test-server]
+cmd = "pytest s2gos-server/tests"
+
 
 # pixi run coverage / coverage-ci
 
 [tool.pixi.tasks.coverage]
-depends-on = ["cov-common", "cov-server", "cov-client", "cov-report-html"]
+depends-on = ["cov-client", "cov-server", "cov-report-html"]
 
 [tool.pixi.tasks.coverage-ci]
-depends-on = ["cov-common", "cov-server", "cov-client", "cov-report-xml"]
+depends-on = ["cov-client", "cov-server", "cov-report-xml"]
 
 [tool.pixi.tasks.cov-report-html]
 cmd = "coverage html -d .cov-report && coverage report"
@@ -157,51 +141,30 @@ cmd = "coverage html -d .cov-report && coverage report"
 [tool.pixi.tasks.cov-report-xml]
 cmd = "coverage xml -o coverage.xml && coverage report"
 
-[tool.pixi.tasks.cov-common]
-cmd = "pytest --cov s2gos-common/src/s2gos_common --cov-report= --cov-append s2gos-common/src/tests"
+[tool.pixi.tasks.cov-client]
+cmd = "pytest --cov s2gos-client/src/s2gos_client --cov-report= --cov-append s2gos-client/tests"
 
 [tool.pixi.tasks.cov-server]
-cmd = "pytest --cov s2gos-server/src/s2gos_server --cov-report= --cov-append s2gos-server/src/tests"
-
-[tool.pixi.tasks.cov-client]
-cmd = "pytest --cov s2gos-client/src/s2gos_client --cov-report= --cov-append s2gos-client/src/tests"
+cmd = "pytest --cov s2gos-server/src/s2gos_server --cov-report= --cov-append s2gos-server/tests"
 
 # pixi run check
 
 [tool.pixi.tasks.check]
-depends-on = ["check-common", "check-server", "check-client", "typecheck"]
-
-[tool.pixi.tasks.check-common]
-cmd = "ruff check s2gos-common/src"
-
-[tool.pixi.tasks.check-server]
-cmd = "ruff check s2gos-server/src"
+depends-on = ["check-client", "check-server", "typecheck"]
 
 [tool.pixi.tasks.check-client]
 cmd = "ruff check s2gos-client/src"
+
+[tool.pixi.tasks.check-server]
+cmd = "ruff check s2gos-server/src"
 
 [tool.pixi.tasks.typecheck]
 cmd = "mypy ."
 
 # pixi run generate
 
-[tool.pixi.tasks.generate]
-depends-on = ["gen-models", "gen-server", "gen-client", "gen-client-docs"]
-
-[tool.pixi.tasks.gen-models]
-cmd = "python -m tools.gen_models"
-
-[tool.pixi.tasks.gen-server]
-cmd = "python -m tools.gen_server"
-
-[tool.pixi.tasks.gen-client]
-cmd = "python -m tools.gen_client"
-
 [tool.pixi.tasks.gen-client-docs]
 cmd = "python -m tools.gen_client_docs"
-
-[tool.pixi.tasks.gen-dags]
-cmd = "python -m tools.gen_dags"
 
 # pixi run sync-versions
 

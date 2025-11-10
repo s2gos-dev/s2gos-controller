@@ -2,5 +2,8 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-# No exports here. To avoid unnecessary imports, CLI apps should pick
-# only what they need from dedicated submodules.
+import s2gos_server.cli
+
+
+def test_cli_ok():
+    assert {"cli"}.issubset(dir(s2gos_server.cli))

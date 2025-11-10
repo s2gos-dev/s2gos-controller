@@ -2,11 +2,11 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from wraptile.cli import get_cli
+from wraptile.cli import new_cli
 
 from s2gos_server import __version__ as version
 
-cli = get_cli("s2gos-server", version=version)
+cli = new_cli(name="s2gos-server", version=version)
 
 __all__ = ["cli"]
 

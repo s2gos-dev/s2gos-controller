@@ -38,15 +38,9 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-  "click",
-  "pydantic",
-  "pyyaml",
-  "typer",
-  "uri-template",
-  "httpx",
   # Eozilla dependencies
-  "cuiman",
-  "gavicore",
+  "cuiman >=0.0.8",
+  "gavicore >=0.0.8",
 ]
 
 [project.scripts]
