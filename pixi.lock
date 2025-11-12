@@ -1179,8 +1179,8 @@ packages:
   requires_python: ~=3.9
 - pypi: ../eozilla/appligator
   name: appligator
-  version: 0.0.8.dev0
-  sha256: 6a4c923c2c6a478fd7d6efd2bf686acef4036328ec7697125e07fc3b77beff23
+  version: 0.0.8
+  sha256: 02c0f3d145b3b7cec7bcc0e4efb1185ffeb9c6e5491e0603e2e4262c74e9f620
   requires_dist:
   - pydantic
   - pyyaml
@@ -2634,8 +2634,8 @@ packages:
   timestamp: 1749539269244
 - pypi: ../eozilla/cuiman
   name: cuiman
-  version: 0.0.8.dev0
-  sha256: c2d45f9ba8268315d501434e507801678cc9038cebf78496e83a08a9faeca910
+  version: 0.0.8
+  sha256: 871aaa2a3816d3e4ff13bdf7b7a8e1350334cc4c9c31b24e4d1e9df2831e80f4
   requires_dist:
   - click
   - panel
@@ -3051,8 +3051,8 @@ packages:
   timestamp: 1748101667956
 - pypi: ../eozilla/gavicore
   name: gavicore
-  version: 0.0.8.dev0
-  sha256: 2f554fb6cb2530441f8a6ef8aa0c639ad7b4f8141ee99e9bec3eb3eb8a417dec
+  version: 0.0.8
+  sha256: 488145ac6c86f4b19f5169523deab4ab235b1edb34422b14242df95c6e9e91e6
   requires_dist:
   - click
   - pydantic
@@ -7755,8 +7755,8 @@ packages:
   timestamp: 1747339794916
 - pypi: ../eozilla/procodile
   name: procodile
-  version: 0.0.8.dev0
-  sha256: bcfc4f38f4679048eb6b9d2896f5780674d18ca03d90b7a8726f300995953996
+  version: 0.0.8
+  sha256: 761ceddd0d3ac3b5717e1fa18c73ac7f949c2fd57e621dde38e721aea31d589b
   requires_dist:
   - pydantic
   - pyyaml
@@ -9885,8 +9885,8 @@ packages:
   timestamp: 1736870265811
 - pypi: ../eozilla/wraptile
   name: wraptile
-  version: 0.0.8.dev0
-  sha256: 18aebc189b21453308d28597524a9585b3d999ab3fa52d90fe8a6e3665ced6bc
+  version: 0.0.8
+  sha256: 436c794e970c9aebbbbe51a9454f8c7c395a8df52cebed220663569b8b682bf7
   requires_dist:
   - fastapi
   - pydantic
