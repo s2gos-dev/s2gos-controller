@@ -17,7 +17,7 @@ Python control layer for the synthetic EO scene simulator service of the
 
 _Note, this project and its documentation is still in an early development stage._
 
-## Description
+## Controller Overview
 
 This project hosts two Python packages:
 
@@ -26,6 +26,13 @@ This project hosts two Python packages:
 * `s2gos-server` - a FastAPI-based implementation of the 
   [OGC API - Processes](https://ogcapi.ogc.org/processes/) that is wrapped around
   the S2GOS scene simulator service based on [Apache Airflow](https://airflow.apache.org/).
+
+The development of the S2GOS controller paved the way for the development of the more 
+general [Eozilla Suite](https://eo-tools.github.io/eozilla/) of tools supporting the 
+interaction with EO workflow orchestration and processing systems. The S2GOS controller 
+therefore build on the Eozilla packages 
+[Cuiman](https://github.com/eo-tools/eozilla/tree/main/cuiman), 
+[Wraptile](https://github.com/eo-tools/eozilla/tree/main/wraptile) and others.
 
 ## Installation
 
