@@ -4,10 +4,7 @@
 
 from importlib.metadata import version
 
-from .api.async_client import AsyncClient
-from .api.client import Client
-from .api.config import ClientConfig
-from .api.exceptions import ClientError
+from .api import AsyncClient, Client, ClientConfig, ClientError
 
 __version__ = version("s2gos-client")
 
@@ -18,3 +15,8 @@ __all__ = [
     "ClientError",
     "__version__",
 ]
+
+# TODO: set final S2GOS gateway server URL
+DEFAULT_SERVER_URL = "http://127.0.0.1:8008"
+
+ClientConfig.set_default(ClientConfig(server_url=DEFAULT_SERVER_URL))

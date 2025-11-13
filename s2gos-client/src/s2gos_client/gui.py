@@ -2,8 +2,8 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from pathlib import Path
-from typing import Final
+from cuiman.gui import Client
 
-THIS_DIR: Final = Path(__file__).parent.resolve()
-S2GOS_PATH: Final = THIS_DIR.parent
+__all__ = [
+    "Client",
+]

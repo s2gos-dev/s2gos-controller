@@ -1,57 +1,21 @@
-[![CI](https://github.com/s2gos-dev/s2gos-controller/actions/workflows/ci.yml/badge.svg)](https://github.com/s2gos-dev/s2gos-controller/actions/workflows/ci.yml)
-[![Codecov](https://codecov.io/gh/s2gos-dev/s2gos-controller/graph/badge.svg?token=T3EXHBMD0G)](https://codecov.io/gh/s2gos-dev/s2gos-controller)
-[![Pixi](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/prefix-dev/pixi/main/assets/badge/v0.json)](https://pixi.sh)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v0.json)](https://github.com/charliermarsh/ruff)
-[![License](https://img.shields.io/github/license/s2gos-dev/s2gos-controller)](https://github.com/s2gos-dev/s2gos-controller)
+# Installation
 
-# DTE-S2GOS Control Layer
-
-Python control layer for the synthetic EO scene simulator service of the 
-[ESA DTE-S2GOS project](https://dte-s2gos.rayference.eu/). 
-
-<p align="center">
-  <img src="./docs/assets/logo-full.svg" width="300" alt="s2gos logo">
-</p>
-
----
-
-_Note, this project and its documentation is still in an early development stage._
-
-## Controller Overview
-
-This project hosts two Python packages:
-
-* `s2gos-client` - CLI, GUI, and API clients that allow for interaction 
-  with the S2GOS scene simulator service.  
-* `s2gos-server` - a FastAPI-based implementation of the 
-  [OGC API - Processes](https://ogcapi.ogc.org/processes/) that is wrapped around
-  the S2GOS scene simulator service based on [Apache Airflow](https://airflow.apache.org/).
-
-The development of the S2GOS controller paved the way for the development of the more 
-general [Eozilla Suite](https://eo-tools.github.io/eozilla/) of tools supporting the 
-interaction with EO workflow orchestration and processing systems. The S2GOS controller 
-therefore build on the Eozilla packages 
-[Cuiman](https://github.com/eo-tools/eozilla/tree/main/cuiman), 
-[Wraptile](https://github.com/eo-tools/eozilla/tree/main/wraptile) and others.
-
-## Installation
-
-### Using pip
+## Using pip
 
 The S2GOS controller packages are not yet deployed on PyPI, therefore
 installing it as a package using `pip` is not yet available. 
 
-### Using conda/mamba 
+## Using conda/mamba 
 
 The S2GOS controller packages are not yet deployed on conda-forge, therefore
 installing it using as a conda package using `conda` or `mamba` is not yet available. 
 
-### Using pixi
+## Using pixi
 
 The S2GOS controller packages are not yet deployed on conda-forge, therefore
 installing it as a conda package using `pixi` is not yet available. 
 
-### Using GitHub
+## Using GitHub
 
 To install the S2GOS controller packages from their sources on GitHub you'll 
 need to install both [git](https://git-scm.com/install/) and 
@@ -123,7 +87,7 @@ s2gos-client list-processes
 Install the S2GOS controller packages as described in 
 [Installation / Using GitHub](#using-github) above.
 
-### Linting and Testing
+## Linting and Testing
 
 To run all checks, execute
 
@@ -143,7 +107,7 @@ To generate a coverage report, execute
 pixi run coverage
 ```
 
-### Implementing Enhancements
+## Implementing Enhancements
 
 The S2GOS controller code relies heavily on the 
 [Eozilla](https://eo-tools.github.io/eozilla/) packages 

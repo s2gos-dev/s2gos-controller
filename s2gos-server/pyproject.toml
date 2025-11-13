@@ -4,7 +4,7 @@
 
 [project]
 name = "s2gos-server"
-version = "0.0.5"
+version = "0.1.0.dev0"
 description = "Python server for the ESA DTE-S2GOS synthetic scene generator service"
 readme = "README.md"
 authors = [
@@ -38,13 +38,9 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-  "fastapi",
-  "pydantic",
-  "pyyaml",
-  "typer",
-  "uvicorn",
-  # local dependency
-  "s2gos-common>=0.0.0",
+  # Eozilla dependencies
+  "gavicore >=0.0.8",
+  "wraptile >=0.0.8",
 ]
 
 [project.scripts]

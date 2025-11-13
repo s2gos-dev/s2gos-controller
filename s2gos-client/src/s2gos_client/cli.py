@@ -2,13 +2,19 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from wraptile.cli import new_cli
+from cuiman.cli import new_cli
 
-from s2gos_server import __version__ as version
+from s2gos_client import __version__ as version
 
-cli = new_cli(name="s2gos-server", version=version)
+cli = new_cli(
+    name="s2gos-client",
+    version=version,
+    summary="Interact with the ESA DTE S2GOS processing service.",
+)
 
-__all__ = ["cli"]
+__all__ = [
+    "cli",
+]
 
 if __name__ == "__main__":  # pragma: no cover
     cli()
