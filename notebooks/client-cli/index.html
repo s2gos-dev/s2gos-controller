@@ -1,258 +1,634 @@
 
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../client-api-airflow/">
+      
+      
+        <link rel="next" href="../../contributing/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/logo.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>CLI usage - ESA DTE-S2GOS Controller</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
 
-<html class="no-js" lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<link href="../client-api-airflow/" rel="prev"/>
-<link href="../../process-dev/" rel="next"/>
-<link href="../../assets/logo.ico" rel="icon"/>
-<meta content="mkdocs-1.6.1, mkdocs-material-9.6.14" name="generator"/>
-<title>CLI usage - ESA DTE-S2GOS Controller</title>
-<link href="../../assets/stylesheets/main.342714a4.min.css" rel="stylesheet"/>
-<link href="../../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
-<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
-<link href="../../assets/_mkdocstrings.css" rel="stylesheet"/>
-<link href="../../overrides/css/custom.css" rel="stylesheet"/>
-<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
-</head>
-<body data-md-color-accent="deep-orange" data-md-color-primary="blue-grey" data-md-color-scheme="default" dir="ltr">
-<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
-<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
-<label class="md-overlay" for="__drawer"></label>
-<div data-md-component="skip">
-<a class="md-skip" href="#cli-usage">
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../overrides/css/custom.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cli-usage" class="md-skip">
           Skip to content
         </a>
-</div>
-<div data-md-component="announce">
-</div>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
 <header class="md-header md-header--shadow" data-md-component="header">
-<nav aria-label="Header" class="md-header__inner md-grid">
-<a aria-label="ESA DTE-S2GOS Controller" class="md-header__button md-logo" data-md-component="logo" href="../.." title="ESA DTE-S2GOS Controller">
-<img alt="logo" src="../../assets/logo.png"/>
-</a>
-<label class="md-header__button md-icon" for="__drawer">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
-</label>
-<div class="md-header__title" data-md-component="header-title">
-<div class="md-header__ellipsis">
-<div class="md-header__topic">
-<span class="md-ellipsis">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="ESA DTE-S2GOS Controller" class="md-header__button md-logo" aria-label="ESA DTE-S2GOS Controller" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
             ESA DTE-S2GOS Controller
           </span>
-</div>
-<div class="md-header__topic" data-md-component="header-topic">
-<span class="md-ellipsis">
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
             
               CLI usage
             
           </span>
-</div>
-</div>
-</div>
-<form class="md-header__option" data-md-component="palette">
-<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="deep-orange" data-md-color-media="" data-md-color-primary="blue-grey" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
-<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
-</label>
-<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="deep-orange" data-md-color-media="" data-md-color-primary="blue-grey" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
-<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
-</label>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="deep-orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="deep-orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
 </form>
-<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
-<label class="md-header__button md-icon" for="__search">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
-</label>
-<div class="md-search" data-md-component="search" role="dialog">
-<label class="md-search__overlay" for="__search"></label>
-<div class="md-search__inner" role="search">
-<form class="md-search__form" name="search">
-<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
-<label class="md-search__icon md-icon" for="__search">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
-</label>
-<nav aria-label="Search" class="md-search__options">
-<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
-</button>
-</nav>
-</form>
-<div class="md-search__output">
-<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
-<div class="md-search-result" data-md-component="search-result">
-<div class="md-search-result__meta">
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
             Initializing search
           </div>
-<ol class="md-search-result__list" role="presentation"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="md-header__source">
-<a class="md-source" data-md-component="source" href="https://github.com/s2gos-dev/s2gos-controller" title="Go to repository">
-<div class="md-source__icon md-icon">
-<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"></path></svg>
-</div>
-<div class="md-source__repository">
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/s2gos-dev/s2gos-controller" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
     s2gos-dev/s2gos-controller
   </div>
 </a>
-</div>
-</nav>
+      </div>
+    
+  </nav>
+  
 </header>
-<div class="md-container" data-md-component="container">
-<main class="md-main" data-md-component="main">
-<div class="md-main__inner md-grid">
-<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
-<div class="md-sidebar__scrollwrap">
-<div class="md-sidebar__inner">
-<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
-<label class="md-nav__title" for="__drawer">
-<a aria-label="ESA DTE-S2GOS Controller" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="ESA DTE-S2GOS Controller">
-<img alt="logo" src="../../assets/logo.png"/>
-</a>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="ESA DTE-S2GOS Controller" class="md-nav__button md-logo" aria-label="ESA DTE-S2GOS Controller" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
     ESA DTE-S2GOS Controller
   </label>
-<div class="md-nav__source">
-<a class="md-source" data-md-component="source" href="https://github.com/s2gos-dev/s2gos-controller" title="Go to repository">
-<div class="md-source__icon md-icon">
-<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"></path></svg>
-</div>
-<div class="md-source__repository">
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/s2gos-dev/s2gos-controller" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
     s2gos-dev/s2gos-controller
   </div>
 </a>
-</div>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../..">
-<span class="md-ellipsis">
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
     Overview
+  
+
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../architecture/">
-<span class="md-ellipsis">
-    Architecture
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation
+  
+
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../client-cli/">
-<span class="md-ellipsis">
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../client-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
     Client CLI
+  
+
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../client-api/">
-<span class="md-ellipsis">
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../client-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
     Client API
+  
+
     
   </span>
-</a>
-</li>
-<li class="md-nav__item md-nav__item--active md-nav__item--nested">
-<input checked="" class="md-nav__toggle md-toggle" id="__nav_5" type="checkbox"/>
-<label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
-<span class="md-ellipsis">
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
     Client Usage
+  
+
     
   </span>
-<span class="md-nav__icon md-icon"></span>
-</label>
-<nav aria-expanded="true" aria-labelledby="__nav_5_label" class="md-nav" data-md-level="1">
-<label class="md-nav__title" for="__nav_5">
-<span class="md-nav__icon md-icon"></span>
-            Client Usage
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
           </label>
-<ul class="md-nav__list" data-md-scrollfix="">
-<li class="md-nav__item">
-<a class="md-nav__link" href="../client-gui/">
-<span class="md-ellipsis">
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Client Usage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../client-gui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
     GUI usage
+  
+
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../client-api/">
-<span class="md-ellipsis">
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../client-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
     Python API usage
+  
+
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../client-api-airflow/">
-<span class="md-ellipsis">
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../client-api-airflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
     Airflow
+  
+
     
   </span>
-</a>
-</li>
-<li class="md-nav__item md-nav__item--active">
-<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
-<a class="md-nav__link md-nav__link--active" href="./">
-<span class="md-ellipsis">
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
     CLI usage
+  
+
     
   </span>
-</a>
-</li>
-</ul>
-</nav>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../process-dev/">
-<span class="md-ellipsis">
-    Process Development
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
     
-  </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../contributing/">
-<span class="md-ellipsis">
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
     Contributing
+  
+
     
   </span>
-</a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="../../roadmap/">
-<span class="md-ellipsis">
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
     Roadmap
+  
+
     
   </span>
-</a>
-</li>
-</ul>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
 </nav>
-</div>
-</div>
-</div>
-<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
-<div class="md-sidebar__scrollwrap">
-<div class="md-sidebar__inner">
-<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
 </nav>
-</div>
-</div>
-</div>
-<div class="md-content" data-md-component="content">
-<article class="md-content__inner md-typeset">
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
 <script>
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -710,7 +1086,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <p>The client expects a running server that conforms to the <a href="">OGC API - Process: Part 1, Version 1.0</a>.
 If you don't have one available, you can also run the project's server
 with a test configuration:</p>
-<div class="highlight"><pre><span></span>s2gos-server<span class="w"> </span>run<span class="w"> </span>--<span class="w"> </span>s2gos_server.services.local.testing:service
+<div class="highlight"><pre><span></span>s2gos-server<span class="w"> </span>run<span class="w"> </span>--<span class="w"> </span>wraptile.services.local.testing:service
 </pre></div>
 </div>
 </div>
@@ -734,9 +1110,9 @@ with a test configuration:</p>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span> <span class="err">!</span><span class="n">s2gos</span><span class="o">-</span><span class="n">client</span> <span class="o">--</span><span class="n">help</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="err">!</span><span class="n">s2gos</span><span class="o">-</span><span class="n">client</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-1"> !s2gos-client --help</div>
+<div class="clipboard-copy-txt" id="cell-1">!s2gos-client --help</div>
 </div>
 </div>
 </div>
@@ -751,13 +1127,27 @@ with a test configuration:</p>
 <pre>                                                                               
  Usage: s2gos-client [OPTIONS] COMMAND [ARGS]...                               
                                                                                
- `s2gos-client` is the client shell tool for the S2GOS service.                
+ Interact with the ESA DTE S2GOS processing service.                           
                                                                                
- The tool can be used to get the available processes, get process details,     
- execute processes, and manage the jobs originating from the latter.  It       
- herewith resembles the functionality of the OGC API Processes - Part 1.       
- You can use shorter command name aliases, e.g., use command name `vr` for     
- `validate-request`, or `lp` for `list-processes`.                             
+ `s2gos-client` can be used to get the available processes, get process        
+ details, execute processes, and manage the jobs originating from the latter.  
+ It                                                                            
+ herewith resembles the core functionality of the OGC API - Processes, Part 1. 
+ For details see https://ogcapi.ogc.org/processes/.                            
+                                                                               
+ You can use shorter command name aliases, e.g., use command name `vr`         
+ for `validate-request`, or `lp` for `list-processes`.                         
+                                                                               
+ The tool's exit codes are as follows:                                         
+                                                                               
+ * `0` - normal exit                                                           
+ * `1` - user errors, argument errors                                          
+ * `2` - remote API errors                                                     
+ * `3` - local network transport errors                                        
+                                                                               
+ If the `--traceback` flag is set, the original Python exception traceback     
+ will be shown and the exit code will always be `1`.                           
+ Otherwise, only the error message is shown.                                   
                                                                                
 +- Options -------------------------------------------------------------------+
 | --version                     Show version and exit.                        |
@@ -771,6 +1161,8 @@ with a test configuration:</p>
 | configure          Configure the client tool.                               |
 | list-processes     List available processes.                                |
 | get-process        Get process details.                                     |
+| create-request     Create an execution request (template) for a given       |
+|                    process.                                                 |
 | validate-request   Validate a process execution request.                    |
 | execute-process    Execute a process in asynchronous mode.                  |
 | list-jobs          List all jobs.                                           |
@@ -804,9 +1196,9 @@ with a test configuration:</p>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span> <span class="err">!</span><span class="n">s2gos</span><span class="o">-</span><span class="n">client</span> <span class="n">configure</span> <span class="o">-</span><span class="n">s</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">8008</span> <span class="o">-</span><span class="n">u</span> <span class="n">bibo</span> <span class="o">-</span><span class="n">t</span> <span class="mi">1234</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="err">!</span><span class="n">s2gos</span><span class="o">-</span><span class="n">client</span> <span class="n">configure</span> <span class="o">-</span><span class="n">s</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">8008</span> <span class="o">-</span><span class="n">u</span> <span class="n">bibo</span> <span class="o">-</span><span class="n">t</span> <span class="mi">1234</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-2"> !s2gos-client configure -s http://127.0.0.1:8008 -u bibo -t 1234</div>
+<div class="clipboard-copy-txt" id="cell-2">!s2gos-client configure -s http://127.0.0.1:8008 -u bibo -t 1234</div>
 </div>
 </div>
 </div>
@@ -818,7 +1210,7 @@ with a test configuration:</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Client configuration written to C:\Users\norma\.s2gos\config
+<pre>Client configuration written to C:\Users\Norman\.eozilla\config
 </pre>
 </div>
 </div>
@@ -989,15 +1381,11 @@ version: 0.0.0
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>created: '2025-10-07T14:29:30.827885Z'
-finished: '2025-10-07T14:29:30.828737Z'
-jobID: job_0
-message: Done
+<pre>created: '2025-11-10T14:59:01.075900Z'
+jobID: job_2
 processID: primes_between
-started: '2025-10-07T14:29:30.828474Z'
-status: successful
+status: accepted
 type: process
-updated: '2025-10-07T14:29:30.828715Z'
 
 </pre>
 </div>
@@ -1039,15 +1427,33 @@ updated: '2025-10-07T14:29:30.828715Z'
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>jobs:
-- created: '2025-10-07T14:29:30.827885Z'
-  finished: '2025-10-07T14:29:30.828737Z'
+- created: '2025-11-10T14:58:35.373594Z'
+  finished: '2025-11-10T14:58:35.474882Z'
   jobID: job_0
+  processID: sleep_a_while
+  progress: 0
+  started: '2025-11-10T14:58:35.374333Z'
+  status: dismissed
+  type: process
+  updated: '2025-11-10T14:58:35.374437Z'
+- created: '2025-11-10T14:58:35.383115Z'
+  finished: '2025-11-10T14:58:35.483986Z'
+  jobID: job_1
+  processID: sleep_a_while
+  progress: 0
+  started: '2025-11-10T14:58:35.383514Z'
+  status: dismissed
+  type: process
+  updated: '2025-11-10T14:58:35.383554Z'
+- created: '2025-11-10T14:59:01.075900Z'
+  finished: '2025-11-10T14:59:01.076461Z'
+  jobID: job_2
   message: Done
   processID: primes_between
-  started: '2025-10-07T14:29:30.828474Z'
+  started: '2025-11-10T14:59:01.076390Z'
   status: successful
   type: process
-  updated: '2025-10-07T14:29:30.828715Z'
+  updated: '2025-11-10T14:59:01.076449Z'
 links:
 - href: http://127.0.0.1:8008/jobs
   hreflang: en
@@ -1094,15 +1500,15 @@ links:
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>created: '2025-10-07T14:29:30.827885Z'
-finished: '2025-10-07T14:29:30.828737Z'
+<pre>created: '2025-11-10T14:58:35.373594Z'
+finished: '2025-11-10T14:58:35.474882Z'
 jobID: job_0
-message: Done
-processID: primes_between
-started: '2025-10-07T14:29:30.828474Z'
-status: successful
+processID: sleep_a_while
+progress: 0
+started: '2025-11-10T14:58:35.374333Z'
+status: dismissed
 type: process
-updated: '2025-10-07T14:29:30.828715Z'
+updated: '2025-11-10T14:58:35.374437Z'
 
 </pre>
 </div>
@@ -1116,7 +1522,7 @@ updated: '2025-10-07T14:29:30.828715Z'
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-8">
@@ -1142,27 +1548,285 @@ updated: '2025-10-07T14:29:30.828715Z'
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>return_value:
-- 11
-- 13
-- 17
-- 19
-- 23
-- 29
-- 31
-- 37
-- 41
-- 43
-- 47
-- 53
-- 59
-- 61
-- 67
-- 71
-- 73
-- 79
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
+<pre>+--------------------- Traceback (most recent call last) ---------------------+
+| C:\Users\Norman\Projects\eozilla\cuiman\src\cuiman\api\transport\httpx.py:7 |
+| 8 in _process_response                                                      |
+|                                                                             |
+|   75                 ),                                                     |
+|   76             ) from e                                                   |
+|   77         try:                                                           |
+| &gt; 78             response.raise_for_status()                                |
+|   79             return args.get_response_for_status(response.status_code,  |
+|   80         except httpx.HTTPError as e:                                   |
+|   81             raise args.get_exception_for_status(                       |
+|                                                                             |
+| +-------------------------------- locals ---------------------------------+ |
+| |          args = TransportArgs(                                          | |
+| |                     path='/jobs/{jobId}/results',                       | |
+| |                     method='get',                                       | |
+| |                     path_params={'jobId': 'job_0'},                     | |
+| |                     query_params={},                                    | |
+| |                     request=None,                                       | |
+| |                     return_types={                                      | |
+| |                         '200': &lt;class 'gavicore.models.JobResults'&gt;     | |
+| |                     },                                                  | |
+| |                     error_types={                                       | |
+| |                         '404': &lt;class 'gavicore.models.ApiError'&gt;,      | |
+| |                         '500': &lt;class 'gavicore.models.ApiError'&gt;       | |
+| |                     },                                                  | |
+| |                     extra_kwargs={}                                     | |
+| |                 )                                                       | |
+| |      response = &lt;Response [403 Forbidden]&gt;                              | |
+| | response_json = {                                                       | |
+| |                     'type': 'ApiError',                                 | |
+| |                     'title': 'Forbidden',                               | |
+| |                     'status': 403,                                      | |
+| |                     'detail': "Job 'job_0' has been cancelled"          | |
+| |                 }                                                       | |
+| |          self = &lt;cuiman.api.transport.httpx.HttpxTransport object at    | |
+| |                 0x00000216E15DDFD0&gt;                                     | |
+| +-------------------------------------------------------------------------+ |
+|                                                                             |
+| C:\Users\Norman\Projects\s2gos-controller\.pixi\envs\default\Lib\site-packa |
+| ges\httpx\_models.py:829 in raise_for_status                                |
+|                                                                             |
+|    826         }                                                            |
+|    827         error_type = error_types.get(status_class, "Invalid status c |
+|    828         message = message.format(self, error_type=error_type)        |
+| &gt;  829         raise HTTPStatusError(message, request=request, response=sel |
+|    830                                                                      |
+|    831     def json(self, **kwargs: typing.Any) -&gt; typing.Any:              |
+|    832         return jsonlib.loads(self.content, **kwargs)                 |
+|                                                                             |
+| +-------------------------------- locals ---------------------------------+ |
+| |   error_type = 'Client error'                                           | |
+| |  error_types = {                                                        | |
+| |                    1: 'Informational response',                         | |
+| |                    3: 'Redirect response',                              | |
+| |                    4: 'Client error',                                   | |
+| |                    5: 'Server error'                                    | |
+| |                }                                                        | |
+| |      message = "Client error '403 Forbidden' for url                    | |
+| |                'http://127.0.0.1:8008/jobs/job_0/results'\n"+88         | |
+| |      request = &lt;Request('GET',                                          | |
+| |                'http://127.0.0.1:8008/jobs/job_0/results')&gt;             | |
+| |         self = &lt;Response [403 Forbidden]&gt;                               | |
+| | status_class = 4                                                        | |
+| +-------------------------------------------------------------------------+ |
++-----------------------------------------------------------------------------+
+HTTPStatusError: Client error '403 Forbidden' for url 
+'http://127.0.0.1:8008/jobs/job_0/results'
+For more information check: 
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
 
+The above exception was the direct cause of the following exception:
+
++--------------------- Traceback (most recent call last) ---------------------+
+| C:\Users\Norman\Projects\eozilla\cuiman\src\cuiman\cli\cli.py:370 in        |
+| get_job_results                                                             |
+|                                                                             |
+|   367         from .output import get_renderer, output                      |
+|   368                                                                       |
+|   369         with use_client(ctx, config_file) as client:                  |
+| &gt; 370             job_results = client.get_job_results(job_id)              |
+|   371         output(get_renderer(output_format).render_job_results(job_res |
+|   372                                                                       |
+|   373     return t                                                          |
+|                                                                             |
+| +-------------------------------- locals ---------------------------------+ |
+| |        client = &lt;cuiman.api.client.Client object at 0x00000216E15DD7F0&gt; | |
+| |   config_file = None                                                    | |
+| |           ctx = &lt;click.core.Context object at 0x00000216E15F5450&gt;       | |
+| |        job_id = 'job_0'                                                 | |
+| | output_format = &lt;OutputFormat.yaml: 'yaml'&gt;                             | |
+| +-------------------------------------------------------------------------+ |
+|                                                                             |
+| C:\Users\Norman\Projects\eozilla\cuiman\src\cuiman\api\client.py:378 in     |
+| get_job_results                                                             |
+|                                                                             |
+|   375             - `404`: The requested URI was not found.                 |
+|   376             - `500`: A server error occurred.                         |
+|   377         """                                                           |
+| &gt; 378         return self._transport.call(                                  |
+|   379             TransportArgs(                                            |
+|   380                 path="/jobs/{jobId}/results",                         |
+|   381                 method="get",                                         |
+|                                                                             |
+| +----------------------------- locals -----------------------------+        |
+| | job_id = 'job_0'                                                 |        |
+| | kwargs = {}                                                      |        |
+| |   self = &lt;cuiman.api.client.Client object at 0x00000216E15DD7F0&gt; |        |
+| +------------------------------------------------------------------+        |
+|                                                                             |
+| C:\Users\Norman\Projects\eozilla\cuiman\src\cuiman\api\transport\httpx.py:3 |
+| 9 in call                                                                   |
+|                                                                             |
+|   36             response = self.sync_httpx.request(*args_, **kwargs_)      |
+|   37         except httpx.HTTPError as e:                                   |
+|   38             raise TransportError(f"{e}") from e                        |
+| &gt; 39         return self._process_response(args, response)                  |
+|   40                                                                        |
+|   41     async def async_call(self, args: TransportArgs) -&gt; Any:            |
+|   42         if self.async_httpx is None:                                   |
+|                                                                             |
+| +-------------------------------- locals ---------------------------------+ |
+| |     args = TransportArgs(                                               | |
+| |                path='/jobs/{jobId}/results',                            | |
+| |                method='get',                                            | |
+| |                path_params={'jobId': 'job_0'},                          | |
+| |                query_params={},                                         | |
+| |                request=None,                                            | |
+| |                return_types={                                           | |
+| |                    '200': &lt;class 'gavicore.models.JobResults'&gt;          | |
+| |                },                                                       | |
+| |                error_types={                                            | |
+| |                    '404': &lt;class 'gavicore.models.ApiError'&gt;,           | |
+| |                    '500': &lt;class 'gavicore.models.ApiError'&gt;            | |
+| |                },                                                       | |
+| |                extra_kwargs={}                                          | |
+| |            )                                                            | |
+| |    args_ = ('GET', 'http://127.0.0.1:8008/jobs/job_0/results')          | |
+| |  kwargs_ = {'params': {}, 'json': None}                                 | |
+| | response = &lt;Response [403 Forbidden]&gt;                                   | |
+| |     self = &lt;cuiman.api.transport.httpx.HttpxTransport object at         | |
+| |            0x00000216E15DDFD0&gt;                                          | |
+| +-------------------------------------------------------------------------+ |
+|                                                                             |
+| C:\Users\Norman\Projects\eozilla\cuiman\src\cuiman\api\transport\httpx.py:8 |
+| 1 in _process_response                                                      |
+|                                                                             |
+|   78             response.raise_for_status()                                |
+|   79             return args.get_response_for_status(response.status_code,  |
+|   80         except httpx.HTTPError as e:                                   |
+| &gt; 81             raise args.get_exception_for_status(                       |
+|   82                 response.status_code, f"{e}", response_json            |
+|   83             ) from e                                                   |
+|   84                                                                        |
+|                                                                             |
+| +-------------------------------- locals ---------------------------------+ |
+| |          args = TransportArgs(                                          | |
+| |                     path='/jobs/{jobId}/results',                       | |
+| |                     method='get',                                       | |
+| |                     path_params={'jobId': 'job_0'},                     | |
+| |                     query_params={},                                    | |
+| |                     request=None,                                       | |
+| |                     return_types={                                      | |
+| |                         '200': &lt;class 'gavicore.models.JobResults'&gt;     | |
+| |                     },                                                  | |
+| |                     error_types={                                       | |
+| |                         '404': &lt;class 'gavicore.models.ApiError'&gt;,      | |
+| |                         '500': &lt;class 'gavicore.models.ApiError'&gt;       | |
+| |                     },                                                  | |
+| |                     extra_kwargs={}                                     | |
+| |                 )                                                       | |
+| |      response = &lt;Response [403 Forbidden]&gt;                              | |
+| | response_json = {                                                       | |
+| |                     'type': 'ApiError',                                 | |
+| |                     'title': 'Forbidden',                               | |
+| |                     'status': 403,                                      | |
+| |                     'detail': "Job 'job_0' has been cancelled"          | |
+| |                 }                                                       | |
+| |          self = &lt;cuiman.api.transport.httpx.HttpxTransport object at    | |
+| |                 0x00000216E15DDFD0&gt;                                     | |
+| +-------------------------------------------------------------------------+ |
++-----------------------------------------------------------------------------+
+ClientError: Client error '403 Forbidden' for url 
+'http://127.0.0.1:8008/jobs/job_0/results'
+For more information check: 
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403 (status 403)
+
+During handling of the above exception, another exception occurred:
+
++--------------------- Traceback (most recent call last) ---------------------+
+| C:\Users\Norman\Projects\eozilla\cuiman\src\cuiman\cli\cli.py:369 in        |
+| get_job_results                                                             |
+|                                                                             |
+|   366         from .client import use_client                                |
+|   367         from .output import get_renderer, output                      |
+|   368                                                                       |
+| &gt; 369         with use_client(ctx, config_file) as client:                  |
+|   370             job_results = client.get_job_results(job_id)              |
+|   371         output(get_renderer(output_format).render_job_results(job_res |
+|   372                                                                       |
+|                                                                             |
+| +-------------------------------- locals ---------------------------------+ |
+| |        client = &lt;cuiman.api.client.Client object at 0x00000216E15DD7F0&gt; | |
+| |   config_file = None                                                    | |
+| |           ctx = &lt;click.core.Context object at 0x00000216E15F5450&gt;       | |
+| |        job_id = 'job_0'                                                 | |
+| | output_format = &lt;OutputFormat.yaml: 'yaml'&gt;                             | |
+| +-------------------------------------------------------------------------+ |
+|                                                                             |
+| C:\Users\Norman\Projects\eozilla\cuiman\src\cuiman\cli\client.py:61 in      |
+| __exit__                                                                    |
+|                                                                             |
+|   58             if api_error.traceback and show_traceback:                 |
+|   59                 message_lines.append("  traceback:")                   |
+|   60                 message_lines.extend(api_error.traceback)              |
+| &gt; 61             typer.echo("\n".join(message_lines))                       |
+|   62             if not show_traceback:                                     |
+|   63                 raise typer.Exit(code=2)                               |
+|   64         elif isinstance(exc_value, TransportError):                    |
+|                                                                             |
+| +-------------------------------- locals ---------------------------------+ |
+| |      api_error = ApiError(                                              | |
+| |                      type='ApiError',                                   | |
+| |                      title='Forbidden',                                 | |
+| |                      status=403,                                        | |
+| |                      detail="Job 'job_0' has been cancelled",           | |
+| |                      instance=None,                                     | |
+| |                      traceback=None                                     | |
+| |                  )                                                      | |
+| |   client_error = ClientError("Client error '403 Forbidden' for url      | |
+| |                  'http://127.0.0.1:8008/jobs/job_0/results'\nFor more   | |
+| |                  information check:                                     | |
+| |                  https://developer.mozilla.org/en-US/docs/Web/HTTP/Sta… | |
+| |                  (status 403)")                                         | |
+| |         exc_tb = &lt;traceback object at 0x00000216E1880440&gt;               | |
+| |      exc_value = ClientError("Client error '403 Forbidden' for url      | |
+| |                  'http://127.0.0.1:8008/jobs/job_0/results'\nFor more   | |
+| |                  information check:                                     | |
+| |                  https://developer.mozilla.org/en-US/docs/Web/HTTP/Sta… | |
+| |                  (status 403)")                                         | |
+| |  message_lines = [                                                      | |
+| |                      "\u274c Error: Client error '403 Forbidden' for url    | |
+| |                  'http://127.0.0.1:8008/jobs/job_0/"+110,               | |
+| |                      'Server-side error details:',                      | |
+| |                      '  title:  Forbidden',                             | |
+| |                      '  status: 403',                                   | |
+| |                      '  type:   ApiError',                              | |
+| |                      "  detail: Job 'job_0' has been cancelled"         | |
+| |                  ]                                                      | |
+| |           self = &lt;cuiman.cli.client.UseClient object at                 | |
+| |                  0x00000216E15DD6A0&gt;                                    | |
+| | show_traceback = False                                                  | |
+| +-------------------------------------------------------------------------+ |
+|                                                                             |
+| C:\Users\Norman\Projects\s2gos-controller\.pixi\envs\default\Lib\site-packa |
+| ges\click\utils.py:321 in echo                                              |
+|                                                                             |
+| C:\Users\Norman\Projects\s2gos-controller\.pixi\envs\default\Lib\encodings\ |
+| cp1252.py:19 in encode                                                      |
+|                                                                             |
+|    16                                                                       |
+|    17 class IncrementalEncoder(codecs.IncrementalEncoder):                  |
+|    18     def encode(self, input, final=False):                             |
+| &gt;  19         return codecs.charmap_encode(input,self.errors,encoding_table |
+|    20                                                                       |
+|    21 class IncrementalDecoder(codecs.IncrementalDecoder):                  |
+|    22     def decode(self, input, final=False):                             |
+|                                                                             |
+| +-------------------------------- locals ---------------------------------+ |
+| | final = False                                                           | |
+| | input = "\u274c Error: Client error '403 Forbidden' for url                 | |
+| |         'http://127.0.0.1:8008/jobs/job_0/"+239                         | |
+| |  self = &lt;encodings.cp1252.IncrementalEncoder object at                  | |
+| |         0x00000216DB854AD0&gt;                                             | |
+| +-------------------------------------------------------------------------+ |
++-----------------------------------------------------------------------------+
+UnicodeEncodeError: 'charmap' codec can't encode character '\u274c' in position
+0: character maps to &lt;undefined&gt;
 </pre>
 </div>
 </div>
@@ -1280,48 +1944,102 @@ updated: '2025-10-07T14:29:30.828715Z'
 </div>
 </div> <!-- jp-Notebook -->
 </div> <!-- jupyter-wrapper -->
-<style>
+
+        <style>
         ['pre { line-height: 125%; }\ntd.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }\nspan.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }\ntd.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }\nspan.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }\n.highlight-ipynb .hll { background-color: var(--jp-cell-editor-active-background) }\n.highlight-ipynb { background: var(--jp-cell-editor-background); color: var(--jp-mirror-editor-variable-color) }\n.highlight-ipynb .c { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment */\n.highlight-ipynb .err { color: var(--jp-mirror-editor-error-color) } /* Error */\n.highlight-ipynb .k { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword */\n.highlight-ipynb .o { color: var(--jp-mirror-editor-operator-color); font-weight: bold } /* Operator */\n.highlight-ipynb .p { color: var(--jp-mirror-editor-punctuation-color) } /* Punctuation */\n.highlight-ipynb .ch { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Hashbang */\n.highlight-ipynb .cm { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Multiline */\n.highlight-ipynb .cp { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Preproc */\n.highlight-ipynb .cpf { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.PreprocFile */\n.highlight-ipynb .c1 { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Single */\n.highlight-ipynb .cs { color: var(--jp-mirror-editor-comment-color); font-style: italic } /* Comment.Special */\n.highlight-ipynb .kc { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Constant */\n.highlight-ipynb .kd { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Declaration */\n.highlight-ipynb .kn { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Namespace */\n.highlight-ipynb .kp { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Pseudo */\n.highlight-ipynb .kr { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Reserved */\n.highlight-ipynb .kt { color: var(--jp-mirror-editor-keyword-color); font-weight: bold } /* Keyword.Type */\n.highlight-ipynb .m { color: var(--jp-mirror-editor-number-color) } /* Literal.Number */\n.highlight-ipynb .s { color: var(--jp-mirror-editor-string-color) } /* Literal.String */\n.highlight-ipynb .ow { color: var(--jp-mirror-editor-operator-color); font-weight: bold } /* Operator.Word */\n.highlight-ipynb .pm { color: var(--jp-mirror-editor-punctuation-color) } /* Punctuation.Marker */\n.highlight-ipynb .w { color: var(--jp-mirror-editor-variable-color) } /* Text.Whitespace */\n.highlight-ipynb .mb { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Bin */\n.highlight-ipynb .mf { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Float */\n.highlight-ipynb .mh { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Hex */\n.highlight-ipynb .mi { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Integer */\n.highlight-ipynb .mo { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Oct */\n.highlight-ipynb .sa { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Affix */\n.highlight-ipynb .sb { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Backtick */\n.highlight-ipynb .sc { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Char */\n.highlight-ipynb .dl { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Delimiter */\n.highlight-ipynb .sd { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Doc */\n.highlight-ipynb .s2 { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Double */\n.highlight-ipynb .se { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Escape */\n.highlight-ipynb .sh { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Heredoc */\n.highlight-ipynb .si { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Interpol */\n.highlight-ipynb .sx { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Other */\n.highlight-ipynb .sr { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Regex */\n.highlight-ipynb .s1 { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Single */\n.highlight-ipynb .ss { color: var(--jp-mirror-editor-string-color) } /* Literal.String.Symbol */\n.highlight-ipynb .il { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Integer.Long */']
         </style>
-</article>
-</div>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
-</div>
-<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
   Back to top
 </button>
-</main>
-<footer class="md-footer">
-<div class="md-footer-meta md-typeset">
-<div class="md-footer-meta__inner md-grid">
-<div class="md-copyright">
-<div class="md-copyright__highlight">
-      Copyright © 2025 ESA DTE-S2GOS Team
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2025 ESA DTE-S2GOS Team
     </div>
   
   
     Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
       Material for MkDocs
     </a>
+  
 </div>
+      
+        
 <div class="md-social">
-<a class="md-social__link" href="https://github.com/s2gos-dev/s2gos-controller" rel="noopener" target="_blank" title="github.com">
-<svg viewbox="0 0 496 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
-</a>
-<a class="md-social__link" href="https://pypi.org/project/s2gos/" rel="noopener" target="_blank" title="pypi.org">
-<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6M286.2 404c11.1 0 20.1 9.1 20.1 20.3 0 11.3-9 20.4-20.1 20.4-11 0-20.1-9.2-20.1-20.4.1-11.3 9.1-20.3 20.1-20.3M167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4m-6.7-142.6c-11.1 0-20.1-9.1-20.1-20.3.1-11.3 9-20.4 20.1-20.4 11 0 20.1 9.2 20.1 20.4s-9 20.3-20.1 20.3"></path></svg>
-</a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/s2gos-dev/s2gos-controller" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://pypi.org/project/s2gos/" target="_blank" rel="noopener" title="pypi.org" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6M286.2 444.7a20.4 20.4 0 1 1 0-40.7 20.4 20.4 0 1 1 0 40.7M167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4m-6.6-183.4a20.4 20.4 0 1 1 0 40.8 20.4 20.4 0 1 1 0-40.8"/></svg>
+    </a>
+  
 </div>
-</div>
-</div>
+      
+    </div>
+  </div>
 </footer>
-</div>
-<div class="md-dialog" data-md-component="dialog">
-<div class="md-dialog__inner md-typeset"></div>
-</div>
-<script id="__config" type="application/json">{"base": "../..", "features": ["navigation.top"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
-<script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
-</body>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
 </html>
