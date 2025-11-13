@@ -10,6 +10,7 @@ copyright: Copyright &copy; 2025 ESA DTE-S2GOS Team
 
 nav:
   - Overview: index.md
+  - Installation: installation.md
   - Architecture: architecture.md
   - Client CLI: client-cli.md
   - Client API: client-api.md
