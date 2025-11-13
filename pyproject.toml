@@ -61,8 +61,6 @@ mkdocstrings = "*"
 mkdocstrings-python = "*"
 mkdocs-jupyter = "*"
 nbformat = "*"
-# For mermaid diagrams
-pymdown-extensions = "*"
 
 [tool.pixi.pypi-dependencies]
 # I wished we could have "no-deps=true" here,
@@ -82,9 +80,6 @@ s2gos-server = { path = "s2gos-server", editable = true }
 
 # Airflow is only available on PyPI
 apache-airflow-client = "==3.0.2"
-# Documentation
-# For mermaid diagrams
-mkdocs-mermaid2-plugin = "*"
 
 [tool.isort]
 skip = [".idea", ".github", ".pixi", "htmlcov", "site"]
