@@ -11,15 +11,18 @@ copyright: Copyright &copy; 2025 ESA DTE-S2GOS Team
 nav:
   - Overview: index.md
   - Installation: installation.md
-  - Client CLI: client-cli.md
-  - Client API: client-api.md
-  - Client Usage:
-        - notebooks/client-gui.ipynb
-        - notebooks/client-api.ipynb
-        - notebooks/client-api-airflow.ipynb
-        - notebooks/client-cli.ipynb
-  - Contributing: contributing.md
-  - Roadmap: roadmap.md
+  - User Guide:
+    - notebooks/client-api.ipynb
+    - notebooks/client-api-airflow.ipynb
+    - notebooks/client-gui.ipynb
+    - notebooks/client-cli.ipynb
+  - References:
+    - Client API Reference: client-api.md
+    - Client CLI Reference: client-cli.md
+    - Execution Requests: execution-requests.md
+  - Development:
+    - Contributing: contributing.md
+    - Roadmap: roadmap.md
 
 theme:
   name: material
