@@ -1,28 +1,33 @@
 ## Changes in version 0.1.0 (in development)
 
-Major parts of the S2GOS controller packages have been generic with respect to the 
-primary interface used between the client and the gateway server, which is the
+Major parts of the S2GOS controller packages have been generic with respect 
+to the primary interface used between the client and the gateway server, 
+which is the
 [OGC API - Processes](https://github.com/opengeospatial/ogcapi-processes). 
-Hence, S2GOS components can theoretically be used to work with any OGC-compliant 
-processing service. Also, the old package names `s2gos-xxx` were hard to remember 
-and imply a special context as well was the name "S2GOS" hard-coded into the package 
-code. (#39) 
+Hence, S2GOS components can theoretically be used to work with any 
+OGC-compliant processing service. Also, the old package names `s2gos-xxx` were
+hard to remember and imply a special context as well was the name "S2GOS"
+hard-coded into the package code, see #39. 
 
-- Moved existing repo to a new, dedicated GitHub organisation 
-  [eo-tools](https://github.com/eo-tools) and a 
-  new repo [Eozilla](https://github.com/eo-tools/eozilla).
-- Renamed the packages so they are easy to remember and convey a clear, general 
-  meaning and refactor out the S2GOS-specific parts. Eozilla packages are 
-  - `appligator` (application packaging),
-  - `cuiman` (client user interfaces),
-  - `gavicore` (common core components),
-  - `procodile` (process dev framework), 
-  - `wraptile` (gateway server that wraps processing systems).
-- In Eozilla, we gave credits to the [S2GOS project](https://dte-s2gos.rayference.eu/), 
-  which made them possible.
-- The S2GOS controller package
-  - `s2gos-client` now uses the Eozilla package `cuiman` and
-  - `s2gos-server` now uses the Eozilla package `wraptile`.
+In consequence, we moved the existing repo to a new, dedicated GitHub 
+organisation [eo-tools](https://github.com/eo-tools) and a new 
+repo [Eozilla](https://github.com/eo-tools/eozilla) and gave credits to the 
+[S2GOS project](https://dte-s2gos.rayference.eu/), which made Eozilla 
+possible. We renamed the original packages so they are easy to remember and
+convey a clear, general meaning and refactor out the S2GOS-specific parts.
+
+The new Eozilla packages are 
+- `appligator` (application packaging),
+- `cuiman` (client user interfaces),
+- `gavicore` (common core components),
+- `procodile` (process dev framework), 
+- `wraptile` (gateway server that wraps processing systems).
+
+The S2GOS controller package `s2gos-client` now uses the Eozilla package 
+`cuiman` and `s2gos-server` now uses the Eozilla package `wraptile`.
+
+
+---
 
 ## Changes in version 0.0.5
 
@@ -43,7 +48,6 @@ code. (#39)
 - Added a keyword-argument `inputs_arg: str | bool` to the `ProcessRegistry.process`
   decorator. If specified, it defines an _inputs argument_, which is used to 
   define the process inputs in form of a dataclass derived from 
-- 
   `pydantic.BaseModel`. (#35)
 - Now supporting the OpenAPI/JSON Schema `discriminator` property 
   in `tools/openapi.yaml/schemas/schema` and generated models. (#36)
@@ -92,6 +96,7 @@ code. (#39)
   - it can be configured by overriding `configure(args, kwargs)` 
   - it can log using `self.logger`
 
+
 ## Changes in version 0.0.2
 
 - `s2gos-client` package:
@@ -126,6 +131,7 @@ code. (#39)
 
 - Project setup:
   - Excluded `s2gos_client.gui` from coverage as it is still experimental.
+
 
 ## Changes in version 0.0.1
 
