@@ -1,10 +1,15 @@
-#  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
+#  Copyright (c) 2026 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
+
+from importlib import import_module
 
 from cuiman.cli import new_cli
 
 from s2gos_client import __version__ as version
+
+# Force pre-configuration of Sen4CAP configuration
+import_module("s2gos_client.api")
 
 cli = new_cli(
     name="s2gos-client",
