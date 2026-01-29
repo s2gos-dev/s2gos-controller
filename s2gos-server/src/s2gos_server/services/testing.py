@@ -22,7 +22,6 @@ from pydantic import Field
 from procodile import JobContext
 from wraptile.services.local import LocalService
 
-from .io import PathRef
 
 service = LocalService(
     title="S2GOS Test-Server",
@@ -67,29 +66,34 @@ class ObservationType(enum.StrEnum):
 # ============================================================================
 
 
-@registry.process(id="mtr_demo_generation")
+# noinspection PyUnusedLocal
+@registry.process(id="mtr_demo_generation", title="Scene Generation Demo")
 def mtr_demo_generation(
     month: Annotated[
         Month,
         Field(
             default=Month.DECEMBER,
             description="Month for simulation (December=summer, June=winter in Patagonia)",
+            title="Month",
         ),
     ],
     random_seed: Annotated[
-        int, Field(default=13, description="RNG seed for vegetation placement")
-    ],
-    config_output_dir: Annotated[
-        PathRef | None,
-        Field(..., description="Generation configuration output directory"),
-    ] = None,
-    scene_output_dir: Annotated[
-        PathRef | None,
+        int,
         Field(
-            ..., description="Scene description and associated data output directory"
+            default=13,
+            description="RNG seed for vegetation placement",
+            title="Vegetation RNG seed",
+        ),
+    ],
+    scene_name: Annotated[
+        str,
+        Field(
+            ...,
+            description="Name of scene",
+            title="Scene name",
         ),
     ] = None,
-) -> PathRef | None:
+) -> str | None:
     """Generate 3D scene for MTR demo with seasonal variations.
 
     This processor:
@@ -107,8 +111,7 @@ def mtr_demo_generation(
     Args:
         month: Month for simulation (controls seasonal variations)
         random_seed: Random seed for reproducible vegetation placement
-        config_output_dir: Optional directory for generation config JSON
-        scene_output_dir: Optional directory for scene description YAML
+        scene_name: Filename for scene description YAML
 
     Returns:
         Path to generated scene description YAML file, or None if validation fails
@@ -146,37 +149,54 @@ def mtr_demo_generation(
 # ============================================================================
 
 
-@registry.process(id="mtr_demo_simulation")
+# noinspection PyUnusedLocal
+@registry.process(id="mtr_demo_simulation", title="Simulation Demo")
 def mtr_demo_simulation(
-    scene_description_path: Annotated[
-        PathRef, Field(..., description="Path to scene description YAML file")
+    scene_name: Annotated[
+        str,
+        Field(
+            ...,
+            description="Scene to sue for simulation",
+            title="Scene name",
+        ),
     ],
     month: Annotated[
         Month,
         Field(
             default=Month.DECEMBER,
             description="Month for simulation (December=summer, June=winter)",
+            title="Month",
         ),
     ],
     hour_utc: Annotated[
-        float, Field(..., description="Hour of observation in UTC (0-23)")
+        float,
+        Field(
+            ...,
+            description="Hour of observation in UTC (0-23) of the 21st of the chosen month, affects sun position ",
+            title="Hour (UTC)",
+        ),
     ],
     observation: Annotated[
         ObservationType,
-        Field(..., description="Observation type (enum value)"),
+        Field(..., description="Observation type (enum value)", title="Observation"),
     ],
     spp: Annotated[
-        int, Field(..., description="Samples per pixel for Monte Carlo simulation")
+        int,
+        Field(
+            ...,
+            description="Samples per pixel for Monte Carlo simulation",
+            title="Samples per pixel",
+        ),
     ] = 8,
-    config_output_dir: Annotated[
-        PathRef | None,
-        Field(..., description="Simulation configuration output directory"),
+    sim_name: Annotated[
+        str,
+        Field(
+            ...,
+            description="Simulation run name",
+            title="Name of run",
+        ),
     ] = None,
-    simulation_output_dir: Annotated[
-        PathRef | None,
-        Field(..., description="Simulation results output directory"),
-    ] = None,
-) -> PathRef | None:
+) -> str | None:
     """Run simulation for MTR demo with configurable observation types.
 
     This processor:
@@ -192,13 +212,12 @@ def mtr_demo_simulation(
     - SATELLITE_HDRF: [PLACEHOLDER - To be implemented]
 
     Args:
-        scene_description_path: Path to scene YAML from generation step
+        scene_name: Filename of the scene YAML from generation step
         month: Month for simulation (determines observation date)
         hour_utc: Hour of observation in UTC
         observation: Observation type configuration
         spp: Samples per pixel for Monte Carlo simulation
-        config_output_dir: Optional directory for simulation config JSON
-        simulation_output_dir: Optional directory for simulation outputs
+        sim_name: Filename for the for simulation config JSON
 
     Returns:
         Path to simulation output directory, or None if observation type
@@ -235,7 +254,7 @@ def mtr_demo_simulation(
     ctx.report_progress(message="Running simulation...")
 
     # TODO
-    output_path = simulation_from_config()
+    output_path = simulation_from_config(scene_name)
 
     if output_path:
         print("\n" + "=" * 60)
@@ -249,9 +268,9 @@ def mtr_demo_simulation(
     return output_path
 
 
-def generation_from_config() -> PathRef:
-    return PathRef("/outputs/generation-result")
+def generation_from_config(scene_name: str) -> str:
+    return f"/outputs/scenes/{scene_name}"
 
 
-def simulation_from_config():
-    return PathRef("/outputs/simulation-result")
+def simulation_from_config(sim_name: str):
+    return f"/outputs/simulations/{sim_name}"
