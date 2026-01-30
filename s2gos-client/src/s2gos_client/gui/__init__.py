@@ -4,22 +4,15 @@
 
 from importlib import import_module
 
-from cuiman.cli import new_cli
+from cuiman.gui import Client
+from .pathref import register_component
 
-from s2gos_client import __version__ as version
 
 # Force pre-configuration of Sen4CAP configuration
 import_module("s2gos_client.api")
 
-cli = new_cli(
-    name="s2gos-client",
-    version=version,
-    summary="Interact with the ESA DTE S2GOS processing service.",
-)
+register_component()
 
 __all__ = [
-    "cli",
+    "Client",
 ]
-
-if __name__ == "__main__":  # pragma: no cover
-    cli()

@@ -9,12 +9,14 @@ channels = ["conda-forge"]
 platforms = ["linux-64", "win-64", "osx-64"]
 
 [tool.pixi.dependencies]
-# Eozilla dependencies
-appligator = ">=0.0.8,<0.0.9"
-cuiman = ">=0.0.8,<0.0.9"
-gavicore = ">=0.0.8,<0.0.9"
-procodile = ">=0.0.8,<0.0.9"
-wraptile = ">=0.0.8,<0.0.9"
+# Eozilla dependencies.
+# Comment out, if using the editable versions,
+# see [tool.pixi.pypi-dependencies] below.
+#appligator = ">=0.0.8,<0.0.9"
+#cuiman = ">=0.0.8,<0.0.9"
+#gavicore = ">=0.0.8,<0.0.9"
+#procodile = ">=0.0.8,<0.0.9"
+#wraptile = ">=0.0.8,<0.0.9"
 # Combined sub-workspace dependencies to prevent our editable
 # PyPI dependencies (our project's sub-workspaces) to install
 # PyPI packages instead of using conda packages.
@@ -24,6 +26,7 @@ httpx = "*"
 pydantic = "*"
 pyyaml = "*"
 typer = "*"
+universal_pathlib = ">=0.3.8,<0.4"
 uri-template = "*"
 uvicorn = "*"
 # IDE integration
@@ -61,6 +64,7 @@ mkdocstrings = "*"
 mkdocstrings-python = "*"
 mkdocs-jupyter = "*"
 nbformat = "*"
+pydantic-settings = ">=2.12.0,<3"
 
 [tool.pixi.pypi-dependencies]
 # I wished we could have "no-deps=true" here,
@@ -72,11 +76,11 @@ s2gos-server = { path = "s2gos-server", editable = true }
 # Uncomment the following to allow using eozilla from sources
 # Note, using the wraptile server is for testing only
 #
-#appligator = { path = "../eozilla/appligator", editable = true }
-#cuiman = { path = "../eozilla/cuiman", editable = true }
-#gavicore = { path = "../eozilla/gavicore", editable = true }
-#procodile = { path = "../eozilla/procodile", editable = true }
-#wraptile = { path = "../eozilla/wraptile", editable = true }
+appligator = { path = "../eozilla/appligator", editable = true }
+cuiman = { path = "../eozilla/cuiman", editable = true }
+gavicore = { path = "../eozilla/gavicore", editable = true }
+procodile = { path = "../eozilla/procodile", editable = true }
+wraptile = { path = "../eozilla/wraptile", editable = true }
 
 # Airflow is only available on PyPI
 apache-airflow-client = "==3.0.2"

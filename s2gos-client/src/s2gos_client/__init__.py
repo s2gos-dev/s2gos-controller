@@ -6,9 +6,6 @@ from importlib.metadata import version
 
 from .api import AsyncClient, Client, ClientConfig, ClientError
 
-from .defaults import DEFAULT_SERVER_URL, DEFAULT_USER_NAME, DEFAULT_ACCESS_TOKEN
-
-
 __version__ = version("s2gos-client")
 
 __all__ = [
@@ -18,11 +15,3 @@ __all__ = [
     "ClientError",
     "__version__",
 ]
-
-ClientConfig.set_default(
-    ClientConfig(
-        server_url=DEFAULT_SERVER_URL,
-        user_name=DEFAULT_USER_NAME,
-        access_token=DEFAULT_ACCESS_TOKEN,
-    )
-)

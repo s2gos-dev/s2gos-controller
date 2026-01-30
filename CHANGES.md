@@ -1,5 +1,9 @@
 ## Changes in version 0.1.0 (in development)
 
+Added GUI component support for 
+[PathRef](https://github.com/s2gos-dev/s2gos-utils/blob/MTR/src/s2gos_utils/io/paths.py) 
+object (not yet used).
+
 Major parts of the S2GOS controller packages have been generic with respect 
 to the primary interface used between the client and the gateway server, 
 which is the
