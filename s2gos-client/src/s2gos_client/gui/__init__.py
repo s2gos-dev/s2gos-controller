@@ -8,7 +8,7 @@ from cuiman.gui import Client
 from .pathref import register_component
 
 
-# Force pre-configuration of Sen4CAP configuration
+# Setup S2GOS-specific API configuration
 import_module("s2gos_client.api")
 
 register_component()

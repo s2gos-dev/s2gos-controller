@@ -8,7 +8,7 @@ from cuiman.cli import new_cli
 
 from s2gos_client import __version__ as version
 
-# Force pre-configuration of Sen4CAP configuration
+# Setup S2GOS-specific API configuration
 import_module("s2gos_client.api")
 
 cli = new_cli(
