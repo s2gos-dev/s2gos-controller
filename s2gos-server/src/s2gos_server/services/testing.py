@@ -19,7 +19,9 @@ from typing import Annotated
 
 from pydantic import Field
 
-from procodile import JobContext
+from gavicore.models import InputDescription
+from procodile import JobContext, additional_parameters
+
 from wraptile.services.local import LocalService
 
 
@@ -29,6 +31,12 @@ service = LocalService(
 )
 
 registry = service.process_registry
+
+# noinspection PyTypeChecker
+advanced_input = InputDescription(
+    additionalParameters=additional_parameters({"level": "advanced"}),
+    schema={},
+)
 
 # ============================================================================
 # Constants
@@ -132,7 +140,7 @@ def mtr_demo_generation(
     print("=" * 60)
     ctx.report_progress(message="Running scene generation pipeline...")
 
-    scene_path = generation_from_config()
+    scene_path = generation_from_config(scene_name)
     if scene_path:
         print("\n" + "=" * 60)
         print("SCENE GENERATION COMPLETE")
@@ -149,8 +157,12 @@ def mtr_demo_generation(
 # ============================================================================
 
 
-# noinspection PyUnusedLocal
-@registry.process(id="mtr_demo_simulation", title="Simulation Demo")
+# noinspection PyUnusedLocal,PyArgumentList,PyTypeChecker
+@registry.process(
+    id="mtr_demo_simulation",
+    title="Simulation Demo",
+    inputs=dict(spp=advanced_input),
+)
 def mtr_demo_simulation(
     scene_name: Annotated[
         str,
