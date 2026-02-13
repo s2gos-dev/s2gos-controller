@@ -1,22 +1,30 @@
 # S2GOS Controller Roadmap
 
-Given here are the features and issues that are worked on and will be addressed next.
+Given here is the S2GOS controller development plan including the features and issues 
+that are worked on and will be addressed next.
 
-## Doing
+_Updated on 2026-02-13_
 
-### General design
+Detailed issue descriptions can be found in the related issue trackers:
 
-- Clarify data i/o, formats, and protocols (also check OGC spec):
-    - user files --> **scene generator** --> OBJ
-    - OBJ --> **scene simulator** --> Zarr 
+- [S2GOS Controller](https://github.com/s2gos-dev/s2gos-controller/issues)
+- [Eozilla](https://github.com/eo-tools/eozilla/issues)
 
-### Airflow Service
+## Ongoing
 
-- Test the Airflow-based service that connects to the Airflow web API
-- Generate DAGs for containerized processes in Docker
-- Generate DAGs for containerized processes in K8s
+- Onboarding different processes based on different generator and simulator configurations.
+- Test client and server with Airflow-based service implementation in OVH.
 
 ## Next
+
+### Client General
+
+- Generalize user data i/o and align with OGC specs:
+    - deal with various data storages and specific data store options (credentials)  
+    - deal with various data formats  
+    - deal with various data in-memory data models  
+- Client: Develop option to register data openers for specific process result 
+  types, e.g., `Client.open_dataset(job_id) -> xarray.Dataset`.  
 
 ### GUI Client
 
@@ -26,7 +34,7 @@ Given here are the features and issues that are worked on and will be addressed 
 
 ### Authentication
 
-* Implement basic authentication using OAuth2 from FastAPI, 
+* Implement authentication using OAuth2 client credentials, 
   use user_name/access_token from ClientConfig in
     - client 
     - server
@@ -50,10 +58,11 @@ The output of `generators/gen_models` is not satisfying:
     - Use `openapi_pydantic.OpenAPI` for representing `s2gos/common/openapi.yaml` in 
       the generators
 
-### Local and Airflow Service
+### Local Service
 
 - Path `/`:
     - Also provide a HTML version, support mimetype `text/html`
+
 
 ### Enhance the GUI Client
 
@@ -75,6 +84,7 @@ The output of `generators/gen_models` is not satisfying:
 - `show_processes()` - get a nicely rendered overview of all processes 
 - `show_process(process_id: str = None, job_id: str = None, editable: bool = True)`
 
+---
 
 ## Done
 
@@ -102,6 +112,11 @@ The output of `generators/gen_models` is not satisfying:
     - **DONE**: Generate `AsyncClient`, next to `Client` 
     - **DONE**: Generate them using [`httpx`](https://github.com/encode/httpx), which 
       should replace currently used `requests`
+
+### Airflow Service
+
+- **DONE** Generate DAGs for containerized processes in Docker
+- **DONE** Generate DAGs for containerized processes in K8s
 
 ### Processor Containerization
 
