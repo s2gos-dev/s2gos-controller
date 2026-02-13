@@ -1226,6 +1226,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <a href="https://github.com/opengeospatial/ogcapi-processes">OGC API - Processes: Part 1, Version 1.0</a>.
 If you don't have one available, you can also run the project's server
 with a test configuration:</p>
+<div class="highlight"><pre><span></span>s2gos-server<span class="w"> </span>run<span class="w"> </span>--<span class="w"> </span>s2gos_server.services.testing:service
+</pre></div>
+<p>or</p>
 <div class="highlight"><pre><span></span>s2gos-server<span class="w"> </span>run<span class="w"> </span>--<span class="w"> </span>wraptile.services.local.testing:service
 </pre></div>
 </div>
@@ -1296,9 +1299,16 @@ client</div>
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <pre><code class="text-json">{
-  "access_token": "1234",
-  "server_url": "http://127.0.0.1:8008",
-  "user_name": "bibo"
+  "api_key": null,
+  "api_key_header": "X-API-Key",
+  "api_url": "http://localhost:8008/",
+  "auth_type": "none",
+  "auth_url": null,
+  "password": null,
+  "token": null,
+  "token_header": "X-Auth-Token",
+  "use_bearer": false,
+  "username": null
 }</code></pre>
 </div>
 </div>
@@ -1339,108 +1349,108 @@ client</div>
 <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <pre><code class="text-json">{
-  "description": "Local test server implementing the OGC API - Processes 1.0 Standard",
+  "description": "Local DTE-S2GOS process server for testing",
   "links": [
     {
-      "href": "http://127.0.0.1:8008/",
+      "href": "http://localhost:8008/",
       "hreflang": "en",
       "rel": "self",
       "title": "get_capabilities",
       "type": "application/json"
     },
     {
-      "href": "http://127.0.0.1:8008/openapi.json",
+      "href": "http://localhost:8008/openapi.json",
       "hreflang": "en",
       "rel": "service",
       "title": "openapi",
       "type": "application/json"
     },
     {
-      "href": "http://127.0.0.1:8008/docs",
+      "href": "http://localhost:8008/docs",
       "hreflang": "en",
       "rel": "service",
       "title": "swagger_ui_html",
       "type": "text/html"
     },
     {
-      "href": "http://127.0.0.1:8008/docs/oauth2-redirect",
+      "href": "http://localhost:8008/docs/oauth2-redirect",
       "hreflang": "en",
       "rel": "service",
       "title": "swagger_ui_redirect",
       "type": "text/html"
     },
     {
-      "href": "http://127.0.0.1:8008/redoc",
+      "href": "http://localhost:8008/redoc",
       "hreflang": "en",
       "rel": "service",
       "title": "redoc_html",
       "type": "text/html"
     },
     {
-      "href": "http://127.0.0.1:8008/",
+      "href": "http://localhost:8008/",
       "hreflang": "en",
       "rel": "service",
       "title": "get_capabilities",
       "type": "application/json"
     },
     {
-      "href": "http://127.0.0.1:8008/conformance",
+      "href": "http://localhost:8008/conformance",
       "hreflang": "en",
       "rel": "service",
       "title": "get_conformance",
       "type": "application/json"
     },
     {
-      "href": "http://127.0.0.1:8008/processes",
+      "href": "http://localhost:8008/processes",
       "hreflang": "en",
       "rel": "service",
       "title": "get_processes",
       "type": "application/json"
     },
     {
-      "href": "http://127.0.0.1:8008/processes/{processID}",
+      "href": "http://localhost:8008/processes/{processID}",
       "hreflang": "en",
       "rel": "service",
       "title": "get_process",
       "type": "application/json"
     },
     {
-      "href": "http://127.0.0.1:8008/processes/{processID}/execution",
+      "href": "http://localhost:8008/processes/{processID}/execution",
       "hreflang": "en",
       "rel": "service",
       "title": "execute_process",
       "type": "application/json"
     },
     {
-      "href": "http://127.0.0.1:8008/jobs",
+      "href": "http://localhost:8008/jobs",
       "hreflang": "en",
       "rel": "service",
       "title": "get_jobs",
       "type": "application/json"
     },
     {
-      "href": "http://127.0.0.1:8008/jobs/{jobId}",
+      "href": "http://localhost:8008/jobs/{jobId}",
       "hreflang": "en",
       "rel": "service",
       "title": "get_job",
       "type": "application/json"
     },
     {
-      "href": "http://127.0.0.1:8008/jobs/{jobId}",
+      "href": "http://localhost:8008/jobs/{jobId}",
       "hreflang": "en",
       "rel": "service",
       "title": "dismiss_job",
       "type": "application/json"
     },
     {
-      "href": "http://127.0.0.1:8008/jobs/{jobId}/results",
+      "href": "http://localhost:8008/jobs/{jobId}/results",
       "hreflang": "en",
       "rel": "service",
       "title": "get_job_results",
       "type": "application/json"
     }
   ],
-  "title": "Eozilla API Server (local dummy for testing)"
+  "title": "S2GOS Test-Server"
 }</code></pre>
 </div>
 </div>
@@ -1531,7 +1541,7 @@ client</div>
 <pre><code class="text-json">{
   "links": [
     {
-      "href": "http://127.0.0.1:8008/processes",
+      "href": "http://localhost:8008/processes",
       "hreflang": "en",
       "rel": "self",
       "title": "get_processes",
@@ -1540,26 +1550,13 @@ client</div>
   ],
   "processes": [
     {
-      "description": "Sleeps for `duration` seconds. Fails on purpose if `fail` is `True`. Returns the effective amount of sleep in seconds.",
-      "id": "sleep_a_while",
-      "title": "Sleep Processor",
+      "description": "Generate 3D scene for MTR demo with seasonal variations.\n\nThis processor:\n1. Creates a scene generation configuration based on season/month\n2. Immediately runs the generation pipeline\n3. Returns path to the generated scene description YAML\n\nThe scene includes:\n- PNP location with 10km target area\n- Seasonal vegetation (summer/winter variants)\n- Heterogeneous atmosphere with aerosol layer\n- Tower XML scene at fixed location\n- Optional snow cover (June only)\n\nArgs:\n    month: Month for simulation (controls seasonal variations)\n    random_seed: Random seed for reproducible vegetation placement\n    config_output_dir: Optional directory for generation config JSON\n    scene_output_dir: Optional directory for scene description YAML\n\nReturns:\n    Path to generated scene description YAML file, or None if validation fails",
+      "id": "mtr_demo_generation",
       "version": "0.0.0"
     },
     {
-      "description": "Returns the list of prime numbers between a `min_val` and `max_val`.",
-      "id": "primes_between",
-      "title": "Prime Processor",
-      "version": "0.0.0"
-    },
-    {
-      "description": "Simulate a set scene images slices for testing. Creates an xarray dataset with `periodicity` time slices and writes it as Zarr into a temporary location. Requires installed `dask`, `xarray`, and `zarr` packages.",
-      "id": "simulate_scene",
-      "title": "Generate scene for testing",
-      "version": "0.0.0"
-    },
-    {
-      "id": "return_base_model",
-      "title": "BaseModel Test",
+      "description": "Run simulation for MTR demo with configurable observation types.\n\nThis processor:\n1. Creates a simulation configuration based on observation type\n2. Immediately runs the simulation\n3. Returns path to the simulation output directory\n\nSupported observation types:\n- CHIME: Hyperspectral satellite sensor\n- MSI: Sentinel-2 multispectral sensor (configurable bands)\n- HYPSTAR: Ground-based hyperspectral sensor with HCRF processing\n- RGB_CAMERA: Perspective camera viewing tower from configurable position\n- SATELLITE_HDRF: [PLACEHOLDER - To be implemented]\n\nArgs:\n    scene_description_path: Path to scene YAML from generation step\n    month: Month for simulation (determines observation date)\n    hour_utc: Hour of observation in UTC\n    observation: Observation type configuration\n    spp: Samples per pixel for Monte Carlo simulation\n    config_output_dir: Optional directory for simulation config JSON\n    simulation_output_dir: Optional directory for simulation outputs\n\nReturns:\n    Path to simulation output directory, or None if observation type\n    is not yet implemented or simulation fails",
+      "id": "mtr_demo_simulation",
       "version": "0.0.0"
     }
   ]
@@ -1575,7 +1572,7 @@ client</div>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-6">
@@ -1588,9 +1585,9 @@ client</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">get_process</span><span class="p">(</span><span class="n">process_id</span><span class="o">=</span><span class="s2">"sleep_a_while"</span><span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">get_process</span><span class="p">(</span><span class="n">process_id</span><span class="o">=</span><span class="s2">"mtr_demo_generation"</span><span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-6">client.get_process(process_id="sleep_a_while")</div>
+<div class="clipboard-copy-txt" id="cell-6">client.get_process(process_id="mtr_demo_generation")</div>
 </div>
 </div>
 </div>
@@ -1600,38 +1597,111 @@ client</div>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <pre><code class="text-json">{
-  "description": "Sleeps for `duration` seconds. Fails on purpose if `fail` is `True`. Returns the effective amount of sleep in seconds.",
-  "id": "sleep_a_while",
+  "description": "Generate 3D scene for MTR demo with seasonal variations.\n\nThis processor:\n1. Creates a scene generation configuration based on season/month\n2. Immediately runs the generation pipeline\n3. Returns path to the generated scene description YAML\n\nThe scene includes:\n- PNP location with 10km target area\n- Seasonal vegetation (summer/winter variants)\n- Heterogeneous atmosphere with aerosol layer\n- Tower XML scene at fixed location\n- Optional snow cover (June only)\n\nArgs:\n    month: Month for simulation (controls seasonal variations)\n    random_seed: Random seed for reproducible vegetation placement\n    config_output_dir: Optional directory for generation config JSON\n    scene_output_dir: Optional directory for scene description YAML\n\nReturns:\n    Path to generated scene description YAML file, or None if validation fails",
+  "id": "mtr_demo_generation",
   "inputs": {
-    "duration": {
+    "config_output_dir": {
+      "description": "Path configuration that preserves credential reference through serialization.\n\nThis model allows paths to reference credentials by ID rather than embedding\nactual credentials. When serialized to JSON, only the path value and credential_id\nare stored (no actual credentials). When deserialized, credentials are resolved\nfrom the credential provider (environment variables or .secrets.yaml).\n\nAttributes:\n    value: The actual path/URI\n    cid: Optional reference to a Credential ID in the credential provider\n\nExample:\n    # With credentials\n    path = PathRef(\n        path=\"https://data.earthdatahub.destine.eu/data.zarr\",\n        cid=\"earthdatahub\"\n    )\n\n    # Without credentials (public or local path)\n    path = PathRef(\"/local/path/data.zarr\")\n\n    # Access the authenticated UPath\n    upath = path.upath",
       "minOccurs": 0,
       "schema": {
-        "default": 10,
-        "type": "number"
+        "nullable": true,
+        "properties": {
+          "cid": {
+            "description": "Credential ID",
+            "nullable": true,
+            "title": "Cid",
+            "type": "string"
+          },
+          "value": {
+            "description": "Full path URI",
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "type": "object"
       },
-      "title": "Duration"
+      "title": "PathRef"
     },
-    "fail": {
+    "month": {
+      "description": "Month selection for MTR demo (limited to solstice dates).",
       "minOccurs": 0,
       "schema": {
-        "default": false,
-        "type": "boolean"
+        "default": "december",
+        "enum": [
+          "december",
+          "june"
+        ],
+        "type": "string"
       },
-      "title": "Fail"
+      "title": "Month"
+    },
+    "random_seed": {
+      "description": "RNG seed for vegetation placement",
+      "minOccurs": 0,
+      "schema": {
+        "default": 13,
+        "type": "integer"
+      },
+      "title": "Random Seed"
+    },
+    "scene_output_dir": {
+      "description": "Path configuration that preserves credential reference through serialization.\n\nThis model allows paths to reference credentials by ID rather than embedding\nactual credentials. When serialized to JSON, only the path value and credential_id\nare stored (no actual credentials). When deserialized, credentials are resolved\nfrom the credential provider (environment variables or .secrets.yaml).\n\nAttributes:\n    value: The actual path/URI\n    cid: Optional reference to a Credential ID in the credential provider\n\nExample:\n    # With credentials\n    path = PathRef(\n        path=\"https://data.earthdatahub.destine.eu/data.zarr\",\n        cid=\"earthdatahub\"\n    )\n\n    # Without credentials (public or local path)\n    path = PathRef(\"/local/path/data.zarr\")\n\n    # Access the authenticated UPath\n    upath = path.upath",
+      "minOccurs": 0,
+      "schema": {
+        "nullable": true,
+        "properties": {
+          "cid": {
+            "description": "Credential ID",
+            "nullable": true,
+            "title": "Cid",
+            "type": "string"
+          },
+          "value": {
+            "description": "Full path URI",
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "type": "object"
+      },
+      "title": "PathRef"
     }
   },
   "outputs": {
     "return_value": {
+      "description": "Path configuration that preserves credential reference through serialization.\n\nThis model allows paths to reference credentials by ID rather than embedding\nactual credentials. When serialized to JSON, only the path value and credential_id\nare stored (no actual credentials). When deserialized, credentials are resolved\nfrom the credential provider (environment variables or .secrets.yaml).\n\nAttributes:\n    value: The actual path/URI\n    cid: Optional reference to a Credential ID in the credential provider\n\nExample:\n    # With credentials\n    path = PathRef(\n        path=\"https://data.earthdatahub.destine.eu/data.zarr\",\n        cid=\"earthdatahub\"\n    )\n\n    # Without credentials (public or local path)\n    path = PathRef(\"/local/path/data.zarr\")\n\n    # Access the authenticated UPath\n    upath = path.upath",
       "schema": {
-        "type": "number"
+        "nullable": true,
+        "properties": {
+          "cid": {
+            "description": "Credential ID",
+            "nullable": true,
+            "title": "Cid",
+            "type": "string"
+          },
+          "value": {
+            "description": "Full path URI",
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "type": "object"
       },
-      "title": "Return Value"
+      "title": "PathRef"
     }
   },
-  "title": "Sleep Processor",
   "version": "0.0.0"
 }</code></pre>
 </div>
@@ -1639,13 +1709,13 @@ client</div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e4e20f28-0ed4-4e30-9fcd-23238a7d06a0">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=e4e20f28-0ed4-4e30-9fcd-23238a7d06a0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-7">
@@ -1665,107 +1735,14 @@ client</div>
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<pre><code class="text-json">{
-  "jobs": [
-    {
-      "created": "2025-11-13T17:58:50.670036Z",
-      "finished": "2025-11-13T17:59:00.820523Z",
-      "jobID": "job_0",
-      "processID": "sleep_a_while",
-      "progress": 100,
-      "started": "2025-11-13T17:58:50.670374Z",
-      "status": "successful",
-      "type": "process",
-      "updated": "2025-11-13T17:59:00.720409Z"
-    },
-    {
-      "created": "2025-11-13T17:58:56.296245Z",
-      "finished": "2025-11-13T17:59:11.321416Z",
-      "jobID": "job_1",
-      "message": "Woke up too early",
-      "processID": "sleep_a_while",
-      "progress": 50,
-      "started": "2025-11-13T17:58:56.296554Z",
-      "status": "failed",
-      "traceback": [
-        "Traceback (most recent call last):\n",
-        "  File \"C:\\Users\\Norman\\Projects\\s2gos-controller\\.pixi\\envs\\default\\Lib\\site-packages\\procodile\\job.py\", line 263, in run\n    function_result = self.process.function(**function_kwargs)\n",
-        "  File \"C:\\Users\\Norman\\Projects\\s2gos-controller\\.pixi\\envs\\default\\Lib\\site-packages\\wraptile\\services\\local\\testing.py\", line 42, in sleep_a_while\n    raise RuntimeError(\"Woke up too early\")\n",
-        "RuntimeError: Woke up too early\n"
-      ],
-      "type": "process",
-      "updated": "2025-11-13T17:59:11.321345Z"
-    },
-    {
-      "created": "2025-11-13T17:59:17.898138Z",
-      "finished": "2025-11-13T17:59:38.153405Z",
-      "jobID": "job_2",
-      "processID": "sleep_a_while",
-      "progress": 100,
-      "started": "2025-11-13T17:59:17.898503Z",
-      "status": "successful",
-      "type": "process",
-      "updated": "2025-11-13T17:59:37.952697Z"
-    },
-    {
-      "created": "2025-11-13T18:01:10.775835Z",
-      "finished": "2025-11-13T18:01:13.176371Z",
-      "jobID": "job_3",
-      "processID": "simulate_scene",
-      "started": "2025-11-13T18:01:10.776288Z",
-      "status": "successful",
-      "type": "process"
-    },
-    {
-      "created": "2025-11-13T18:01:20.568455Z",
-      "finished": "2025-11-13T18:01:20.648477Z",
-      "jobID": "job_4",
-      "processID": "simulate_scene",
-      "started": "2025-11-13T18:01:20.568998Z",
-      "status": "successful",
-      "type": "process"
-    },
-    {
-      "created": "2025-11-13T18:02:35.468838Z",
-      "finished": "2025-11-13T18:02:35.469317Z",
-      "jobID": "job_5",
-      "message": "Done",
-      "processID": "primes_between",
-      "started": "2025-11-13T18:02:35.469254Z",
-      "status": "successful",
-      "type": "process",
-      "updated": "2025-11-13T18:02:35.469310Z"
-    }
-  ],
-  "links": [
-    {
-      "href": "http://127.0.0.1:8008/jobs",
-      "hreflang": "en",
-      "rel": "self",
-      "title": "get_jobs",
-      "type": "application/json"
-    }
-  ]
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=cc034916-02db-4ec2-8682-71710d54edf6">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=cc034916-02db-4ec2-8682-71710d54edf6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-8">
@@ -1785,32 +1762,14 @@ client</div>
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<pre><code class="text-json">{
-  "created": "2025-11-13T18:02:59.857140Z",
-  "jobID": "job_6",
-  "processID": "sleep_a_while",
-  "status": "accepted",
-  "type": "process"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=4cd38b1d-5989-4991-9b62-d1981d33a46e">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=4cd38b1d-5989-4991-9b62-d1981d33a46e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-9">
@@ -1830,32 +1789,14 @@ client</div>
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<pre><code class="text-json">{
-  "created": "2025-11-13T18:02:59.866960Z",
-  "jobID": "job_7",
-  "processID": "sleep_a_while",
-  "status": "accepted",
-  "type": "process"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=21b94f40-5a1b-408f-a3a7-52de97b05b82">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=21b94f40-5a1b-408f-a3a7-52de97b05b82">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-10">
@@ -1875,36 +1816,14 @@ client</div>
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<pre><code class="text-json">{
-  "created": "2025-11-13T18:02:59.874333Z",
-  "finished": "2025-11-13T18:02:59.874817Z",
-  "jobID": "job_8",
-  "message": "Done",
-  "processID": "primes_between",
-  "started": "2025-11-13T18:02:59.874757Z",
-  "status": "successful",
-  "type": "process",
-  "updated": "2025-11-13T18:02:59.874808Z"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9cf5e867-d91e-45dd-91b3-a54bc2d087a7">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=9cf5e867-d91e-45dd-91b3-a54bc2d087a7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-11">
@@ -1924,138 +1843,14 @@ client</div>
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<pre><code class="text-json">{
-  "jobs": [
-    {
-      "created": "2025-11-13T17:58:50.670036Z",
-      "finished": "2025-11-13T17:59:00.820523Z",
-      "jobID": "job_0",
-      "processID": "sleep_a_while",
-      "progress": 100,
-      "started": "2025-11-13T17:58:50.670374Z",
-      "status": "successful",
-      "type": "process",
-      "updated": "2025-11-13T17:59:00.720409Z"
-    },
-    {
-      "created": "2025-11-13T17:58:56.296245Z",
-      "finished": "2025-11-13T17:59:11.321416Z",
-      "jobID": "job_1",
-      "message": "Woke up too early",
-      "processID": "sleep_a_while",
-      "progress": 50,
-      "started": "2025-11-13T17:58:56.296554Z",
-      "status": "failed",
-      "traceback": [
-        "Traceback (most recent call last):\n",
-        "  File \"C:\\Users\\Norman\\Projects\\s2gos-controller\\.pixi\\envs\\default\\Lib\\site-packages\\procodile\\job.py\", line 263, in run\n    function_result = self.process.function(**function_kwargs)\n",
-        "  File \"C:\\Users\\Norman\\Projects\\s2gos-controller\\.pixi\\envs\\default\\Lib\\site-packages\\wraptile\\services\\local\\testing.py\", line 42, in sleep_a_while\n    raise RuntimeError(\"Woke up too early\")\n",
-        "RuntimeError: Woke up too early\n"
-      ],
-      "type": "process",
-      "updated": "2025-11-13T17:59:11.321345Z"
-    },
-    {
-      "created": "2025-11-13T17:59:17.898138Z",
-      "finished": "2025-11-13T17:59:38.153405Z",
-      "jobID": "job_2",
-      "processID": "sleep_a_while",
-      "progress": 100,
-      "started": "2025-11-13T17:59:17.898503Z",
-      "status": "successful",
-      "type": "process",
-      "updated": "2025-11-13T17:59:37.952697Z"
-    },
-    {
-      "created": "2025-11-13T18:01:10.775835Z",
-      "finished": "2025-11-13T18:01:13.176371Z",
-      "jobID": "job_3",
-      "processID": "simulate_scene",
-      "started": "2025-11-13T18:01:10.776288Z",
-      "status": "successful",
-      "type": "process"
-    },
-    {
-      "created": "2025-11-13T18:01:20.568455Z",
-      "finished": "2025-11-13T18:01:20.648477Z",
-      "jobID": "job_4",
-      "processID": "simulate_scene",
-      "started": "2025-11-13T18:01:20.568998Z",
-      "status": "successful",
-      "type": "process"
-    },
-    {
-      "created": "2025-11-13T18:02:35.468838Z",
-      "finished": "2025-11-13T18:02:35.469317Z",
-      "jobID": "job_5",
-      "message": "Done",
-      "processID": "primes_between",
-      "started": "2025-11-13T18:02:35.469254Z",
-      "status": "successful",
-      "type": "process",
-      "updated": "2025-11-13T18:02:35.469310Z"
-    },
-    {
-      "created": "2025-11-13T18:02:59.857140Z",
-      "jobID": "job_6",
-      "processID": "sleep_a_while",
-      "progress": 0,
-      "started": "2025-11-13T18:02:59.857825Z",
-      "status": "running",
-      "type": "process",
-      "updated": "2025-11-13T18:02:59.857854Z"
-    },
-    {
-      "created": "2025-11-13T18:02:59.866960Z",
-      "jobID": "job_7",
-      "processID": "sleep_a_while",
-      "progress": 0,
-      "started": "2025-11-13T18:02:59.867467Z",
-      "status": "running",
-      "type": "process",
-      "updated": "2025-11-13T18:02:59.867491Z"
-    },
-    {
-      "created": "2025-11-13T18:02:59.874333Z",
-      "finished": "2025-11-13T18:02:59.874817Z",
-      "jobID": "job_8",
-      "message": "Done",
-      "processID": "primes_between",
-      "started": "2025-11-13T18:02:59.874757Z",
-      "status": "successful",
-      "type": "process",
-      "updated": "2025-11-13T18:02:59.874808Z"
-    }
-  ],
-  "links": [
-    {
-      "href": "http://127.0.0.1:8008/jobs",
-      "hreflang": "en",
-      "rel": "self",
-      "title": "get_jobs",
-      "type": "application/json"
-    }
-  ]
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=fe96d358-084e-4e2c-af93-4c6562b0f12e">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=fe96d358-084e-4e2c-af93-4c6562b0f12e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-12">
@@ -2075,28 +1870,6 @@ client</div>
 </div>
 </div>
 </div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<pre><code class="text-json">{
-  "created": "2025-11-13T17:59:17.898138Z",
-  "finished": "2025-11-13T17:59:38.153405Z",
-  "jobID": "job_2",
-  "processID": "sleep_a_while",
-  "progress": 100,
-  "started": "2025-11-13T17:59:17.898503Z",
-  "status": "successful",
-  "type": "process",
-  "updated": "2025-11-13T17:59:37.952697Z"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
 <div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=b7f99444-d724-4451-aeae-0c23e8245dd1">
@@ -2104,7 +1877,7 @@ client</div>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-13">
@@ -2131,7 +1904,7 @@ client</div>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-14">
@@ -2154,13 +1927,13 @@ client</div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=4636fdfc-3f61-40b4-889e-497c2dd50d91">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=4636fdfc-3f61-40b4-889e-497c2dd50d91">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-15">
@@ -2176,52 +1949,6 @@ client</div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">get_jobs</span><span class="p">()</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-15">client.get_jobs()</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell-outputWrapper">
-<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
-</div>
-<div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[16]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<pre><code class="text-json">{
-  "jobs": [
-    {
-      "created": "2025-11-13T18:02:59.857140Z",
-      "finished": "2025-11-13T18:02:59.958631Z",
-      "jobID": "job_6",
-      "processID": "sleep_a_while",
-      "progress": 0,
-      "started": "2025-11-13T18:02:59.857825Z",
-      "status": "dismissed",
-      "type": "process",
-      "updated": "2025-11-13T18:02:59.857854Z"
-    },
-    {
-      "created": "2025-11-13T18:02:59.866960Z",
-      "finished": "2025-11-13T18:02:59.967590Z",
-      "jobID": "job_7",
-      "processID": "sleep_a_while",
-      "progress": 0,
-      "started": "2025-11-13T18:02:59.867467Z",
-      "status": "dismissed",
-      "type": "process",
-      "updated": "2025-11-13T18:02:59.867491Z"
-    }
-  ],
-  "links": [
-    {
-      "href": "http://127.0.0.1:8008/jobs",
-      "hreflang": "en",
-      "rel": "self",
-      "title": "get_jobs",
-      "type": "application/json"
-    }
-  ]
-}</code></pre>
 </div>
 </div>
 </div>

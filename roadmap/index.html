@@ -751,41 +751,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#doing" class="md-nav__link">
+  <a href="#ongoing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Doing
+        Ongoing
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Doing">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#general-design" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        General design
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#airflow-service" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Airflow Service
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -800,6 +772,17 @@
   
     <nav class="md-nav" aria-label="Next">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#client-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Client General
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#gui-client" class="md-nav__link">
@@ -863,10 +846,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#local-and-airflow-service" class="md-nav__link">
+  <a href="#local-service" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Local and Airflow Service
+        Local Service
       
     </span>
   </a>
@@ -913,10 +896,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#general-design_1" class="md-nav__link">
+  <a href="#general-design" class="md-nav__link">
     <span class="md-ellipsis">
       
         General design
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#airflow-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Airflow Service
       
     </span>
   </a>
@@ -957,7 +951,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#local-service" class="md-nav__link">
+  <a href="#local-service_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         Local service
@@ -1048,41 +1042,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#doing" class="md-nav__link">
+  <a href="#ongoing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Doing
+        Ongoing
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Doing">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#general-design" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        General design
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#airflow-service" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Airflow Service
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1097,6 +1063,17 @@
   
     <nav class="md-nav" aria-label="Next">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#client-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Client General
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#gui-client" class="md-nav__link">
@@ -1160,10 +1137,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#local-and-airflow-service" class="md-nav__link">
+  <a href="#local-service" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Local and Airflow Service
+        Local Service
       
     </span>
   </a>
@@ -1210,10 +1187,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#general-design_1" class="md-nav__link">
+  <a href="#general-design" class="md-nav__link">
     <span class="md-ellipsis">
       
         General design
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#airflow-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Airflow Service
       
     </span>
   </a>
@@ -1254,7 +1242,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#local-service" class="md-nav__link">
+  <a href="#local-service_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         Local service
@@ -1323,23 +1311,31 @@
 
 
 <h1 id="s2gos-controller-roadmap">S2GOS Controller Roadmap</h1>
-<p>Given here are the features and issues that are worked on and will be addressed next.</p>
-<h2 id="doing">Doing</h2>
-<h3 id="general-design">General design</h3>
+<p>Given here is the S2GOS controller development plan including the features and issues 
+that are worked on and will be addressed next.</p>
+<p><em>Updated on 2026-02-13</em></p>
+<p>Detailed issue descriptions can be found in the related issue trackers:</p>
 <ul>
-<li>Clarify data i/o, formats, and protocols (also check OGC spec):<ul>
-<li>user files --&gt; <strong>scene generator</strong> --&gt; OBJ</li>
-<li>OBJ --&gt; <strong>scene simulator</strong> --&gt; Zarr </li>
+<li>S2GOS Controller: https://github.com/s2gos-dev/s2gos-controller/issues</li>
+<li>Eozilla: https://github.com/eo-tools/eozilla/issues</li>
 </ul>
-</li>
-</ul>
-<h3 id="airflow-service">Airflow Service</h3>
+<h2 id="ongoing">Ongoing</h2>
 <ul>
-<li>Test the Airflow-based service that connects to the Airflow web API</li>
-<li>Generate DAGs for containerized processes in Docker</li>
-<li>Generate DAGs for containerized processes in K8s</li>
+<li>Onboarding different processes based on different generator and simulator configurations.</li>
+<li>Test client and server with Airflow-based service implementation in OVH.</li>
 </ul>
 <h2 id="next">Next</h2>
+<h3 id="client-general">Client General</h3>
+<ul>
+<li>Generalize user data i/o and align with OGC specs:<ul>
+<li>deal with various data storages and specific data store options (credentials)  </li>
+<li>deal with various data formats  </li>
+<li>deal with various data in-memory data models  </li>
+</ul>
+</li>
+<li>Client: Develop option to register data openers for specific process result 
+  types, e.g., <code>Client.open_dataset(job_id) -&gt; xarray.Dataset</code>.  </li>
+</ul>
 <h3 id="gui-client">GUI Client</h3>
 <ul>
 <li>❌ Bug in <code>show()</code> with bbox. To reproduce with local service
@@ -1348,7 +1344,7 @@
 </ul>
 <h3 id="authentication">Authentication</h3>
 <ul>
-<li>Implement basic authentication using OAuth2 from FastAPI, 
+<li>Implement authentication using OAuth2 client credentials, 
   use user_name/access_token from ClientConfig in<ul>
 <li>client </li>
 <li>server</li>
@@ -1376,7 +1372,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="local-and-airflow-service">Local and Airflow Service</h3>
+<h3 id="local-service">Local Service</h3>
 <ul>
 <li>Path <code>/</code>:<ul>
 <li>Also provide a HTML version, support mimetype <code>text/html</code></li>
@@ -1413,6 +1409,7 @@
 <li><code>show_processes()</code> - get a nicely rendered overview of all processes </li>
 <li><code>show_process(process_id: str = None, job_id: str = None, editable: bool = True)</code></li>
 </ul>
+<hr />
 <h2 id="done">Done</h2>
 <h3 id="repopackage-setup">Repo/package setup</h3>
 <ul>
@@ -1438,7 +1435,7 @@
 </li>
 <li><strong>DONE</strong>: Align <code>ruff</code> settings with other <a href="https://github.com/s2gos-dev">S2GOS repos</a>.</li>
 </ul>
-<h3 id="general-design_1">General design</h3>
+<h3 id="general-design">General design</h3>
 <ul>
 <li><strong>DOING</strong>: We need two API client versions: sync and async<ul>
 <li><strong>DONE</strong>: Generate <code>AsyncClient</code>, next to <code>Client</code> </li>
@@ -1446,6 +1443,11 @@
   should replace currently used <code>requests</code></li>
 </ul>
 </li>
+</ul>
+<h3 id="airflow-service">Airflow Service</h3>
+<ul>
+<li><strong>DONE</strong> Generate DAGs for containerized processes in Docker</li>
+<li><strong>DONE</strong> Generate DAGs for containerized processes in K8s</li>
 </ul>
 <h3 id="processor-containerization">Processor Containerization</h3>
 <ul>
@@ -1492,7 +1494,7 @@
 </li>
 <li><code>show_job(job_id: str)</code> - show a dedicated job</li>
 </ul>
-<h3 id="local-service">Local service</h3>
+<h3 id="local-service_1">Local service</h3>
 <ul>
 <li><strong>DONE</strong>: Implement local service that can invoke any Python function</li>
 <li>Endpoint path <code>/</code>:</li>
