@@ -1212,11 +1212,14 @@ packages:
   requires_python: ~=3.9
 - pypi: ../eozilla/appligator
   name: appligator
-  version: 0.0.9
-  sha256: 0d91500317ad2a828e290857b5aee03df12b209df78b455a6aaf31005785ceba
+  version: 0.1.0.dev0
+  sha256: e6e6370986bb16eee7c22b259583cf891c42584fdf70421fe501eb8ac976a60b
   requires_dist:
+  - jinja2
   - pydantic
   - pyyaml
+  - tomli-w
+  - tomli ; python_full_version < '3.11'
   - typer
   - gavicore>=0.0.7
   - procodile>=0.0.7
@@ -2672,8 +2675,8 @@ packages:
   timestamp: 1760605188769
 - pypi: ../eozilla/cuiman
   name: cuiman
-  version: 0.0.9
-  sha256: c38b40a59805d1b26803fe94d8ac17c85aab8a022c226ee61adf0dfe7cc17167
+  version: 0.1.0.dev0
+  sha256: 3fb393bd8d09976253eed2154527c33c982e7bf9b0919b75b09b7ef0093cc5dd
   requires_dist:
   - click
   - panel
@@ -3105,11 +3108,12 @@ packages:
   timestamp: 1761840236679
 - pypi: ../eozilla/gavicore
   name: gavicore
-  version: 0.0.9
-  sha256: 5e930c51d2ebac7b21fec3fb8655ee2eaa445659b7eff152aa79c99c0f9738fb
+  version: 0.1.0.dev0
+  sha256: 49333cb7ca2b44ba200d6e6b7d765a2d598d5765fcbe7583f888810c26bcaea1
   requires_dist:
   - click
   - pydantic
+  - pyyaml
   - typer
   requires_python: '>=3.10'
   editable: true
@@ -7945,8 +7949,8 @@ packages:
   timestamp: 1747339794916
 - pypi: ../eozilla/procodile
   name: procodile
-  version: 0.0.9
-  sha256: e33beae578578c9bb8be0b7315de82043bf569a6087260a34982c3705b027e39
+  version: 0.1.0.dev0
+  sha256: 6282e20b04ce87988e6cc5076b89829c9a7b83f101cfcc93f613566724aed59a
   requires_dist:
   - pydantic
   - pyyaml
@@ -10098,8 +10102,8 @@ packages:
   timestamp: 1756851987645
 - pypi: ../eozilla/wraptile
   name: wraptile
-  version: 0.0.9
-  sha256: 13ac2a4f578987e0fd16931a38f18fccdbf4bfecd369a79cc1389bb6c8973a54
+  version: 0.1.0.dev0
+  sha256: 9884326630dd5e33b4a7d42072a9bd9003905ce112ed5ed62fea106dab98c9d5
   requires_dist:
   - fastapi
   - pydantic
