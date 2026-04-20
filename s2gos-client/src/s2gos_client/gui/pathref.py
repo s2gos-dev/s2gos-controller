@@ -1,104 +1,73 @@
 #  Copyright (c) 2026 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
-from typing import Any, Callable
 
 import panel as pn
 import param
 
-from cuiman.gui.component import (
-    Component,
-    ComponentContainer,
-    ComponentFactoryBase,
-    JsonValue,
-    JsonSchemaDict,
+from gavicore.ui import FieldMeta, FieldContext
+from gavicore.ui.vm import ViewModel
+from gavicore.ui.providers.panel import (
+    PanelField,
+    PanelFieldFactoryBase,
 )
 
 
-class PathRefEditor(pn.viewable.Viewer):
-    title = param.String(default="")
-    tooltip = param.String(default=None, allow_None=True)
-
-    value = param.String(default="")
-    cid = param.String(default="")
-
-    disabled = param.Boolean(default=False)
+class PathRefEditor(pn.widgets.WidgetBase, pn.custom.PyComponent):
+    value = param.Dict(default={"uri": "", "cid": ""})
+    description = param.String(default="", allow_None=True)
 
     def __init__(self, **params):
         super().__init__(**params)
 
-        self._value_input = pn.widgets.TextInput(
-            name=f"{self.title} URI",
+        self._uri_input = pn.widgets.TextInput(
+            name=f"{self.name + ' ' if self.name else ''}URI",
             placeholder="URI or rel. path...",
-            value=self.value,
-            disabled=self.param.disabled,
+            value=self.value["uri"],
             width=300,
+            description=self.description or "",
         )
 
         self._cid_input = pn.widgets.TextInput(
-            name=f"{self.title} CID (optional)",
-            placeholder="Credentials ID...",
-            value=self.cid,
-            disabled=self.param.disabled,
-            width=120,
+            name="Credentials ID",
+            value=self.value["cid"],
+            width=300,
         )
 
-        # widget ↔ param (two-way, explicit)
-        self._value_input.link(self, value="value")
+        self._uri_input.link(self, value="uri")
         self._cid_input.link(self, value="cid")
+        self._uri_input.param.watch(self._on_uri_change, "value")
+        self._cid_input.param.watch(self._on_cid_change, "value")
+        self.param.watch(self._on_value_change, "value")
 
-        # TODO: set tooltip (how?)
-        self.view = pn.Row(
-            self._value_input,
+    def __panel__(self):
+        return pn.Column(
+            self._uri_input,
             self._cid_input,
         )
 
-    def __panel__(self):
-        return self.view
+    def _on_uri_change(self, e):
+        self.value = dict(uri=e.new, cid=self.value["cid"])
+
+    def _on_cid_change(self, e):
+        self.value = dict(uri=self.value["uri"], cid=e.new)
+
+    def _on_value_change(self, _e):
+        uri, cid = self.value["uri"], self.value["cid"]
+        if self._uri_input.value != uri:
+            self._uri_input.value = uri
+        if self._cid_input.value != cid:
+            self._cid_input.value = cid
 
 
-class PathRefComponent(Component):
-    def __init__(self, editor: PathRefEditor):
-        # noinspection PyTypeChecker
-        super().__init__(editor)
+class PathRefEditorFactory(PanelFieldFactoryBase):
+    def get_object_score(self, meta: FieldMeta) -> int:
+        assert meta.properties is not None
+        return 10 if {"uri", "cid"}.issubset(set(meta.properties.keys())) else 0
 
-    @property
-    def path_ref_editor(self) -> PathRefEditor:
-        # noinspection PyTypeChecker
-        return self.viewable
-
-    def get_value(self) -> dict[str, Any] | None:
-        value = self.path_ref_editor.value
-        cid = self.path_ref_editor.cid
-        if not (value and cid):
-            return None
-        return {"value": value, "cid": cid or None}
-
-    def set_value(self, value: dict[str, Any] | None):
-        self.path_ref_editor.value = value.get("value") or ""
-        self.path_ref_editor.cid = value.get("cid") or ""
-
-    def watch_value(self, callback: Callable[[Any], Any]):
-        self.path_ref_editor.param.watch(callback, ["value", "cid"])
-
-
-class PathRefEditorFactory(ComponentFactoryBase):
-    type = "object"
-    format = "PathRef"
-
-    def create_component(
-        self, value: JsonValue, title: str, schema: JsonSchemaDict
-    ) -> Component:
-        path_ref: dict[str, Any] | None = value
-        return PathRefComponent(
-            PathRefEditor(
-                title=title,
-                value=(path_ref and path_ref.get("value")) or "",
-                cid=(path_ref and path_ref.get("cid")) or "",
-                tooltip=schema.get("description"),
-            )
+    def create_object_field(self, ctx: FieldContext) -> PanelField:
+        view_model: ViewModel = ctx.vm.primitive()
+        view = PathRefEditor(
+            value=view_model.value, name=ctx.label, description=ctx.meta.description
         )
-
-
-def register_component():
-    PathRefEditorFactory.register_in(ComponentContainer.registry)
+        return PanelField(view_model=view_model, view=view)
