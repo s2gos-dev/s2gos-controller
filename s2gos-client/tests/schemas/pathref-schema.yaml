@@ -1,0 +1,24 @@
+type: object
+properties:
+
+  user_models:
+    type: object
+    title: Extra models
+    properties:
+      uri:
+        title: User data URL
+        type: string
+      cid:
+        title: User data CID
+        type: string
+
+  user_regions:
+    type: object
+    title: Extra regions
+    properties:
+      uri:
+        title: User data URL
+        type: string
+      cid:
+        title: User data CID
+        type: string

@@ -39,8 +39,8 @@ classifiers = [
 requires-python = ">=3.10"
 dependencies = [
   # Eozilla dependencies
-  "cuiman >=0.0.8",
-  "gavicore >=0.0.8",
+  "cuiman >=0.1.0.dev0",
+  "gavicore >=0.1.0.dev0",
 ]
 
 [project.scripts]

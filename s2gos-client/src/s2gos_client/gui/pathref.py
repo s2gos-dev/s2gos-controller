@@ -7,7 +7,7 @@ import param
 
 from gavicore.ui import FieldMeta, FieldContext
 from gavicore.ui.vm import ViewModel
-from gavicore.ui.providers.panel import (
+from gavicore.ui.panel import (
     PanelField,
     PanelFieldFactoryBase,
 )
@@ -20,18 +20,26 @@ class PathRefEditor(pn.widgets.WidgetBase, pn.custom.PyComponent):
     def __init__(self, **params):
         super().__init__(**params)
 
+        if not self.value:
+            self.value = {"uri": "", "cid": ""}
+        if "uri" not in self.value:
+            self.value = {"uri": "", **self.value}
+        if "cid" not in self.value:
+            self.value = {"cid": "", **self.value}
+
         self._uri_input = pn.widgets.TextInput(
             name=f"{self.name + ' ' if self.name else ''}URI",
-            placeholder="URI or rel. path...",
+            placeholder="URL or rel. path...",
             value=self.value["uri"],
             width=300,
-            description=self.description or "",
+            description=self.description or None,
         )
 
         self._cid_input = pn.widgets.TextInput(
             name="Credentials ID",
             value=self.value["cid"],
             width=300,
+            description="A key that you should have received when registering your data",
         )
 
         self._uri_input.link(self, value="uri")
@@ -41,10 +49,7 @@ class PathRefEditor(pn.widgets.WidgetBase, pn.custom.PyComponent):
         self.param.watch(self._on_value_change, "value")
 
     def __panel__(self):
-        return pn.Column(
-            self._uri_input,
-            self._cid_input,
-        )
+        return pn.Column(self._uri_input, self._cid_input, margin=(6, 0, 6, 0))
 
     def _on_uri_change(self, e):
         self.value = dict(uri=e.new, cid=self.value["cid"])
@@ -67,6 +72,8 @@ class PathRefEditorFactory(PanelFieldFactoryBase):
 
     def create_object_field(self, ctx: FieldContext) -> PanelField:
         view_model: ViewModel = ctx.vm.primitive()
+        if not view_model.value:
+            view_model.value = {"uri": "", "cid": ""}
         view = PathRefEditor(
             value=view_model.value, name=ctx.label, description=ctx.meta.description
         )
