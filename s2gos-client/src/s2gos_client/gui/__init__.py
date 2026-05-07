@@ -2,17 +2,16 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from importlib import import_module
-
 from cuiman.gui import Client
-from .pathref import register_component
+
+from s2gos_client.api import ClientConfig
+from .pathref import PathRefEditorFactory
 
 
-# Setup S2GOS-specific API configuration
-import_module("s2gos_client.api")
-
-register_component()
+config = ClientConfig.default_config
+config.get_field_factory_registry().register(PathRefEditorFactory())
 
 __all__ = [
     "Client",
+    "ClientConfig",
 ]

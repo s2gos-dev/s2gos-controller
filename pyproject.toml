@@ -12,11 +12,11 @@ platforms = ["linux-64", "win-64", "osx-64"]
 # Eozilla dependencies.
 # Comment out, if using the editable versions,
 # see [tool.pixi.pypi-dependencies] below.
-#appligator = ">=0.0.8,<0.0.9"
-#cuiman = ">=0.0.8,<0.0.9"
-#gavicore = ">=0.0.8,<0.0.9"
-#procodile = ">=0.0.8,<0.0.9"
-#wraptile = ">=0.0.8,<0.0.9"
+#appligator = ">=0.1.0.dev0"
+#cuiman = ">=0.1.0.dev0"
+#gavicore = ">=0.1.0.dev0"
+#procodile = ">=0.1.0.dev0"
+#wraptile = ">=0.1.0.dev0"
 # Combined sub-workspace dependencies to prevent our editable
 # PyPI dependencies (our project's sub-workspaces) to install
 # PyPI packages instead of using conda packages.
@@ -29,8 +29,6 @@ typer = "*"
 universal_pathlib = ">=0.3.8,<0.4"
 uri-template = "*"
 uvicorn = "*"
-# IDE integration
-pixi-pycharm = ">=0.0.8,<0.0.9"
 # Development & build tools
 pip = "*"
 hatch = "*"
@@ -65,6 +63,7 @@ mkdocstrings-python = "*"
 mkdocs-jupyter = "*"
 nbformat = "*"
 pydantic-settings = ">=2.12.0,<3"
+pixi-pycharm = ">=0.0.11,<0.0.12"
 
 [tool.pixi.pypi-dependencies]
 # I wished we could have "no-deps=true" here,
