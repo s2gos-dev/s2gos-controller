@@ -176,7 +176,12 @@ cmd = "python -m tools.gen_client_docs"
 # pixi run sync-versions
 
 [tool.pixi.tasks.sync-versions]
-cmd = "python -m tools.sync_versions"
+cmd = "python  tools.sync_versions"
+
+# pixi run schema2ui
+
+[tool.pixi.tasks.schema2ui]
+cmd = "python s2gos-client/tests/schema2ui.py"
 
 # docs
 

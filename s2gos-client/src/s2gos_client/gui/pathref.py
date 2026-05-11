@@ -11,26 +11,27 @@ from gavicore.ui.panel import (
     PanelField,
     PanelFieldFactoryBase,
 )
+from gavicore.ui.panel.widgets.labeled import LabeledWidget
 
 
 class PathRefEditor(pn.widgets.WidgetBase, pn.custom.PyComponent):
-    value = param.Dict(default={"uri": "", "cid": ""})
+    value = param.Dict(default={"value": "", "cid": ""})
     description = param.String(default="", allow_None=True)
 
     def __init__(self, **params):
         super().__init__(**params)
 
         if not self.value:
-            self.value = {"uri": "", "cid": ""}
-        if "uri" not in self.value:
-            self.value = {"uri": "", **self.value}
+            self.value = {"value": "", "cid": ""}
+        if "value" not in self.value:
+            self.value = {"value": "", **self.value}
         if "cid" not in self.value:
             self.value = {"cid": "", **self.value}
 
         self._uri_input = pn.widgets.TextInput(
             name=f"{self.name + ' ' if self.name else ''}URI",
             placeholder="URL or rel. path...",
-            value=self.value["uri"],
+            value=self.value["value"],
             width=300,
             description=self.description or None,
         )
@@ -42,25 +43,27 @@ class PathRefEditor(pn.widgets.WidgetBase, pn.custom.PyComponent):
             description="A key that you should have received when registering your data",
         )
 
-        self._uri_input.link(self, value="uri")
-        self._cid_input.link(self, value="cid")
         self._uri_input.param.watch(self._on_uri_change, "value")
         self._cid_input.param.watch(self._on_cid_change, "value")
         self.param.watch(self._on_value_change, "value")
 
     def __panel__(self):
-        return pn.Column(self._uri_input, self._cid_input, margin=(6, 0, 6, 0))
+        return LabeledWidget(
+            pn.Column(self._uri_input, self._cid_input, margin=(6, 0, 6, 0)),
+            name=self.name,
+            divider=True,
+        )
 
     def _on_uri_change(self, e):
-        self.value = dict(uri=e.new, cid=self.value["cid"])
+        self.value = dict(value=e.new, cid=self.value["cid"])
 
     def _on_cid_change(self, e):
-        self.value = dict(uri=self.value["uri"], cid=e.new)
+        self.value = dict(value=self.value["value"], cid=e.new)
 
     def _on_value_change(self, _e):
-        uri, cid = self.value["uri"], self.value["cid"]
-        if self._uri_input.value != uri:
-            self._uri_input.value = uri
+        value, cid = self.value["value"], self.value["cid"]
+        if self._uri_input.value != value:
+            self._uri_input.value = value
         if self._cid_input.value != cid:
             self._cid_input.value = cid
 
@@ -68,12 +71,12 @@ class PathRefEditor(pn.widgets.WidgetBase, pn.custom.PyComponent):
 class PathRefEditorFactory(PanelFieldFactoryBase):
     def get_object_score(self, meta: FieldMeta) -> int:
         assert meta.properties is not None
-        return 10 if {"uri", "cid"}.issubset(set(meta.properties.keys())) else 0
+        return 10 if {"value", "cid"}.issubset(set(meta.properties.keys())) else 0
 
     def create_object_field(self, ctx: FieldContext) -> PanelField:
         view_model: ViewModel = ctx.vm.primitive()
         if not view_model.value:
-            view_model.value = {"uri": "", "cid": ""}
+            view_model.value = {"value": "", "cid": ""}
         view = PathRefEditor(
             value=view_model.value, name=ctx.label, description=ctx.meta.description
         )

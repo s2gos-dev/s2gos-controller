@@ -5,7 +5,7 @@ properties:
     type: object
     title: Extra models
     properties:
-      uri:
+      value:
         title: User data URL
         type: string
       cid:
@@ -16,7 +16,7 @@ properties:
     type: object
     title: Extra regions
     properties:
-      uri:
+      value:
         title: User data URL
         type: string
       cid:

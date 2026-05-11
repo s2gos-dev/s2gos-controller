@@ -4,7 +4,7 @@
 
 from gavicore.models import Schema
 from gavicore.ui import FieldMeta, FieldGenerator, FieldContext
-from gavicore.ui.providers.panel import PanelField
+from gavicore.ui.panel import PanelField
 from gavicore.ui.vm import PrimitiveViewModel
 
 import s2gos_client.gui
@@ -25,10 +25,10 @@ def test_extra_panel_field_registered():
             **{
                 "type": "object",
                 "properties": {
-                    "uri": {"type": "string"},
+                    "value": {"type": "string"},
                     "cid": {"type": "string"},
                 },
-                "required": ["uri"],
+                "required": ["value"],
             }
         ),
     )
@@ -37,7 +37,7 @@ def test_extra_panel_field_registered():
 
     assert factory.get_score(field_meta) == 10
 
-    initial_value = {"uri": "data/aux-2.bin", "cid": ""}
+    initial_value = {"value": "data/aux-2.bin", "cid": ""}
     ctx = FieldContext(
         generator=FieldGenerator(),
         meta=field_meta,
@@ -55,6 +55,6 @@ def test_extra_panel_field_registered():
     field.view._uri_input.value = "data/aux-1.bin"
     field.view._cid_input.value = "EF8DA78A001F17387B"
     assert field.view_model.value == {
-        "uri": "data/aux-1.bin",
+        "value": "data/aux-1.bin",
         "cid": "EF8DA78A001F17387B",
     }

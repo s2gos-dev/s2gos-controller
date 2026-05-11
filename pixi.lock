@@ -382,7 +382,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zlib-ng-2.3.3-hceb46e0_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
       - pypi: https://files.pythonhosted.org/packages/53/c7/d168dd2e2120b1a61ffdcf6eaa6d992620a793d3bf7e12a59704eda1d83b/apache_airflow_client-3.0.2-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/00/60/249e3444fcd9c833704741769981cd02fe2c7ce94126b1394e7a3b26e543/ipyfilechooser-0.6.0-py3-none-any.whl
       - pypi: ../eozilla/appligator
       - pypi: ../eozilla/cuiman
       - pypi: ../eozilla/gavicore
@@ -755,7 +754,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-ng-2.3.3-h8bce59a_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
       - pypi: https://files.pythonhosted.org/packages/53/c7/d168dd2e2120b1a61ffdcf6eaa6d992620a793d3bf7e12a59704eda1d83b/apache_airflow_client-3.0.2-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/00/60/249e3444fcd9c833704741769981cd02fe2c7ce94126b1394e7a3b26e543/ipyfilechooser-0.6.0-py3-none-any.whl
       - pypi: ../eozilla/appligator
       - pypi: ../eozilla/cuiman
       - pypi: ../eozilla/gavicore
@@ -1127,7 +1125,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-ng-2.3.3-h0261ad2_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
       - pypi: https://files.pythonhosted.org/packages/53/c7/d168dd2e2120b1a61ffdcf6eaa6d992620a793d3bf7e12a59704eda1d83b/apache_airflow_client-3.0.2-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/00/60/249e3444fcd9c833704741769981cd02fe2c7ce94126b1394e7a3b26e543/ipyfilechooser-0.6.0-py3-none-any.whl
       - pypi: ../eozilla/appligator
       - pypi: ../eozilla/cuiman
       - pypi: ../eozilla/gavicore
@@ -2698,11 +2695,9 @@ packages:
 - pypi: ../eozilla/cuiman
   name: cuiman
   version: 0.1.0.dev0
-  sha256: 96570c9e6ba168da0ee42f2330a26bf4e5f803bc8412abc6b5de78b622c1df3a
+  sha256: 541b821748644d71ae15cd3e3721ab9c4aa208fc81233607868d98ca190b6141
   requires_dist:
   - click
-  - ipyfilechooser
-  - ipyleaflet
   - panel
   - pydantic
   - pydantic-settings
@@ -3617,12 +3612,6 @@ packages:
   - pkg:pypi/iniconfig?source=compressed-mapping
   size: 13387
   timestamp: 1760831448842
-- pypi: https://files.pythonhosted.org/packages/00/60/249e3444fcd9c833704741769981cd02fe2c7ce94126b1394e7a3b26e543/ipyfilechooser-0.6.0-py3-none-any.whl
-  name: ipyfilechooser
-  version: 0.6.0
-  sha256: 4555c24b30b819c91dc0ae5e6f7e4cf8f90e5cca531a9209a1fe4deee288d5c5
-  requires_dist:
-  - ipywidgets
 - conda: https://conda.anaconda.org/conda-forge/noarch/ipykernel-6.31.0-pyh5552912_0.conda
   sha256: 4eb35a7f81d43800c7d18b27c0fff9a2f23372839ac907ad116c24edcea6ab19
   md5: c83fa42af2cd5b2d4576d4501dad6232
