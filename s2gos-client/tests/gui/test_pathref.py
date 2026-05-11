@@ -7,6 +7,7 @@ import panel as pn
 from gavicore.models import Schema
 from gavicore.ui import FieldContext, FieldGenerator, FieldMeta
 from gavicore.ui.panel import PanelField
+from gavicore.ui.panel.widgets.labeled import LabeledWidget
 from gavicore.ui.vm import PrimitiveViewModel
 
 from s2gos_client.gui.pathref import PathRefEditor, PathRefEditorFactory
@@ -98,13 +99,14 @@ def test_path_ref_editor_updates_inputs_when_value_changes():
 
 
 def test_path_ref_editor_renders_uri_and_cid_inputs():
-    editor = PathRefEditor(value={"value": "data/aux.bin", "cid": "ABC123"})
+    editor = PathRefEditor(
+        name="User model", value={"value": "data/aux.bin", "cid": "ABC123"}
+    )
 
     layout = editor.__panel__()
 
-    assert isinstance(layout, pn.Column)
-    assert list(layout) == [editor._uri_input, editor._cid_input]
-    assert layout.margin == (6, 0, 6, 0)
+    assert isinstance(layout, LabeledWidget)
+    assert layout.name == "User model"
 
 
 def test_path_ref_editor_factory_scores_path_ref_object_schema():

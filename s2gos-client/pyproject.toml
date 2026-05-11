@@ -1,10 +1,10 @@
-#  Copyright (c) 2025 by ESA DTE-S2GOS team and contributors
+#  Copyright (c) 2025-2026 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
 [project]
 name = "s2gos-client"
-version = "0.1.0.dev0"
+version = "0.1.0"
 description = "Python client for the ESA DTE-S2GOS synthetic scene generator service"
 readme = "README.md"
 authors = [
@@ -24,10 +24,10 @@ classifiers = [
   "Intended Audience :: Developers",
   "License :: OSI Approved :: Apache Software License",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Topic :: Software Development",
   "Topic :: Scientific/Engineering",
   "Typing :: Typed",
@@ -36,11 +36,11 @@ classifiers = [
   "Operating System :: Unix",
   "Operating System :: MacOS",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
   # Eozilla dependencies
-  "cuiman >=0.1.0.dev0",
-  "gavicore >=0.1.0.dev0",
+  "cuiman >=0.1.0",
+  "gavicore >=0.1.0",
 ]
 
 [project.scripts]

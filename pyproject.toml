@@ -1,8 +1,8 @@
 [project]
 name = "s2gos-controller"
-version = "0.1.0.dev0"
+version = "0.1.0"
 description = "S2GOS control layer comprising a gateway server and client"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
@@ -12,11 +12,11 @@ platforms = ["linux-64", "win-64", "osx-64"]
 # Eozilla dependencies.
 # Comment out, if using the editable versions,
 # see [tool.pixi.pypi-dependencies] below.
-#appligator = ">=0.1.0.dev0"
-#cuiman = ">=0.1.0.dev0"
-#gavicore = ">=0.1.0.dev0"
-#procodile = ">=0.1.0.dev0"
-#wraptile = ">=0.1.0.dev0"
+#appligator = ">=0.1.0"
+#cuiman = ">=0.1.0"
+#gavicore = ">=0.1.0"
+#procodile = ">=0.1.0"
+#wraptile = ">=0.1.0"
 # Combined sub-workspace dependencies to prevent our editable
 # PyPI dependencies (our project's sub-workspaces) to install
 # PyPI packages instead of using conda packages.
@@ -72,14 +72,15 @@ pixi-pycharm = ">=0.0.11,<0.0.12"
 s2gos-client = { path = "s2gos-client", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
 #
-# Uncomment the following to allow using eozilla from sources
-# Note, using the wraptile server is for testing only
+# Uncomment the following to allow using eozilla from sources.
+# For release installs, keep these commented so the s2gos package
+# dependencies resolve to the published PyPI releases.
 #
-appligator = { path = "../eozilla/appligator", editable = true }
-cuiman = { path = "../eozilla/cuiman", editable = true }
-gavicore = { path = "../eozilla/gavicore", editable = true }
-procodile = { path = "../eozilla/procodile", editable = true }
-wraptile = { path = "../eozilla/wraptile", editable = true }
+# appligator = { path = "../eozilla/appligator", editable = true }
+# cuiman = { path = "../eozilla/cuiman", editable = true }
+# gavicore = { path = "../eozilla/gavicore", editable = true }
+# procodile = { path = "../eozilla/procodile", editable = true }
+# wraptile = { path = "../eozilla/wraptile", editable = true }
 
 # Airflow is only available on PyPI
 apache-airflow-client = "==3.0.2"
@@ -111,7 +112,7 @@ select = ["I", "F", "E"]
 omit = []
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.12"
 check_untyped_defs = true
 disable_error_code = ["valid-type", "import-untyped"]
 exclude = [
@@ -122,9 +123,14 @@ exclude = [
 
 ########################## Tasks ###############################
 
-# pixi run test
+# pixi run format
 
-[tool.pixi.tasks.test]
+[tool.pixi.tasks.format]
+cmd = "ruff format ."
+
+# pixi run tests
+
+[tool.pixi.tasks.tests]
 depends-on = ["test-client", "test-server"]
 
 [tool.pixi.tasks.test-client]
@@ -154,9 +160,9 @@ cmd = "pytest --cov s2gos-client/src/s2gos_client --cov-report= --cov-append s2g
 [tool.pixi.tasks.cov-server]
 cmd = "pytest --cov s2gos-server/src/s2gos_server --cov-report= --cov-append s2gos-server/tests"
 
-# pixi run check
+# pixi run checks
 
-[tool.pixi.tasks.check]
+[tool.pixi.tasks.checks]
 depends-on = ["check-client", "check-server", "typecheck"]
 
 [tool.pixi.tasks.check-client]
@@ -185,8 +191,8 @@ cmd = "python s2gos-client/tests/schema2ui.py"
 
 # docs
 
-[tool.pixi.tasks.docs-serve]
+[tool.pixi.tasks.serve-docs]
 cmd = "mkdocs serve"
 
-[tool.pixi.tasks.docs-build]
+[tool.pixi.tasks.build-docs]
 cmd = "mkdocs build"

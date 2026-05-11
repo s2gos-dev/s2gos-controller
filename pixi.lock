@@ -382,11 +382,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zlib-ng-2.3.3-hceb46e0_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
       - pypi: https://files.pythonhosted.org/packages/53/c7/d168dd2e2120b1a61ffdcf6eaa6d992620a793d3bf7e12a59704eda1d83b/apache_airflow_client-3.0.2-py3-none-any.whl
-      - pypi: ../eozilla/appligator
-      - pypi: ../eozilla/cuiman
-      - pypi: ../eozilla/gavicore
-      - pypi: ../eozilla/procodile
-      - pypi: ../eozilla/wraptile
+      - pypi: https://files.pythonhosted.org/packages/0b/8a/8f5eb240265eb65bd78c7d506acf79592e5f67003d2d55f3e5a8e6425752/cuiman-0.1.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/2b/73/e806cff3ba36188bbd2a6b54ca9818f0cc022983bcb1c9546b7e27045682/gavicore-0.1.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/61/ce/519c07d959eea16e40c6ec63f3f45fee7da8465fa8eb9fa887de8bd1e3b3/procodile-0.1.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/6b/29/4c6082c64520f0e492df7c7e502d0ebc77c4df4295a79a1bf89891d2f0b3/wraptile-0.1.0-py3-none-any.whl
       - pypi: ./s2gos-client
       - pypi: ./s2gos-server
       osx-64:
@@ -754,11 +753,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-ng-2.3.3-h8bce59a_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
       - pypi: https://files.pythonhosted.org/packages/53/c7/d168dd2e2120b1a61ffdcf6eaa6d992620a793d3bf7e12a59704eda1d83b/apache_airflow_client-3.0.2-py3-none-any.whl
-      - pypi: ../eozilla/appligator
-      - pypi: ../eozilla/cuiman
-      - pypi: ../eozilla/gavicore
-      - pypi: ../eozilla/procodile
-      - pypi: ../eozilla/wraptile
+      - pypi: https://files.pythonhosted.org/packages/0b/8a/8f5eb240265eb65bd78c7d506acf79592e5f67003d2d55f3e5a8e6425752/cuiman-0.1.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/2b/73/e806cff3ba36188bbd2a6b54ca9818f0cc022983bcb1c9546b7e27045682/gavicore-0.1.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/61/ce/519c07d959eea16e40c6ec63f3f45fee7da8465fa8eb9fa887de8bd1e3b3/procodile-0.1.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/6b/29/4c6082c64520f0e492df7c7e502d0ebc77c4df4295a79a1bf89891d2f0b3/wraptile-0.1.0-py3-none-any.whl
       - pypi: ./s2gos-client
       - pypi: ./s2gos-server
       win-64:
@@ -1125,11 +1123,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-ng-2.3.3-h0261ad2_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
       - pypi: https://files.pythonhosted.org/packages/53/c7/d168dd2e2120b1a61ffdcf6eaa6d992620a793d3bf7e12a59704eda1d83b/apache_airflow_client-3.0.2-py3-none-any.whl
-      - pypi: ../eozilla/appligator
-      - pypi: ../eozilla/cuiman
-      - pypi: ../eozilla/gavicore
-      - pypi: ../eozilla/procodile
-      - pypi: ../eozilla/wraptile
+      - pypi: https://files.pythonhosted.org/packages/0b/8a/8f5eb240265eb65bd78c7d506acf79592e5f67003d2d55f3e5a8e6425752/cuiman-0.1.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/2b/73/e806cff3ba36188bbd2a6b54ca9818f0cc022983bcb1c9546b7e27045682/gavicore-0.1.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/61/ce/519c07d959eea16e40c6ec63f3f45fee7da8465fa8eb9fa887de8bd1e3b3/procodile-0.1.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/6b/29/4c6082c64520f0e492df7c7e502d0ebc77c4df4295a79a1bf89891d2f0b3/wraptile-0.1.0-py3-none-any.whl
       - pypi: ./s2gos-client
       - pypi: ./s2gos-server
 packages:
@@ -1236,20 +1233,6 @@ packages:
   - python-dateutil
   - urllib3>=2.1.0
   requires_python: ~=3.9
-- pypi: ../eozilla/appligator
-  name: appligator
-  version: 0.1.0.dev0
-  sha256: 68e039f42f4ba13dbf106afcd7ac7db37b4a56953c6eaf4d7e98c3daf84fe262
-  requires_dist:
-  - jinja2
-  - pydantic
-  - pyyaml
-  - tomli-w
-  - tomli ; python_full_version < '3.11'
-  - typer
-  - gavicore>=0.0.9
-  - procodile>=0.0.9
-  requires_python: '>=3.10'
 - conda: https://conda.anaconda.org/conda-forge/noarch/appnope-0.1.4-pyhd8ed1ab_1.conda
   sha256: 8f032b140ea4159806e4969a68b4a3c0a7cab1ad936eb958a2b5ffe5335e19bf
   md5: 54898d0f524c9dee622d44bbb081a8ab
@@ -2692,20 +2675,20 @@ packages:
   - pkg:pypi/cryptography?source=hash-mapping
   size: 1907293
   timestamp: 1777106315542
-- pypi: ../eozilla/cuiman
+- pypi: https://files.pythonhosted.org/packages/0b/8a/8f5eb240265eb65bd78c7d506acf79592e5f67003d2d55f3e5a8e6425752/cuiman-0.1.0-py3-none-any.whl
   name: cuiman
-  version: 0.1.0.dev0
-  sha256: 541b821748644d71ae15cd3e3721ab9c4aa208fc81233607868d98ca190b6141
+  version: 0.1.0
+  sha256: 3156f6c14e0fa2ff49b2a7839ff02cc415c857e0a38fc993246aecbfe1dafe40
   requires_dist:
   - click
+  - gavicore>=0.1.0
+  - httpx
   - panel
   - pydantic
   - pydantic-settings
   - pyyaml
   - typer
   - uri-template
-  - httpx
-  - gavicore>=0.0.9
   requires_python: '>=3.10'
 - conda: https://conda.anaconda.org/conda-forge/linux-64/cytoolz-1.1.0-py314h5bd0f2a_2.conda
   sha256: 5edb3c0fbf5c39b66f71fef0264d4fbab561f6adbdd7ef88188b725a82fcd6da
@@ -3180,10 +3163,10 @@ packages:
   - pkg:pypi/fsspec?source=compressed-mapping
   size: 149694
   timestamp: 1777547807038
-- pypi: ../eozilla/gavicore
+- pypi: https://files.pythonhosted.org/packages/2b/73/e806cff3ba36188bbd2a6b54ca9818f0cc022983bcb1c9546b7e27045682/gavicore-0.1.0-py3-none-any.whl
   name: gavicore
-  version: 0.1.0.dev0
-  sha256: 49333cb7ca2b44ba200d6e6b7d765a2d598d5765fcbe7583f888810c26bcaea1
+  version: 0.1.0
+  sha256: c2d3f74df6b8c4137a357fb53ae34ad1c3dabf457070b1b2121f6b647fe4ac21
   requires_dist:
   - click
   - pydantic
@@ -8121,15 +8104,15 @@ packages:
   - pkg:pypi/pluggy?source=compressed-mapping
   size: 25877
   timestamp: 1764896838868
-- pypi: ../eozilla/procodile
+- pypi: https://files.pythonhosted.org/packages/61/ce/519c07d959eea16e40c6ec63f3f45fee7da8465fa8eb9fa887de8bd1e3b3/procodile-0.1.0-py3-none-any.whl
   name: procodile
-  version: 0.1.0.dev0
-  sha256: 6757dc161a1d35f53cace75593af225cb68966c7d05568282ba70ce3c689d2b8
+  version: 0.1.0
+  sha256: 7ba5d09130a93ca9475251503b2b3fde7e8823ea90f081c9c8628ae4b0ffb3f4
   requires_dist:
+  - gavicore>=0.1.0
   - pydantic
   - pyyaml
   - typer
-  - gavicore>=0.0.9
   requires_python: '>=3.10'
 - conda: https://conda.anaconda.org/conda-forge/linux-64/prometheus-cpp-1.3.0-ha5d0236_0.conda
   sha256: 013669433eb447548f21c3c6b16b2ed64356f726b5f77c1b39d5ba17a8a4b8bc
@@ -9311,21 +9294,21 @@ packages:
   timestamp: 1776378829267
 - pypi: ./s2gos-client
   name: s2gos-client
-  version: 0.1.0.dev0
-  sha256: 2d39958c0d8a4bcd00740e52bab06db0e0c97b19f0d2e2889b2c9a34a8fe2faa
+  version: 0.1.0
+  sha256: f1391087ba6d38802bcf2c02da1fae727ead828ec5da6beb0c33d1fde27ee926
   requires_dist:
-  - cuiman>=0.1.0.dev0
-  - gavicore>=0.1.0.dev0
-  requires_python: '>=3.10'
+  - cuiman>=0.1.0
+  - gavicore>=0.1.0
+  requires_python: '>=3.11'
 - pypi: ./s2gos-server
   name: s2gos-server
-  version: 0.1.0.dev0
-  sha256: 6c0a2b74de7129a53decffa7c62d470807f3136a4160a8ee8d9a93602f9abfb8
+  version: 0.1.0
+  sha256: 25bdc97586cffc9e5fd23fa5776dd1e95829ce8f2e8dc421ef887f19a3d9f6db
   requires_dist:
-  - gavicore>=0.1.0.dev0
-  - wraptile>=0.1.0.dev0
+  - gavicore>=0.1.0
+  - wraptile>=0.1.0
   - universal-pathlib>=0.3.8,<0.4
-  requires_python: '>=3.10'
+  requires_python: '>=3.11'
 - conda: https://conda.anaconda.org/conda-forge/linux-64/s2n-1.7.2-hc5a330e_1.conda
   sha256: 856866fd519b812db3e092aba308248dd87b5c308186fcffe593f309373ae94c
   md5: 3f578c7d2b0bb52469340e4060d48d94
@@ -10375,18 +10358,18 @@ packages:
   - pkg:pypi/wrapt?source=hash-mapping
   size: 86073
   timestamp: 1772794899504
-- pypi: ../eozilla/wraptile
+- pypi: https://files.pythonhosted.org/packages/6b/29/4c6082c64520f0e492df7c7e502d0ebc77c4df4295a79a1bf89891d2f0b3/wraptile-0.1.0-py3-none-any.whl
   name: wraptile
-  version: 0.1.0.dev0
-  sha256: 6dfb792a9295337eb25e15cfb00512e18bcd15b7fc6fdde738dcb891c49db929
+  version: 0.1.0
+  sha256: 9950914acbf2cafab22fb174a9f889aab294bfd56dfbb9002a32399a855247ae
   requires_dist:
   - fastapi
+  - gavicore>=0.1.0
+  - procodile>=0.1.0
   - pydantic
   - pyyaml
   - typer
   - uvicorn
-  - gavicore>=0.0.9
-  - procodile>=0.0.9
   requires_python: '>=3.10'
 - conda: https://conda.anaconda.org/conda-forge/noarch/xarray-2026.4.0-pyhc364b38_0.conda
   sha256: 9f5f5905afea6e0188aa6887aed0809033143343a7af06983f4b390c2286d2d7

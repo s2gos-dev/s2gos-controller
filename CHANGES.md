@@ -1,8 +1,8 @@
-## Changes in version 0.1.0 (in development)
+## Changes in version 0.1.0
 
-Added GUI component support for 
+Added a dedicated editor for objects of type 
 [PathRef](https://github.com/s2gos-dev/s2gos-utils/blob/MTR/src/s2gos_utils/io/paths.py) 
-object (not yet used).
+object.
 
 Major parts of the S2GOS controller packages have been generic with respect 
 to the primary interface used between the client and the gateway server, 
