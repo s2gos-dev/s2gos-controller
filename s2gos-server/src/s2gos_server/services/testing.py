@@ -19,7 +19,7 @@ from typing import Annotated
 
 from pydantic import Field
 
-from gavicore.models import InputDescription
+from gavicore.models import InputDescription, Schema
 from procodile import JobContext
 
 from wraptile.services.local import LocalService
@@ -31,11 +31,6 @@ service = LocalService(
 )
 
 registry = service.process_registry
-
-# noinspection PyTypeChecker
-advanced_input = InputDescription(
-    schema={},
-)
 
 # ============================================================================
 # Constants
@@ -93,7 +88,7 @@ def mtr_demo_generation(
         ),
     ],
     scene_name: Annotated[
-        str,
+        str | None,
         Field(
             ...,
             description="Name of scene",
@@ -139,7 +134,11 @@ def mtr_demo_generation(
     print("=" * 60)
     ctx.report_progress(message="Running scene generation pipeline...")
 
-    scene_path = generation_from_config(scene_name)
+    scene_path = generation_from_config(scene_name or "scene.yaml")
+    ctx.report_progress(
+        message=f"Scene description: {scene_path}",
+        progress=100,
+    )
     if scene_path:
         print("\n" + "=" * 60)
         print("SCENE GENERATION COMPLETE")
@@ -160,7 +159,11 @@ def mtr_demo_generation(
 @registry.process(
     id="mtr_demo_simulation",
     title="Simulation Demo",
-    inputs=dict(spp=InputDescription(**{"schema": {}, "x-ui-advanced": True})),
+    inputs=dict(
+        spp=InputDescription(
+            schema=Schema(**{"x-ui-advanced": True})  # type: ignore[arg-type]
+        )
+    ),
 )
 def mtr_demo_simulation(
     scene_name: Annotated[
@@ -200,7 +203,7 @@ def mtr_demo_simulation(
         ),
     ] = 8,
     sim_name: Annotated[
-        str,
+        str | None,
         Field(
             ...,
             description="Simulation run name",
