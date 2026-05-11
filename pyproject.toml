@@ -112,7 +112,7 @@ select = ["I", "F", "E"]
 omit = []
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.12"
 check_untyped_defs = true
 disable_error_code = ["valid-type", "import-untyped"]
 exclude = [
@@ -123,9 +123,14 @@ exclude = [
 
 ########################## Tasks ###############################
 
-# pixi run test
+# pixi run format
 
-[tool.pixi.tasks.test]
+[tool.pixi.tasks.format]
+cmd = "ruff format ."
+
+# pixi run tests
+
+[tool.pixi.tasks.tests]
 depends-on = ["test-client", "test-server"]
 
 [tool.pixi.tasks.test-client]
@@ -155,9 +160,9 @@ cmd = "pytest --cov s2gos-client/src/s2gos_client --cov-report= --cov-append s2g
 [tool.pixi.tasks.cov-server]
 cmd = "pytest --cov s2gos-server/src/s2gos_server --cov-report= --cov-append s2gos-server/tests"
 
-# pixi run check
+# pixi run checks
 
-[tool.pixi.tasks.check]
+[tool.pixi.tasks.checks]
 depends-on = ["check-client", "check-server", "typecheck"]
 
 [tool.pixi.tasks.check-client]
@@ -186,8 +191,8 @@ cmd = "python s2gos-client/tests/schema2ui.py"
 
 # docs
 
-[tool.pixi.tasks.docs-serve]
+[tool.pixi.tasks.serve-docs]
 cmd = "mkdocs serve"
 
-[tool.pixi.tasks.docs-build]
+[tool.pixi.tasks.build-docs]
 cmd = "mkdocs build"

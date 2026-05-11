@@ -20,7 +20,7 @@ from typing import Annotated
 from pydantic import Field
 
 from gavicore.models import InputDescription
-from procodile import JobContext, additional_parameters
+from procodile import JobContext
 
 from wraptile.services.local import LocalService
 
@@ -34,7 +34,6 @@ registry = service.process_registry
 
 # noinspection PyTypeChecker
 advanced_input = InputDescription(
-    additionalParameters=additional_parameters({"level": "advanced"}),
     schema={},
 )
 
@@ -161,7 +160,7 @@ def mtr_demo_generation(
 @registry.process(
     id="mtr_demo_simulation",
     title="Simulation Demo",
-    inputs=dict(spp=advanced_input),
+    inputs=dict(spp=InputDescription(**{"schema": {}, "x-ui-advanced": True})),
 )
 def mtr_demo_simulation(
     scene_name: Annotated[
