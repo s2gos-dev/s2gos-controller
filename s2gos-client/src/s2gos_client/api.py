@@ -3,6 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 from pathlib import Path
+from typing import Any
 
 from cuiman.api import AsyncClient, Client, ClientConfig, ClientError
 from cuiman.api.auth import AuthConfig, login
@@ -28,28 +29,29 @@ ClientConfig.default_path = Path("~").expanduser() / ".s2gos-client"
 ClientConfig.default_config = _CONFIG_BASE
 
 
-def create_config(username: str, password: str) -> ClientConfig:
-    auth_config = AuthConfig(
-        auth_url=_CONFIG_BASE.auth_url,
-        auth_type="login",
-        username=username,
-        password=password,
-    )
-    token = login(auth_config)
+def create_config(**config_overrides: Any) -> ClientConfig:
     config_dict = _CONFIG_BASE.model_dump()
-    config_dict.update(
-        auth_type="token",
-        token=token,
-    )
+    config_dict.update(config_overrides)
+
+    auth_config_dict = dict(config_dict)
+    auth_config_dict.pop("api_url", None)
+
+    auth_config = AuthConfig(**auth_config_dict)
+    if auth_config.auth_type.lower() == "login":
+        token = login(auth_config)
+        config_dict.update(
+            auth_type="token",
+            token=token,
+        )
     return S2GOSConfig(**config_dict)
 
 
-def create_client(username: str, password: str) -> Client:
-    return Client(config=create_config(username, password), _debug=_DEBUG)
+def create_client(**config_overrides: Any) -> Client:
+    return Client(config=create_config(**config_overrides), _debug=_DEBUG)
 
 
-def create_async_client(username: str, password: str) -> AsyncClient:
-    return AsyncClient(config=create_config(username, password), _debug=_DEBUG)
+def create_async_client(**config_overrides: Any) -> AsyncClient:
+    return AsyncClient(config=create_config(**config_overrides), _debug=_DEBUG)
 
 
 __all__ = [

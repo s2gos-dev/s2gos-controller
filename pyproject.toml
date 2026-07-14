@@ -211,7 +211,7 @@ cmd = "python -m twine upload dist/*"
 cwd = "s2gos-server"
 cmd = "python -m twine upload dist/*"
 
-# pixi run generate
+# pixi run gen-client-docs
 
 [tool.pixi.tasks.gen-client-docs]
 cmd = "python -m tools.gen_client_docs"
@@ -221,15 +221,18 @@ cmd = "python -m tools.gen_client_docs"
 [tool.pixi.tasks.sync-versions]
 cmd = "python  tools.sync_versions"
 
-# pixi run schema2ui
-
-[tool.pixi.tasks.schema2ui]
-cmd = "python s2gos-client/tests/schema2ui.py"
-
-# docs
+# pixi run serve-docs
 
 [tool.pixi.tasks.serve-docs]
 cmd = "mkdocs serve"
 
+# pixi run build-docs
+
 [tool.pixi.tasks.build-docs]
 cmd = "mkdocs build"
+
+# pixi run jl
+
+[tool.pixi.tasks.jl]
+cmd = "jupyter-lab"
+
