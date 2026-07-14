@@ -9,7 +9,7 @@ repo_name: s2gos-dev/s2gos-controller
 copyright: Copyright &copy; 2025-2026 ESA DTE-S2GOS Team
 
 nav:
-  - Overview: index.md
+  - What is it?: index.md
   - Installation: installation.md
   - User Guide:
     - notebooks/client-api.ipynb
@@ -29,28 +29,40 @@ theme:
   logo: assets/logo.png
   favicon: assets/logo.ico
   palette:
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
     # Palette toggle for light mode
-    - scheme: default
-      primary: blue grey
-      accent: deep orange
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: green
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     # Palette toggle for dark mode
-    - scheme: slate
-      primary: blue grey
-      accent: deep orange
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: green
       toggle:
         icon: material/brightness-4
-        name: Switch to light mode
+        name: Switch to system preference
   features:
     - navigation.top
-  custom_dir: docs\overrides
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - toc.follow
+    - content.code.copy
+  custom_dir: docs/overrides
 
 markdown_extensions:
   - attr_list
+  - tables
   - admonition
   - pymdownx.details
+  # - pymdownx.highlight
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
@@ -60,7 +72,9 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/s2gos-dev/s2gos-controller
     - icon: fontawesome/brands/python
-      link: https://pypi.org/project/s2gos/
+      link: https://pypi.org/project/s2gos-client/
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/s2gos-server/
 
 plugins:
   - search
@@ -70,16 +84,30 @@ plugins:
       handlers:
         python:
           options:
+            #annotations_path: brief
+            #annotations_path: full
+            annotations_path: source
             docstring_style: google
-            show_root_toc_entry: true
-            show_root_heading: true
-            show_source: true
-            heading_level: 2
-            annotations_path: brief
+            docstring_section_style: table
+            filters:
+              - "!^_"
+            heading_level: 3
+            inherited_members: true
+            line_length: 80
             members_order: source
-
+            merge_init_into_class: true
+            separate_signature: true
+            show_if_no_docstring: false
+            show_root_heading: true
+            show_root_toc_entry: true
+            show_signature_annotations: true
+            show_source: false
+            # --- Generates JSON schema doc for each pydantic model:
+            # extensions:
+            #  - griffe_pydantic:
+            #      schema: true
 extra_css:
-    - overrides/css/custom.css
+  - overrides/css/custom.css
 
 hooks:
-    - docs\hooks\notebooks_json_output.py
+  - docs/hooks/notebooks_json_output.py

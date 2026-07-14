@@ -15,8 +15,6 @@ Python control layer for the synthetic EO scene simulator service of the
 
 ---
 
-_Note, this project and its documentation is still in an early development stage._
-
 ## Controller Overview
 
 This project hosts two Python packages:
