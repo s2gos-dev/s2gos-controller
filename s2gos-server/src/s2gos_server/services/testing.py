@@ -17,13 +17,10 @@ The demo showcases:
 import enum
 from typing import Annotated
 
-from pydantic import Field
-
 from gavicore.models import InputDescription, Schema
 from procodile import JobContext
-
+from pydantic import Field
 from wraptile.services.local import LocalService
-
 
 service = LocalService(
     title="S2GOS Test-Server",

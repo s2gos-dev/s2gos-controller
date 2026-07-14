@@ -4,7 +4,7 @@
 
 [project]
 name = "s2gos-client"
-version = "0.1.0"
+version = "0.2.0.dev0"
 description = "Python client for the ESA DTE-S2GOS synthetic scene generator service"
 readme = "README.md"
 authors = [
@@ -38,9 +38,13 @@ classifiers = [
 ]
 requires-python = ">=3.11"
 dependencies = [
+  "fsspec",
+  "s3fs",
+  "xarray",
+  "zarr",
   # Eozilla dependencies
-  "cuiman >=0.1.0",
-  "gavicore >=0.1.0",
+  "cuiman >=0.2.0.dev0",
+  "gavicore >=0.2.0.dev0",
 ]
 
 [project.scripts]
