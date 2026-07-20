@@ -37,7 +37,7 @@ def create_config(**config_overrides: Any) -> ClientConfig:
     auth_config_dict.pop("api_url", None)
 
     auth_config = AuthConfig(**auth_config_dict)
-    if auth_config.auth_type.lower() == "login":
+    if auth_config.auth_type == "login":
         token = login(auth_config)
         config_dict.update(
             auth_type="token",
