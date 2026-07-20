@@ -39,6 +39,7 @@ disable_error_code = ["valid-type", "import-untyped"]
 exclude = [
     "s2gos-client/tests",
     "s2gos-server/tests",
+    "eozilla",
     "tools",
 ]
 
@@ -235,4 +236,3 @@ cmd = "mkdocs build"
 
 [tool.pixi.tasks.jl]
 cmd = "jupyter-lab"
-
