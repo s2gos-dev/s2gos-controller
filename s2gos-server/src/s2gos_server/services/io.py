@@ -1,6 +1,6 @@
 import os
 
-from pydantic import BaseModel, Field, model_validator, PrivateAttr
+from pydantic import BaseModel, Field, PrivateAttr, model_validator
 from upath import UPath
 
 

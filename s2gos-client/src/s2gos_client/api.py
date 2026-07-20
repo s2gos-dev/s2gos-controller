@@ -3,10 +3,11 @@
 #  https://opensource.org/license/apache-2-0.
 
 from pathlib import Path
-
-from pydantic_settings import SettingsConfigDict
+from typing import Any
 
 from cuiman.api import AsyncClient, Client, ClientConfig, ClientError
+from cuiman.api.auth import AuthConfig, login
+from pydantic_settings import SettingsConfigDict
 
 
 class S2GOSConfig(ClientConfig):
@@ -17,18 +18,47 @@ class S2GOSConfig(ClientConfig):
     )
 
 
-ClientConfig.default_path = Path("~").expanduser() / ".sen4cap-client"
-ClientConfig.default_config = S2GOSConfig(
+_CONFIG_BASE = S2GOSConfig(
     api_url="http://localhost:8008/",
-    # auth_url="http://localhost:8080/auth/login",
-    # auth_type="token",
-    # use_bearer=True,
+    auth_url=None,
     auth_type="none",
 )
+_DEBUG = False
+
+ClientConfig.default_path = Path("~").expanduser() / ".s2gos-client"
+ClientConfig.default_config = _CONFIG_BASE
+
+
+def create_config(**config_overrides: Any) -> ClientConfig:
+    config_dict = _CONFIG_BASE.model_dump()
+    config_dict.update(config_overrides)
+
+    auth_config_dict = dict(config_dict)
+    auth_config_dict.pop("api_url", None)
+
+    auth_config = AuthConfig(**auth_config_dict)
+    if auth_config.auth_type.lower() == "login":
+        token = login(auth_config)
+        config_dict.update(
+            auth_type="token",
+            token=token,
+        )
+    return S2GOSConfig(**config_dict)
+
+
+def create_client(**config_overrides: Any) -> Client:
+    return Client(config=create_config(**config_overrides), _debug=_DEBUG)
+
+
+def create_async_client(**config_overrides: Any) -> AsyncClient:
+    return AsyncClient(config=create_config(**config_overrides), _debug=_DEBUG)
+
 
 __all__ = [
     "AsyncClient",
     "Client",
     "ClientConfig",
     "ClientError",
+    "create_client",
+    "create_async_client",
 ]

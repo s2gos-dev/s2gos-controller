@@ -6,6 +6,10 @@ import s2gos_client.api
 
 
 def test_api_ok():
-    assert {"AsyncClient", "Client", "ClientConfig", "ClientError"}.issubset(
-        dir(s2gos_client.api)
-    )
+    assert {
+        "AsyncClient",
+        "Client",
+        "ClientConfig",
+        "ClientError",
+        "create_client",
+    }.issubset(dir(s2gos_client.api))

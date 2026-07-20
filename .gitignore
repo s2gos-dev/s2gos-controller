@@ -1,6 +1,8 @@
 # Testing
 *.zarr/
 .cov-report
+notebooks/credentials.json
+notebooks/config.json
 
 # Documentation generation
 docs/notebooks/*.ipynb
