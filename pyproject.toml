@@ -114,11 +114,11 @@ s2gos-server = { path = "s2gos-server", editable = true }
 # For release installs, keep these commented so the s2gos package
 # dependencies resolve to the published PyPI releases.
 #
-appligator = { path = "eozilla/appligator", editable = true }
-cuiman = { path = "eozilla/cuiman", editable = true }
-gavicore = { path = "eozilla/gavicore", editable = true }
-procodile = { path = "eozilla/procodile", editable = true }
-wraptile = { path = "eozilla/wraptile", editable = true }
+appligator = { path = "../eozilla/appligator", editable = true }
+cuiman = { path = "../eozilla/cuiman", editable = true }
+gavicore = { path = "../eozilla/gavicore", editable = true }
+procodile = { path = "../eozilla/procodile", editable = true }
+wraptile = { path = "../eozilla/wraptile", editable = true }
 
 
 ########################## Tasks ###############################

@@ -453,11 +453,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/zarr-3.2.0-pyhc364b38_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zict-3.0.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.1-pyhcf101f3_0.conda
-      - pypi: eozilla/appligator
-      - pypi: eozilla/cuiman
-      - pypi: eozilla/gavicore
-      - pypi: eozilla/procodile
-      - pypi: eozilla/wraptile
+      - pypi: ../eozilla/appligator
+      - pypi: ../eozilla/cuiman
+      - pypi: ../eozilla/gavicore
+      - pypi: ../eozilla/procodile
+      - pypi: ../eozilla/wraptile
       - pypi: https://files.pythonhosted.org/packages/10/a1/510b0a7fadc6f43a6ce50152e69dbd86415240835868bb0bd9b5b88b1e06/aioitertools-0.13.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/14/2f/967ba146e6d58cf6a652da73885f52fc68001525b4197effc174321d70b4/jmespath-1.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/2b/76/7f1bfd6afff4c5e38e36a3c6d68eb5f4b7311ea80baf693db78d95b603c4/propcache-0.5.2-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
@@ -860,11 +860,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-1.3.2-hbb4bfdb_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-ng-2.3.3-h8bce59a_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
-      - pypi: eozilla/appligator
-      - pypi: eozilla/cuiman
-      - pypi: eozilla/gavicore
-      - pypi: eozilla/procodile
-      - pypi: eozilla/wraptile
+      - pypi: ../eozilla/appligator
+      - pypi: ../eozilla/cuiman
+      - pypi: ../eozilla/gavicore
+      - pypi: ../eozilla/procodile
+      - pypi: ../eozilla/wraptile
       - pypi: https://files.pythonhosted.org/packages/10/a1/510b0a7fadc6f43a6ce50152e69dbd86415240835868bb0bd9b5b88b1e06/aioitertools-0.13.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/14/2f/967ba146e6d58cf6a652da73885f52fc68001525b4197effc174321d70b4/jmespath-1.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/3a/98/ab4b5ed1b1b5cd973c8a3eb994c3a6aefb6ce6d399e21bb5f0316c33815c/yarl-1.24.2-cp314-cp314-macosx_10_15_x86_64.whl
@@ -1278,11 +1278,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-1.3.2-hfd05255_2.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-ng-2.3.3-h0261ad2_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
-      - pypi: eozilla/appligator
-      - pypi: eozilla/cuiman
-      - pypi: eozilla/gavicore
-      - pypi: eozilla/procodile
-      - pypi: eozilla/wraptile
+      - pypi: ../eozilla/appligator
+      - pypi: ../eozilla/cuiman
+      - pypi: ../eozilla/gavicore
+      - pypi: ../eozilla/procodile
+      - pypi: ../eozilla/wraptile
       - pypi: https://files.pythonhosted.org/packages/10/a1/510b0a7fadc6f43a6ce50152e69dbd86415240835868bb0bd9b5b88b1e06/aioitertools-0.13.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/14/2f/967ba146e6d58cf6a652da73885f52fc68001525b4197effc174321d70b4/jmespath-1.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/53/c7/d168dd2e2120b1a61ffdcf6eaa6d992620a793d3bf7e12a59704eda1d83b/apache_airflow_client-3.0.2-py3-none-any.whl
@@ -12922,7 +12922,7 @@ packages:
   purls: []
   size: 388453
   timestamp: 1764777142545
-- pypi: eozilla/appligator
+- pypi: ../eozilla/appligator
   name: appligator
   requires_dist:
   - jinja2
@@ -12934,7 +12934,7 @@ packages:
   - gavicore>=0.2.0.dev0
   - procodile>=0.2.0.dev0
   requires_python: '>=3.11'
-- pypi: eozilla/cuiman
+- pypi: ../eozilla/cuiman
   name: cuiman
   requires_dist:
   - pydantic
@@ -12946,14 +12946,14 @@ packages:
   - httpx
   - gavicore>=0.2.0.dev0
   requires_python: '>=3.10'
-- pypi: eozilla/gavicore
+- pypi: ../eozilla/gavicore
   name: gavicore
   requires_dist:
   - pydantic
   - pyyaml
   - typer>=0.26.0,<1
   requires_python: '>=3.11'
-- pypi: eozilla/procodile
+- pypi: ../eozilla/procodile
   name: procodile
   requires_dist:
   - pydantic
@@ -12961,7 +12961,7 @@ packages:
   - typer>=0.26.0,<1
   - gavicore>=0.2.0.dev0
   requires_python: '>=3.10'
-- pypi: eozilla/wraptile
+- pypi: ../eozilla/wraptile
   name: wraptile
   requires_dist:
   - fastapi

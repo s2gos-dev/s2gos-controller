@@ -20,6 +20,9 @@ jobs:
                   repository: eo-tools/eozilla
                   path: eozilla
 
+            - name: Link Eozilla as a sibling checkout
+              run: ln -s "$GITHUB_WORKSPACE/eozilla" "$GITHUB_WORKSPACE/../eozilla"
+
             - name: Setup pixi
               uses: prefix-dev/setup-pixi@v0.10.0
               with:
