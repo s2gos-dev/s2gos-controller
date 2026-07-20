@@ -27,7 +27,8 @@ jobs:
               uses: prefix-dev/setup-pixi@v0.10.0
               with:
                   pixi-version: v0.73.0
-                  cache: true
+                  cache: false
+                  locked: false
 
             - name: Run checks
               run: pixi run checks
