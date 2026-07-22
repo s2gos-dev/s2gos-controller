@@ -453,11 +453,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/zarr-3.2.0-pyhc364b38_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zict-3.0.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-3.23.1-pyhcf101f3_0.conda
-      - pypi: ../eozilla/appligator
-      - pypi: ../eozilla/cuiman
-      - pypi: ../eozilla/gavicore
-      - pypi: ../eozilla/procodile
-      - pypi: ../eozilla/wraptile
       - pypi: https://files.pythonhosted.org/packages/10/a1/510b0a7fadc6f43a6ce50152e69dbd86415240835868bb0bd9b5b88b1e06/aioitertools-0.13.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/14/2f/967ba146e6d58cf6a652da73885f52fc68001525b4197effc174321d70b4/jmespath-1.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/2b/76/7f1bfd6afff4c5e38e36a3c6d68eb5f4b7311ea80baf693db78d95b603c4/propcache-0.5.2-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
@@ -466,10 +461,14 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/71/43/1947f06babed6b3f1d7f38b0c767f52df66bfb2bc10b468c4a7de9eceff2/aiohappyeyeballs-2.7.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/80/a0/7bb35512648162276acc1c8e43fa8e456a3da15f54878eb9e392e056b4a3/remotestate-0.3.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/90/5f/85535dfb3cfd6442d66d1df1694062c5d6df02f895329e7e120b2a3d2b8b/aiobotocore-3.7.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/98/2d/208d3ed34203bd9c97917b76449fdf432780a54f540b7b292c78de7b8a54/procodile-0.2.0.dev1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/a0/18/938441025db6769a3464596b2410af3afde0b21eb2f204c6f766f68af4bd/aiohttp-3.14.1-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/a7/b2/fabede9fafd976b991e9f1b9c8c873ed86f202889b864756f240ce6dd855/frozenlist-1.8.0-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl
+      - pypi: https://files.pythonhosted.org/packages/b6/f7/6f33a754bc7b68b4e71bbc4ec9227d249eb5cc94438ca9c103a371eba171/wraptile-0.2.0.dev1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bf/4b/afc1fef8a43bafb139f57f73bbd70df82807af5934321e8112ae50668827/botocore-1.43.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/c2/53/d81269aaafccea0d33396c03035de997b743f11e648e6e27a0df99c72980/yarl-1.24.2-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
+      - pypi: https://files.pythonhosted.org/packages/ca/3d/ee923a5c177b71b8c5ffe168ed3bdaef04fb45f81b51770ddfed96cfa416/gavicore-0.2.0.dev1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/e9/09/fbefba5f6fd50663893a9e4ffa269f37fc7f7479e9890775425591a7208e/cuiman-0.2.0.dev1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fb/76/641ae371508676492379f16e2fa48f4e2c11741bd63c48be4b12a6b09cba/aiosignal-1.4.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fe/3b/8ec5074bcfc450fe84273713b4b0a0dd47c0249358f5d82eb8104ffe2520/multidict-6.7.1-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: s2gos-client
@@ -860,11 +859,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-1.3.2-hbb4bfdb_2.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-ng-2.3.3-h8bce59a_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-h3eecb57_6.conda
-      - pypi: ../eozilla/appligator
-      - pypi: ../eozilla/cuiman
-      - pypi: ../eozilla/gavicore
-      - pypi: ../eozilla/procodile
-      - pypi: ../eozilla/wraptile
       - pypi: https://files.pythonhosted.org/packages/10/a1/510b0a7fadc6f43a6ce50152e69dbd86415240835868bb0bd9b5b88b1e06/aioitertools-0.13.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/14/2f/967ba146e6d58cf6a652da73885f52fc68001525b4197effc174321d70b4/jmespath-1.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/3a/98/ab4b5ed1b1b5cd973c8a3eb994c3a6aefb6ce6d399e21bb5f0316c33815c/yarl-1.24.2-cp314-cp314-macosx_10_15_x86_64.whl
@@ -874,10 +868,14 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/80/a0/7bb35512648162276acc1c8e43fa8e456a3da15f54878eb9e392e056b4a3/remotestate-0.3.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/8e/e8/a1185e236ec66c20afd72399522f142c3724c785789255202d27ae992818/frozenlist-1.8.0-cp314-cp314-macosx_10_13_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/90/5f/85535dfb3cfd6442d66d1df1694062c5d6df02f895329e7e120b2a3d2b8b/aiobotocore-3.7.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/98/2d/208d3ed34203bd9c97917b76449fdf432780a54f540b7b292c78de7b8a54/procodile-0.2.0.dev1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b5/06/c5a52f419b5d8972f8d46a7577476090d8e3263ff589ce40b5ca4968d5be/propcache-0.5.2-cp314-cp314-macosx_10_15_x86_64.whl
+      - pypi: https://files.pythonhosted.org/packages/b6/f7/6f33a754bc7b68b4e71bbc4ec9227d249eb5cc94438ca9c103a371eba171/wraptile-0.2.0.dev1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bf/4b/afc1fef8a43bafb139f57f73bbd70df82807af5934321e8112ae50668827/botocore-1.43.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/ca/3d/ee923a5c177b71b8c5ffe168ed3bdaef04fb45f81b51770ddfed96cfa416/gavicore-0.2.0.dev1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/d3/66/f42f5c984d99e49c6cff5f26f590750f2e2f7ef1fcfb99966ab5be1b632e/aiohttp-3.14.1-cp314-cp314-macosx_10_15_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/d5/22/492f2246bb5b534abd44804292e81eeaf835388901f0c574bac4eeec73c5/multidict-6.7.1-cp314-cp314-macosx_10_15_x86_64.whl
+      - pypi: https://files.pythonhosted.org/packages/e9/09/fbefba5f6fd50663893a9e4ffa269f37fc7f7479e9890775425591a7208e/cuiman-0.2.0.dev1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fb/76/641ae371508676492379f16e2fa48f4e2c11741bd63c48be4b12a6b09cba/aiosignal-1.4.0-py3-none-any.whl
       - pypi: s2gos-client
       - pypi: s2gos-server
@@ -1278,11 +1276,6 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-1.3.2-hfd05255_2.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-ng-2.3.3-h0261ad2_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_6.conda
-      - pypi: ../eozilla/appligator
-      - pypi: ../eozilla/cuiman
-      - pypi: ../eozilla/gavicore
-      - pypi: ../eozilla/procodile
-      - pypi: ../eozilla/wraptile
       - pypi: https://files.pythonhosted.org/packages/10/a1/510b0a7fadc6f43a6ce50152e69dbd86415240835868bb0bd9b5b88b1e06/aioitertools-0.13.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/14/2f/967ba146e6d58cf6a652da73885f52fc68001525b4197effc174321d70b4/jmespath-1.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/53/c7/d168dd2e2120b1a61ffdcf6eaa6d992620a793d3bf7e12a59704eda1d83b/apache_airflow_client-3.0.2-py3-none-any.whl
@@ -1292,8 +1285,12 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/71/43/1947f06babed6b3f1d7f38b0c767f52df66bfb2bc10b468c4a7de9eceff2/aiohappyeyeballs-2.7.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/80/a0/7bb35512648162276acc1c8e43fa8e456a3da15f54878eb9e392e056b4a3/remotestate-0.3.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/90/5f/85535dfb3cfd6442d66d1df1694062c5d6df02f895329e7e120b2a3d2b8b/aiobotocore-3.7.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/98/2d/208d3ed34203bd9c97917b76449fdf432780a54f540b7b292c78de7b8a54/procodile-0.2.0.dev1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/b6/f7/6f33a754bc7b68b4e71bbc4ec9227d249eb5cc94438ca9c103a371eba171/wraptile-0.2.0.dev1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bf/4b/afc1fef8a43bafb139f57f73bbd70df82807af5934321e8112ae50668827/botocore-1.43.0-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/ca/3d/ee923a5c177b71b8c5ffe168ed3bdaef04fb45f81b51770ddfed96cfa416/gavicore-0.2.0.dev1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/e0/bf/52f25716bbe93745595800f36fb17b73711f14da59ed0bb2eba141bc9f0f/multidict-6.7.1-cp314-cp314-win_amd64.whl
+      - pypi: https://files.pythonhosted.org/packages/e9/09/fbefba5f6fd50663893a9e4ffa269f37fc7f7479e9890775425591a7208e/cuiman-0.2.0.dev1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f0/2b/13e8d741a9ec5db7d900c060554cf8352ab85e44e2a4469ebb9d377bda17/aiohttp-3.14.1-cp314-cp314-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/fa/d9/5582d57e2b2db9b85eb6663a22efdd78e08805f3f5389566e9fcad254d1b/yarl-1.24.2-cp314-cp314-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/fb/76/641ae371508676492379f16e2fa48f4e2c11741bd63c48be4b12a6b09cba/aiosignal-1.4.0-py3-none-any.whl
@@ -12922,56 +12919,6 @@ packages:
   purls: []
   size: 388453
   timestamp: 1764777142545
-- pypi: ../eozilla/appligator
-  name: appligator
-  requires_dist:
-  - jinja2
-  - pydantic
-  - pyyaml
-  - tomli-w
-  - tomli ; python_full_version < '3.11'
-  - typer>=0.26.0,<1
-  - gavicore>=0.2.0.dev0
-  - procodile>=0.2.0.dev0
-  requires_python: '>=3.11'
-- pypi: ../eozilla/cuiman
-  name: cuiman
-  requires_dist:
-  - pydantic
-  - pydantic-settings
-  - pyyaml
-  - remotestate>=0.3.1,<1
-  - typer>=0.26.0,<1
-  - uri-template
-  - httpx
-  - gavicore>=0.2.0.dev0
-  requires_python: '>=3.10'
-- pypi: ../eozilla/gavicore
-  name: gavicore
-  requires_dist:
-  - pydantic
-  - pyyaml
-  - typer>=0.26.0,<1
-  requires_python: '>=3.11'
-- pypi: ../eozilla/procodile
-  name: procodile
-  requires_dist:
-  - pydantic
-  - pyyaml
-  - typer>=0.26.0,<1
-  - gavicore>=0.2.0.dev0
-  requires_python: '>=3.10'
-- pypi: ../eozilla/wraptile
-  name: wraptile
-  requires_dist:
-  - fastapi
-  - pydantic
-  - pyyaml
-  - typer>=0.26.0,<1
-  - uvicorn
-  - gavicore>=0.2.0.dev0
-  - procodile>=0.2.0.dev0
-  requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/10/a1/510b0a7fadc6f43a6ce50152e69dbd86415240835868bb0bd9b5b88b1e06/aioitertools-0.13.0-py3-none-any.whl
   name: aioitertools
   version: 0.13.0
@@ -13060,6 +13007,16 @@ packages:
   - wrapt>=1.10.10,<3.0.0
   - httpx>=0.25.1,<0.29 ; extra == 'httpx'
   requires_python: '>=3.10'
+- pypi: https://files.pythonhosted.org/packages/98/2d/208d3ed34203bd9c97917b76449fdf432780a54f540b7b292c78de7b8a54/procodile-0.2.0.dev1-py3-none-any.whl
+  name: procodile
+  version: 0.2.0.dev1
+  sha256: 975beae97bb924363f0ea26c4354d55a08958d29c4fc3efb7c1282b05bc65352
+  requires_dist:
+  - gavicore>=0.2.0.dev1
+  - pydantic
+  - pyyaml
+  - typer>=0.26.0,<1
+  requires_python: '>=3.10'
 - pypi: https://files.pythonhosted.org/packages/a0/18/938441025db6769a3464596b2410af3afde0b21eb2f204c6f766f68af4bd/aiohttp-3.14.1-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
   name: aiohttp
   version: 3.14.1
@@ -13089,6 +13046,19 @@ packages:
   version: 0.5.2
   sha256: fc88b26f08d634f7bc819a7852e5214f5802641ab8d9fd5326892292eee1993e
   requires_python: '>=3.10'
+- pypi: https://files.pythonhosted.org/packages/b6/f7/6f33a754bc7b68b4e71bbc4ec9227d249eb5cc94438ca9c103a371eba171/wraptile-0.2.0.dev1-py3-none-any.whl
+  name: wraptile
+  version: 0.2.0.dev1
+  sha256: 315c2729a138242e5fae7929c3daae23bcc71fd9020f805e0588896d0ac28731
+  requires_dist:
+  - fastapi
+  - gavicore>=0.2.0.dev1
+  - procodile>=0.2.0.dev1
+  - pydantic
+  - pyyaml
+  - typer>=0.26.0,<1
+  - uvicorn
+  requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/bf/4b/afc1fef8a43bafb139f57f73bbd70df82807af5934321e8112ae50668827/botocore-1.43.0-py3-none-any.whl
   name: botocore
   version: 1.43.0
@@ -13108,6 +13078,15 @@ packages:
   - multidict>=4.0
   - propcache>=0.2.1
   requires_python: '>=3.10'
+- pypi: https://files.pythonhosted.org/packages/ca/3d/ee923a5c177b71b8c5ffe168ed3bdaef04fb45f81b51770ddfed96cfa416/gavicore-0.2.0.dev1-py3-none-any.whl
+  name: gavicore
+  version: 0.2.0.dev1
+  sha256: 0d13caed1197b80b8f4ee21a52adca7b838ea2769edff88dd9b58fd7d3d2f56d
+  requires_dist:
+  - pydantic
+  - pyyaml
+  - typer>=0.26.0,<1
+  requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/d3/66/f42f5c984d99e49c6cff5f26f590750f2e2f7ef1fcfb99966ab5be1b632e/aiohttp-3.14.1-cp314-cp314-macosx_10_15_x86_64.whl
   name: aiohttp
   version: 3.14.1
@@ -13141,6 +13120,20 @@ packages:
   requires_dist:
   - typing-extensions>=4.1.0 ; python_full_version < '3.11'
   requires_python: '>=3.9'
+- pypi: https://files.pythonhosted.org/packages/e9/09/fbefba5f6fd50663893a9e4ffa269f37fc7f7479e9890775425591a7208e/cuiman-0.2.0.dev1-py3-none-any.whl
+  name: cuiman
+  version: 0.2.0.dev1
+  sha256: 9e79ef0d635a3dde00f1866b79953bdcf53d9d84a787c18488122618faf2d3a0
+  requires_dist:
+  - gavicore>=0.2.0.dev1
+  - httpx
+  - pydantic
+  - pydantic-settings
+  - pyyaml
+  - remotestate>=0.3.1,<1
+  - typer>=0.26.0,<1
+  - uri-template
+  requires_python: '>=3.10'
 - pypi: https://files.pythonhosted.org/packages/f0/2b/13e8d741a9ec5db7d900c060554cf8352ab85e44e2a4469ebb9d377bda17/aiohttp-3.14.1-cp314-cp314-win_amd64.whl
   name: aiohttp
   version: 3.14.1
@@ -13197,7 +13190,8 @@ packages:
 - pypi: s2gos-server
   name: s2gos-server
   requires_dist:
-  - gavicore>=0.1.0
-  - wraptile>=0.1.0
+  - gavicore>=0.2.0.dev1
+  - procodile>=0.2.0.dev1
+  - wraptile>=0.2.0.dev1
   - universal-pathlib>=0.3.8,<0.4
   requires_python: '>=3.11'

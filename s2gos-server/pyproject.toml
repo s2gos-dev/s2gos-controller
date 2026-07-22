@@ -4,7 +4,7 @@
 
 [project]
 name = "s2gos-server"
-version = "0.1.0"
+version = "0.2.0.dev1"
 description = "Python server for the ESA DTE-S2GOS synthetic scene generator service"
 readme = "README.md"
 authors = [
@@ -39,8 +39,9 @@ classifiers = [
 requires-python = ">=3.11"
 dependencies = [
   # Eozilla dependencies
-  "gavicore >=0.1.0",
-  "wraptile >=0.1.0",
+  "gavicore >=0.2.0.dev1",
+  "procodile >=0.2.0.dev1",
+  "wraptile >=0.2.0.dev1",
   # Other
   "universal_pathlib >=0.3.8,<0.4",
 ]

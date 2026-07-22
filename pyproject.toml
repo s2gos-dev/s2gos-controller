@@ -1,6 +1,6 @@
 [project]
 name = "s2gos-controller"
-version = "0.1.0"
+version = "0.2.0.dev1"
 description = "S2GOS control layer comprising a gateway server and client"
 requires-python = ">=3.11"
 
@@ -50,13 +50,6 @@ channels = ["conda-forge"]
 platforms = ["linux-64", "win-64", "osx-64"]
 
 [tool.pixi.dependencies]
-# Eozilla conda dependencies.
-# Comment out, if using the editable versions in pypi-dependencies
-#appligator = ">=0.1.0"
-#cuiman = ">=0.1.0"
-#gavicore = ">=0.1.0"
-#procodile = ">=0.1.0"
-#wraptile = ">=0.1.0"
 # Combined sub-workspace dependencies
 fastapi = "*"
 httpx = "*"
@@ -109,42 +102,50 @@ apache-airflow-client = "==3.0.2"
 # Workspace dependencies
 s2gos-client = { path = "s2gos-client", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
-#
-# Uncomment the following to allow using eozilla from sources.
-# For release installs, keep these commented so the s2gos package
-# dependencies resolve to the published PyPI releases.
-#
-appligator = { path = "../eozilla/appligator", editable = true }
-cuiman = { path = "../eozilla/cuiman", editable = true }
-gavicore = { path = "../eozilla/gavicore", editable = true }
-procodile = { path = "../eozilla/procodile", editable = true }
-wraptile = { path = "../eozilla/wraptile", editable = true }
-
+# eozilla from PyPI (uncomment if eozilla from source is used)
+cuiman = ">=0.2.0.dev1"
+gavicore = ">=0.2.0.dev1"
+procodile = ">=0.2.0.dev1"
+wraptile = ">=0.2.0.dev1"
+# eozilla from sources (uncomment if eozilla from PyPI is used)
+#appligator = { path = "../eozilla/appligator", editable = true }
+#cuiman = { path = "../eozilla/cuiman", editable = true }
+#gavicore = { path = "../eozilla/gavicore", editable = true }
+#procodile = { path = "../eozilla/procodile", editable = true }
+#wraptile = { path = "../eozilla/wraptile", editable = true }
+#appligator = ">=0.2.0.dev1"
 
 ########################## Tasks ###############################
+
+# pixi run x
+
+[tool.pixi.tasks]
+format-ruff = "ruff format ."
+format-isort = "isort ."
+test-client = "pytest s2gos-client/tests"
+test-server = "pytest s2gos-server/tests"
+cov-report-html = "coverage html -d .cov-report && coverage report"
+cov-report-xml = "coverage xml -o coverage.xml && coverage report"
+cov-client = "pytest --cov s2gos-client/src/s2gos_client --cov-report= --cov-append s2gos-client/tests"
+cov-server = "pytest --cov s2gos-server/src/s2gos_server --cov-report= --cov-append s2gos-server/tests"
+check-client = "ruff check s2gos-client/src"
+check-server = "ruff check s2gos-server/src"
+typecheck = "mypy ."
+gen-cli-docs = "python -m tools.gen_cli_docs"
+sync-versions = "python tools.sync_versions"
+doc-serve = "mkdocs serve"
+doc-build = "mkdocs build"
+jl = "jupyter-lab"
 
 # pixi run format
 
 [tool.pixi.tasks.format]
 depends-on = ["format-isort", "format-ruff"]
 
-[tool.pixi.tasks.format-ruff]
-cmd = "ruff format ."
-
-[tool.pixi.tasks.format-isort]
-cmd = "isort ."
-
 # pixi run tests
 
 [tool.pixi.tasks.tests]
 depends-on = ["test-client", "test-server"]
-
-[tool.pixi.tasks.test-client]
-cmd = "pytest s2gos-client/tests"
-
-[tool.pixi.tasks.test-server]
-cmd = "pytest s2gos-server/tests"
-
 
 # pixi run coverage / coverage-ci
 
@@ -154,39 +155,15 @@ depends-on = ["cov-client", "cov-server", "cov-report-html"]
 [tool.pixi.tasks.coverage-ci]
 depends-on = ["cov-client", "cov-server", "cov-report-xml"]
 
-[tool.pixi.tasks.cov-report-html]
-cmd = "coverage html -d .cov-report && coverage report"
-
-[tool.pixi.tasks.cov-report-xml]
-cmd = "coverage xml -o coverage.xml && coverage report"
-
-[tool.pixi.tasks.cov-client]
-cmd = "pytest --cov s2gos-client/src/s2gos_client --cov-report= --cov-append s2gos-client/tests"
-
-[tool.pixi.tasks.cov-server]
-cmd = "pytest --cov s2gos-server/src/s2gos_server --cov-report= --cov-append s2gos-server/tests"
-
 # pixi run checks
 
 [tool.pixi.tasks.checks]
 depends-on = ["check-client", "check-server", "typecheck"]
 
-[tool.pixi.tasks.check-client]
-cmd = "ruff check s2gos-client/src"
-
-[tool.pixi.tasks.check-server]
-cmd = "ruff check s2gos-server/src"
-
-[tool.pixi.tasks.typecheck]
-cmd = "mypy ."
-
 # pixi run build
 
 [tool.pixi.tasks.build]
-depends-on = [
-  "build-client",
-  "build-server",
-]
+depends-on = ["build-client", "build-server"]
 
 [tool.pixi.tasks.build-client]
 cwd = "s2gos-client"
@@ -212,27 +189,3 @@ cmd = "python -m twine upload dist/*"
 cwd = "s2gos-server"
 cmd = "python -m twine upload dist/*"
 
-# pixi run gen-client-docs
-
-[tool.pixi.tasks.gen-client-docs]
-cmd = "python -m tools.gen_client_docs"
-
-# pixi run sync-versions
-
-[tool.pixi.tasks.sync-versions]
-cmd = "python  tools.sync_versions"
-
-# pixi run serve-docs
-
-[tool.pixi.tasks.serve-docs]
-cmd = "mkdocs serve"
-
-# pixi run build-docs
-
-[tool.pixi.tasks.build-docs]
-cmd = "mkdocs build"
-
-# pixi run jl
-
-[tool.pixi.tasks.jl]
-cmd = "jupyter-lab"
