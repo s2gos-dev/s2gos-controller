@@ -56,7 +56,7 @@ def create_client(**config: Any) -> Client:
 
     Provided configuration values, if any, override values
     read from persistent configuration that were previously
-    written by the CLI command `s2gos-controller configure`.
+    written by the CLI command `s2gos-client configure`.
 
     Args:
         config: Configuration overrides. See
@@ -74,7 +74,7 @@ def create_async_client(**config: Any) -> AsyncClient:
 
     Provided configuration values, if any, override values
     read from persistent configuration that were previously
-    written by the CLI command `s2gos-controller configure`.
+    written by the CLI command `s2gos-client configure`.
 
     Args:
         config: Configuration overrides. See
