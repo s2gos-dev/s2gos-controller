@@ -34,20 +34,17 @@ def _create_config(**config_overrides: Any) -> ClientConfig:
     Create the S2GOS-specific configuration instance
     from given configuration overrides.
     """
-    config_dict = _CONFIG_BASE.model_dump()
-    config_dict.update(config_overrides)
+    # ClientConfig.create() will ready any previous configuration from
+    # ~/.s2gos-client written by command "s2gos-client configure":
+    config = ClientConfig.create(**config_overrides)
+    if config.auth_type != "login":
+        # already logged in
+        return config
 
-    auth_config_dict = dict(config_dict)
-    auth_config_dict.pop("api_url", None)
-
-    auth_config = AuthConfig(**auth_config_dict)
-    if auth_config.auth_type == "login":
-        token = login(auth_config)
-        config_dict.update(
-            auth_type="token",
-            token=token,
-        )
-
+    # Login to get an (initial) access token and change auth_type to "token":
+    token = login(config)
+    config_dict = config.to_dict()
+    config_dict.update(auth_type="token", token=token)
     return S2GOSConfig(**config_dict)
 
 
