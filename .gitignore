@@ -6,6 +6,7 @@ notebooks/config.json
 
 # Documentation generation
 docs/notebooks/*.ipynb
+docs/notebooks/*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
