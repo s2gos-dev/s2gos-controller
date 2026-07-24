@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from cuiman.api import AsyncClient, Client, ClientConfig, ClientError
-from cuiman.api.auth import AuthConfig, login
+from cuiman.api.auth import login
 from pydantic_settings import SettingsConfigDict
 
 

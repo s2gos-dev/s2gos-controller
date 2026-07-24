@@ -2,15 +2,13 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+from pathlib import Path
 from typing import Final
 
-from pathlib import Path
-
 import typer
+from gavicore.util.dynimp import import_value
 from typer.cli import get_docs_for_click
 from typer.main import get_command
-
-from gavicore.util.dynimp import import_value
 
 from tools.common import S2GOS_PATH
 
