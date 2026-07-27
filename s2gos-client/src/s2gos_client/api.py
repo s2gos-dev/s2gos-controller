@@ -23,7 +23,7 @@ _CONFIG_BASE = S2GOSConfig(
     auth_type="login",
     auth_url=(
         "https://kc.dev.brockmann-consult.de/realms/eozilla-auth/protocol"
-        "/openiconnect/token"
+        "/openid-connect/token"
     ),
     client_id="cuiman",
     grant_type="password",
