@@ -1,3 +1,11 @@
+## Changes in version 0.2.0
+
+- Added Docker packaging for `s2gos-server` (`Dockerfile` and build script).
+- Reworked `s2gos-client` authentication to use refreshable OAuth2 tokens
+  against Keycloak.
+
+---
+
 ## Changes in version 0.1.0
 
 Added a dedicated editor for objects of type 
