@@ -15,7 +15,7 @@ The `auth_type` setting selects how the client authenticates:
 
 | `auth_type` | How it works | Required settings |
 |-------------|--------------|-------------------|
-| `none`      | No authentication (default). | — |
+| `none`      | No authentication. | — |
 | `login`     | OAuth2 *password grant*: exchange username/password for access and refresh tokens, then send the access token as a bearer. | `auth_url`, `username`, `password` (+ `client_id`, `client_secret` if required) |
 | `token`     | Send a pre-obtained static token. | `token` |
 | `api-key`   | Send an API key in a custom header. | `api_key` |
@@ -53,6 +53,27 @@ Settings are merged from several sources, in increasing order of precedence:
 
 So a value passed in code overrides an environment variable, which overrides
 the config file.
+
+### Default configuration
+
+Out of the box, the client is preconfigured for the hosted S2GOS service and
+its Keycloak realm, so a plain `create_client()` targets that deployment. The
+built-in defaults are:
+
+| Setting | Default |
+|---------|---------|
+| `api_url` | `https://s2gos.wraptile.brockmann-consult.de/` |
+| `auth_type` | `login` |
+| `auth_url` | `https://kc.dev.brockmann-consult.de/realms/eozilla-auth/protocol/openid-connect/token` |
+| `client_id` | `cuiman` |
+| `grant_type` | `password` |
+| `use_bearer` | `true` |
+
+Because `auth_type` defaults to `login`, you still need to supply your
+`username` and `password` (via any of the sources above) for the initial token
+exchange. Override any default by passing it to `create_client`, setting the
+matching `S2GOS_*` environment variable, or storing it in `~/.s2gos-client` —
+for example, point `api_url` / `auth_url` at a different deployment.
 
 ## Connecting to an OAuth2 server
 
