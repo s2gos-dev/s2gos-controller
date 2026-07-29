@@ -4,8 +4,6 @@
 - Reworked `s2gos-client` authentication to use refreshable OAuth2 tokens
   against Keycloak.
 
----
-
 ## Changes in version 0.1.0
 
 Added a dedicated editor for objects of type 

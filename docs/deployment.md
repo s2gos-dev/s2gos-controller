@@ -44,3 +44,28 @@ and improve efficiency of workflows.
 
 - `Sealed Secrets` - allows us to store passwords and keys safely in Kubernetes without
    exposing them in plain text.
+
+## Building the server image
+
+The `s2gos-server` container image is built with the
+[`build-image.sh`](https://github.com/s2gos-dev/s2gos-controller/blob/main/s2gos-server/build-image.sh)
+script, which wraps `docker build` and pins the eozilla packages (`gavicore`,
+`procodile`, `wraptile`) to a given version.
+
+```commandline
+# Build, tagging the image from the s2gos-server version:
+./s2gos-server/build-image.sh
+
+# Build with an explicit tag:
+./s2gos-server/build-image.sh -t dev
+
+# Build and push to the registry:
+./s2gos-server/build-image.sh -t 0.2.0 --push
+
+# Build against a specific eozilla version:
+./s2gos-server/build-image.sh --eozilla-version 0.2.0.dev1
+```
+
+The image repository defaults to `quay.io/s2gos/s2gos-server`; override it with
+`-r`/`--repo` or the `IMAGE_REPO` environment variable. Run
+`./s2gos-server/build-image.sh --help` for the full list of options.
