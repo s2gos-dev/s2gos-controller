@@ -40,7 +40,7 @@ def _create_config(**config_overrides: Any) -> ClientConfig:
     Create the S2GOS-specific configuration instance
     from given configuration overrides.
     """
-    config = ClientConfig.create(**config_overrides)
+    config = S2GOSConfig.create(**config_overrides)
     if config.auth_type != "login":
         return config
 
