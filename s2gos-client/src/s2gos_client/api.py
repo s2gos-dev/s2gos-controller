@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from cuiman.api import AsyncClient, Client, ClientConfig, ClientError
-from cuiman.api.auth import login
+from cuiman.api.auth import login_for_tokens
 from pydantic_settings import SettingsConfigDict
 
 
@@ -19,9 +19,15 @@ class S2GOSConfig(ClientConfig):
 
 
 _CONFIG_BASE = S2GOSConfig(
-    api_url="http://localhost:8008/",
-    auth_url=None,
-    auth_type="none",
+    api_url="https://s2gos.wraptile.brockmann-consult.de/",
+    auth_type="login",
+    auth_url=(
+        "https://kc.dev.brockmann-consult.de/realms/eozilla-auth/protocol"
+        "/openid-connect/token"
+    ),
+    client_id="cuiman",
+    grant_type="password",
+    use_bearer=True,
 )
 _DEBUG = False
 
@@ -34,18 +40,18 @@ def _create_config(**config_overrides: Any) -> ClientConfig:
     Create the S2GOS-specific configuration instance
     from given configuration overrides.
     """
-    # ClientConfig.create() will ready any previous configuration from
-    # ~/.s2gos-client written by command "s2gos-client configure":
-    config = ClientConfig.create(**config_overrides)
+    config = S2GOSConfig.create(**config_overrides)
     if config.auth_type != "login":
-        # already logged in
         return config
 
-    # Login to get an (initial) access token and change auth_type to "token":
-    token = login(config)
-    config_dict = config.to_dict()
-    config_dict.update(auth_type="token", token=token)
-    return S2GOSConfig(**config_dict)
+    # Always obtain fresh tokens: a token read from persistent configuration is
+    # likely expired, and so is its refresh token. Authentication stays of type
+    # "login", which lets the underlying transport refresh the access token
+    # after a 401 response.
+    result = login_for_tokens(config)
+    config.token = result.access_token
+    config.refresh_token = result.refresh_token
+    return config
 
 
 def create_client(**config: Any) -> Client:

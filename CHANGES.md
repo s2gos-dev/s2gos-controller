@@ -1,8 +1,13 @@
 ## Changes in version 0.2.0
 
 - Added Docker packaging for `s2gos-server` (`Dockerfile` and build script).
-
----
+- Reworked `s2gos-client` authentication to use refreshable OAuth2 tokens
+  against Keycloak.
+- Fixed `create_client()`/`create_async_client()` silently ignoring
+  `S2GOS_*` environment variables (e.g. `S2GOS_TOKEN`, `S2GOS_AUTH_TYPE`,
+  `S2GOS_API_URL`). Configuration was being read via the base `ClientConfig`
+  class (env prefix `EOZILLA_`) instead of `S2GOSConfig` (env prefix
+  `S2GOS_`).
 
 ## Changes in version 0.1.0
 
