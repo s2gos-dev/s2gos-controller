@@ -2,6 +2,8 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
+import os
+from importlib.resources import files
 from pathlib import Path
 from typing import Any
 
@@ -33,6 +35,13 @@ _DEBUG = False
 
 ClientConfig.default_path = Path("~").expanduser() / ".s2gos-client"
 ClientConfig.default_config = _CONFIG_BASE
+
+# Default show_app() to the S2GOS-branded GUI build bundled with this
+# package, unless the user has already set EOZILLA_APP_DIST themselves
+# (e.g. to point at a local frontend dev build).
+os.environ.setdefault(
+    "EOZILLA_APP_DIST", str(files("s2gos_client.app").joinpath("dist"))
+)
 
 
 def _create_config(**config_overrides: Any) -> ClientConfig:
