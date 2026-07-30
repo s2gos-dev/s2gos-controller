@@ -1,5 +1,11 @@
 ## Changes in version 0.2.0
 
+- `client.show_app()` now defaults to an S2GOS-branded GUI build (bundled
+  under `s2gos_client/app/dist`) instead of the generic Eozilla one, via an
+  `EOZILLA_APP_DIST` default set on import. Setting `EOZILLA_APP_DIST`
+  explicitly still overrides it. The bundled build's Custom Service form
+  also defaults to the S2GOS API URL and OAuth2/OIDC authentication
+  against the `cuiman` client.
 - Added Docker packaging for `s2gos-server` (`Dockerfile` and build script).
 - Reworked `s2gos-client` authentication to use refreshable OAuth2 tokens
   against Keycloak.
