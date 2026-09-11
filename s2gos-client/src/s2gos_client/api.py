@@ -24,7 +24,7 @@ _CONFIG_BASE = S2GOSConfig(
     api_url="https://s2gos.wraptile.brockmann-consult.de/",
     auth_type="login",
     auth_url=(
-        "https://kc.dev.brockmann-consult.de/realms/eozilla-auth/protocol"
+        "https://kc.dev.brockmann-consult.de/realms/dte-s2gos/protocol"
         "/openid-connect/token"
     ),
     client_id="cuiman",
