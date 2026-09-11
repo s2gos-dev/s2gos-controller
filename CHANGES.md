@@ -5,7 +5,9 @@
   `EOZILLA_APP_DIST` default set on import. Setting `EOZILLA_APP_DIST`
   explicitly still overrides it. The bundled build's Custom Service form
   also defaults to the S2GOS API URL and OAuth2/OIDC authentication
-  against the `cuiman` client.
+  against the `cuiman` client of the `dte-s2gos` Keycloak realm.
+- `s2gos-client` now authenticates against the `dte-s2gos` Keycloak realm , 
+   both in the Python client and in the bundled GUI.
 - Added Docker packaging for `s2gos-server` (`Dockerfile` and build script).
 - Reworked `s2gos-client` authentication to use refreshable OAuth2 tokens
   against Keycloak.
