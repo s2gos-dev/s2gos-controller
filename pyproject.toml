@@ -54,7 +54,7 @@ platforms = ["linux-64", "win-64", "osx-64"]
 fastapi = "*"
 httpx = "*"
 pydantic = "*"
-pydantic-settings = ">=2.12.0,<3"
+pydantic-settings = ">=2.14.2,<3"
 pyyaml = "*"
 typer = ">=0.26"
 universal_pathlib = ">=0.3.8,<0.4"
@@ -103,18 +103,18 @@ apache-airflow-client = "==3.0.2"
 s2gos-client = { path = "s2gos-client", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
 # eozilla from PyPI (uncomment if eozilla from source is used)
-appligator = ">=0.2.1.dev1"
-cuiman = ">=0.2.1.dev1"
-gavicore = ">=0.2.1.dev1"
-procodile = ">=0.2.1.dev1"
-wraptile = ">=0.2.1.dev1"
+#appligator = ">=0.2.1.dev1"
+#cuiman = ">=0.2.1.dev1"
+#gavicore = ">=0.2.1.dev1"
+#procodile = ">=0.2.1.dev1"
+#wraptile = ">=0.2.1.dev1"
 
 # eozilla from sources (uncomment if eozilla from PyPI is used)
-#appligator = { path = "../eozilla/appligator", editable = true }
-#cuiman = { path = "../eozilla/cuiman", editable = true }
-#gavicore = { path = "../eozilla/gavicore", editable = true }
-#procodile = { path = "../eozilla/procodile", editable = true }
-#wraptile = { path = "../eozilla/wraptile", editable = true }
+appligator = { path = "../eozilla/appligator", editable = true }
+cuiman = { path = "../eozilla/cuiman", editable = true }
+gavicore = { path = "../eozilla/gavicore", editable = true }
+procodile = { path = "../eozilla/procodile", editable = true }
+wraptile = { path = "../eozilla/wraptile", editable = true }
 
 
 ########################## Tasks ###############################

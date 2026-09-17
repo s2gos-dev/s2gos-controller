@@ -5,36 +5,45 @@
 import os
 from importlib.resources import files
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
 from cuiman.api import AsyncClient, Client, ClientConfig, ClientError
-from cuiman.api.auth import login_for_tokens
+from cuiman.api.auth import AuthConfig, OAuth2AuthConfig
+from pydantic import HttpUrl
 from pydantic_settings import SettingsConfigDict
+
+_DEBUG = False
 
 
 class S2GOSConfig(ClientConfig):
+    """Configuration namespace of the S2GOS client.
+
+    This class owns the S2GOS settings schema, its field defaults, its
+    `S2GOS_` environment namespace, and its persistent profile location.
+    Importing this module therefore leaves plain `cuiman` and any other
+    `cuiman`-based application unchanged.
+    """
+
     model_config = SettingsConfigDict(
         env_prefix="S2GOS_",
+        env_nested_delimiter="__",
         env_file=".env",
-        extra="allow",  # ClientConfig uses "forbid"
+        extra="allow",  # base ClientConfig uses "forbid"
     )
 
+    default_path: ClassVar[Path] = Path("~").expanduser() / ".s2gos-client"
 
-_CONFIG_BASE = S2GOSConfig(
-    api_url="https://s2gos.wraptile.brockmann-consult.de/",
-    auth_type="login",
-    auth_url=(
-        "https://kc.dev.brockmann-consult.de/realms/dte-s2gos/protocol"
-        "/openid-connect/token"
-    ),
-    client_id="cuiman",
-    grant_type="password",
-    use_bearer=True,
-)
-_DEBUG = False
+    api_url: str | None = "https://s2gos.wraptile.brockmann-consult.de/"
 
-ClientConfig.default_path = Path("~").expanduser() / ".s2gos-client"
-ClientConfig.default_config = _CONFIG_BASE
+    auth: AuthConfig = OAuth2AuthConfig(
+        token_url=HttpUrl(
+            "https://kc.dev.brockmann-consult.de/realms/dte-s2gos/protocol"
+            "/openid-connect/token"
+        ),
+        client_id="cuiman",
+        grant_type="password",
+    )
+
 
 # Default show_app() to the S2GOS-branded GUI build bundled with this
 # package, unless the user has already set EOZILLA_APP_DIST themselves
@@ -44,31 +53,16 @@ os.environ.setdefault(
 )
 
 
-def _create_config(**config_overrides: Any) -> ClientConfig:
-    """
-    Create the S2GOS-specific configuration instance
-    from given configuration overrides.
-    """
-    config = S2GOSConfig.create(**config_overrides)
-    if config.auth_type != "login":
-        return config
-
-    # Always obtain fresh tokens: a token read from persistent configuration is
-    # likely expired, and so is its refresh token. Authentication stays of type
-    # "login", which lets the underlying transport refresh the access token
-    # after a 401 response.
-    result = login_for_tokens(config)
-    config.token = result.access_token
-    config.refresh_token = result.refresh_token
-    return config
-
-
 def create_client(**config: Any) -> Client:
     """Create a synchronous S2GOS client from given configuration.
 
-    Provided configuration values, if any, override values
-    read from persistent configuration that were previously
-    written by the CLI command `s2gos-client configure`.
+    Provided configuration values, if any, override values read from the
+    `S2GOS_` environment namespace and from the persistent configuration
+    that was previously written by the CLI command `s2gos-client configure`.
+
+    The client is not logged in on return. It authenticates with the
+    available credentials before its first request; call `client.login()`
+    explicitly when the credentials must be prompted for or refreshed.
 
     Args:
         config: Configuration overrides. See
@@ -78,15 +72,20 @@ def create_client(**config: Any) -> Client:
         An instance of a synchronous cuiman client for S2GOS. See
         https://eo-tools.github.io/eozilla/cuiman/ for details.
     """
-    return Client(config=_create_config(**config), _debug=_DEBUG)
+    return Client(config_type=S2GOSConfig, _debug=_DEBUG, **config)
 
 
 def create_async_client(**config: Any) -> AsyncClient:
     """Create an asynchronous S2GOS client from given configuration.
 
-    Provided configuration values, if any, override values
-    read from persistent configuration that were previously
-    written by the CLI command `s2gos-client configure`.
+    Provided configuration values, if any, override values read from the
+    `S2GOS_` environment namespace and from the persistent configuration
+    that was previously written by the CLI command `s2gos-client configure`.
+
+    The client is not logged in on return. It authenticates with the
+    available credentials before its first request; call `await
+    client.login()` explicitly when the credentials must be prompted for
+    or refreshed.
 
     Args:
         config: Configuration overrides. See
@@ -96,7 +95,7 @@ def create_async_client(**config: Any) -> AsyncClient:
         An instance of an asynchronous cuiman client for S2GOS. See
         https://eo-tools.github.io/eozilla/cuiman/ for details.
     """
-    return AsyncClient(config=_create_config(**config), _debug=_DEBUG)
+    return AsyncClient(config_type=S2GOSConfig, _debug=_DEBUG, **config)
 
 
 __all__ = [
@@ -104,6 +103,7 @@ __all__ = [
     "Client",
     "ClientConfig",
     "ClientError",
+    "S2GOSConfig",
     "create_client",
     "create_async_client",
 ]

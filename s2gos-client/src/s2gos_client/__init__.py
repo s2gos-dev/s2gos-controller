@@ -9,6 +9,7 @@ from .api import (
     Client,
     ClientConfig,
     ClientError,
+    S2GOSConfig,
     create_async_client,
     create_client,
 )
@@ -20,6 +21,7 @@ __all__ = [
     "Client",
     "ClientConfig",
     "ClientError",
+    "S2GOSConfig",
     "create_async_client",
     "create_client",
     "__version__",
