@@ -6,7 +6,8 @@ from pathlib import Path
 from typing import Any
 
 from cuiman.api import AsyncClient, Client, ClientConfig, ClientError
-from cuiman.api.auth import OAuth2AuthConfig
+from cuiman.api.auth import AuthConfig, OAuth2AuthConfig
+from pydantic import HttpUrl
 from pydantic_settings import SettingsConfigDict
 
 
@@ -17,19 +18,17 @@ class S2GOSConfig(ClientConfig):
         extra="allow",  # ClientConfig uses "forbid"
     )
 
+    default_path = Path("~").expanduser() / ".s2gos-client"
 
-ClientConfig.default_path = Path("~").expanduser() / ".s2gos-client"
-ClientConfig.default_config = S2GOSConfig(
-    api_url="https://s2gos.wraptile.brockmann-consult.de/",
-    auth=OAuth2AuthConfig(
-        token_url=(
+    api_url: str | None = "https://s2gos.wraptile.brockmann-consult.de/"
+    auth: AuthConfig = OAuth2AuthConfig(
+        token_url=HttpUrl(
             "https://kc.dev.brockmann-consult.de/realms/dte-s2gos/protocol"
             "/openid-connect/token"
         ),
         client_id="cuiman",
         grant_type="password",
-    ),
-)
+    )
 
 
 def create_client(**config: Any) -> Client:
@@ -47,7 +46,7 @@ def create_client(**config: Any) -> Client:
         An instance of a synchronous cuiman client for S2GOS. See
         https://eo-tools.github.io/eozilla/cuiman/ for details.
     """
-    return Client(**config)
+    return Client(config_type=S2GOSConfig, **config)
 
 
 def create_async_client(**config: Any) -> AsyncClient:
@@ -65,7 +64,7 @@ def create_async_client(**config: Any) -> AsyncClient:
         An instance of an asynchronous cuiman client for S2GOS. See
         https://eo-tools.github.io/eozilla/cuiman/ for details.
     """
-    return AsyncClient(**config)
+    return AsyncClient(config_type=S2GOSConfig, **config)
 
 
 __all__ = [
@@ -73,6 +72,7 @@ __all__ = [
     "Client",
     "ClientConfig",
     "ClientError",
+    "S2GOSConfig",
     "create_client",
     "create_async_client",
 ]
