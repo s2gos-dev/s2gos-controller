@@ -43,8 +43,8 @@ dependencies = [
   "xarray",
   "zarr",
   # Eozilla dependencies
-  "cuiman >=0.2.0.dev1",
-  "gavicore >=0.2.0.dev1",
+  "cuiman >=0.3.0.dev0",
+  "gavicore >=0.3.0.dev0",
 ]
 
 [project.scripts]

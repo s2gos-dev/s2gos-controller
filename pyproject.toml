@@ -53,7 +53,7 @@ platforms = ["linux-64", "win-64", "osx-64"]
 # Combined sub-workspace dependencies
 fastapi = "*"
 pydantic = ">=2,<3"
-pydantic-settings = ">=2.14.2,<3"
+pydantic-settings = ">=2.14,<3"
 pyyaml = "*"
 typer = ">=0.26"
 universal_pathlib = ">=0.3.8,<0.4"
@@ -102,11 +102,11 @@ apache-airflow-client = "==3.0.2"
 s2gos-client = { path = "s2gos-client", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
 # eozilla from PyPI (uncomment if eozilla from source is used)
-#appligator = ">=0.2.1.dev1"
-#cuiman = ">=0.2.1.dev1"
-#gavicore = ">=0.2.1.dev1"
-#procodile = ">=0.2.1.dev1"
-#wraptile = ">=0.2.1.dev1"
+#appligator = ">=0.3.0.dev0"
+#cuiman = ">=0.3.0.dev0"
+#gavicore = ">=0.3.0.dev0"
+#procodile = ">=0.3.0.dev0"
+#wraptile = ">=0.3.0.dev0"
 
 # eozilla from sources (uncomment if eozilla from PyPI is used)
 appligator = { path = "../eozilla/appligator", editable = true }
