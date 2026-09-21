@@ -8,10 +8,10 @@
 # Usage:
 #   ./s2gos-server/build-image.sh                    # build, tag from s2gos-server version
 #   ./s2gos-server/build-image.sh -t dev             # build with an explicit tag
-#   ./s2gos-server/build-image.sh -t 0.1.0 --push    # build and push to the registry
+#   ./s2gos-server/build-image.sh -t 0.2.0 --push    # build and push to the registry
 #
 #   # Build against a specific eozilla version:
-#   ./s2gos-server/build-image.sh --eozilla-version 0.2.0.dev1
+#   ./s2gos-server/build-image.sh --eozilla-version 0.3.0
 #
 #   # Override a single package spec (e.g. use the newest proper release):
 #   ./s2gos-server/build-image.sh --wraptile wraptile --stable
@@ -23,7 +23,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 IMAGE_REPO="${IMAGE_REPO:-quay.io/s2gos/s2gos-server}"
 IMAGE_TAG=""
 PUSH=0
-EOZILLA_VERSION="0.2.0.dev1"
+EOZILLA_VERSION="0.3.0"
 GAVICORE_SPEC=""
 PROCODILE_SPEC=""
 WRAPTILE_SPEC=""

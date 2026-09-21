@@ -12,8 +12,8 @@
 # By default the eozilla packages are pinned to the version in EOZILLA_VERSION.
 # Override it to build against another eozilla version:
 #
-#   docker build --build-arg EOZILLA_VERSION=0.2.0.dev1 \
-#     -t quay.io/s2gos/s2gos-server:0.2.0.dev1 s2gos-server/
+#   docker build --build-arg EOZILLA_VERSION=0.3.0 \
+#     -t quay.io/s2gos/s2gos-server:0.2.0 s2gos-server/
 #
 # For non-pinned resolution, override the *_SPEC args with bare names. PRE_FLAG
 # then controls whether pre-releases are considered (--pre, the default) or only
@@ -41,8 +41,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     EOZILLA_SERVER_PORT=8008 \
     EOZILLA_SERVICE="wraptile.services.airflow:service"
 
-# Eozilla version the packages are pinned to by default (a dev release).
-ARG EOZILLA_VERSION=0.2.0.dev1
+# Eozilla version the packages are pinned to by default.
+ARG EOZILLA_VERSION=0.3.0
 # Eozilla package specs. Default to the pinned EOZILLA_VERSION; override with
 # bare names ("gavicore") for non-pinned resolution, or other "name==X.Y.Z"
 # pins. An explicit "==<dev>" pin installs even without PRE_FLAG.
