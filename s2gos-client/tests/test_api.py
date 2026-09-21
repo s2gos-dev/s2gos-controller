@@ -41,7 +41,7 @@ def test_create_client_uses_s2gos_defaults(create_client):
     client_type = api.Client if create_client is api.create_client else api.AsyncClient
     assert isinstance(client, client_type)
     assert isinstance(client.config, api.S2GOSConfig)
-    assert client.config.api_url == "https://s2gos.wraptile.brockmann-consult.de/"
+    assert client.config.api_url == "https://s2gos-free.wraptile.brockmann-consult.de/"
     auth = client.config.auth
     assert isinstance(auth, OAuth2AuthConfig)
     assert str(auth.token_url) == (
