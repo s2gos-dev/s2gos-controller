@@ -2,10 +2,26 @@
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
 
-from unittest.mock import Mock, patch
+import os
 
-import s2gos_client.api
-from cuiman.api.auth import LoginResult
+import pytest
+from cuiman.api.auth import NoAuthConfig, OAuth2AuthConfig, TokenAuthConfig
+
+import s2gos_client.api as api
+
+
+@pytest.fixture(autouse=True)
+def isolated_config(monkeypatch, tmp_path):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(api.S2GOSConfig, "default_path", tmp_path / "config.yaml")
+    for name in os.environ:
+        if name.upper().startswith(("S2GOS_", "EOZILLA_")):
+            monkeypatch.delenv(name)
+
+
+@pytest.fixture(params=[api.create_client, api.create_async_client], ids=["sync", "async"])
+def create_client(request):
+    return request.param
 
 
 def test_api_exports_ok():
@@ -13,91 +29,69 @@ def test_api_exports_ok():
         "AsyncClient",
         "Client",
         "ClientConfig",
+        "ClientError",
         "create_client",
         "create_async_client",
-    }.issubset(dir(s2gos_client.api))
+    }.issubset(dir(api))
 
 
-def test_create_client():
-    config = Mock(auth_type="token")
+def test_create_client_uses_s2gos_defaults(create_client):
+    client = create_client()
 
-    with (
-        patch.object(
-            s2gos_client.api.ClientConfig, "create", return_value=config
-        ) as create_config,
-        patch.object(s2gos_client.api, "Client") as client_type,
-    ):
-        client = s2gos_client.api.create_client(api_url="https://example.test")
-
-    create_config.assert_called_once_with(api_url="https://example.test")
-    client_type.assert_called_once_with(config=config, _debug=False)
-    assert client is client_type.return_value
-
-
-def test_create_async_client():
-    config = Mock(auth_type="token")
-
-    with (
-        patch.object(
-            s2gos_client.api.ClientConfig, "create", return_value=config
-        ) as create_config,
-        patch.object(s2gos_client.api, "AsyncClient") as client_type,
-    ):
-        client = s2gos_client.api.create_async_client(api_url="https://example.test")
-
-    create_config.assert_called_once_with(api_url="https://example.test")
-    client_type.assert_called_once_with(config=config, _debug=False)
-    assert client is client_type.return_value
+    client_type = api.Client if create_client is api.create_client else api.AsyncClient
+    assert isinstance(client, client_type)
+    assert isinstance(client.config, api.S2GOSConfig)
+    assert client.config.api_url == "https://s2gos.wraptile.brockmann-consult.de/"
+    auth = client.config.auth
+    assert isinstance(auth, OAuth2AuthConfig)
+    assert str(auth.token_url) == (
+        "https://kc.dev.brockmann-consult.de/realms/dte-s2gos/protocol"
+        "/openid-connect/token"
+    )
+    assert auth.client_id == "cuiman"
+    assert auth.grant_type == "password"
 
 
-def test_create_config_logs_in_and_retains_refresh_token():
-    config = Mock(auth_type="login", token=None)
-    login_result = LoginResult(
-        access_token="access-token",
-        refresh_token="refresh-token",
+def test_create_client_accepts_auth_override(create_client):
+    client = create_client(
+        api_url="https://example.test/",
+        auth={"auth_type": "token", "access_token": "test-token"},
     )
 
-    with (
-        patch.object(
-            s2gos_client.api.ClientConfig, "create", return_value=config
-        ) as create_config,
-        patch.object(
-            s2gos_client.api, "login_for_tokens", return_value=login_result
-        ) as login,
-    ):
-        created_config = s2gos_client.api._create_config(api_url="https://example.test")
-
-    create_config.assert_called_once_with(api_url="https://example.test")
-    login.assert_called_once_with(config)
-    assert created_config is config
-    assert config.auth_type == "login"
-    assert config.token == "access-token"
-    assert config.refresh_token == "refresh-token"
+    assert client.config.api_url == "https://example.test/"
+    assert isinstance(client.config.auth, TokenAuthConfig)
+    assert client.config.auth.access_token == "test-token"
 
 
-def test_create_config_replaces_persisted_login_token():
-    config = Mock(
-        auth_type="login",
-        token="old-access-token",
-        refresh_token="old-refresh-token",
-    )
-    login_result = LoginResult(
-        access_token="access-token",
-        refresh_token="refresh-token",
+def test_create_client_overrides_persisted_settings(create_client, tmp_path):
+    config_path = tmp_path / "profile.yaml"
+    config_path.write_text(
+        "api_url: https://saved.test/\nauth:\n  auth_type: none\n",
+        encoding="utf-8",
     )
 
-    with (
-        patch.object(
-            s2gos_client.api.ClientConfig, "create", return_value=config
-        ) as create_config,
-        patch.object(
-            s2gos_client.api, "login_for_tokens", return_value=login_result
-        ) as login,
-    ):
-        created_config = s2gos_client.api._create_config(api_url="https://example.test")
+    saved = create_client(config_path=str(config_path))
+    overridden = create_client(
+        config_path=str(config_path), api_url="https://override.test/"
+    )
 
-    create_config.assert_called_once_with(api_url="https://example.test")
-    login.assert_called_once_with(config)
-    assert created_config is config
-    assert config.token == "access-token"
-    assert config.refresh_token == "refresh-token"
+    assert saved.config.api_url == "https://saved.test/"
+    assert overridden.config.api_url == "https://override.test/"
+    assert isinstance(overridden.config.auth, NoAuthConfig)
+
+
+def test_create_client_uses_s2gos_environment(create_client, monkeypatch):
+    monkeypatch.setenv("S2GOS_API_URL", "https://s2gos-env.test/")
+    monkeypatch.setenv("EOZILLA_API_URL", "https://eozilla-env.test/")
+
+    assert create_client().config.api_url == "https://s2gos-env.test/"
+    assert create_client(api_url="https://explicit.test/").config.api_url == (
+        "https://explicit.test/"
+    )
+
+
+def test_client_auth_defaults_are_independent(create_client):
+    first = create_client()
+    first.config.auth.client_id = "changed"
+
+    assert create_client().config.auth.client_id == "cuiman"

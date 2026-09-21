@@ -1,5 +1,6 @@
 ## Changes in version 0.2.0
 
+- Updated `s2gos-client` to use latest Cuiman configuration API.
 - `client.show_app()` now defaults to an S2GOS-branded GUI build (bundled
   under `s2gos_client/app/dist`) instead of the generic Eozilla one, via an
   `EOZILLA_APP_DIST` default set on import. Setting `EOZILLA_APP_DIST`
