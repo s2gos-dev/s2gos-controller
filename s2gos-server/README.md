@@ -73,7 +73,7 @@ be passed after `--`:
 
 ```commandline
 docker run --rm -p 8008:8008 \
-    quay.io/s2gos/s2gos-server:0.2.0.dev1 \
+    quay.io/s2gos/s2gos-server:0.2.0 \
     s2gos-server run -- wraptile.services.airflow:service \
       --airflow-base-url=https://airflow.your-domain.example \
       --airflow-username=admin \
@@ -86,7 +86,7 @@ environment variable and run the default command:
 ```commandline
 docker run --rm -p 8008:8008 \
     -e EOZILLA_SERVICE="wraptile.services.airflow:service --airflow-base-url=https://airflow.your-domain.example --airflow-username=admin --airflow-password=${AIRFLOW_PASSWORD}" \
-    quay.io/s2gos/s2gos-server:0.2.0.dev1
+    quay.io/s2gos/s2gos-server:0.2.0
 ```
 
 Once running, `GET http://localhost:8008/processes` lists the DAGs exposed by
