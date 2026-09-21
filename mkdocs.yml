@@ -6,15 +6,29 @@ site_name: ESA DTE-S2GOS Controller
 repo_url: https://github.com/s2gos-dev/s2gos-controller
 repo_name: s2gos-dev/s2gos-controller
 
+# Copies left by older builds must never be published (including local configs).
+exclude_docs: |
+  /notebooks/
+
+validation:
+  nav:
+    omitted_files: warn
+  links:
+    unrecognized_links: warn
+    anchors: warn
+
 copyright: Copyright &copy; 2025-2026 ESA DTE-S2GOS Team
 
 nav:
   - What is it?: index.md
   - Installation: installation.md
   - User Guide:
-    - notebooks/client-api.ipynb
-    - notebooks/client-gui.ipynb
-    - notebooks/client-cli.ipynb
+    - Getting Started: guide/index.md
+    - Configuration and Authentication: auth.md
+    - Python API: guide/client-api.md
+    - App: guide/client-gui.md
+    - Command Line: guide/client-cli.md
+    - Working with Results: guide/results.md
   - References:
     - Client API Reference: client-api.md
     - Client CLI Reference: client-cli.md
@@ -22,6 +36,7 @@ nav:
     - Execution Requests: execution-requests.md
   - Development:
     - Contributing: contributing.md
+    - Deployment: deployment.md
     - Roadmap: roadmap.md
 
 theme:
@@ -62,7 +77,12 @@ markdown_extensions:
   - tables
   - admonition
   - pymdownx.details
-  # - pymdownx.highlight
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.snippets:
+      base_path: ["."]
+      check_paths: true
+      dedent_subsections: true
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
@@ -79,7 +99,6 @@ extra:
 plugins:
   - search
   - autorefs
-  - mkdocs-jupyter
   - mkdocstrings:
       handlers:
         python:
@@ -108,6 +127,3 @@ plugins:
             #      schema: true
 extra_css:
   - overrides/css/custom.css
-
-hooks:
-  - docs/hooks/notebooks_json_output.py

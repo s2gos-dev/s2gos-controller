@@ -1,5 +1,11 @@
 ## Changes in version 0.2.0
 
+- Replaced notebook-generated user guides with maintained Markdown walkthroughs
+  for setup, authentication, the Python API, App, CLI, and result access. Reusable
+  examples are checked alongside the client. Documentation builds run in strict
+  mode, including in CI, and no longer copy or render notebooks. Original
+  notebooks remain available for independent exploration.
+
 - Updated `s2gos-client` to use latest Cuiman configuration API.
 - `client.show_app()` now defaults to an S2GOS-branded GUI build (bundled
   under `s2gos_client/app/dist`) instead of the generic Eozilla one, via an

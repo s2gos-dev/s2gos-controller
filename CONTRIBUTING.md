@@ -32,6 +32,16 @@ checklist are addressed in your PR.
   please adjust it and include the change in the PR.
   Run `mkdocs serve` to verify. 
 
+## User-guide examples
+
+Maintain walkthroughs in `docs/guide/` and reusable examples in `examples/guides/`.
+Use named `pymdownx.snippets` sections to include code in Markdown. Original
+notebooks are for exploration and are not documentation build inputs.
+Run `pixi run checks`, `pixi run tests`, and `pixi run doc-build` after updating
+examples, and preview the rendered pages with `pixi run doc-serve`.
+See [documentation maintenance](docs/contributing.md#maintain-the-user-guide)
+for snippet conventions and screenshot provenance.
+
 ## Code style
 
 The code style of the S2GOS client equals the default settings 
