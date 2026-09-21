@@ -20,7 +20,7 @@ class S2GOSConfig(ClientConfig):
 
     default_path = Path("~").expanduser() / ".s2gos-client"
 
-    api_url: str | None = "https://s2gos.wraptile.brockmann-consult.de/"
+    api_url: str | None = "https://s2gos-free.wraptile.brockmann-consult.de/"
     auth: AuthConfig = OAuth2AuthConfig(
         token_url=HttpUrl(
             "https://kc.dev.brockmann-consult.de/realms/dte-s2gos/protocol"
