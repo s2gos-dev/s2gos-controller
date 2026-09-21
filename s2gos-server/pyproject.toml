@@ -39,9 +39,9 @@ classifiers = [
 requires-python = ">=3.11"
 dependencies = [
   # Eozilla dependencies
-  "gavicore >=0.3.0.dev0",
-  "procodile >=0.3.0.dev0",
-  "wraptile >=0.3.0.dev0",
+  "gavicore >=0.3.0",
+  "procodile >=0.3.0",
+  "wraptile >=0.3.0",
   # Other
   "universal_pathlib >=0.3.8,<0.4",
 ]
