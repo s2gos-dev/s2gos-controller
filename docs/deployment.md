@@ -63,7 +63,7 @@ script, which wraps `docker build` and pins the eozilla packages (`gavicore`,
 ./s2gos-server/build-image.sh -t 0.2.0 --push
 
 # Build against a specific eozilla version:
-./s2gos-server/build-image.sh --eozilla-version 0.2.0.dev1
+./s2gos-server/build-image.sh --eozilla-version 0.3.0
 ```
 
 The image repository defaults to `quay.io/s2gos/s2gos-server`; override it with

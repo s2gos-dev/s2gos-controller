@@ -1,6 +1,6 @@
 [project]
 name = "s2gos-controller"
-version = "0.2.0.dev1"
+version = "0.2.0"
 description = "S2GOS control layer comprising a gateway server and client"
 requires-python = ">=3.11"
 
@@ -106,7 +106,7 @@ s2gos-client = { path = "s2gos-client", editable = true }
 s2gos-server = { path = "s2gos-server", editable = true }
 # eozilla from PyPI (uncomment if eozilla from source is used)
 appligator = ">=0.3.0"
-cuiman = ">=0.3.0"
+cuiman = ">=0.3.1"
 gavicore = ">=0.3.0"
 procodile = ">=0.3.0"
 wraptile = ">=0.3.0"
