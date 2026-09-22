@@ -3,7 +3,7 @@
 #  https://opensource.org/license/apache-2-0.
 
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
 from cuiman.api import AsyncClient, Client, ClientConfig, ClientError
 from cuiman.api.auth import AuthConfig, OAuth2AuthConfig
@@ -17,6 +17,9 @@ class S2GOSConfig(ClientConfig):
         env_file=".env",
         extra="allow",  # ClientConfig uses "forbid"
     )
+
+    display_name: ClassVar[str] = "S2GOS Client"
+    cli_name: ClassVar[str] = "s2gos-client"
 
     default_path = Path("~").expanduser() / ".s2gos-client"
 
