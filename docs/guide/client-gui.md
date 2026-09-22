@@ -29,6 +29,14 @@ request forms and stop the local App server later:
 client, app = open_app(display="browser")
 ```
 
+For the local testing service used above you should now see a UI like this:
+
+![show-app-1.png](../assets/show-app-1.png)
+
+And using the S2GOS free tier demo service:
+
+![show-app-2.png](../assets/show-app-2.png)
+
 In a notebook, use `open_app(display="notebook")` or just `open_app()` instead. 
 The `height` setting controls the embedded display height. Keep the notebook 
 kernel or Python process alive while using the App. For a standalone browser 
