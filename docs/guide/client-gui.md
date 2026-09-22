@@ -29,10 +29,10 @@ request forms and stop the local App server later:
 client, app = open_app(display="browser")
 ```
 
-In a notebook, use `open_app(display="notebook")` instead. The `height` setting
-controls the embedded display height. Keep the notebook kernel or Python process
-alive while using the App. For a standalone browser session, run
-`python -m examples.guides.app`; it remains active until Ctrl+C.
+In a notebook, use `open_app(display="notebook")` or just `open_app()` instead. 
+The `height` setting controls the embedded display height. Keep the notebook 
+kernel or Python process alive while using the App. For a standalone browser 
+session, run `python -m examples.guides.app`; it remains active until Ctrl+C.
 
 For S2GOS, adapt the helper to use `create_client()` with your configured profile
 or `create_client(config_path="s2gos-client.yaml")`. The client uses Cuiman's App

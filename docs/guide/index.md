@@ -12,14 +12,34 @@ Use the same service configuration and user account when moving between them.
 
 ## Choose an interface
 
-| You want to… | Start here |
-| --- | --- |
-| Explore processes and fill in input forms | [App](client-gui.md) |
-| Repeat requests from a terminal or script | [Command line](client-cli.md) |
-| Integrate processing with a scientific workflow | [Python API](client-api.md) |
-| Read a job's dataset or troubleshoot storage access | [Working with results](results.md) |
+| You want to…                                         | Start here |
+|------------------------------------------------------| --- |
+| Explore processes and use a graphical user interface | [App](client-gui.md) |
+| Repeat requests from a terminal or script            | [Command line](client-cli.md) |
+| Integrate processing with a scientific workflow      | [Python API](client-api.md) |
+| Read a job's dataset or troubleshoot storage access  | [Working with results](results.md) |
 
-## Run the examples locally
+## Connect to S2GOS
+
+To work with the remote S2GOS service, you need its API URL, access to the service,
+and the authentication details supplied by its operator. Follow
+[Configuration and authentication](../auth.md) to configure and log in. 
+
+By default, the S2GOS client is configured to use a free tier demo service 
+on [DestinE](https://platform.destine.eu/).
+
+For a scene-generation workflow, carefully inspect its process description, 
+prepare the required scene inputs and output locations, submit once, then monitor 
+the returned job ID. Storage access may require additional credentials; see
+[Working with results](results.md#access-data-from-a-hosted-service).
+
+## Testing the client locally
+
+!!! note
+
+    This section will be rewritten to work with the 
+    [`s2gos-mono`](https://github.com/s2gos-dev/s2gos-mono) 
+    repo. 
 
 Follow [Installation](../installation.md#using-github) to create the development
 environment. Open two terminals in the repository root and run `pixi shell` in
@@ -62,20 +82,6 @@ checks its status once, and closes the client. Follow the
 [Python walkthrough](client-api.md) to understand each step or the
 [CLI walkthrough](client-cli.md) to perform it from the terminal.
 
-## Connect to S2GOS
-
-To work with a deployed S2GOS service, you need its API URL, access to the service,
-and the authentication details supplied by its operator. Follow
-[Configuration and authentication](../auth.md) to configure and log in. You do
-not need to start a local server when using a hosted service.
-
-Discover that deployment's processes before adapting a tutorial request. Test
-process IDs and input names are not guaranteed to exist in S2GOS deployments.
-For a scene-generation workflow, inspect its process description, prepare the
-required scene inputs and output locations, submit once, then monitor the returned
-job ID. Storage access may require additional credentials; see
-[Working with results](results.md#access-data-from-a-hosted-service).
-
 ## Understand the job lifecycle
 
 | Status | Meaning | Next step |
@@ -102,6 +108,5 @@ your experiment so you can return to it later.
 | A process or job is not found | Check the service URL, account, and ID. A job ID belongs to the service that created it. |
 | Old job IDs stop working after restarting the test server | The local test service is for experimentation; do not rely on it for durable job history. |
 
-The original [notebooks](https://github.com/s2gos-dev/s2gos-controller/tree/main/notebooks)
-remain available for exploration. These Markdown guides are the maintained
-walkthroughs; the documentation build does not execute or publish notebook copies.
+We also provide example [notebooks](https://github.com/s2gos-dev/s2gos-controller/tree/main/notebooks) 
+available for exploration. 

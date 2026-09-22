@@ -2,8 +2,20 @@
 
 ## Using pip
 
-The S2GOS controller packages are not yet deployed on PyPI, therefore
-installing it as a package using `pip` is not yet available. 
+The S2GOS controller packages can be installed from PyPI using `pip` into an existing
+Python environment with Python >= 3.11. 
+
+To install the S2GOS client
+
+```bash
+pip install s2gos-client
+```
+
+and to install the S2GOS server (e.g., for local testing)
+
+```bash
+pip install s2gos-server
+```
 
 ## Using conda/mamba 
 
@@ -12,20 +24,20 @@ installing it using as a conda package using `conda` or `mamba` is not yet avail
 
 ## Using pixi
 
-The S2GOS controller packages are not yet deployed on conda-forge, therefore
-installing it as a conda package using `pixi` is not yet available. 
+Since the S2GOS controller packages are not yet deployed on conda-forge, 
+use `pixi add --pypi s2gos-{client|server}` to add them to an existing 
+[pixi](https://pixi.prefix.dev/latest/) project.
 
 ## Using GitHub
 
 To install the S2GOS controller packages from their sources on GitHub you'll 
-need to install both [git](https://git-scm.com/install/) and 
-[pixi](https://pixi.sh/latest/installation/) first. Then:
+need to both [install git](https://git-scm.com/install/) and 
+[install pixi](https://pixi.sh/latest/installation/) first. Then:
 
 ```bash
 git clone https://github.com/s2gos-dev/s2gos-controller.git
 cd s2gos-controller
 pixi install
-pixi shell
 ```
 
 The environment includes both controller packages, JupyterLab, and the
@@ -39,12 +51,13 @@ App, command line, authentication, and result access.
 
 The original notebooks remain in the repository for independent exploration;
 the maintained walkthroughs and reusable examples are in the user guide.
+
 ## Development
 
 Install the S2GOS controller packages as described in 
 [Installation / Using GitHub](#using-github) above.
 
-## Linting and Testing
+## Code Checking and Testing
 
 To run all checks, execute
 
@@ -69,12 +82,15 @@ pixi run coverage
 The S2GOS controller code relies heavily on the 
 [Eozilla](https://eo-tools.github.io/eozilla/) packages 
 
-* [wraptile](https://github.com/eo-tools/eozilla/tree/main/wraptile),
-  which provides the gateway server implementation, 
-* [cuiman](https://github.com/eo-tools/eozilla/tree/main/cuiman),
+* `s2gos-client` is a branded version of 
+  [cuiman](https://github.com/eo-tools/eozilla/tree/main/cuiman),
   which provides the client CLI, GUI, and API implementations, and 
+* `s2gos-server` is a branded version of
+  [wraptile](https://github.com/eo-tools/eozilla/tree/main/wraptile),
+  which provides the gateway server implementation, 
 * [gavicore](https://github.com/eo-tools/eozilla/tree/main/gavicore)
-  which provides common OGC model classes and basic utilities.  
+  which provides common OGC model classes and basic utilities for 
+  Eozilla packages.  
 
 Should S2GOS controller require non-S2GOS-specific enhancements it 
 would likely be best to implement the required changes in the respective 
