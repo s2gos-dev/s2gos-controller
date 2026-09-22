@@ -12,14 +12,14 @@
         <link rel="prev" href="../client-api/">
       
       
-        <link rel="next" href="../execution-requests/">
+        <link rel="next" href="../server-cli/">
       
       
         
       
       
       <link rel="icon" href="../assets/logo.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#client-cli-reference" class="md-skip">
+        <a href="#s2gos-client-cli" class="md-skip">
           Skip to content
         </a>
       
@@ -272,7 +272,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../notebooks/client-api/" class="md-tabs__link">
+        <a href="../guide/" class="md-tabs__link">
           
   
   
@@ -440,6 +440,12 @@
     
       
         
+          
+        
+      
+        
+      
+        
       
         
       
@@ -463,8 +469,9 @@
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
-            
+          <div class="md-nav__link md-nav__container">
+            <a href="../guide/" class="md-nav__link ">
+              
   
   
   <span class="md-ellipsis">
@@ -478,8 +485,14 @@
   
   
 
-            <span class="md-nav__icon md-icon"></span>
-          </label>
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
@@ -493,20 +506,22 @@
           <ul class="md-nav__list" data-md-scrollfix>
             
               
+            
+              
                 
   
   
   
   
     <li class="md-nav__item">
-      <a href="../notebooks/client-api/" class="md-nav__link">
+      <a href="../auth/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Client API
+    Configuration and Authentication
   
 
     
@@ -527,14 +542,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../notebooks/client-api-airflow/" class="md-nav__link">
+      <a href="../guide/client-api/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Client API with Airflow
+    Python API
   
 
     
@@ -555,14 +570,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../notebooks/client-gui/" class="md-nav__link">
+      <a href="../guide/client-gui/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Client GUI
+    App
   
 
     
@@ -583,14 +598,42 @@
   
   
     <li class="md-nav__item">
-      <a href="../notebooks/client-cli/" class="md-nav__link">
+      <a href="../guide/client-cli/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Client CLI
+    Command Line
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with Results
   
 
     
@@ -621,6 +664,8 @@
   
     
     
+      
+        
       
         
       
@@ -782,6 +827,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#s2gos-client-login" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        s2gos-client login
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s2gos-client-logout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        s2gos-client logout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s2gos-client-generate-client" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        s2gos-client generate-client
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#s2gos-client-list-processes" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -880,10 +958,49 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#s2gos-client-show-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        s2gos-client show-app
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../server-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Server CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -932,6 +1049,8 @@
   
     
     
+      
+        
       
         
       
@@ -997,6 +1116,34 @@
     
   
     Contributing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
   
 
     
@@ -1083,6 +1230,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#s2gos-client-login" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        s2gos-client login
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s2gos-client-logout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        s2gos-client logout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s2gos-client-generate-client" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        s2gos-client generate-client
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#s2gos-client-list-processes" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1181,6 +1361,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#s2gos-client-show-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        s2gos-client show-app
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1201,26 +1392,27 @@
   
 
 
-<h1 id="client-cli-reference">Client CLI Reference</h1>
-<p><code>s2gos-client</code> is the client shell tool for the S2GOS service.</p>
-<p>The tool can be used to get the available processes, get process details,
-execute processes, and manage the jobs originating from the latter. 
-It herewith resembles the functionality of the OGC API Processes - Part 1.</p>
+<h1 id="s2gos-client-cli">S2GOS Client CLI</h1>
+<p>Interact with the ESA DTE S2GOS processing service.</p>
+<p><code>s2gos-client</code> can be used to get the available processes, get process 
+details, execute processes, and manage the jobs originating from the latter. It 
+herewith resembles the core functionality of the OGC API - Processes, Part 1.
+For details see https://ogcapi.ogc.org/processes/.</p>
 <p>You can use shorter command name aliases, e.g., use command name <code>vr</code>
 for <code>validate-request</code>, or <code>lp</code> for <code>list-processes</code>.</p>
-<p>The tool&#x27;s exit codes are as follows:</p>
+<p>The tool's exit codes are as follows:</p>
 <ul>
 <li><code>0</code> - normal exit</li>
 <li><code>1</code> - user errors, argument errors</li>
 <li><code>2</code> - remote API errors </li>
 <li><code>3</code> - local network transport errors</li>
 </ul>
-<p>If the --traceback flag is set, the original Python exception traceback
+<p>If the <code>--traceback</code> flag is set, the original Python exception traceback
 will be shown and the exit code will always be <code>1</code>. 
-Otherwise, only the error message is shown.</p>
+Otherwise, only the error message is shown. </p>
 <p><strong>Usage</strong>:</p>
-<pre><code class="language-console">$ s2gos-client [OPTIONS] COMMAND [ARGS]...
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>ARGS<span class="o">]</span>...
+</code></pre></div>
 <p><strong>Options</strong>:</p>
 <ul>
 <li><code>--version</code>: Show version and exit.</li>
@@ -1232,6 +1424,9 @@ Otherwise, only the error message is shown.</p>
 <p><strong>Commands</strong>:</p>
 <ul>
 <li><code>configure</code>: Configure the client tool.</li>
+<li><code>login</code>: Reuse or obtain credentials and save them...</li>
+<li><code>logout</code>: Remove the locally stored credentials for...</li>
+<li><code>generate-client</code>: Generate the Python code for...</li>
 <li><code>list-processes</code>: List available processes.</li>
 <li><code>get-process</code>: Get process details.</li>
 <li><code>create-request</code>: Create an execution request (template) for...</li>
@@ -1241,25 +1436,76 @@ Otherwise, only the error message is shown.</p>
 <li><code>get-job</code>: Get job details.</li>
 <li><code>dismiss-job</code>: Cancel a running or delete a finished job.</li>
 <li><code>get-job-results</code>: Get job results.</li>
+<li><code>show-app</code>: Show the client app in a browser.</li>
 </ul>
 <h2 id="s2gos-client-configure"><code>s2gos-client configure</code></h2>
 <p>Configure the client tool.</p>
+<p>Prompts require an interactive terminal. In notebook shell commands or
+other noninteractive environments, supply all configuration options.</p>
 <p><strong>Usage</strong>:</p>
-<pre><code class="language-console">$ s2gos-client configure [OPTIONS]
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>configure<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
 <p><strong>Options</strong>:</p>
 <ul>
-<li><code>-u, --user TEXT</code>: Your user name.</li>
-<li><code>-t, --token TEXT</code>: Your personal access token.</li>
-<li><code>-s, --server TEXT</code>: The S2GOS service API URL.</li>
+<li><code>--api-url TEXT</code>: The URL of a service complying to the OGC API - Processes.</li>
+<li><code>-a, --auth-type TEXT</code>: The authorisation method for the API (none|basic|token|login|oauth2|oidc|api-key).</li>
+<li><code>--login-url TEXT</code>: The proprietary login endpoint URL.</li>
+<li><code>--token-url TEXT</code>: The OAuth2 token endpoint URL.</li>
+<li><code>--grant-type TEXT</code>: The OAuth2 grant type (password|client_credentials).</li>
+<li><code>--client-id TEXT</code>: OAuth2 or OIDC client ID.</li>
+<li><code>--issuer-url TEXT</code>: The OpenID Connect issuer URL.</li>
+<li><code>--scope TEXT</code>: An OpenID Connect resource scope; repeat for multiple scopes.</li>
+<li><code>--access-token-header TEXT</code>: Custom header for static/proprietary tokens; empty means Bearer.</li>
+<li><code>--api-key-header TEXT</code>: Header used for API-key authentication.</li>
+<li><code>-c, --config PATH</code>: Client configuration file.</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="s2gos-client-login"><code>s2gos-client login</code></h2>
+<p>Reuse or obtain credentials and save them in the OS keyring.</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>login<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>-c, --config PATH</code>: Client configuration file.</li>
+<li><code>--no-browser</code>: Print the OIDC authorization URL instead of opening a browser.</li>
+<li><code>--force</code>: Sign in again, allowing credential prompts.</li>
+<li><code>--no-input</code>: Never prompt or open a browser; use supplied credentials.</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="s2gos-client-logout"><code>s2gos-client logout</code></h2>
+<p>Remove the locally stored credentials for this configuration.</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span><span class="nb">logout</span><span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>-c, --config PATH</code>: Client configuration file.</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="s2gos-client-generate-client"><code>s2gos-client generate-client</code></h2>
+<p>Generate the Python code for service-specific, higher-level client functions.</p>
+<p>The command generates classes for both sync and async clients, which
+have methods that directly represent the processes of the currently configured
+processing service.</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>generate-client<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>NAME
+</code></pre></div>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>NAME</code>: Service name used for generated module and class names.  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>-o, --output-dir TEXT</code>: Directory where generated modules will be written.  [default: .]</li>
 <li><code>-c, --config PATH</code>: Client configuration file.</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 <h2 id="s2gos-client-list-processes"><code>s2gos-client list-processes</code></h2>
 <p>List available processes.</p>
 <p><strong>Usage</strong>:</p>
-<pre><code class="language-console">$ s2gos-client list-processes [OPTIONS]
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>list-processes<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
 <p><strong>Options</strong>:</p>
 <ul>
 <li><code>-c, --config PATH</code>: Client configuration file.</li>
@@ -1269,8 +1515,8 @@ Otherwise, only the error message is shown.</p>
 <h2 id="s2gos-client-get-process"><code>s2gos-client get-process</code></h2>
 <p>Get process details.</p>
 <p><strong>Usage</strong>:</p>
-<pre><code class="language-console">$ s2gos-client get-process [OPTIONS] PROCESS_ID
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>get-process<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>PROCESS_ID
+</code></pre></div>
 <p><strong>Arguments</strong>:</p>
 <ul>
 <li><code>PROCESS_ID</code>: Process identifier.  [required]</li>
@@ -1288,8 +1534,8 @@ Note that they might not necessarily be valid.
 The generated template request may serve as a starting point for the actual,
 valid execution request.</p>
 <p><strong>Usage</strong>:</p>
-<pre><code class="language-console">$ s2gos-client create-request [OPTIONS] [PROCESS_ID]
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>create-request<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>PROCESS_ID<span class="o">]</span>
+</code></pre></div>
 <p><strong>Arguments</strong>:</p>
 <ul>
 <li><code>[PROCESS_ID]</code>: Process identifier.</li>
@@ -1309,8 +1555,8 @@ with zero, one, or more <code>--input</code> (or <code>-i</code>) options.</p>
 <p>The <code>process_id</code> argument and any given <code>--input</code> options will override
 settings with the same name found in the given request file or <code>stdin</code>, if any.</p>
 <p><strong>Usage</strong>:</p>
-<pre><code class="language-console">$ s2gos-client validate-request [OPTIONS] [PROCESS_ID]
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>validate-request<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>PROCESS_ID<span class="o">]</span>
+</code></pre></div>
 <p><strong>Arguments</strong>:</p>
 <ul>
 <li><code>[PROCESS_ID]</code>: Process identifier.</li>
@@ -1319,7 +1565,7 @@ settings with the same name found in the given request file or <code>stdin</code
 <ul>
 <li><code>-d, --dotpath</code>: Input names use dot-path notion to encode nested values, e.g., <code>-i scene.colors.bg=red</code>.</li>
 <li><code>-i, --input [NAME=VALUE]...</code>: Process input value.</li>
-<li><code>-r, --request PATH</code>: Execution request file. Use <code>-</code> to read from &lt;stdin&gt;.</li>
+<li><code>-r, --request PATH</code>: Execution request file. Use <code>-</code> to read from <stdin>.</li>
 <li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
@@ -1331,8 +1577,8 @@ with zero, one, or more <code>--input</code> (or <code>-i</code>) options.</p>
 <p>The <code>process_id</code> argument and any given <code>--input</code> options will override
 settings with same name found in the given request file or <code>stdin</code>, if any.</p>
 <p><strong>Usage</strong>:</p>
-<pre><code class="language-console">$ s2gos-client execute-process [OPTIONS] [PROCESS_ID]
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>execute-process<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>PROCESS_ID<span class="o">]</span>
+</code></pre></div>
 <p><strong>Arguments</strong>:</p>
 <ul>
 <li><code>[PROCESS_ID]</code>: Process identifier.</li>
@@ -1342,7 +1588,7 @@ settings with same name found in the given request file or <code>stdin</code>, i
 <li><code>-d, --dotpath</code>: Input names use dot-path notion to encode nested values, e.g., <code>-i scene.colors.bg=red</code>.</li>
 <li><code>-i, --input [NAME=VALUE]...</code>: Process input value.</li>
 <li><code>-s, --subscriber [NAME=URL]...</code>: Process subscriber URL.</li>
-<li><code>-r, --request PATH</code>: Execution request file. Use <code>-</code> to read from &lt;stdin&gt;.</li>
+<li><code>-r, --request PATH</code>: Execution request file. Use <code>-</code> to read from <stdin>.</li>
 <li><code>-c, --config PATH</code>: Client configuration file.</li>
 <li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
 <li><code>--help</code>: Show this message and exit.</li>
@@ -1350,8 +1596,8 @@ settings with same name found in the given request file or <code>stdin</code>, i
 <h2 id="s2gos-client-list-jobs"><code>s2gos-client list-jobs</code></h2>
 <p>List all jobs.</p>
 <p><strong>Usage</strong>:</p>
-<pre><code class="language-console">$ s2gos-client list-jobs [OPTIONS]
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>list-jobs<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
 <p><strong>Options</strong>:</p>
 <ul>
 <li><code>-c, --config PATH</code>: Client configuration file.</li>
@@ -1361,8 +1607,8 @@ settings with same name found in the given request file or <code>stdin</code>, i
 <h2 id="s2gos-client-get-job"><code>s2gos-client get-job</code></h2>
 <p>Get job details.</p>
 <p><strong>Usage</strong>:</p>
-<pre><code class="language-console">$ s2gos-client get-job [OPTIONS] JOB_ID
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>get-job<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>JOB_ID
+</code></pre></div>
 <p><strong>Arguments</strong>:</p>
 <ul>
 <li><code>JOB_ID</code>: Job identifier.  [required]</li>
@@ -1376,8 +1622,8 @@ settings with same name found in the given request file or <code>stdin</code>, i
 <h2 id="s2gos-client-dismiss-job"><code>s2gos-client dismiss-job</code></h2>
 <p>Cancel a running or delete a finished job.</p>
 <p><strong>Usage</strong>:</p>
-<pre><code class="language-console">$ s2gos-client dismiss-job [OPTIONS] JOB_ID
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>dismiss-job<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>JOB_ID
+</code></pre></div>
 <p><strong>Arguments</strong>:</p>
 <ul>
 <li><code>JOB_ID</code>: Job identifier.  [required]</li>
@@ -1391,8 +1637,8 @@ settings with same name found in the given request file or <code>stdin</code>, i
 <h2 id="s2gos-client-get-job-results"><code>s2gos-client get-job-results</code></h2>
 <p>Get job results.</p>
 <p><strong>Usage</strong>:</p>
-<pre><code class="language-console">$ s2gos-client get-job-results [OPTIONS] JOB_ID
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>get-job-results<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>JOB_ID
+</code></pre></div>
 <p><strong>Arguments</strong>:</p>
 <ul>
 <li><code>JOB_ID</code>: Job identifier.  [required]</li>
@@ -1401,6 +1647,17 @@ settings with same name found in the given request file or <code>stdin</code>, i
 <ul>
 <li><code>-c, --config PATH</code>: Client configuration file.</li>
 <li><code>-f, --format [simple|json|yaml]</code>: Output format.  [default: yaml]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="s2gos-client-show-app"><code>s2gos-client show-app</code></h2>
+<p>Show the client app in a browser.</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-client<span class="w"> </span>show-app<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</code></pre></div>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>-c, --config PATH</code>: Client configuration file.</li>
+<li><code>-d, --debug</code>: Output debugging information to the browser's dev console.</li>
 <li><code>--help</code>: Show this message and exit.</li>
 </ul>
 
@@ -1503,7 +1760,7 @@ settings with same name found in the given request file or <code>stdin</code>, i
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.top", "navigation.tabs", "navigation.sections", "navigation.indexes", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

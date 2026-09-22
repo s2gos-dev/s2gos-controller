@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../contributing/">
+        <link rel="prev" href="../client-cli/">
       
       
-        <link rel="next" href="../roadmap/">
+        <link rel="next" href="../execution-requests/">
       
       
         
@@ -23,7 +23,7 @@
     
     
       
-        <title>Deployment - ESA DTE-S2GOS Controller</title>
+        <title>Server CLI Reference - ESA DTE-S2GOS Controller</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#devops-tools-high-level-overview" class="md-skip">
+        <a href="#s2gos-server-cli" class="md-skip">
           Skip to content
         </a>
       
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Deployment
+              Server CLI Reference
             
           </span>
         </div>
@@ -290,10 +290,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../client-api/" class="md-tabs__link">
           
   
@@ -312,12 +314,10 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../contributing/" class="md-tabs__link">
           
   
@@ -658,8 +658,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -675,19 +677,22 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
             
   
   
@@ -705,7 +710,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -776,10 +781,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../server-cli/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Server CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -795,6 +827,48 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#s2gos-server-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        s2gos-server run
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s2gos-server-dev" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        s2gos-server dev
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -839,10 +913,8 @@
       
   
   
-    
   
   
-  
     
     
       
@@ -856,22 +928,19 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
             
   
   
@@ -889,7 +958,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -932,37 +1001,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Deployment
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
         
   
   
@@ -978,37 +1020,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#building-the-server-image" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Building the server image
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1076,10 +1087,21 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#building-the-server-image" class="md-nav__link">
+  <a href="#s2gos-server-run" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Building the server image
+        s2gos-server run
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s2gos-server-dev" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        s2gos-server dev
       
     </span>
   </a>
@@ -1106,85 +1128,59 @@
   
 
 
-<h1 id="devops-tools-high-level-overview">DevOps Tools – High-Level Overview</h1>
-<p><img alt="Deployment" src="../assets/deployment.png" /></p>
-<p>To deliver and operate the S2GOS service efficiently, we apply modern DevOps practices.
-These ensure that software is built, tested, and deployed in a reliable, repeatable, 
-and secure way. The main tools can be grouped as follows: </p>
-<ol>
-<li>
-<p><strong>Infrastructure &amp; Deployment</strong> </p>
-</li>
-<li>
-<p><code>Kubernetes</code> – the platform on which all services run. It allows applications 
-   to scale automatically, restart when needed, and be isolated for reliability. </p>
-</li>
-<li>
-<p><code>Helm</code> – a package manager for Kubernetes. It makes deploying complex applications 
-much simpler and ensures they can be installed the same way across different 
-environments. </p>
-</li>
-<li>
-<p><code>Terraform</code> – used to set up the underlying cloud resources (servers, storage, 
-networks). It guarantees that infrastructure is defined in code, so it can be 
-  reproduced, audited, and updated consistently.</p>
-</li>
-<li>
-<p><strong>Continuous Integration &amp; Delivery (CI/CD)</strong> </p>
-</li>
-<li>
-<p><code>GitHub Actions</code> – automates testing and building of the software whenever code 
-changes are made. This reduces errors and speeds up development. </p>
-</li>
-<li>
-<p><code>ArgoCD</code> – ensures that what is defined in the project repositories is always 
-reflected in the running system. It continuously monitors and synchronizes deployments, 
-reducing manual intervention.</p>
-</li>
-<li>
-<p><strong>Monitoring and Observability</strong> </p>
-</li>
-<li>
-<p><code>Prometheus and Grafana</code> – provide live insights into the system’s health and 
-performance (e.g., resource usage, response times). This allows early detection of 
-issues and helps optimize resources. </p>
-</li>
-<li>
-<p><code>Jaeger</code> – used for tracing requests across services, which helps diagnose problems 
-and improve efficiency of workflows. </p>
-</li>
-<li>
-<p><strong>Security and Access</strong></p>
-</li>
-<li>
-<p><code>Keycloak</code> – a central system for user authentication and authorisation. 
-   It enables single sign-on and ensures that only authorised users can access services.</p>
-</li>
-<li>
-<p><code>Sealed Secrets</code> - allows us to store passwords and keys safely in Kubernetes without
-   exposing them in plain text.</p>
-</li>
-</ol>
-<h2 id="building-the-server-image">Building the server image</h2>
-<p>The <code>s2gos-server</code> container image is built with the
-<a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/s2gos-server/build-image.sh"><code>build-image.sh</code></a>
-script, which wraps <code>docker build</code> and pins the eozilla packages (<code>gavicore</code>,
-<code>procodile</code>, <code>wraptile</code>) to a given version.</p>
-<div class="highlight"><pre><span></span><code># Build, tagging the image from the s2gos-server version:
-./s2gos-server/build-image.sh
-
-# Build with an explicit tag:
-./s2gos-server/build-image.sh -t dev
-
-# Build and push to the registry:
-./s2gos-server/build-image.sh -t 0.2.0 --push
-
-# Build against a specific eozilla version:
-./s2gos-server/build-image.sh --eozilla-version 0.3.0
+<h1 id="s2gos-server-cli">S2GOS Server CLI</h1>
+<p><code>s2gos-server</code> is a web server made for wrapping workflow 
+orchestration systems providing an API compliant with the OGC API - Processes,
+Part 1: Core Standard (https://ogcapi.ogc.org/processes/).</p>
+<p>The SERVICE argument may be followed by a <code>--</code> to pass one or more 
+service-specific arguments and options.</p>
+<p>Note that the service arguments may also be given by the 
+environment variable <code>EOZILLA_SERVICE</code>.</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-server<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span>COMMAND<span class="w"> </span><span class="o">[</span>ARGS<span class="o">]</span>...
 </code></pre></div>
-<p>The image repository defaults to <code>quay.io/s2gos/s2gos-server</code>; override it with
-<code>-r</code>/<code>--repo</code> or the <code>IMAGE_REPO</code> environment variable. Run
-<code>./s2gos-server/build-image.sh --help</code> for the full list of options.</p>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--version</code>: Show version and exit.</li>
+<li><code>--install-completion</code>: Install completion for the current shell.</li>
+<li><code>--show-completion</code>: Show completion for the current shell, to copy it or customize the installation.</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>run</code>: Run server in production mode.</li>
+<li><code>dev</code>: Run server in development mode.</li>
+</ul>
+<h2 id="s2gos-server-run"><code>s2gos-server run</code></h2>
+<p>Run server in production mode.</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-server<span class="w"> </span>run<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>SERVICE<span class="w"> </span><span class="o">[</span>--<span class="w"> </span>SERVICE-OPTIONS<span class="o">]]</span>
+</code></pre></div>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[SERVICE [-- SERVICE-OPTIONS]]</code>: Service instance optionally followed by <code>--</code> to pass service-specific arguments and options. SERVICE should have the form <code>path.to.module:service</code>.  [env var: EOZILLA_SERVICE]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--host TEXT</code>: Host address.  [env var: EOZILLA_SERVER_HOST; default: 127.0.0.1]</li>
+<li><code>--port INTEGER</code>: Port number.  [env var: EOZILLA_SERVER_PORT; default: 8008]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="s2gos-server-dev"><code>s2gos-server dev</code></h2>
+<p>Run server in development mode.</p>
+<p><strong>Usage</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span>s2gos-server<span class="w"> </span>dev<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span><span class="w"> </span><span class="o">[</span>SERVICE<span class="w"> </span><span class="o">[</span>--<span class="w"> </span>SERVICE-OPTIONS<span class="o">]]</span>
+</code></pre></div>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>[SERVICE [-- SERVICE-OPTIONS]]</code>: Service instance optionally followed by <code>--</code> to pass service-specific arguments and options. SERVICE should have the form <code>path.to.module:service</code>.  [env var: EOZILLA_SERVICE]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--host TEXT</code>: Host address.  [env var: EOZILLA_SERVER_HOST; default: 127.0.0.1]</li>
+<li><code>--port INTEGER</code>: Port number.  [env var: EOZILLA_SERVER_PORT; default: 8008]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
 
 
 

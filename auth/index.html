@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../contributing/">
+        <link rel="prev" href="../guide/">
       
       
-        <link rel="next" href="../roadmap/">
+        <link rel="next" href="../guide/client-api/">
       
       
         
@@ -23,7 +23,7 @@
     
     
       
-        <title>Deployment - ESA DTE-S2GOS Controller</title>
+        <title>Configuration and Authentication - ESA DTE-S2GOS Controller</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#devops-tools-high-level-overview" class="md-skip">
+        <a href="#configuration-and-authentication" class="md-skip">
           Skip to content
         </a>
       
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Deployment
+              Configuration and Authentication
             
           </span>
         </div>
@@ -268,10 +268,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../guide/" class="md-tabs__link">
           
   
@@ -312,12 +314,10 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
+      <li class="md-tabs__item">
         <a href="../contributing/" class="md-tabs__link">
           
   
@@ -434,6 +434,8 @@
       
   
   
+    
+  
   
   
     
@@ -457,16 +459,19 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <div class="md-nav__link md-nav__container">
@@ -488,13 +493,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -511,10 +516,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../auth/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration and Authentication
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -530,6 +562,92 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#profiles-and-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Profiles and defaults
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-service-no-login" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local service: no login
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hosted-service-configure-then-log-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hosted service: configure, then log in
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supported-mechanisms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported mechanisms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supply-credentials-from-the-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supply credentials from the environment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automated-runs-and-token-lifetime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automated runs and token lifetime
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -839,10 +957,8 @@
       
   
   
-    
   
   
-  
     
     
       
@@ -856,22 +972,19 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
             
   
   
@@ -889,7 +1002,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -932,37 +1045,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Deployment
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
         
   
   
@@ -978,37 +1064,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#building-the-server-image" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Building the server image
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1076,10 +1131,65 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#building-the-server-image" class="md-nav__link">
+  <a href="#profiles-and-defaults" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Building the server image
+        Profiles and defaults
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-service-no-login" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Local service: no login
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hosted-service-configure-then-log-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hosted service: configure, then log in
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supported-mechanisms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported mechanisms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supply-credentials-from-the-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supply credentials from the environment
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automated-runs-and-token-lifetime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automated runs and token lifetime
       
     </span>
   </a>
@@ -1106,85 +1216,191 @@
   
 
 
-<h1 id="devops-tools-high-level-overview">DevOps Tools – High-Level Overview</h1>
-<p><img alt="Deployment" src="../assets/deployment.png" /></p>
-<p>To deliver and operate the S2GOS service efficiently, we apply modern DevOps practices.
-These ensure that software is built, tested, and deployed in a reliable, repeatable, 
-and secure way. The main tools can be grouped as follows: </p>
-<ol>
-<li>
-<p><strong>Infrastructure &amp; Deployment</strong> </p>
-</li>
-<li>
-<p><code>Kubernetes</code> – the platform on which all services run. It allows applications 
-   to scale automatically, restart when needed, and be isolated for reliability. </p>
-</li>
-<li>
-<p><code>Helm</code> – a package manager for Kubernetes. It makes deploying complex applications 
-much simpler and ensures they can be installed the same way across different 
-environments. </p>
-</li>
-<li>
-<p><code>Terraform</code> – used to set up the underlying cloud resources (servers, storage, 
-networks). It guarantees that infrastructure is defined in code, so it can be 
-  reproduced, audited, and updated consistently.</p>
-</li>
-<li>
-<p><strong>Continuous Integration &amp; Delivery (CI/CD)</strong> </p>
-</li>
-<li>
-<p><code>GitHub Actions</code> – automates testing and building of the software whenever code 
-changes are made. This reduces errors and speeds up development. </p>
-</li>
-<li>
-<p><code>ArgoCD</code> – ensures that what is defined in the project repositories is always 
-reflected in the running system. It continuously monitors and synchronizes deployments, 
-reducing manual intervention.</p>
-</li>
-<li>
-<p><strong>Monitoring and Observability</strong> </p>
-</li>
-<li>
-<p><code>Prometheus and Grafana</code> – provide live insights into the system’s health and 
-performance (e.g., resource usage, response times). This allows early detection of 
-issues and helps optimize resources. </p>
-</li>
-<li>
-<p><code>Jaeger</code> – used for tracing requests across services, which helps diagnose problems 
-and improve efficiency of workflows. </p>
-</li>
-<li>
-<p><strong>Security and Access</strong></p>
-</li>
-<li>
-<p><code>Keycloak</code> – a central system for user authentication and authorisation. 
-   It enables single sign-on and ensures that only authorised users can access services.</p>
-</li>
-<li>
-<p><code>Sealed Secrets</code> - allows us to store passwords and keys safely in Kubernetes without
-   exposing them in plain text.</p>
-</li>
-</ol>
-<h2 id="building-the-server-image">Building the server image</h2>
-<p>The <code>s2gos-server</code> container image is built with the
-<a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/s2gos-server/build-image.sh"><code>build-image.sh</code></a>
-script, which wraps <code>docker build</code> and pins the eozilla packages (<code>gavicore</code>,
-<code>procodile</code>, <code>wraptile</code>) to a given version.</p>
-<div class="highlight"><pre><span></span><code># Build, tagging the image from the s2gos-server version:
-./s2gos-server/build-image.sh
-
-# Build with an explicit tag:
-./s2gos-server/build-image.sh -t dev
-
-# Build and push to the registry:
-./s2gos-server/build-image.sh -t 0.2.0 --push
-
-# Build against a specific eozilla version:
-./s2gos-server/build-image.sh --eozilla-version 0.3.0
+<h1 id="configuration-and-authentication">Configuration and authentication</h1>
+<p>The S2GOS client uses one configuration model across its Python API, CLI, and
+App. Public service settings live in a YAML profile; the CLI stores login secrets
+in the operating system's keyring. For the local tutorials, use a separate profile
+with no authentication. For a hosted deployment, use the settings supplied by
+its operator.</p>
+<h2 id="profiles-and-defaults">Profiles and defaults</h2>
+<p>The default profile is <code>~/.s2gos-client</code>. The S2GOS factory functions
+<code>create_client()</code> and <code>create_async_client()</code> select this profile and the
+<code>S2GOS_</code> environment namespace. Use <code>config_path="profile.yaml"</code> in Python or
+<code>--config profile.yaml</code> on CLI commands to select another profile.</p>
+<p>Current built-in defaults in <code>S2GOSConfig</code> are:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>api_url</code></td>
+<td><code>https://s2gos-free.wraptile.brockmann-consult.de/</code></td>
+</tr>
+<tr>
+<td><code>auth.auth_type</code></td>
+<td><code>oauth2</code></td>
+</tr>
+<tr>
+<td><code>auth.token_url</code></td>
+<td><code>https://kc.dev.brockmann-consult.de/realms/dte-s2gos/protocol/openid-connect/token</code></td>
+</tr>
+<tr>
+<td><code>auth.client_id</code></td>
+<td><code>cuiman</code></td>
+</tr>
+<tr>
+<td><code>auth.grant_type</code></td>
+<td><code>password</code></td>
+</tr>
+</tbody>
+</table>
+<p>These are package defaults, not a guarantee of access to that deployment. Confirm
+which service and account you should use with your operator.</p>
+<p>For a newly created client, settings have increasing precedence: built-in defaults,
+profile file, local <code>.env</code> file, process environment, supplied <code>config</code> fields,
+and explicit keyword overrides. Environment variables can therefore override
+settings in a selected profile. Explicit Python keyword arguments take precedence.</p>
+<p>Authentication is a nested <code>auth</code> object. A partial override without <code>auth_type</code>
+merges with the selected authentication settings. An override containing
+<code>auth_type</code> replaces the previous authentication object, so supply the required
+provider fields when selecting a new mechanism.</p>
+<h2 id="local-service-no-login">Local service: no login</h2>
+<p>From an activated environment at the repository root:</p>
+<div class="highlight"><pre><span></span><code>s2gos-client<span class="w"> </span>configure<span class="w"> </span>--api-url<span class="w"> </span>http://127.0.0.1:8008<span class="w"> </span>--auth-type<span class="w"> </span>none<span class="w"> </span>--config<span class="w"> </span>local-client.yaml
 </code></pre></div>
-<p>The image repository defaults to <code>quay.io/s2gos/s2gos-server</code>; override it with
-<code>-r</code>/<code>--repo</code> or the <code>IMAGE_REPO</code> environment variable. Run
-<code>./s2gos-server/build-image.sh --help</code> for the full list of options.</p>
+<p>The generated profile describes this service:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">api_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://127.0.0.1:8008/</span>
+<span class="nt">auth</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">auth_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">none</span>
+</code></pre></div>
+<p>In Python, use <code>create_client(config_path="local-client.yaml")</code>, or supply both
+<code>api_url="http://127.0.0.1:8008"</code> and <code>auth={"auth_type": "none"}</code> explicitly.
+Changing only the API URL does not disable the S2GOS authentication defaults.</p>
+<h2 id="hosted-service-configure-then-log-in">Hosted service: configure, then log in</h2>
+<p>Run these commands in an interactive terminal:</p>
+<div class="highlight"><pre><span></span><code>s2gos-client<span class="w"> </span>configure
+s2gos-client<span class="w"> </span>login
+s2gos-client<span class="w"> </span>list-processes
+</code></pre></div>
+<p><code>configure</code> prompts for the service URL and public authentication settings. Check
+the displayed defaults, especially if you have previously used another service.
+<code>login</code> obtains credentials and stores them in the OS keyring. For a separate
+profile, add <code>--config s2gos-client.yaml</code> to each command.</p>
+<p>Once configured, use that same profile from Python:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">s2gos_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">create_client</span><span class="p">()</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>  <span class="c1"># reuses credentials or prompts when needed</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">get_processes</span><span class="p">()</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div>
+<p>Constructing a client does not log in immediately. Requests can acquire tokens
+from supplied credentials without prompting; call <code>login()</code> explicitly for an
+interactive login. Use <code>client.login(save=True)</code> if you also want a Python login
+to save its credentials for later sessions. Plain <code>close()</code> releases connections
+and does not log out or cancel server jobs.</p>
+<h2 id="supported-mechanisms">Supported mechanisms</h2>
+<table>
+<thead>
+<tr>
+<th><code>auth.auth_type</code></th>
+<th>Purpose</th>
+<th>Main settings inside <code>auth</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>none</code></td>
+<td>Unauthenticated service</td>
+<td>None</td>
+</tr>
+<tr>
+<td><code>oauth2</code></td>
+<td>OAuth2 password or client-credentials grant</td>
+<td><code>token_url</code>, <code>client_id</code>, <code>grant_type</code>; credentials for the selected grant</td>
+</tr>
+<tr>
+<td><code>oidc</code></td>
+<td>Browser login using Authorization Code with PKCE</td>
+<td><code>issuer_url</code>, <code>client_id</code>, optional <code>scopes</code></td>
+</tr>
+<tr>
+<td><code>token</code></td>
+<td>An existing access token</td>
+<td><code>access_token</code>, optional <code>access_token_header</code></td>
+</tr>
+<tr>
+<td><code>basic</code></td>
+<td>HTTP Basic authentication</td>
+<td><code>username</code>, <code>password</code></td>
+</tr>
+<tr>
+<td><code>api-key</code></td>
+<td>API key in a header</td>
+<td><code>api_key</code>, optional <code>api_key_header</code></td>
+</tr>
+<tr>
+<td><code>login</code></td>
+<td>A proprietary username/password login endpoint</td>
+<td><code>login_url</code>, <code>username</code>, <code>password</code></td>
+</tr>
+</tbody>
+</table>
+<p>Use <code>oauth2</code> for an OAuth2 token endpoint. The <code>login</code> authentication type is a
+different mechanism and is not the name for OAuth2 password authentication.
+For an existing token, the default is <code>Authorization: Bearer ...</code>; set
+<code>access_token_header</code> only when the service expects another header.</p>
+<h2 id="supply-credentials-from-the-environment">Supply credentials from the environment</h2>
+<p>Nested fields use a double underscore. For example, set
+<code>S2GOS_AUTH__USERNAME</code> and <code>S2GOS_AUTH__PASSWORD</code> in your environment to supply
+credentials for the default OAuth2 configuration. Keep the provider fields
+unchanged by omitting <code>S2GOS_AUTH__AUTH_TYPE</code> when you only need to add credentials.</p>
+<p>For static-token access, set <code>S2GOS_API_URL</code>,
+<code>S2GOS_AUTH__AUTH_TYPE=token</code>, and <code>S2GOS_AUTH__ACCESS_TOKEN</code>.
+Use your shell or secret manager to provide the values. Flat settings such as
+<code>S2GOS_TOKEN</code> or <code>S2GOS_AUTH_TYPE</code> are not the current authentication interface.</p>
+<p>You can also pass credentials explicitly from environment variables in Python:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">s2gos_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_client</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">create_client</span><span class="p">(</span>
+    <span class="n">auth</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;S2GOS_AUTH__USERNAME&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;S2GOS_AUTH__PASSWORD&quot;</span><span class="p">],</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="n">interactive</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">get_processes</span><span class="p">()</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div>
+<p>This partial <code>auth</code> override assumes the selected profile uses OAuth2 password
+authentication. For another provider, configure its token URL and client ID first.
+Do not put passwords, access tokens, or client secrets in example request files.</p>
+<h2 id="automated-runs-and-token-lifetime">Automated runs and token lifetime</h2>
+<p>In unattended Python jobs, supply credentials through the environment and use
+<code>client.login(interactive=False)</code> to fail early if authentication cannot proceed.
+The CLI requires a profile even when environment variables supply credentials.
+Create that profile before running your job. <code>s2gos-client login --no-input</code>
+uses supplied credentials without prompts and saves them to the OS keyring, so
+it also requires a working keyring. Ordinary API calls can use credentials
+provided at runtime without saving them.</p>
+<p>OAuth2/OIDC sessions can renew tokens when the provider supplies the necessary
+refresh information. A static token has no automatic refresh flow; replace it
+when it expires. If a saved login no longer works, use
+<code>s2gos-client login --force</code> with the appropriate profile. Use
+<code>s2gos-client logout</code> to remove its stored credentials when you intend to sign out.</p>
+<p>For missing credentials or keyring errors, check that you are using the same
+profile, service URL, and account as during login. For authorization failures,
+confirm your account has permission for that service. Data-storage credentials
+are separate; see <a href="../guide/results/#access-data-from-a-hosted-service">Working with results</a>.</p>
 
 
 

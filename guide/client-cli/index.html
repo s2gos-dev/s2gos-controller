@@ -9,28 +9,28 @@
       
       
       
-        <link rel="prev" href="../contributing/">
+        <link rel="prev" href="../client-gui/">
       
       
-        <link rel="next" href="../roadmap/">
+        <link rel="next" href="../results/">
       
       
         
       
       
-      <link rel="icon" href="../assets/logo.ico">
+      <link rel="icon" href="../../assets/logo.ico">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Deployment - ESA DTE-S2GOS Controller</title>
+        <title>Command Line - ESA DTE-S2GOS Controller</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -49,11 +49,11 @@
       
     
     
-      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="../overrides/css/custom.css">
+      <link rel="stylesheet" href="../../overrides/css/custom.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#devops-tools-high-level-overview" class="md-skip">
+        <a href="#command-line" class="md-skip">
           Skip to content
         </a>
       
@@ -92,9 +92,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="ESA DTE-S2GOS Controller" class="md-header__button md-logo" aria-label="ESA DTE-S2GOS Controller" data-md-component="logo">
+    <a href="../.." title="ESA DTE-S2GOS Controller" class="md-header__button md-logo" aria-label="ESA DTE-S2GOS Controller" data-md-component="logo">
       
-  <img src="../assets/logo.png" alt="logo">
+  <img src="../../assets/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Deployment
+              Command Line
             
           </span>
         </div>
@@ -232,7 +232,7 @@
   
   
     <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -251,7 +251,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../installation/" class="md-tabs__link">
+      <a href="../../installation/" class="md-tabs__link">
         
   
   
@@ -268,11 +268,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../guide/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -294,7 +296,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../client-api/" class="md-tabs__link">
+        <a href="../../client-api/" class="md-tabs__link">
           
   
   
@@ -312,13 +314,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../contributing/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../contributing/" class="md-tabs__link">
           
   
   
@@ -354,9 +354,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="ESA DTE-S2GOS Controller" class="md-nav__button md-logo" aria-label="ESA DTE-S2GOS Controller" data-md-component="logo">
+    <a href="../.." title="ESA DTE-S2GOS Controller" class="md-nav__button md-logo" aria-label="ESA DTE-S2GOS Controller" data-md-component="logo">
       
-  <img src="../assets/logo.png" alt="logo">
+  <img src="../../assets/logo.png" alt="logo">
 
     </a>
     ESA DTE-S2GOS Controller
@@ -383,7 +383,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -410,7 +410,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../installation/" class="md-nav__link">
+      <a href="../../installation/" class="md-nav__link">
         
   
   
@@ -434,6 +434,8 @@
       
   
   
+    
+  
   
   
     
@@ -457,20 +459,23 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../guide/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -488,13 +493,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -514,7 +519,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../auth/" class="md-nav__link">
+      <a href="../../auth/" class="md-nav__link">
         
   
   
@@ -542,7 +547,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guide/client-api/" class="md-nav__link">
+      <a href="../client-api/" class="md-nav__link">
         
   
   
@@ -570,7 +575,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guide/client-gui/" class="md-nav__link">
+      <a href="../client-gui/" class="md-nav__link">
         
   
   
@@ -595,10 +600,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../guide/client-cli/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Command Line
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -614,6 +646,92 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configure-and-inspect-the-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configure and inspect the service
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prepare-a-repeatable-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prepare a repeatable request
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validate-then-submit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validate, then submit
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#follow-the-returned-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Follow the returned job
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dismiss-a-selected-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dismiss a selected job
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#errors-in-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Errors in scripts
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -626,7 +744,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guide/results/" class="md-nav__link">
+      <a href="../results/" class="md-nav__link">
         
   
   
@@ -723,7 +841,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../client-api/" class="md-nav__link">
+      <a href="../../client-api/" class="md-nav__link">
         
   
   
@@ -751,7 +869,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../client-cli/" class="md-nav__link">
+      <a href="../../client-cli/" class="md-nav__link">
         
   
   
@@ -779,7 +897,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../server-cli/" class="md-nav__link">
+      <a href="../../server-cli/" class="md-nav__link">
         
   
   
@@ -807,7 +925,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../execution-requests/" class="md-nav__link">
+      <a href="../../execution-requests/" class="md-nav__link">
         
   
   
@@ -839,10 +957,8 @@
       
   
   
-    
   
   
-  
     
     
       
@@ -856,22 +972,19 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
             
   
   
@@ -889,7 +1002,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -907,7 +1020,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../contributing/" class="md-nav__link">
+      <a href="../../contributing/" class="md-nav__link">
         
   
   
@@ -932,37 +1045,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Deployment
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../deployment/" class="md-nav__link">
         
   
   
@@ -978,37 +1064,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#building-the-server-image" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Building the server image
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1021,7 +1076,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../roadmap/" class="md-nav__link">
+      <a href="../../roadmap/" class="md-nav__link">
         
   
   
@@ -1076,10 +1131,65 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#building-the-server-image" class="md-nav__link">
+  <a href="#configure-and-inspect-the-service" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Building the server image
+        Configure and inspect the service
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prepare-a-repeatable-request" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prepare a repeatable request
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validate-then-submit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validate, then submit
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#follow-the-returned-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Follow the returned job
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dismiss-a-selected-job" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dismiss a selected job
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#errors-in-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Errors in scripts
       
     </span>
   </a>
@@ -1106,85 +1216,95 @@
   
 
 
-<h1 id="devops-tools-high-level-overview">DevOps Tools – High-Level Overview</h1>
-<p><img alt="Deployment" src="../assets/deployment.png" /></p>
-<p>To deliver and operate the S2GOS service efficiently, we apply modern DevOps practices.
-These ensure that software is built, tested, and deployed in a reliable, repeatable, 
-and secure way. The main tools can be grouped as follows: </p>
-<ol>
-<li>
-<p><strong>Infrastructure &amp; Deployment</strong> </p>
-</li>
-<li>
-<p><code>Kubernetes</code> – the platform on which all services run. It allows applications 
-   to scale automatically, restart when needed, and be isolated for reliability. </p>
-</li>
-<li>
-<p><code>Helm</code> – a package manager for Kubernetes. It makes deploying complex applications 
-much simpler and ensures they can be installed the same way across different 
-environments. </p>
-</li>
-<li>
-<p><code>Terraform</code> – used to set up the underlying cloud resources (servers, storage, 
-networks). It guarantees that infrastructure is defined in code, so it can be 
-  reproduced, audited, and updated consistently.</p>
-</li>
-<li>
-<p><strong>Continuous Integration &amp; Delivery (CI/CD)</strong> </p>
-</li>
-<li>
-<p><code>GitHub Actions</code> – automates testing and building of the software whenever code 
-changes are made. This reduces errors and speeds up development. </p>
-</li>
-<li>
-<p><code>ArgoCD</code> – ensures that what is defined in the project repositories is always 
-reflected in the running system. It continuously monitors and synchronizes deployments, 
-reducing manual intervention.</p>
-</li>
-<li>
-<p><strong>Monitoring and Observability</strong> </p>
-</li>
-<li>
-<p><code>Prometheus and Grafana</code> – provide live insights into the system’s health and 
-performance (e.g., resource usage, response times). This allows early detection of 
-issues and helps optimize resources. </p>
-</li>
-<li>
-<p><code>Jaeger</code> – used for tracing requests across services, which helps diagnose problems 
-and improve efficiency of workflows. </p>
-</li>
-<li>
-<p><strong>Security and Access</strong></p>
-</li>
-<li>
-<p><code>Keycloak</code> – a central system for user authentication and authorisation. 
-   It enables single sign-on and ensures that only authorised users can access services.</p>
-</li>
-<li>
-<p><code>Sealed Secrets</code> - allows us to store passwords and keys safely in Kubernetes without
-   exposing them in plain text.</p>
-</li>
-</ol>
-<h2 id="building-the-server-image">Building the server image</h2>
-<p>The <code>s2gos-server</code> container image is built with the
-<a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/s2gos-server/build-image.sh"><code>build-image.sh</code></a>
-script, which wraps <code>docker build</code> and pins the eozilla packages (<code>gavicore</code>,
-<code>procodile</code>, <code>wraptile</code>) to a given version.</p>
-<div class="highlight"><pre><span></span><code># Build, tagging the image from the s2gos-server version:
-./s2gos-server/build-image.sh
-
-# Build with an explicit tag:
-./s2gos-server/build-image.sh -t dev
-
-# Build and push to the registry:
-./s2gos-server/build-image.sh -t 0.2.0 --push
-
-# Build against a specific eozilla version:
-./s2gos-server/build-image.sh --eozilla-version 0.3.0
+<h1 id="command-line">Command line</h1>
+<p>The CLI is useful for inspecting a service, keeping execution requests in files,
+and integrating submissions into scripts. This walkthrough uses the
+<a href="../#run-the-examples-locally">local test service</a>, an active <code>pixi shell</code>,
+and the repository root as the working directory.</p>
+<p>The commands are maintained in
+<a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/examples/guides/cli.sh">examples/guides/cli.sh</a>.
+Copy individual recipes; running that file does not submit jobs. Commands shown
+on a single line work in Bash and PowerShell.</p>
+<h2 id="configure-and-inspect-the-service">Configure and inspect the service</h2>
+<div class="highlight"><pre><span></span><code>s2gos-client<span class="w"> </span>configure<span class="w"> </span>--api-url<span class="w"> </span>http://127.0.0.1:8008<span class="w"> </span>--auth-type<span class="w"> </span>none<span class="w"> </span>--config<span class="w"> </span>local-client.yaml
+s2gos-client<span class="w"> </span>list-processes<span class="w"> </span>--config<span class="w"> </span>local-client.yaml
+s2gos-client<span class="w"> </span>get-process<span class="w"> </span>primes_between<span class="w"> </span>--config<span class="w"> </span>local-client.yaml
 </code></pre></div>
-<p>The image repository defaults to <code>quay.io/s2gos/s2gos-server</code>; override it with
-<code>-r</code>/<code>--repo</code> or the <code>IMAGE_REPO</code> environment variable. Run
-<code>./s2gos-server/build-image.sh --help</code> for the full list of options.</p>
+<p>The profile contains the API URL and authentication settings. <code>--config</code> belongs
+to the individual command, after its name. For a hosted deployment, create and
+log in to a separate profile as described in <a href="../../auth/">Authentication</a>.</p>
+<p>Inspect the process description before submitting: it describes the valid input
+names, types, defaults, and outputs. <code>s2gos-client --help</code> lists commands;
+<code>s2gos-client execute-process --help</code> lists that command's options.</p>
+<h2 id="prepare-a-repeatable-request">Prepare a repeatable request</h2>
+<p>Generate a starting template from the service:</p>
+<div class="highlight"><pre><span></span><code>s2gos-client<span class="w"> </span>create-request<span class="w"> </span>primes_between<span class="w"> </span>--format<span class="w"> </span>json<span class="w"> </span>--config<span class="w"> </span>local-client.yaml
+</code></pre></div>
+<p>Generated values are suggestions, and may need editing before the request is
+valid for that process. Save your actual request as JSON or YAML. The supplied
+<code>examples/guides/primes-request.json</code> contains:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;process_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;primes_between&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;inputs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;min_val&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;max_val&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Keep request files with your analysis so the chosen inputs are recorded. See
+<a href="../../execution-requests/">Execution requests</a> for nested inputs, output settings,
+and the distinction between CLI request files and Python <code>ProcessRequest</code> objects.</p>
+<h2 id="validate-then-submit">Validate, then submit</h2>
+<div class="highlight"><pre><span></span><code>s2gos-client<span class="w"> </span>validate-request<span class="w"> </span>--request<span class="w"> </span>examples/guides/primes-request.json
+</code></pre></div>
+<p><code>validate-request</code> works offline. It checks the execution-request structure and
+parses inputs; it does <strong>not</strong> fetch the process schema, verify storage access, or
+guarantee scientific validity. Compare inputs with <code>get-process</code> and review
+service-side validation errors as well.</p>
+<p>When the request is ready, submit it once:</p>
+<div class="highlight"><pre><span></span><code>s2gos-client<span class="w"> </span>execute-process<span class="w"> </span>--request<span class="w"> </span>examples/guides/primes-request.json<span class="w"> </span>--config<span class="w"> </span>local-client.yaml
+</code></pre></div>
+<p>Alternatively, for a small request you can supply inputs directly:</p>
+<div class="highlight"><pre><span></span><code>s2gos-client<span class="w"> </span>execute-process<span class="w"> </span>primes_between<span class="w"> </span>-i<span class="w"> </span><span class="nv">min_val</span><span class="o">=</span><span class="m">10</span><span class="w"> </span>-i<span class="w"> </span><span class="nv">max_val</span><span class="o">=</span><span class="m">80</span><span class="w"> </span>--config<span class="w"> </span>local-client.yaml
+</code></pre></div>
+<p>These are alternative submissions: running both creates two jobs. Repeated <code>-i</code>
+options set separate inputs. Values such as numbers, <code>true</code>, arrays, and objects
+are parsed as JSON where possible. Use a request file for complex values to
+avoid shell quoting problems. A process ID or input supplied on the command line
+overrides the corresponding value in the file.</p>
+<h2 id="follow-the-returned-job">Follow the returned job</h2>
+<p>The submission prints job information, including <code>jobID</code> and <code>status</code>. Copy that
+ID and replace <code>YOUR_JOB_ID</code> in the remaining commands:</p>
+<div class="highlight"><pre><span></span><code>s2gos-client<span class="w"> </span>list-jobs<span class="w"> </span>--config<span class="w"> </span>local-client.yaml
+s2gos-client<span class="w"> </span>get-job<span class="w"> </span>YOUR_JOB_ID<span class="w"> </span>--config<span class="w"> </span>local-client.yaml
+</code></pre></div>
+<p>For <code>accepted</code> or <code>running</code>, check the same job later. For <code>failed</code>, read its
+message before retrying. When status is <code>successful</code>, retrieve the results:</p>
+<div class="highlight"><pre><span></span><code>s2gos-client<span class="w"> </span>get-job-results<span class="w"> </span>YOUR_JOB_ID<span class="w"> </span>--config<span class="w"> </span>local-client.yaml
+</code></pre></div>
+<p>Prime-number results are inline values. Scene results may be links to storage;
+this command displays the result metadata rather than downloading every linked
+file. Use the <a href="../results/">results guide</a> to open datasets in Python.</p>
+<p>For machine-readable output, add <code>--format json</code> to discovery, submission, job,
+and result commands. Save the returned <code>jobID</code> in your script. A zero exit code
+from submission means the API call succeeded; it does not mean the job finished.</p>
+<h2 id="dismiss-a-selected-job">Dismiss a selected job</h2>
+<p>Only when you intend to cancel or discard that job:</p>
+<div class="highlight"><pre><span></span><code>s2gos-client<span class="w"> </span>dismiss-job<span class="w"> </span>YOUR_JOB_ID<span class="w"> </span>--config<span class="w"> </span>local-client.yaml
+</code></pre></div>
+<p>Backend dismissal policies vary, and results may become unavailable afterward.
+Download or open what you need first. Do not dismiss every job in a shared
+service as part of tutorial cleanup.</p>
+<h2 id="errors-in-scripts">Errors in scripts</h2>
+<p>The CLI normally returns <code>0</code> for success, <code>1</code> for input or configuration errors,
+<code>2</code> for remote API errors, and <code>3</code> for network transport errors. Stop your script
+when submission fails instead of trying to parse a job ID from an error message.
+The global <code>--traceback</code> option provides diagnostic details and changes error
+exit codes to <code>1</code>:</p>
+<div class="highlight"><pre><span></span><code>s2gos-client<span class="w"> </span>--traceback<span class="w"> </span>list-processes<span class="w"> </span>--config<span class="w"> </span>local-client.yaml
+</code></pre></div>
+<p>Consult the generated <a href="../../client-cli/">CLI reference</a> for all commands and
+options. Regenerate it after upgrading the underlying client implementation.</p>
 
 
 
@@ -1282,10 +1402,10 @@ script, which wraps <code>docker build</code> and pins the eozilla packages (<co
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.top", "navigation.tabs", "navigation.sections", "navigation.indexes", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.tabs", "navigation.sections", "navigation.indexes", "toc.follow", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

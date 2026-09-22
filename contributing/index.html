@@ -12,14 +12,14 @@
         <link rel="prev" href="../execution-requests/">
       
       
-        <link rel="next" href="../roadmap/">
+        <link rel="next" href="../deployment/">
       
       
         
       
       
       <link rel="icon" href="../assets/logo.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -272,7 +272,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../notebooks/client-api/" class="md-tabs__link">
+        <a href="../guide/" class="md-tabs__link">
           
   
   
@@ -440,6 +440,12 @@
     
       
         
+          
+        
+      
+        
+      
+        
       
         
       
@@ -463,8 +469,9 @@
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
-            
+          <div class="md-nav__link md-nav__container">
+            <a href="../guide/" class="md-nav__link ">
+              
   
   
   <span class="md-ellipsis">
@@ -478,8 +485,14 @@
   
   
 
-            <span class="md-nav__icon md-icon"></span>
-          </label>
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
@@ -493,20 +506,22 @@
           <ul class="md-nav__list" data-md-scrollfix>
             
               
+            
+              
                 
   
   
   
   
     <li class="md-nav__item">
-      <a href="../notebooks/client-api/" class="md-nav__link">
+      <a href="../auth/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Client API
+    Configuration and Authentication
   
 
     
@@ -527,14 +542,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../notebooks/client-api-airflow/" class="md-nav__link">
+      <a href="../guide/client-api/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Client API with Airflow
+    Python API
   
 
     
@@ -555,14 +570,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../notebooks/client-gui/" class="md-nav__link">
+      <a href="../guide/client-gui/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Client GUI
+    App
   
 
     
@@ -583,14 +598,42 @@
   
   
     <li class="md-nav__item">
-      <a href="../notebooks/client-cli/" class="md-nav__link">
+      <a href="../guide/client-cli/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Client CLI
+    Command Line
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guide/results/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with Results
   
 
     
@@ -619,6 +662,8 @@
   
     
     
+      
+        
       
         
       
@@ -734,6 +779,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../server-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Server CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../execution-requests/" class="md-nav__link">
         
   
@@ -772,6 +845,8 @@
   
     
     
+      
+        
       
         
       
@@ -892,10 +967,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#changelog" class="md-nav__link">
+  <a href="#development-setup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Changelog
+        Development setup
       
     </span>
   </a>
@@ -903,118 +978,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#reporting" class="md-nav__link">
+  <a href="#maintain-the-user-guide" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Reporting
+        Maintain the user guide
       
     </span>
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#contributions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Contributions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#development" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Development
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Development">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Setup
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#running-the-s2gos-controller-tools" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Running the S2GOS controller tools
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#formatting-linting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Formatting &amp; Linting
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#testing-coverage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Testing &amp; Coverage
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#version-syncing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Version syncing
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#code-generation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Code generation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Documentation
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1033,6 +1003,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1100,10 +1098,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#changelog" class="md-nav__link">
+  <a href="#development-setup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Changelog
+        Development setup
       
     </span>
   </a>
@@ -1111,118 +1109,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#reporting" class="md-nav__link">
+  <a href="#maintain-the-user-guide" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Reporting
+        Maintain the user guide
       
     </span>
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#contributions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Contributions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#development" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Development
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Development">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Setup
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#running-the-s2gos-controller-tools" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Running the S2GOS controller tools
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#formatting-linting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Formatting &amp; Linting
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#testing-coverage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Testing &amp; Coverage
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#version-syncing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Version syncing
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#code-generation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Code generation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Documentation
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1258,101 +1151,56 @@
 
 
 <h1 id="contributing-to-the-project">Contributing to the project</h1>
-<h2 id="changelog">Changelog</h2>
-<p>You can find the complete changelog 
-<a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/CHANGES.md">here</a>. </p>
-<h2 id="reporting">Reporting</h2>
-<p>If you have suggestions, ideas, feature requests, or if you have identified
-a malfunction or error, then please 
-<a href="https://github.com/s2gos-dev/s2gos-controller/issues">post an issue</a>. </p>
-<h2 id="contributions">Contributions</h2>
-<p>The S2GOS client project welcomes contributions of any form as long as you 
-respect our 
-<a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/CODE_OF_CONDUCT.md">code of conduct</a>
-and follow our 
-<a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/CONTRIBUTING.md">contribution guide</a>.</p>
-<p>If you'd like to submit code or documentation changes, we ask you to provide a 
-pull request (PR) 
-<a href="https://github.com/s2gos-dev/s2gos-controller/pulls">here</a>. 
-For code and configuration changes, your PR must be linked to a 
-corresponding issue. </p>
-<h2 id="development">Development</h2>
-<h3 id="setup">Setup</h3>
-<p>Before you start, make sure you have <a href="https://pixi.sh">pixi</a> installed.</p>
-<p>Checkout sources</p>
-<pre><code class="language-commandline">git clone https://github.com/s2gos-dev/s2gos-controller.git
-cd ./s2gos-controller
-</code></pre>
-<p>Create a new Python environment and activate it:</p>
-<pre><code class="language-commandline">pixi install 
-pixi shell
-</code></pre>
-<h3 id="running-the-s2gos-controller-tools">Running the S2GOS controller tools</h3>
-<p>Run local test server</p>
-<pre><code class="language-commandline">s2gos-server run -- s2gos_server.services.local.testing:service
-</code></pre>
-<p>The dev mode is useful if you are changing server code:</p>
-<pre><code class="language-commandline">s2gos-server dev s2gos_server.services.local.testing:service
-</code></pre>
-<p>Run client API</p>
-<pre><code class="language-python">from s2gos_client import Client
-
-client = Client()
-client.get_processes()
-client.get_jobs()
-</code></pre>
-<p>Run client GUI (in Jupyter notebooks)</p>
-<pre><code class="language-python">from s2gos_client.gui import Client
-
-client = Client()
-client.show()
-client.show_jobs()
-</code></pre>
-<p>Run client CLI</p>
-<pre><code class="language-commandline">$ s2gos-client --help
-</code></pre>
-<h3 id="formatting-linting">Formatting &amp; Linting</h3>
-<pre><code class="language-commandline">pixi run isort .
-pixi run ruff format 
-pixi run ruff check
-</code></pre>
-<h3 id="testing-coverage">Testing &amp; Coverage</h3>
-<pre><code class="language-commandline">pixi run test
-pixi run coverage
-</code></pre>
-<h3 id="version-syncing">Version syncing</h3>
-<p>Before a release increase version number in root <code>pyproject.toml</code>
-then synchronize versions in workspaces <code>tools/pyproject.toml</code> using </p>
-<pre><code class="language-commandline">pixi run sync-versions
-</code></pre>
-<h3 id="code-generation">Code generation</h3>
-<p>Some code is generated (see respective file headers)
-from an OpenAPI specification in <code>tools/openapi.yaml</code>. 
-If this file is changed, code need to be regenerated: </p>
-<pre><code class="language-commandline">pixi run generate
-</code></pre>
-<p>This will generate S2GOS'</p>
-<ul>
-<li><a href="https://docs.pydantic.dev/">pydantic</a> models in <code>s2gos-common/src/s2gos_common/models.py</code> 
-(uses <a href="https://koxudaxi.github.io/datamodel-code-generator/">datamodel-code-generator</a>)</li>
-<li>client implementation in <code>s2gos-client/src/s2gos_client/client.py</code> and CLI documentation <code>docs/cli.md</code></li>
-<li>server routes in <code>s2gos-server/src/s2gos_server/routes.py</code> and the 
-  service interface in <code>s2gos-server/src/s2gos_server/service.py</code></li>
-</ul>
-<h3 id="documentation">Documentation</h3>
-<p>The S2GOS client's documentation is built using the 
-<a href="https://www.mkdocs.org/">mkdocs</a> tool.</p>
-<p>With repository root as current working directory:</p>
-<pre><code class="language-bash">mkdocs build
-mkdocs serve
-mkdocs gh-deploy
-</code></pre>
-<p>After changing the CLI code, always update its documentation <code>docs/cli.md</code> 
-by running</p>
-<pre><code class="language-bash">pixi run gen-client
-</code></pre>
+<p>Contributions are welcome through the
+<a href="https://github.com/s2gos-dev/s2gos-controller/issues">issue tracker</a> and
+<a href="https://github.com/s2gos-dev/s2gos-controller/pulls">pull requests</a>.
+Read the <a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/CONTRIBUTING.md">contribution guide</a>
+and <a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/CODE_OF_CONDUCT.md">code of conduct</a>.
+Document user-visible changes in
+<a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/CHANGES.md">CHANGES.md</a>.</p>
+<h2 id="development-setup">Development setup</h2>
+<p>Follow <a href="../installation/#using-github">Installation</a>, then work from the repository
+root inside <code>pixi shell</code>. See <a href="../guide/">Getting started</a> for the local
+server and client workflow. Use <code>s2gos-server dev -- wraptile.services.local.testing:service</code>
+when you need the server to reload after code changes.</p>
+<div class="highlight"><pre><span></span><code>pixi<span class="w"> </span>run<span class="w"> </span>format
+pixi<span class="w"> </span>run<span class="w"> </span>checks
+pixi<span class="w"> </span>run<span class="w"> </span>tests
+pixi<span class="w"> </span>run<span class="w"> </span>coverage
+</code></pre></div>
+<p>Before a release, update the version in the root <code>pyproject.toml</code> and synchronize
+package versions with <code>pixi run sync-versions</code>.</p>
+<h2 id="maintain-the-user-guide">Maintain the user guide</h2>
+<p>The user guide is maintained as Markdown in <code>docs/guide/</code>, with shared
+configuration and authentication documentation in <code>docs/auth.md</code>. Original
+notebooks remain under <code>notebooks/</code> for exploration. They are not copied or
+rendered during documentation builds. Old generated files under <code>docs/notebooks/</code>
+are excluded from the site, including any local configuration files left there.</p>
+<p>Reusable Python, shell, and JSON examples live in <code>examples/guides/</code>. Include
+code using <code>pymdownx.snippets</code> rather than maintaining a second copy in Markdown.
+Keep imports, variable definitions, and cleanup clear when splitting examples
+across multiple blocks. If a snippet needs an earlier step, say so in the prose.</p>
+<p>Examples should use the local test service, retain server-assigned job IDs, and
+close clients and datasets. Imports must not connect, submit jobs, or start an
+App. Explain how to adapt the workflow to hosted S2GOS without publishing
+credentials or assuming a particular scientific process is installed.</p>
+<p>The client test suite checks the example workflows, including failure handling,
+App cleanup, and opening an actual local Zarr result. Example code participates
+in formatting, linting, type checking, and client coverage. When you change a
+snippet, validate the rendered walkthrough as well as its Python module.</p>
+<div class="highlight"><pre><span></span><code>pixi<span class="w"> </span>run<span class="w"> </span>gen-cli-docs
+pixi<span class="w"> </span>run<span class="w"> </span>doc-build
+pixi<span class="w"> </span>run<span class="w"> </span>doc-serve
+</code></pre></div>
+<p>The CLI reference pages are generated; update them with <code>gen-cli-docs</code> after
+changing CLI behavior. <code>doc-build</code> uses strict mode, also in CI. Preview changed
+pages and check headings, code blocks, links, and navigation before submitting.</p>
+<p>If adding a screenshot, capture the current App against the local test service,
+keep credentials and private job data out of the image, and record the process,
+inputs, App version or revision, and capture steps alongside the asset so it can
+be reproduced.</p>
 <h2 id="license">License</h2>
-<p>The S2GOS client is open source made available under the terms and conditions of the 
+<p>The project is available under the
 <a href="https://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0 license</a>.</p>
 
 
@@ -1454,7 +1302,7 @@ by running</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.top", "navigation.tabs", "navigation.sections", "navigation.indexes", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

@@ -9,28 +9,28 @@
       
       
       
-        <link rel="prev" href="../contributing/">
+        <link rel="prev" href="../../auth/">
       
       
-        <link rel="next" href="../roadmap/">
+        <link rel="next" href="../client-gui/">
       
       
         
       
       
-      <link rel="icon" href="../assets/logo.ico">
+      <link rel="icon" href="../../assets/logo.ico">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Deployment - ESA DTE-S2GOS Controller</title>
+        <title>Python API - ESA DTE-S2GOS Controller</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -49,11 +49,11 @@
       
     
     
-      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="../overrides/css/custom.css">
+      <link rel="stylesheet" href="../../overrides/css/custom.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#devops-tools-high-level-overview" class="md-skip">
+        <a href="#python-api" class="md-skip">
           Skip to content
         </a>
       
@@ -92,9 +92,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="ESA DTE-S2GOS Controller" class="md-header__button md-logo" aria-label="ESA DTE-S2GOS Controller" data-md-component="logo">
+    <a href="../.." title="ESA DTE-S2GOS Controller" class="md-header__button md-logo" aria-label="ESA DTE-S2GOS Controller" data-md-component="logo">
       
-  <img src="../assets/logo.png" alt="logo">
+  <img src="../../assets/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Deployment
+              Python API
             
           </span>
         </div>
@@ -232,7 +232,7 @@
   
   
     <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -251,7 +251,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../installation/" class="md-tabs__link">
+      <a href="../../installation/" class="md-tabs__link">
         
   
   
@@ -268,11 +268,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../guide/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -294,7 +296,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../client-api/" class="md-tabs__link">
+        <a href="../../client-api/" class="md-tabs__link">
           
   
   
@@ -312,13 +314,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../contributing/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../contributing/" class="md-tabs__link">
           
   
   
@@ -354,9 +354,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="ESA DTE-S2GOS Controller" class="md-nav__button md-logo" aria-label="ESA DTE-S2GOS Controller" data-md-component="logo">
+    <a href="../.." title="ESA DTE-S2GOS Controller" class="md-nav__button md-logo" aria-label="ESA DTE-S2GOS Controller" data-md-component="logo">
       
-  <img src="../assets/logo.png" alt="logo">
+  <img src="../../assets/logo.png" alt="logo">
 
     </a>
     ESA DTE-S2GOS Controller
@@ -383,7 +383,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -410,7 +410,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../installation/" class="md-nav__link">
+      <a href="../../installation/" class="md-nav__link">
         
   
   
@@ -434,6 +434,8 @@
       
   
   
+    
+  
   
   
     
@@ -457,20 +459,23 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../guide/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -488,13 +493,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -514,7 +519,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../auth/" class="md-nav__link">
+      <a href="../../auth/" class="md-nav__link">
         
   
   
@@ -539,10 +544,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../guide/client-api/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python API
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -558,6 +590,103 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#create-a-client" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create a client
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discover-the-process-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discover the process contract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#submit-once-and-keep-the-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Submit once and keep the ID
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#check-status-before-requesting-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check status before requesting results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-the-complete-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run the complete session
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failures-and-cancellation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failures and cancellation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#asynchronous-clients-and-airflow-backed-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Asynchronous clients and Airflow-backed services
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -570,7 +699,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guide/client-gui/" class="md-nav__link">
+      <a href="../client-gui/" class="md-nav__link">
         
   
   
@@ -598,7 +727,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guide/client-cli/" class="md-nav__link">
+      <a href="../client-cli/" class="md-nav__link">
         
   
   
@@ -626,7 +755,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../guide/results/" class="md-nav__link">
+      <a href="../results/" class="md-nav__link">
         
   
   
@@ -723,7 +852,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../client-api/" class="md-nav__link">
+      <a href="../../client-api/" class="md-nav__link">
         
   
   
@@ -751,7 +880,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../client-cli/" class="md-nav__link">
+      <a href="../../client-cli/" class="md-nav__link">
         
   
   
@@ -779,7 +908,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../server-cli/" class="md-nav__link">
+      <a href="../../server-cli/" class="md-nav__link">
         
   
   
@@ -807,7 +936,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../execution-requests/" class="md-nav__link">
+      <a href="../../execution-requests/" class="md-nav__link">
         
   
   
@@ -839,10 +968,8 @@
       
   
   
-    
   
   
-  
     
     
       
@@ -856,22 +983,19 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
             
   
   
@@ -889,7 +1013,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -907,7 +1031,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../contributing/" class="md-nav__link">
+      <a href="../../contributing/" class="md-nav__link">
         
   
   
@@ -932,37 +1056,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Deployment
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../deployment/" class="md-nav__link">
         
   
   
@@ -978,37 +1075,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#building-the-server-image" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Building the server image
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1021,7 +1087,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../roadmap/" class="md-nav__link">
+      <a href="../../roadmap/" class="md-nav__link">
         
   
   
@@ -1076,10 +1142,76 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#building-the-server-image" class="md-nav__link">
+  <a href="#create-a-client" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Building the server image
+        Create a client
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discover-the-process-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discover the process contract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#submit-once-and-keep-the-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Submit once and keep the ID
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#check-status-before-requesting-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check status before requesting results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-the-complete-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run the complete session
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failures-and-cancellation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failures and cancellation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#asynchronous-clients-and-airflow-backed-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Asynchronous clients and Airflow-backed services
       
     </span>
   </a>
@@ -1106,85 +1238,126 @@
   
 
 
-<h1 id="devops-tools-high-level-overview">DevOps Tools – High-Level Overview</h1>
-<p><img alt="Deployment" src="../assets/deployment.png" /></p>
-<p>To deliver and operate the S2GOS service efficiently, we apply modern DevOps practices.
-These ensure that software is built, tested, and deployed in a reliable, repeatable, 
-and secure way. The main tools can be grouped as follows: </p>
-<ol>
-<li>
-<p><strong>Infrastructure &amp; Deployment</strong> </p>
-</li>
-<li>
-<p><code>Kubernetes</code> – the platform on which all services run. It allows applications 
-   to scale automatically, restart when needed, and be isolated for reliability. </p>
-</li>
-<li>
-<p><code>Helm</code> – a package manager for Kubernetes. It makes deploying complex applications 
-much simpler and ensures they can be installed the same way across different 
-environments. </p>
-</li>
-<li>
-<p><code>Terraform</code> – used to set up the underlying cloud resources (servers, storage, 
-networks). It guarantees that infrastructure is defined in code, so it can be 
-  reproduced, audited, and updated consistently.</p>
-</li>
-<li>
-<p><strong>Continuous Integration &amp; Delivery (CI/CD)</strong> </p>
-</li>
-<li>
-<p><code>GitHub Actions</code> – automates testing and building of the software whenever code 
-changes are made. This reduces errors and speeds up development. </p>
-</li>
-<li>
-<p><code>ArgoCD</code> – ensures that what is defined in the project repositories is always 
-reflected in the running system. It continuously monitors and synchronizes deployments, 
-reducing manual intervention.</p>
-</li>
-<li>
-<p><strong>Monitoring and Observability</strong> </p>
-</li>
-<li>
-<p><code>Prometheus and Grafana</code> – provide live insights into the system’s health and 
-performance (e.g., resource usage, response times). This allows early detection of 
-issues and helps optimize resources. </p>
-</li>
-<li>
-<p><code>Jaeger</code> – used for tracing requests across services, which helps diagnose problems 
-and improve efficiency of workflows. </p>
-</li>
-<li>
-<p><strong>Security and Access</strong></p>
-</li>
-<li>
-<p><code>Keycloak</code> – a central system for user authentication and authorisation. 
-   It enables single sign-on and ensures that only authorised users can access services.</p>
-</li>
-<li>
-<p><code>Sealed Secrets</code> - allows us to store passwords and keys safely in Kubernetes without
-   exposing them in plain text.</p>
-</li>
-</ol>
-<h2 id="building-the-server-image">Building the server image</h2>
-<p>The <code>s2gos-server</code> container image is built with the
-<a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/s2gos-server/build-image.sh"><code>build-image.sh</code></a>
-script, which wraps <code>docker build</code> and pins the eozilla packages (<code>gavicore</code>,
-<code>procodile</code>, <code>wraptile</code>) to a given version.</p>
-<div class="highlight"><pre><span></span><code># Build, tagging the image from the s2gos-server version:
-./s2gos-server/build-image.sh
+<h1 id="python-api">Python API</h1>
+<p>Use the Python API when you want to construct requests programmatically, integrate
+jobs into an analysis, or work directly with returned datasets. This walkthrough
+uses the <a href="../#run-the-examples-locally">local test service</a>. Its complete
+source is <a href="https://github.com/s2gos-dev/s2gos-controller/blob/main/examples/guides/api.py">examples/guides/api.py</a>.
+Importing the example does not connect or submit work.</p>
+<h2 id="create-a-client">Create a client</h2>
+<p>Use the S2GOS factory functions so the client uses the S2GOS configuration
+namespace and defaults. Import the request and status models used below:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">gavicore.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobResults</span><span class="p">,</span> <span class="n">JobStatus</span><span class="p">,</span> <span class="n">ProcessRequest</span>
 
-# Build with an explicit tag:
-./s2gos-server/build-image.sh -t dev
+<span class="kn">from</span><span class="w"> </span><span class="nn">s2gos_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">create_client</span>
 
-# Build and push to the registry:
-./s2gos-server/build-image.sh -t 0.2.0 --push
-
-# Build against a specific eozilla version:
-./s2gos-server/build-image.sh --eozilla-version 0.3.0
+<span class="k">def</span><span class="w"> </span><span class="nf">connect</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Client</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">create_client</span><span class="p">(</span><span class="n">api_url</span><span class="o">=</span><span class="s2">&quot;http://127.0.0.1:8008&quot;</span><span class="p">,</span> <span class="n">auth</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;auth_type&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">})</span>
 </code></pre></div>
-<p>The image repository defaults to <code>quay.io/s2gos/s2gos-server</code>; override it with
-<code>-r</code>/<code>--repo</code> or the <code>IMAGE_REPO</code> environment variable. Run
-<code>./s2gos-server/build-image.sh --help</code> for the full list of options.</p>
+<p><code>connect()</code> explicitly selects the local server and disables authentication.
+For hosted work, replace its body with <code>return create_client()</code> after configuring
+your <a href="../../auth/">S2GOS profile</a>, or use
+<code>create_client(config_path="s2gos-client.yaml")</code> for a separate profile.
+Use <code>client.login()</code> when interactive authentication is needed. Creating the
+client itself does not log in or submit a request.</p>
+<h2 id="discover-the-process-contract">Discover the process contract</h2>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">inspect_process</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">Client</span><span class="p">,</span> <span class="n">process_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">get_processes</span><span class="p">()</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">get_process</span><span class="p">(</span><span class="n">process_id</span><span class="p">)</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</code></pre></div>
+<p>The process list is a catalogue. The individual description gives you input names,
+types, defaults, required values, constraints, and output descriptions. Read it
+before constructing requests, particularly for deployed scene-generation
+processes whose parameters may change between versions.</p>
+<p>The returned objects are Pydantic models. Their attributes are convenient in
+Python; <code>model_dump_json(indent=2)</code> produces readable JSON for inspection.
+<code>client.get_capabilities()</code> and <code>client.get_conformance()</code> provide service-level
+metadata when you need to identify a deployment or inspect its OGC capabilities.</p>
+<h2 id="submit-once-and-keep-the-id">Submit once and keep the ID</h2>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">submit</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">Client</span><span class="p">,</span> <span class="n">process_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">ProcessRequest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">execute_process</span><span class="p">(</span><span class="n">process_id</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="n">request</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">job</span><span class="o">.</span><span class="n">jobID</span>
+</code></pre></div>
+<p>Input values belong inside <code>ProcessRequest(inputs={...})</code>. They are not top-level
+fields of the request. The process ID is supplied separately to
+<code>execute_process</code>. For the prime-number example, <code>min_val=10</code> and <code>max_val=80</code>
+request the primes in that range.</p>
+<p>The returned <code>JobInfo.jobID</code> identifies this execution. Always retain that
+server-generated value. A response with <code>accepted</code> or <code>running</code> means the job
+still needs monitoring. Do not repeat the submission to refresh its status.</p>
+<h2 id="check-status-before-requesting-results">Check status before requesting results</h2>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">inspect_results</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">Client</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobResults</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_job</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="n">JobStatus</span><span class="o">.</span><span class="n">accepted</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">running</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Check this job ID again later; do not submit another job.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">successful</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Job did not succeed. Read its status and message before retrying.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_job_results</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">results</span>
+</code></pre></div>
+<p>This helper checks once. Call it again with the same job ID later if the job is
+still active. In an automated workflow, poll at an interval suitable for the
+computation and set an overall waiting limit. A client-side timeout does not
+cancel the server job.</p>
+<p>For a successful prime-number job, the results contain a <code>return_value</code> output
+with a list starting at <code>11</code> and ending at <code>79</code>. For a scene-generation job,
+results may instead contain links to files or datasets. Retrieving result
+metadata does not necessarily download the data; see <a href="../results/">Working with results</a>.</p>
+<h2 id="run-the-complete-session">Run the complete session</h2>
+<p>After defining the functions above, run this session:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">connect</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">process_id</span> <span class="o">=</span> <span class="s2">&quot;primes_between&quot;</span>
+        <span class="n">inspect_process</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">process_id</span><span class="p">)</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">ProcessRequest</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;min_val&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;max_val&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">})</span>
+        <span class="n">job_id</span> <span class="o">=</span> <span class="n">submit</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">process_id</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+        <span class="n">inspect_results</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">job_id</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Keep this job ID: </span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">job_id</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+
+<span class="n">job_id</span> <span class="o">=</span> <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+<p>The <code>finally</code> block releases network resources even if discovery or submission
+fails. Closing the client leaves submitted server jobs running. To revisit the
+job, create a new client for the same service and pass the saved ID to
+<code>inspect_results(client, job_id)</code>, then close that client too.</p>
+<p>You can also run the maintained example directly from the repository root:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>examples.guides.api
+</code></pre></div>
+<p>Each invocation submits one new job. If you only want to check an existing job,
+use the helper with its saved ID or the CLI's <code>get-job</code> command instead.</p>
+<h2 id="failures-and-cancellation">Failures and cancellation</h2>
+<p>A transport or HTTP error raises <code>ClientError</code>. A process that fails after
+submission is represented by a job with status <code>failed</code>; inspect its <code>message</code>.
+For a controlled local failure, submit <code>sleep_a_while</code> with
+<code>ProcessRequest(inputs={"duration": 2, "fail": True})</code>, retain the returned ID,
+and check that job after a few seconds.</p>
+<p>To dismiss a selected job, call <code>client.dismiss_job(job_id)</code>. Dismissal can cancel
+work or remove access to a completed job's results, depending on the backend.
+Use only the ID of the job you intend to dismiss. Avoid dismissal loops over all
+jobs, especially on a shared service.</p>
+<h2 id="asynchronous-clients-and-airflow-backed-services">Asynchronous clients and Airflow-backed services</h2>
+<p><code>create_async_client()</code> uses the same S2GOS settings and provides asynchronous
+server calls. Await operations such as <code>get_processes()</code>, <code>execute_process()</code>,
+<code>get_job()</code>, and <code>close()</code>. This is useful when your application already has an
+event loop; it does not change the server job lifecycle. The synchronous client
+also submits jobs for asynchronous execution on the service.</p>
+<p>An Airflow-backed deployment exposes the same OGC interface through the S2GOS
+gateway. Connect to the gateway's API URL, not the Airflow web UI, and discover
+the processes it advertises. Your client does not need Airflow administrator
+credentials. Operators configure the gateway's backend connection using the
+<a href="../../server-cli/">Server CLI</a>. See the <a href="../../client-api/">Client API reference</a>
+for the full client interface.</p>
 
 
 
@@ -1282,10 +1455,10 @@ script, which wraps <code>docker build</code> and pins the eozilla packages (<co
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.top", "navigation.tabs", "navigation.sections", "navigation.indexes", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.tabs", "navigation.sections", "navigation.indexes", "toc.follow", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
