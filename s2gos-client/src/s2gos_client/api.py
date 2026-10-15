@@ -7,6 +7,7 @@ from typing import Any
 
 from cuiman.api import AsyncClient, Client, ClientConfig, ClientError
 from cuiman.api.auth import AuthConfig, OidcAuthConfig
+from pydantic import HttpUrl
 from pydantic_settings import SettingsConfigDict
 
 
@@ -21,7 +22,7 @@ class S2GOSConfig(ClientConfig):
 
     api_url: str | None = "https://s2gos-free.wraptile.brockmann-consult.de/"
     auth: AuthConfig = OidcAuthConfig(
-        issuer_url="https://auth.brockmann-consult.de/realms/dte-s2gos",
+        issuer_url=HttpUrl("https://auth.brockmann-consult.de/realms/dte-s2gos"),
         client_id="cuiman",
     )
 
