@@ -5,7 +5,7 @@
 import os
 
 import pytest
-from cuiman.api.auth import NoAuthConfig, OAuth2AuthConfig, TokenAuthConfig
+from cuiman.api.auth import NoAuthConfig, OidcAuthConfig, TokenAuthConfig
 
 import s2gos_client.api as api
 
@@ -43,13 +43,10 @@ def test_create_client_uses_s2gos_defaults(create_client):
     assert isinstance(client.config, api.S2GOSConfig)
     assert client.config.api_url == "https://s2gos-free.wraptile.brockmann-consult.de/"
     auth = client.config.auth
-    assert isinstance(auth, OAuth2AuthConfig)
-    assert str(auth.token_url) == (
-        "https://kc.dev.brockmann-consult.de/realms/dte-s2gos/protocol"
-        "/openid-connect/token"
-    )
+    assert isinstance(auth, OidcAuthConfig)
+    assert str(auth.issuer_url) == "https://auth.brockmann-consult.de/realms/dte-s2gos"
     assert auth.client_id == "cuiman"
-    assert auth.grant_type == "password"
+    assert auth.scopes == ("openid",)
 
 
 def test_create_client_accepts_auth_override(create_client):

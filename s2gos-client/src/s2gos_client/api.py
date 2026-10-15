@@ -6,8 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from cuiman.api import AsyncClient, Client, ClientConfig, ClientError
-from cuiman.api.auth import AuthConfig, OAuth2AuthConfig
-from pydantic import HttpUrl
+from cuiman.api.auth import AuthConfig, OidcAuthConfig
 from pydantic_settings import SettingsConfigDict
 
 
@@ -21,13 +20,9 @@ class S2GOSConfig(ClientConfig):
     default_path = Path("~").expanduser() / ".s2gos-client"
 
     api_url: str | None = "https://s2gos-free.wraptile.brockmann-consult.de/"
-    auth: AuthConfig = OAuth2AuthConfig(
-        token_url=HttpUrl(
-            "https://kc.dev.brockmann-consult.de/realms/dte-s2gos/protocol"
-            "/openid-connect/token"
-        ),
+    auth: AuthConfig = OidcAuthConfig(
+        issuer_url="https://auth.brockmann-consult.de/realms/dte-s2gos",
         client_id="cuiman",
-        grant_type="password",
     )
 
 
