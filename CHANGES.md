@@ -1,6 +1,7 @@
-## Changes in version 0.2.1 (in development)
+## Changes in version 0.3.0 (in development)
 
-- Added new app branding based on Cuiman configuration.
+- Added new app runtime branding as of Cuiman 0.4.x.
+
 
 ## Changes in version 0.2.0
 
