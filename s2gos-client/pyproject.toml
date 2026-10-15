@@ -4,7 +4,7 @@
 
 [project]
 name = "s2gos-client"
-version = "0.2.0"
+version = "0.2.1.dev0"
 description = "Python client for the ESA DTE-S2GOS synthetic scene generator service"
 readme = "README.md"
 authors = [
@@ -43,8 +43,8 @@ dependencies = [
   "xarray",
   "zarr",
   # Eozilla dependencies
-  "cuiman >=0.3.1",
-  "gavicore >=0.3.0",
+  "cuiman >=0.4.0.dev0",
+  "gavicore >=0.4.0.dev0",
 ]
 
 [project.scripts]
@@ -63,15 +63,13 @@ build-backend = "hatchling.build"
 [tool.hatch.build]
 sources = ["src"]
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/s2gos_client"]
+
 [tool.hatch.build.targets.sdist]
 include = [
   "src/s2gos_client/**/*",
   "pyproject.toml",
   "README.md",
   "LICENSE",
-]
-
-[tool.hatch.build.targets.wheel]
-include = [
-  "src/s2gos_client/**/*"
 ]

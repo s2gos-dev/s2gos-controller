@@ -1,3 +1,7 @@
+## Changes in version 0.2.1 (in development)
+
+- Added new app branding based on Cuiman configuration.
+
 ## Changes in version 0.2.0
 
 - Updated `s2gos-client` to use latest Cuiman configuration API.
