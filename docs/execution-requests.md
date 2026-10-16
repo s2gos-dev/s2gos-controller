@@ -7,13 +7,24 @@ _execution request file_ in JSON or YAML format. The structure is simple, for ex
 {
     "process_id": "primes_between",
     "inputs": {
-      "min_val": 100,
-      "max_val": 200
+      "min_val": 10,
+      "max_val": 80
     }
 }
 ```
 
-The process request file format in detail:
+This is the CLI's execution-request format. Python's `ProcessRequest` contains
+`inputs`, `outputs`, and `subscriber`; pass the process ID separately to
+`client.execute_process(process_id, request=...)`. The `dotpath` setting is a
+CLI convenience for constructing nested inputs, not a process input itself.
+
+Use `s2gos-client create-request PROCESS_ID` to generate a starting template from
+the server's process description. Review generated values before use.
+`s2gos-client validate-request --request request.json` validates the request
+structure offline; it does not validate inputs against a remote process schema.
+See the [CLI walkthrough](guide/client-cli.md) for a complete submission.
+
+The execution-request file format in detail:
 
 - `process_id`: Process identifier
 - `dotpath`: Whether dots in input names should be used to create

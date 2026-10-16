@@ -1,153 +1,71 @@
 # Contributing to the project
 
-## Changelog
+Contributions are welcome through the
+[issue tracker](https://github.com/s2gos-dev/s2gos-controller/issues) and
+[pull requests](https://github.com/s2gos-dev/s2gos-controller/pulls).
+Read the [contribution guide](https://github.com/s2gos-dev/s2gos-controller/blob/main/CONTRIBUTING.md)
+and [code of conduct](https://github.com/s2gos-dev/s2gos-controller/blob/main/CODE_OF_CONDUCT.md).
+Document user-visible changes in
+[CHANGES.md](https://github.com/s2gos-dev/s2gos-controller/blob/main/CHANGES.md).
 
-You can find the complete changelog 
-[here](https://github.com/s2gos-dev/s2gos-controller/blob/main/CHANGES.md). 
+## Development setup
 
-## Reporting
+Follow [Installation](installation.md#using-github), then work from the repository
+root inside `pixi shell`. See [Getting started](guide/index.md) for the local
+server and client workflow. Use `s2gos-server dev -- wraptile.services.local.testing:service`
+when you need the server to reload after code changes.
 
-If you have suggestions, ideas, feature requests, or if you have identified
-a malfunction or error, then please 
-[post an issue](https://github.com/s2gos-dev/s2gos-controller/issues). 
-
-## Contributions
-
-The S2GOS client project welcomes contributions of any form as long as you 
-respect our 
-[code of conduct](https://github.com/s2gos-dev/s2gos-controller/blob/main/CODE_OF_CONDUCT.md)
-and follow our 
-[contribution guide](https://github.com/s2gos-dev/s2gos-controller/blob/main/CONTRIBUTING.md).
-
-If you'd like to submit code or documentation changes, we ask you to provide a 
-pull request (PR) 
-[here](https://github.com/s2gos-dev/s2gos-controller/pulls). 
-For code and configuration changes, your PR must be linked to a 
-corresponding issue. 
-
-## Development
-
-### Setup
-
-Before you start, make sure you have [pixi](https://pixi.sh) installed.
-
-Checkout sources
-
-```commandline
-git clone https://github.com/s2gos-dev/s2gos-controller.git
-cd ./s2gos-controller
-```
-
-Create a new Python environment and activate it:
-
-```commandline
-pixi install 
-pixi shell
-```
-
-### Running the S2GOS controller tools
-
-Run local test server
-
-```commandline
-s2gos-server run -- s2gos_server.services.local.testing:service
-```
-
-The dev mode is useful if you are changing server code:
-
-```commandline
-s2gos-server dev s2gos_server.services.local.testing:service
-```
-
-Run client API
-
-```python
-from s2gos_client import Client
-
-client = Client()
-client.get_processes()
-client.get_jobs()
-```
-
-Run client GUI (in Jupyter notebooks)
-
-```python
-from s2gos_client.gui import Client
-
-client = Client()
-client.show()
-client.show_jobs()
-```
-
-Run client CLI
-
-```commandline
-$ s2gos-client --help
-```
-
-### Formatting & Linting
-
-```commandline
-pixi run isort .
-pixi run ruff format 
-pixi run ruff check
-```
-
-### Testing & Coverage
-
-```commandline
-pixi run test
+```bash
+pixi run format
+pixi run checks
+pixi run tests
 pixi run coverage
 ```
 
-### Version syncing
+Before a release, update the version in the root `pyproject.toml` and synchronize
+package versions with `pixi run sync-versions`.
 
-Before a release increase version number in root `pyproject.toml`
-then synchronize versions in workspaces `tools/pyproject.toml` using 
+## Maintain the user guide
 
-```commandline
-pixi run sync-versions
-```
+The user guide is maintained as Markdown in `docs/guide/`, with shared
+configuration and authentication documentation in `docs/auth.md`. Original
+notebooks remain under `notebooks/` for exploration. They are not copied or
+rendered during documentation builds. Old generated files under `docs/notebooks/`
+are excluded from the site, including any local configuration files left there.
 
-### Code generation
+Reusable Python, shell, and JSON examples live in `examples/guides/`. Include
+code using `pymdownx.snippets` rather than maintaining a second copy in Markdown.
+Named sections use matching `# --8<-- [start:name]` and
+`# --8<-- [end:name]` comments. The build fails if a snippet path is missing.
+Keep imports, variable definitions, and cleanup clear when splitting examples
+across multiple blocks. If a snippet needs an earlier step, say so in the prose.
 
-Some code is generated (see respective file headers)
-from an OpenAPI specification in `tools/openapi.yaml`. 
-If this file is changed, code need to be regenerated: 
+Examples should use the local test service, retain server-assigned job IDs, and
+close clients and datasets. Imports must not connect, submit jobs, or start an
+App. Explain how to adapt the workflow to hosted S2GOS without publishing
+credentials or assuming a particular scientific process is installed.
 
-```commandline
-pixi run generate
-```
-
-This will generate S2GOS'
-
-- [pydantic](https://docs.pydantic.dev/) models in `s2gos-common/src/s2gos_common/models.py` 
-(uses [datamodel-code-generator](https://koxudaxi.github.io/datamodel-code-generator/))
-- client implementation in `s2gos-client/src/s2gos_client/client.py` and CLI documentation `docs/cli.md`
-- server routes in `s2gos-server/src/s2gos_server/routes.py` and the 
-  service interface in `s2gos-server/src/s2gos_server/service.py`
-
-### Documentation
-
-The S2GOS client's documentation is built using the 
-[mkdocs](https://www.mkdocs.org/) tool.
-
-With repository root as current working directory:
+The client test suite checks the example workflows, including failure handling,
+App cleanup, and opening an actual local Zarr result. Example code participates
+in formatting, linting, type checking, and client coverage. When you change a
+snippet, validate the rendered walkthrough as well as its Python module.
 
 ```bash
-mkdocs build
-mkdocs serve
-mkdocs gh-deploy
+pixi run gen-cli-docs
+pixi run doc-build
+pixi run doc-serve
 ```
 
-After changing the CLI code, always update its documentation `docs/cli.md` 
-by running
+The CLI reference pages are generated; update them with `gen-cli-docs` after
+changing CLI behavior. `doc-build` uses strict mode, also in CI. Preview changed
+pages and check headings, code blocks, links, and navigation before submitting.
 
-```bash
-pixi run gen-client
-```
+If adding a screenshot, capture the current App against the local test service,
+keep credentials and private job data out of the image, and record the process,
+inputs, App version or revision, and capture steps alongside the asset so it can
+be reproduced.
 
 ## License
 
-The S2GOS client is open source made available under the terms and conditions of the 
+The project is available under the
 [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html).

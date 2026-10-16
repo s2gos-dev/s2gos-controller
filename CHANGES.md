@@ -3,7 +3,20 @@
 - Added new app runtime branding as of Cuiman 0.4.x.
 
 
+## Changes in version 0.2.1 (in development)
+
+- `s2gos-client` now defaults to OIDC login against
+  `auth.brockmann-consult.de`; the password grant is no longer allowed.
+- Updated `docs/auth.md` to the current Cuiman auth configuration.
+
+
 ## Changes in version 0.2.0
+
+- Replaced notebook-generated user guides with maintained Markdown walkthroughs
+  for setup, authentication, the Python API, App, CLI, and result access. Reusable
+  examples are checked alongside the client. Documentation builds run in strict
+  mode, including in CI, and no longer copy or render notebooks. Original
+  notebooks remain available for independent exploration.
 
 - Updated `s2gos-client` to use latest Cuiman configuration API.
 - `client.show_app()` now defaults to an S2GOS-branded GUI build (bundled

@@ -3,11 +3,12 @@
 #  https://opensource.org/license/apache-2-0.
 
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
 from cuiman.api import AsyncClient, Client, ClientConfig, ClientError
 from cuiman.api.auth import AuthConfig, OAuth2AuthConfig
 from cuiman.api.branding import AppBranding, AppImageIcon
+from cuiman.api.auth import AuthConfig, OidcAuthConfig
 from pydantic import HttpUrl
 from pydantic_settings import SettingsConfigDict
 
@@ -21,19 +22,18 @@ class S2GOSConfig(ClientConfig):
         extra="allow",  # ClientConfig uses "forbid"
     )
 
+    display_name: ClassVar[str] = "S2GOS Client"
+    cli_name: ClassVar[str] = "s2gos-client"
+
     default_path = Path("~").expanduser() / ".s2gos-client"
 
     display_name = "S2GOS Client"
     cli_name = "s2gos-client"
 
     api_url: str | None = "https://s2gos-free.wraptile.brockmann-consult.de/"
-    auth: AuthConfig = OAuth2AuthConfig(
-        token_url=HttpUrl(
-            "https://kc.dev.brockmann-consult.de/realms/dte-s2gos/protocol"
-            "/openid-connect/token"
-        ),
+    auth: AuthConfig = OidcAuthConfig(
+        issuer_url=HttpUrl("https://auth.brockmann-consult.de/realms/dte-s2gos"),
         client_id="cuiman",
-        grant_type="password",
     )
 
     branding: AppBranding = AppBranding(

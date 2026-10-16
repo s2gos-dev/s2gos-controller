@@ -36,4 +36,4 @@ therefore build on the Eozilla packages
 [Cuiman](https://github.com/eo-tools/eozilla/tree/main/cuiman), 
 [Wraptile](https://github.com/eo-tools/eozilla/tree/main/wraptile) and others.
 
-[Get Started](installation){ .md-button .md-button--primary }
+[Get Started](guide/index.md){ .md-button .md-button--primary }
