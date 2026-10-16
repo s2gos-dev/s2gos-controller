@@ -6,6 +6,7 @@ in the operating system's keyring. For the local tutorials, use a separate profi
 with no authentication. For a hosted deployment, use the settings supplied by
 its operator.
 
+
 ## Profiles and defaults
 
 The default profile is `~/.s2gos-client`. The S2GOS factory functions
