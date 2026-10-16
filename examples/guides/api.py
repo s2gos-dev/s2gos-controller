@@ -1,7 +1,7 @@
 """Run with python -m examples.guides.api against the local test service."""
 
 # --8<-- [start:imports]
-from gavicore.models import JobResults, JobStatus, ProcessRequest
+from gavicore.models.core import JobResults, JobStatus, ProcessRequest
 
 from s2gos_client import Client, create_client
 

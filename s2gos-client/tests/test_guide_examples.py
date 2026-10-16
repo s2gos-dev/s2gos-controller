@@ -9,7 +9,7 @@ import cuiman.api  # noqa: F401  (works around cuiman circular import)
 import pytest
 import xarray as xr
 from cuiman.app import App
-from gavicore.models import JobInfo, JobStatus, ProcessRequest
+from gavicore.models.core import JobInfo, JobStatus, ProcessRequest
 from markdown import markdown
 from procodile import Job
 from remotestate import ServeResult
@@ -306,7 +306,7 @@ def test_local_opener_selects_only_supported_outputs(
     import asyncio
 
     from cuiman.api.opener import JobResultOpenContext
-    from gavicore.models import JobResults, Link
+    from gavicore.models.core import JobResults, Link
 
     ctx = JobResultOpenContext(
         config=S2GOSConfig(auth={"auth_type": "none"}),

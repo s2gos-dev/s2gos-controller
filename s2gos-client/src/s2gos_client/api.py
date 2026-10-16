@@ -6,9 +6,8 @@ from pathlib import Path
 from typing import Any, ClassVar
 
 from cuiman.api import AsyncClient, Client, ClientConfig, ClientError
-from cuiman.api.auth import AuthConfig, OAuth2AuthConfig
-from cuiman.api.branding import AppBranding, AppImageIcon
 from cuiman.api.auth import AuthConfig, OidcAuthConfig
+from cuiman.api.branding import AppBranding, AppImageIcon
 from pydantic import HttpUrl
 from pydantic_settings import SettingsConfigDict
 
@@ -40,7 +39,7 @@ class S2GOSConfig(ClientConfig):
         title="S2GOS Processes",
         favicon=Path(_BRANDING_DIR / "favicon.ico"),
         icon=AppImageIcon(path=_BRANDING_DIR / "icon.png"),
-        icon_position="",
+        icon_position="before",
     )
 
 
