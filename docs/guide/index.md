@@ -33,7 +33,7 @@ prepare the required scene inputs and output locations, submit once, then monito
 the returned job ID. Storage access may require additional credentials; see
 [Working with results](results.md#access-data-from-a-hosted-service).
 
-## Testing the client locally
+## Run the examples locally
 
 !!! note
 
