@@ -1,6 +1,7 @@
 #  Copyright (c) 2026 by ESA DTE-S2GOS team and contributors
 #  Permissions are hereby granted under the terms of the Apache 2.0 License:
 #  https://opensource.org/license/apache-2-0.
+
 from pathlib import Path
 from typing import Any
 
@@ -36,9 +37,10 @@ class S2GOSConfig(ClientConfig):
     )
 
     branding: AppBranding = AppBranding(
-        title="S2GOS App",
+        title="S2GOS Processes",
         favicon=Path(_BRANDING_DIR / "favicon.ico"),
         icon=AppImageIcon(path=_BRANDING_DIR / "icon.png"),
+        icon_position="",
     )
 
 
