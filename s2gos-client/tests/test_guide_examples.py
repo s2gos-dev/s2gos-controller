@@ -5,6 +5,7 @@ import re
 from pathlib import Path
 from unittest.mock import Mock
 
+import cuiman.api  # noqa: F401  (works around cuiman circular import)
 import pytest
 import xarray as xr
 from cuiman.app import App
@@ -254,6 +255,20 @@ def test_scene_session_submits_and_closes_dataset(monkeypatch, client):
     assert client.execute_process.call_args.args == ("simulate_scene",)
     assert client.open_job_result.call_args.args == ("submitted-42",)
     closed.assert_called_once()
+    client.close.assert_called_once()
+
+
+def test_results_script_reopens_saved_job(monkeypatch, client):
+    import runpy
+
+    monkeypatch.setattr(api, "connect", lambda: client)
+    monkeypatch.setattr("sys.argv", ["results.py", "--job-id", "saved-job"])
+    client.open_job_result.return_value = xr.Dataset({"a": ("time", [0.0])})
+    # Relative imports in results.py need run_module rather than run_path.
+    with pytest.warns(RuntimeWarning, match="found in sys.modules"):
+        runpy.run_module("examples.guides.results", run_name="__main__")
+    client.execute_process.assert_not_called()
+    assert client.open_job_result.call_args.args == ("saved-job",)
     client.close.assert_called_once()
 
 
