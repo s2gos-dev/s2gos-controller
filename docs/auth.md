@@ -1,229 +1,165 @@
-# Authentication
+# Configuration and authentication
 
-The S2GOS client authenticates requests to the S2GOS service (an
-OGC API - Processes server) using standard HTTP mechanisms. There is **no
-provider-specific code**: the client speaks generic OAuth2 / OIDC and HTTP
-auth, so it works with any compliant authorization server: Keycloak, Auth0,
-Azure AD, or a plain token issuer.
+The S2GOS client uses one configuration model across its Python API, CLI, and
+App. Public service settings live in a YAML profile; the CLI stores login secrets
+in the operating system's keyring. For the local tutorials, use a separate profile
+with no authentication. For a hosted deployment, use the settings supplied by
+its operator.
 
-This page explains how to configure the client, with a focus on connecting it
-to an **OpenID Connect / OAuth2 authorization server**.
 
-## Supported authentication types
+## Profiles and defaults
 
-Authentication settings live in a nested `auth` section of the client
-configuration. Its `auth_type` selects how the client authenticates:
+The default profile is `~/.s2gos-client`. The S2GOS factory functions
+`create_client()` and `create_async_client()` select this profile and the
+`S2GOS_` environment namespace. Use `config_path="profile.yaml"` in Python or
+`--config profile.yaml` on CLI commands to select another profile.
 
-| `auth_type` | How it works | Required settings |
-|-------------|--------------|-------------------|
-| `none`      | No authentication. | — |
-| `oidc`      | OpenID Connect *Authorization Code + PKCE*: sign in through the browser, then send the access token as a bearer and refresh it automatically. **This is the default.** | `issuer_url`, `client_id` |
-| `oauth2`    | OAuth2 *password* or *client-credentials* grant against a token endpoint; tokens are refreshed automatically. | `token_url`, `client_id`, plus `username`/`password` (password grant) or `client_secret` (client credentials) |
-| `token`     | Send a pre-obtained static access token. | `access_token` |
-| `login`     | Exchange username/password at a *proprietary* (non-OAuth2) login endpoint for an access token. | `login_url`, `username`, `password` |
-| `api-key`   | Send an API key in a custom header. | `api_key` |
-| `basic`     | HTTP Basic Auth. | `username`, `password` |
-
-For the hosted S2GOS service you normally use **`oidc`** (interactive sign-in)
-or **`token`** (if you already hold an access token, e.g. inside JupyterHub).
-
-## Configuration settings
-
-| Setting | Description |
-|---------|-------------|
-| `api_url` | URL of the S2GOS service (OGC API - Processes). Top-level setting. |
-| `auth.auth_type` | One of the types above. |
-| `auth.issuer_url` | OIDC issuer URL (`oidc`), e.g. a Keycloak realm URL. Endpoints are discovered from `<issuer_url>/.well-known/openid-configuration`. |
-| `auth.scopes` | Extra OIDC scopes (`oidc`); `openid` is always included. |
-| `auth.token_url` | OAuth2 **token endpoint** (`oauth2`). |
-| `auth.grant_type` | `password` (default) or `client_credentials` (`oauth2`). |
-| `auth.client_id` / `auth.client_secret` | OAuth2/OIDC client. `client_secret` is only needed for *confidential* clients. |
-| `auth.username` / `auth.password` | User credentials (`oauth2` password grant, `login`, `basic`). |
-| `auth.access_token` | Static access token (`token`, or obtained by `login`). |
-| `auth.access_token_header` | Send the raw token in this header instead of `Authorization: Bearer <token>` (`token`, `login`). |
-| `auth.oauth_token` | The OAuth2/OIDC token set (access + refresh token), managed by the client. |
-| `auth.api_key` / `auth.api_key_header` | API key and its header (default `X-API-Key`) for `api-key`. |
-
-### Where settings come from
-
-Settings are merged from several sources, in increasing order of precedence:
-
-1. Built-in defaults.
-2. The configuration file `~/.s2gos-client` (YAML).
-3. A local `.env` file, then environment variables prefixed with `S2GOS_`.
-   Nested `auth` settings use a double underscore, e.g. `S2GOS_AUTH__AUTH_TYPE`.
-4. Values passed directly in Python (`create_client(**settings)`).
-
-So a value passed in code overrides an environment variable, which overrides
-the config file. Passing an `auth` mapping that contains `auth_type` replaces
-the whole `auth` section; one without `auth_type` is merged into it.
-
-### Where secrets are stored
-
-Secrets (passwords, client secrets, access/refresh tokens, API keys) are **not**
-written to `~/.s2gos-client`. `s2gos-client login` stores them in the operating
-system **keyring**, and the client reads them from there when the configuration
-does not supply them. `s2gos-client logout` removes them again.
-
-### Default configuration
-
-Out of the box, the client is preconfigured for the hosted S2GOS service and
-its Keycloak realm, so a plain `create_client()` targets that deployment. The
-built-in defaults are:
+Current built-in defaults in `S2GOSConfig` are:
 
 | Setting | Default |
-|---------|---------|
+| --- | --- |
 | `api_url` | `https://s2gos-free.wraptile.brockmann-consult.de/` |
-| `auth.auth_type` | `oidc` (Authorization Code + PKCE) |
-| `auth.issuer_url` | `https://auth.brockmann-consult.de/realms/dte-s2gos` |
+| `auth.auth_type` | `oauth2` |
+| `auth.token_url` | `https://kc.dev.brockmann-consult.de/realms/dte-s2gos/protocol/openid-connect/token` |
 | `auth.client_id` | `cuiman` |
-| `auth.scopes` | `openid` |
+| `auth.grant_type` | `password` |
 
-Because `auth_type` defaults to `oidc`, signing in opens a browser login at
-the Keycloak realm (which can hand off to DestinE IAM); no username or
-password is handled by the client. Override any default by passing it to
-`create_client`, setting the matching `S2GOS_*` environment variable, or storing
-it in `~/.s2gos-client` — for example, point `api_url` / `auth.issuer_url` at a
-different deployment, or use `auth_type="token"` inside JupyterHub.
+These are package defaults, not a guarantee of access to that deployment. Confirm
+which service and account you should use with your operator.
 
-## Signing in with OIDC (default)
+For a newly created client, settings have increasing precedence: built-in defaults,
+profile file, local `.env` file, process environment, supplied `config` fields,
+and explicit keyword overrides. Environment variables can therefore override
+settings in a selected profile. Explicit Python keyword arguments take precedence.
 
-From the command line:
+Authentication is a nested `auth` object. A partial override without `auth_type`
+merges with the selected authentication settings. An override containing
+`auth_type` replaces the previous authentication object, so supply the required
+provider fields when selecting a new mechanism.
 
-```console
-$ s2gos-client login
+## Local service: no login
+
+From an activated environment at the repository root:
+
+```bash
+--8<-- "examples/guides/cli.sh:configure"
 ```
 
-This opens a browser at the authorization server; after you sign in, the
-token is saved in the keyring and reused by both the CLI and Python. Use
-`--no-browser` to print the authorization URL instead (e.g. over SSH), and
-`--force` to discard the stored token and sign in again.
-
-A configuration file for the default deployment looks like this:
+The generated profile describes this service:
 
 ```yaml
-api_url: https://s2gos-free.wraptile.brockmann-consult.de/
+api_url: http://127.0.0.1:8008/
 auth:
-  auth_type: oidc
-  issuer_url: https://auth.brockmann-consult.de/realms/dte-s2gos
-  client_id: cuiman
+  auth_type: none
 ```
 
-You can write it interactively with `s2gos-client configure`, or
-non-interactively:
+In Python, use `create_client(config_path="local-client.yaml")`, or supply both
+`api_url="http://127.0.0.1:8008"` and `auth={"auth_type": "none"}` explicitly.
+Changing only the API URL does not disable the S2GOS authentication defaults.
 
-```console
-$ s2gos-client configure --api-url https://s2gos-free.wraptile.brockmann-consult.de/ \
-    --auth-type oidc \
-    --issuer-url https://auth.brockmann-consult.de/realms/dte-s2gos \
-    --client-id cuiman
+## Hosted service: configure, then log in
+
+Run these commands in an interactive terminal:
+
+```bash
+s2gos-client configure
+s2gos-client login
+s2gos-client list-processes
 ```
 
-In Python, `create_client()` picks up the stored token; call
-`client.login()` (or `client.login(force=True)`) to sign in from a notebook.
-Pass `save=True` to also store the new token in the keyring.
+`configure` prompts for the service URL and public authentication settings. Check
+the displayed defaults, especially if you have previously used another service.
+`login` obtains credentials and stores them in the OS keyring. For a separate
+profile, add `--config s2gos-client.yaml` to each command.
 
-!!! note "OIDC needs a browser on the same machine"
-    The Authorization Code flow redirects back to a loopback address on the
-    machine running the client. Where that is not possible (e.g. a remote
-    JupyterHub server), use a static `token` instead.
+Once configured, use that same profile from Python:
 
-## Using the OAuth2 password grant
+```python
+from s2gos_client import create_client
 
-For scripts and CI you can exchange a username and password for a token at the
-token endpoint. For a **Keycloak** realm it looks like:
-
+client = create_client()
+try:
+    client.login()  # reuses credentials or prompts when needed
+    print(client.get_processes().model_dump_json(indent=2))
+finally:
+    client.close()
 ```
-https://<keycloak-host>/realms/<realm>/protocol/openid-connect/token
-```
+
+Constructing a client does not log in immediately. Requests can acquire tokens
+from supplied credentials without prompting; call `login()` explicitly for an
+interactive login. Use `client.login(save=True)` if you also want a Python login
+to save its credentials for later sessions. Plain `close()` releases connections
+and does not log out or cancel server jobs.
+
+## Supported mechanisms
+
+| `auth.auth_type` | Purpose | Main settings inside `auth` |
+| --- | --- | --- |
+| `none` | Unauthenticated service | None |
+| `oauth2` | OAuth2 password or client-credentials grant | `token_url`, `client_id`, `grant_type`; credentials for the selected grant |
+| `oidc` | Browser login using Authorization Code with PKCE | `issuer_url`, `client_id`, optional `scopes` |
+| `token` | An existing access token | `access_token`, optional `access_token_header` |
+| `basic` | HTTP Basic authentication | `username`, `password` |
+| `api-key` | API key in a header | `api_key`, optional `api_key_header` |
+| `login` | A proprietary username/password login endpoint | `login_url`, `username`, `password` |
+
+Use `oauth2` for an OAuth2 token endpoint. The `login` authentication type is a
+different mechanism and is not the name for OAuth2 password authentication.
+For an existing token, the default is `Authorization: Bearer ...`; set
+`access_token_header` only when the service expects another header.
+
+## Supply credentials from the environment
+
+Nested fields use a double underscore. For example, set
+`S2GOS_AUTH__USERNAME` and `S2GOS_AUTH__PASSWORD` in your environment to supply
+credentials for the default OAuth2 configuration. Keep the provider fields
+unchanged by omitting `S2GOS_AUTH__AUTH_TYPE` when you only need to add credentials.
+
+For static-token access, set `S2GOS_API_URL`,
+`S2GOS_AUTH__AUTH_TYPE=token`, and `S2GOS_AUTH__ACCESS_TOKEN`.
+Use your shell or secret manager to provide the values. Flat settings such as
+`S2GOS_TOKEN` or `S2GOS_AUTH_TYPE` are not the current authentication interface.
+
+You can also pass credentials explicitly from environment variables in Python:
 
 ```python
 import os
 from s2gos_client import create_client
 
 client = create_client(
-    api_url="https://s2gos.example/",
     auth={
-        "auth_type": "oauth2",
-        "token_url": "https://keycloak.example/realms/s2gos/protocol/openid-connect/token",
-        "client_id": "s2gos-client",
-        "client_secret": os.environ.get("S2GOS_CLIENT_SECRET"),  # confidential clients only
-        "username": "alice",
-        "password": os.environ["S2GOS_PASSWORD"],
-    },
+        "username": os.environ["S2GOS_AUTH__USERNAME"],
+        "password": os.environ["S2GOS_AUTH__PASSWORD"],
+    }
 )
-
-processes = client.get_processes()
+try:
+    client.login(interactive=False)
+    print(client.get_processes().model_dump_json(indent=2))
+finally:
+    client.close()
 ```
 
-!!! warning "The client must allow direct access grants"
-    The password grant only works if the authorization server permits it for
-    the client (in Keycloak: *Direct access grants* enabled). The default
-    `cuiman` client of the hosted S2GOS realm does **not** allow it and
-    rejects the request with `unauthorized_client`; use `oidc` there.
+This partial `auth` override assumes the selected profile uses OAuth2 password
+authentication. For another provider, configure its token URL and client ID first.
+Do not put passwords, access tokens, or client secrets in example request files.
 
-Under the hood the client sends
+## Automated runs and token lifetime
 
-```
-POST <token_url>
-Content-Type: application/x-www-form-urlencoded
+In unattended Python jobs, supply credentials through the environment and use
+`client.login(interactive=False)` to fail early if authentication cannot proceed.
+The CLI requires a profile even when environment variables supply credentials.
+Create that profile before running your job. `s2gos-client login --no-input`
+uses supplied credentials without prompts and saves them to the OS keyring, so
+it also requires a working keyring. Ordinary API calls can use credentials
+provided at runtime without saving them.
 
-grant_type=password&username=alice&password=…&client_id=s2gos-client
-```
+OAuth2/OIDC sessions can renew tokens when the provider supplies the necessary
+refresh information. A static token has no automatic refresh flow; replace it
+when it expires. If a saved login no longer works, use
+`s2gos-client login --force` with the appropriate profile. Use
+`s2gos-client logout` to remove its stored credentials when you intend to sign out.
 
-and sends the returned access token as `Authorization: Bearer <access_token>`
-on every request, refreshing it with the refresh token before it expires.
-
-!!! tip "Keep secrets out of source code"
-    Read passwords and client secrets from environment variables (as above)
-    rather than hard-coding them. Never commit credentials to version control.
-
-## Using a static token instead
-
-If you already have an access token (for example, obtained out-of-band from
-your authorization server, or injected by JupyterHub), provide it directly:
-
-```python
-from s2gos_client import create_client
-
-client = create_client(
-    auth={"auth_type": "token", "access_token": "eyJhbGciOi…"},
-)
-```
-
-The token is sent as `Authorization: Bearer <token>`, or in
-`access_token_header` if you set one. A static token is not refreshed;
-provide a new one when it expires.
-
-## Configuration by environment variables
-
-Any setting can be supplied via an `S2GOS_`-prefixed environment variable (or a
-`.env` file in the working directory), using `__` for nested `auth` settings.
-This is convenient for CI, containers, and JupyterHub:
-
-```bash
-export S2GOS_API_URL="https://s2gos.example/"
-export S2GOS_AUTH__AUTH_TYPE="token"
-export S2GOS_AUTH__ACCESS_TOKEN="eyJhbGciOi…"
-```
-
-```python
-from s2gos_client import create_client
-
-client = create_client()  # settings picked up from the environment
-```
-
-## Token expiry and refresh
-
-For `oidc` and `oauth2`, the client refreshes the access token with the
-refresh token before it expires.
-If the refresh token itself has expired (e.g. after a long idle period), sign
-in again with `s2gos-client login --force` or `client.login(force=True)`.
-
-## Security notes
-
-- Never commit passwords, client secrets, or tokens to version control.
-- Prefer `oidc` or environment variables over storing credentials in code;
-  secrets obtained via `s2gos-client login` are kept in the OS keyring.
-- Always use `https://` URLs for `api_url`, `issuer_url`, and `token_url` so
-  credentials and tokens are not sent in clear text.
+For missing credentials or keyring errors, check that you are using the same
+profile, service URL, and account as during login. For authorization failures,
+confirm your account has permission for that service. Data-storage credentials
+are separate; see [Working with results](guide/results.md#access-data-from-a-hosted-service).

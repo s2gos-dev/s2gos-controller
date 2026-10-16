@@ -15,8 +15,12 @@ known_first_party = ["s2gos_client", "s2gos_server"]
 [tool.black]
 line-length = 88
 
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
 [tool.ruff]
 include = [
+    "examples/guides/**/*.py",
     "notebooks/**/*.py",
     "s2gos-client/src/**/*.py",
     "s2gos-server/src/**/*.py",
@@ -87,13 +91,12 @@ tomlkit = "*"  # to sync versions
 mkdocs = "==1.6.1"
 mkdocs-autorefs = ">=1.4.3,<1.5"
 mkdocs-get-deps = ">=0.2,<0.3"
-mkdocs-jupyter = ">=0.25.1,<0.26"
 mkdocs-material = ">=9.7.1,<9.8"
 mkdocs-material-extensions = ">=1.3.1,<1.4"
 mkdocstrings = ">=1.0.0,<1.1"
 mkdocstrings-python = ">=2.0.1,<2.1"
-nbformat = ">=5.10.4,<5.11"
 pygments = ">=2.19,<2.20"
+pymdown-extensions = ">=10.20,<13"
 
 [tool.pixi.pypi-dependencies]
 # Airflow is only available on PyPI
@@ -127,15 +130,17 @@ test-client = "pytest s2gos-client/tests"
 test-server = "pytest s2gos-server/tests"
 cov-report-html = "coverage html -d .cov-report && coverage report"
 cov-report-xml = "coverage xml -o coverage.xml && coverage report"
-cov-client = "pytest --cov s2gos-client/src/s2gos_client --cov-report= --cov-append s2gos-client/tests"
+cov-client = "pytest --cov s2gos-client/src/s2gos_client --cov examples/guides --cov-report= --cov-append s2gos-client/tests"
 cov-server = "pytest --cov s2gos-server/src/s2gos_server --cov-report= --cov-append s2gos-server/tests"
 check-client = "ruff check s2gos-client/src"
 check-server = "ruff check s2gos-server/src"
+check-examples = "ruff check examples/guides"
+check-example-format = "ruff format --check examples/guides"
 typecheck = "mypy ."
 gen-cli-docs = "python -m tools.gen_cli_docs"
 sync-versions = "python tools.sync_versions"
 doc-serve = "mkdocs serve"
-doc-build = "mkdocs build"
+doc-build = "mkdocs build --strict"
 jl = "jupyter-lab"
 
 # pixi run format
@@ -159,7 +164,7 @@ depends-on = ["cov-client", "cov-server", "cov-report-xml"]
 # pixi run checks
 
 [tool.pixi.tasks.checks]
-depends-on = ["check-client", "check-server", "typecheck"]
+depends-on = ["check-client", "check-server", "check-examples", "check-example-format", "typecheck"]
 
 # pixi run build
 

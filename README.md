@@ -56,66 +56,23 @@ need to install both [git](https://git-scm.com/install/) and
 [pixi](https://pixi.sh/latest/installation/) first. Then:
 
 ```bash
-git clone https://github.com/eo-tools/sen4cap-client.git
+git clone https://github.com/s2gos-dev/s2gos-controller.git
 cd s2gos-controller
 pixi install
 pixi shell
 ```
 
-The installed development environment includes also JupyterLab so the recommended
-way to get started is to take a look at the notebooks in the `notebooks` folder.
-
-```bash
-cd notebooks
-jupyter-lab
-```
+The environment includes both controller packages, JupyterLab, and the
+requirements for the local demonstration processes.
 
 ## Getting started
 
-After installing the S2GOS controller packages in your Python environment
-and activating it (conda/mamba: `conda activate <your-env>`, pixi: `pixi shell`)
-make sure the respective command-line tools are accessible: Type
+Follow the [user guide](https://s2gos-dev.github.io/s2gos-controller/guide/) to start a local test service,
+configure the client, and submit your first job. The guide covers the Python API,
+App, command line, authentication, and result access.
 
-```bash
-s2gos-server --help
-```
-
-and 
-
-```bash
-s2gos-client --help
-```
-
-to get an overview of the available commands and options. 
-
-You can then run the S2GOS server with one of the development services
-or use the deployed server. To run the development service with a local
-process executor run
-
-```bash
-s2gos-server dev -- wraptile.services.local:service
-```
-
-To run the S2GOS gateway server with a local Airflow instance (assuming
-the local Airflow webserver runs on http://localhost:8080):
-
-```bash
-s2gos-server dev -- wraptile.services.airflow:service --airflow-password=abcd1234
-```
-
-The next step is configure the client, which will also serve as default configuration 
-for the client's Python API and its GUI:
-
-```bash
-s2gos-client configure
-```
-
-Test:
-
-```bash
-s2gos-client list-processes
-```
-
+The original notebooks remain in the repository for independent exploration;
+the maintained walkthroughs and reusable examples are in the user guide.
 ## Development
 
 Install the S2GOS controller packages as described in 

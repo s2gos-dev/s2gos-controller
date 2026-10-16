@@ -37,6 +37,9 @@ jobs:
             - name: Run test & coverage
               run: pixi run coverage-ci
 
+            - name: Build documentation
+              run: pixi run doc-build
+
             - name: Upload coverage reports
               uses: codecov/codecov-action@v7
               with:
