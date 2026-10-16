@@ -4,10 +4,11 @@
 notebooks/credentials.json
 notebooks/config.json
 notebooks/storage-options.json
+# Local client profile created by the user guide
+/local-client.yaml
 
-# Documentation generation
-docs/notebooks/*.ipynb
-docs/notebooks/*.json
+# Legacy generated documentation (excluded from the site)
+docs/notebooks/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,0 +1,7 @@
+{
+  "process_id": "primes_between",
+  "inputs": {
+    "min_val": 10,
+    "max_val": 80
+  }
+}

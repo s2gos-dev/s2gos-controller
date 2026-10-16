@@ -38,6 +38,8 @@ $ s2gos-client [OPTIONS] COMMAND [ARGS]...
 **Commands**:
 
 * `configure`: Configure the client tool.
+* `login`: Reuse or obtain credentials and save them...
+* `logout`: Remove the locally stored credentials for...
 * `generate-client`: Generate the Python code for...
 * `list-processes`: List available processes.
 * `get-process`: Get process details.
@@ -54,6 +56,9 @@ $ s2gos-client [OPTIONS] COMMAND [ARGS]...
 
 Configure the client tool.
 
+Prompts require an interactive terminal. In notebook shell commands or
+other noninteractive environments, supply all configuration options.
+
 **Usage**:
 
 ```console
@@ -63,15 +68,48 @@ $ s2gos-client configure [OPTIONS]
 **Options**:
 
 * `--api-url TEXT`: The URL of a service complying to the OGC API - Processes.
-* `-a, --auth-type TEXT`: The authorisation method for the API (none|basic|token|login|api-key).
-* `--auth-url TEXT`: The URL of the authorisation service for the API 
-* `-u, --username TEXT`: Username.
-* `-p, --password TEXT`: Password.
-* `--client-id TEXT`: OAuth2 client ID for login authentication.
-* `--client-secret TEXT`: OAuth2 client secret for login authentication.
-* `-t, --token TEXT`: Access token.
-* `--use-bearer`: Use bearer token?
-* `--token-header TEXT`: Access token header
+* `-a, --auth-type TEXT`: The authorisation method for the API (none|basic|token|login|oauth2|oidc|api-key).
+* `--login-url TEXT`: The proprietary login endpoint URL.
+* `--token-url TEXT`: The OAuth2 token endpoint URL.
+* `--grant-type TEXT`: The OAuth2 grant type (password|client_credentials).
+* `--client-id TEXT`: OAuth2 or OIDC client ID.
+* `--issuer-url TEXT`: The OpenID Connect issuer URL.
+* `--scope TEXT`: An OpenID Connect resource scope; repeat for multiple scopes.
+* `--access-token-header TEXT`: Custom header for static/proprietary tokens; empty means Bearer.
+* `--api-key-header TEXT`: Header used for API-key authentication.
+* `-c, --config PATH`: Client configuration file.
+* `--help`: Show this message and exit.
+
+## `s2gos-client login`
+
+Reuse or obtain credentials and save them in the OS keyring.
+
+**Usage**:
+
+```console
+$ s2gos-client login [OPTIONS]
+```
+
+**Options**:
+
+* `-c, --config PATH`: Client configuration file.
+* `--no-browser`: Print the OIDC authorization URL instead of opening a browser.
+* `--force`: Sign in again, allowing credential prompts.
+* `--no-input`: Never prompt or open a browser; use supplied credentials.
+* `--help`: Show this message and exit.
+
+## `s2gos-client logout`
+
+Remove the locally stored credentials for this configuration.
+
+**Usage**:
+
+```console
+$ s2gos-client logout [OPTIONS]
+```
+
+**Options**:
+
 * `-c, --config PATH`: Client configuration file.
 * `--help`: Show this message and exit.
 
