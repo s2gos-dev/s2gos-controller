@@ -464,14 +464,17 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/zarr-3.4.0-pyhc364b38_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zict-3.0.0-pyhd8ed1ab_1.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/zipp-4.1.0-pyhcf101f3_0.conda
+      - pypi: ../eozilla/appligator
+      - pypi: ../eozilla/cuiman
+      - pypi: ../eozilla/gavicore
+      - pypi: ../eozilla/procodile
+      - pypi: ../eozilla/wraptile
       - pypi: ./s2gos-client
       - pypi: ./s2gos-server
       - pypi: https://files.pythonhosted.org/packages/10/a1/510b0a7fadc6f43a6ce50152e69dbd86415240835868bb0bd9b5b88b1e06/aioitertools-0.13.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/13/f5/20b5c946fdcfafa8e0538d4d278abf10dda4b4012f29aa98a32fe09a46c5/aiobotocore-3.9.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/14/2f/967ba146e6d58cf6a652da73885f52fc68001525b4197effc174321d70b4/jmespath-1.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/47/cd/f27bf3242c2d70046211788d897679686a498bb032fbbc25f3c4d41ae9a5/multidict-6.9.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
-      - pypi: https://files.pythonhosted.org/packages/4c/b3/0d77cb7194516b8d5fd6fcae0550149a1f191d5427b3022bcfc2371c2784/appligator-0.3.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/4f/4c/850b80452c688036d3e9cd8a364916b07f9faafbb647496dc799cf61f898/gavicore-0.3.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/52/b7/7cd31f29d6055bd711ae6e669367fba6f5ae9de463910a793e30556a8db7/aiohttp-3.14.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/53/c7/d168dd2e2120b1a61ffdcf6eaa6d992620a793d3bf7e12a59704eda1d83b/apache_airflow_client-3.0.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/67/c5/82addfd375e5ee6520644e0553e4aadde92d668c4fc99cc716d337fe7bb3/joserfc-1.7.5-py3-none-any.whl
@@ -479,11 +482,8 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/71/43/1947f06babed6b3f1d7f38b0c767f52df66bfb2bc10b468c4a7de9eceff2/aiohappyeyeballs-2.7.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/85/9f/83a07b6ec0e043c050cfdd35fb0cf1b7897b91d554d6eea293740309afe7/propcache-0.5.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/87/44/18ca9a090acc7bf5eb1fbdbb9ad3cb2e73fd56690438a037f5374ec288c5/remotestate-0.3.4-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/93/10/7ebae728d0b1359f29afd5132bf032423216ee0c8c2aebd31135a6949f8a/cuiman-0.3.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/94/46/19d3178e70f37fda251f3d9560f29654f09c6eedbe1c8b790adeee84da49/botocore-1.43.75-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/97/d6/4f0a21b1867661a90f801e0e9dab2f577eb0e019ab84cb36e6dad19c8be3/procodile-0.3.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/98/cc/bcde19a37952ecc58e7d9d67ecaa048e1e21b17d014ce0863a6a6101e606/s3fs-2026.7.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/b3/76/86de25c61c0968f7024da4dd79068eacb9560eece4455ddc9589e5dded32/wraptile-0.3.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b8/c6/6f124bcfbbfb20fba22c939b4e43a06dccfc0e1ca20e5634ca573cb1e271/authlib-1.8.0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bc/7b/ca212cbe170ac8b96e45317ecbcf9c3c3ecf0cdec98d5b088a9c4088929b/yarl-1.25.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/fb/76/641ae371508676492379f16e2fa48f4e2c11741bd63c48be4b12a6b09cba/aiosignal-1.4.0-py3-none-any.whl
@@ -873,25 +873,25 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-1.3.2-hbb4bfdb_3.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zlib-ng-2.3.3-h646e873_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/zstd-1.5.7-hbc1a06c_7.conda
+      - pypi: ../eozilla/appligator
+      - pypi: ../eozilla/cuiman
+      - pypi: ../eozilla/gavicore
+      - pypi: ../eozilla/procodile
+      - pypi: ../eozilla/wraptile
       - pypi: ./s2gos-client
       - pypi: ./s2gos-server
       - pypi: https://files.pythonhosted.org/packages/10/a1/510b0a7fadc6f43a6ce50152e69dbd86415240835868bb0bd9b5b88b1e06/aioitertools-0.13.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/13/f5/20b5c946fdcfafa8e0538d4d278abf10dda4b4012f29aa98a32fe09a46c5/aiobotocore-3.9.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/14/2f/967ba146e6d58cf6a652da73885f52fc68001525b4197effc174321d70b4/jmespath-1.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/28/5d/40602b534c8b731619a39b3cf1e8f41b25d81e125af3915b858bbc254de5/multidict-6.9.0-cp314-cp314-macosx_10_15_x86_64.whl
-      - pypi: https://files.pythonhosted.org/packages/4c/b3/0d77cb7194516b8d5fd6fcae0550149a1f191d5427b3022bcfc2371c2784/appligator-0.3.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/4f/4c/850b80452c688036d3e9cd8a364916b07f9faafbb647496dc799cf61f898/gavicore-0.3.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/53/c7/d168dd2e2120b1a61ffdcf6eaa6d992620a793d3bf7e12a59704eda1d83b/apache_airflow_client-3.0.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/67/c5/82addfd375e5ee6520644e0553e4aadde92d668c4fc99cc716d337fe7bb3/joserfc-1.7.5-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/71/43/1947f06babed6b3f1d7f38b0c767f52df66bfb2bc10b468c4a7de9eceff2/aiohappyeyeballs-2.7.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/87/44/18ca9a090acc7bf5eb1fbdbb9ad3cb2e73fd56690438a037f5374ec288c5/remotestate-0.3.4-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/8e/e8/a1185e236ec66c20afd72399522f142c3724c785789255202d27ae992818/frozenlist-1.8.0-cp314-cp314-macosx_10_13_x86_64.whl
-      - pypi: https://files.pythonhosted.org/packages/93/10/7ebae728d0b1359f29afd5132bf032423216ee0c8c2aebd31135a6949f8a/cuiman-0.3.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/94/46/19d3178e70f37fda251f3d9560f29654f09c6eedbe1c8b790adeee84da49/botocore-1.43.75-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/97/a3/7056b86dc0d9ec709ea9777eae3b0161428f943372f8b98c01c11593b682/aiohttp-3.14.3-cp314-cp314-macosx_10_15_x86_64.whl
-      - pypi: https://files.pythonhosted.org/packages/97/d6/4f0a21b1867661a90f801e0e9dab2f577eb0e019ab84cb36e6dad19c8be3/procodile-0.3.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/98/cc/bcde19a37952ecc58e7d9d67ecaa048e1e21b17d014ce0863a6a6101e606/s3fs-2026.7.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/b3/76/86de25c61c0968f7024da4dd79068eacb9560eece4455ddc9589e5dded32/wraptile-0.3.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b8/c6/6f124bcfbbfb20fba22c939b4e43a06dccfc0e1ca20e5634ca573cb1e271/authlib-1.8.0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/bb/ad/5d6702db60b1e40b41ef513b6967ff5848f307d50f8449baf1634f5908f1/cryptography-50.0.1.tar.gz
       - pypi: https://files.pythonhosted.org/packages/d7/a8/e6c1be0e6761d0f2d10bbf33a3e1e02b99dc83874d92945d7b461a72481e/yarl-1.25.1-cp314-cp314-macosx_10_15_x86_64.whl
@@ -1279,6 +1279,11 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-1.3.2-hfd05255_3.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zlib-ng-2.3.3-h0261ad2_1.conda
       - conda: https://conda.anaconda.org/conda-forge/win-64/zstd-1.5.7-h534d264_7.conda
+      - pypi: ../eozilla/appligator
+      - pypi: ../eozilla/cuiman
+      - pypi: ../eozilla/gavicore
+      - pypi: ../eozilla/procodile
+      - pypi: ../eozilla/wraptile
       - pypi: ./s2gos-client
       - pypi: ./s2gos-server
       - pypi: https://files.pythonhosted.org/packages/10/a1/510b0a7fadc6f43a6ce50152e69dbd86415240835868bb0bd9b5b88b1e06/aioitertools-0.13.0-py3-none-any.whl
@@ -1286,19 +1291,14 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/14/2f/967ba146e6d58cf6a652da73885f52fc68001525b4197effc174321d70b4/jmespath-1.1.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/1e/9e/a0ac821a2229186af5e2e3c3635a78abb23cfddca57f38513ab5d70420f3/propcache-0.5.4-cp314-cp314-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/42/8b/cb12b1b60c91b074ca6bf0fdd59aa8f10d8bc5f73af8faece86ef0421b37/cryptography-50.0.1-cp311-abi3-win_amd64.whl
-      - pypi: https://files.pythonhosted.org/packages/4c/b3/0d77cb7194516b8d5fd6fcae0550149a1f191d5427b3022bcfc2371c2784/appligator-0.3.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/4f/4c/850b80452c688036d3e9cd8a364916b07f9faafbb647496dc799cf61f898/gavicore-0.3.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/53/c7/d168dd2e2120b1a61ffdcf6eaa6d992620a793d3bf7e12a59704eda1d83b/apache_airflow_client-3.0.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/59/ad/9caa9b9c836d9ad6f067157a531ac48b7d36499f5036d4141ce78c230b1b/frozenlist-1.8.0-cp314-cp314-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/67/c5/82addfd375e5ee6520644e0553e4aadde92d668c4fc99cc716d337fe7bb3/joserfc-1.7.5-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/71/43/1947f06babed6b3f1d7f38b0c767f52df66bfb2bc10b468c4a7de9eceff2/aiohappyeyeballs-2.7.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/87/44/18ca9a090acc7bf5eb1fbdbb9ad3cb2e73fd56690438a037f5374ec288c5/remotestate-0.3.4-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/93/10/7ebae728d0b1359f29afd5132bf032423216ee0c8c2aebd31135a6949f8a/cuiman-0.3.1-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/94/46/19d3178e70f37fda251f3d9560f29654f09c6eedbe1c8b790adeee84da49/botocore-1.43.75-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/96/07/f20f633396700043a804fc1d7c397928e79d9955516b7621639219c6aace/multidict-6.9.0-cp314-cp314-win_amd64.whl
-      - pypi: https://files.pythonhosted.org/packages/97/d6/4f0a21b1867661a90f801e0e9dab2f577eb0e019ab84cb36e6dad19c8be3/procodile-0.3.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/98/cc/bcde19a37952ecc58e7d9d67ecaa048e1e21b17d014ce0863a6a6101e606/s3fs-2026.7.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/b3/76/86de25c61c0968f7024da4dd79068eacb9560eece4455ddc9589e5dded32/wraptile-0.3.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b8/c6/6f124bcfbbfb20fba22c939b4e43a06dccfc0e1ca20e5634ca573cb1e271/authlib-1.8.0-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/f5/01/349c0386caedbbe488d519f252df54efac8a1459282d466c474bdd84a620/yarl-1.25.1-cp314-cp314-win_amd64.whl
       - pypi: https://files.pythonhosted.org/packages/f5/8b/c7baa1ba1eda4db6989baefe5de6d99834921b84ebd7918624febcb9f290/aiohttp-3.14.3-cp314-cp314-win_amd64.whl
@@ -5105,7 +5105,7 @@ packages:
   license: BSD-2-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/appnope?source=compressed-mapping
+  - pkg:pypi/appnope?source=hash-mapping
   run_exports: {}
   size: 12232
   timestamp: 1787337124448
@@ -5305,7 +5305,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/bokeh?source=compressed-mapping
+  - pkg:pypi/bokeh?source=hash-mapping
   run_exports: {}
   size: 4454345
   timestamp: 1787144786949
@@ -6729,7 +6729,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/jupyterlab?source=compressed-mapping
+  - pkg:pypi/jupyterlab?source=hash-mapping
   run_exports: {}
   size: 13178193
   timestamp: 1786398793317
@@ -7215,7 +7215,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/notebook?source=compressed-mapping
+  - pkg:pypi/notebook?source=hash-mapping
   run_exports: {}
   size: 4631065
   timestamp: 1786455253264
@@ -7704,7 +7704,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/python-dotenv?source=compressed-mapping
+  - pkg:pypi/python-dotenv?source=hash-mapping
   run_exports: {}
   size: 28328
   timestamp: 1787003234261
@@ -8294,7 +8294,7 @@ packages:
   - python
   license: MIT AND BSD-3-Clause
   purls:
-  - pkg:pypi/typer?source=compressed-mapping
+  - pkg:pypi/typer?source=hash-mapping
   run_exports: {}
   size: 188056
   timestamp: 1787921102267
@@ -8631,7 +8631,7 @@ packages:
   license: BSD-3-Clause
   license_family: BSD
   purls:
-  - pkg:pypi/xyzservices?source=compressed-mapping
+  - pkg:pypi/xyzservices?source=hash-mapping
   run_exports: {}
   size: 53963
   timestamp: 1788530754725
@@ -10591,7 +10591,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/nh3?source=compressed-mapping
+  - pkg:pypi/nh3?source=hash-mapping
   run_exports: {}
   size: 669167
   timestamp: 1787526901132
@@ -11814,7 +11814,7 @@ packages:
   license: MIT
   license_family: MIT
   purls:
-  - pkg:pypi/cffi?source=compressed-mapping
+  - pkg:pypi/cffi?source=hash-mapping
   run_exports: {}
   size: 347452
   timestamp: 1788485352441
@@ -14156,6 +14156,60 @@ packages:
     - zstd >=1.5.7,<1.6.0a0
   size: 387535
   timestamp: 1786599623274
+- pypi: ../eozilla/appligator
+  name: appligator
+  requires_dist:
+  - jinja2
+  - pydantic
+  - pyyaml
+  - tomli-w
+  - tomli ; python_full_version < '3.11'
+  - typer>=0.26.0,<1
+  - gavicore>=0.4.0.dev0
+  - procodile>=0.4.0.dev0
+  requires_python: '>=3.11'
+- pypi: ../eozilla/cuiman
+  name: cuiman
+  requires_dist:
+  - ipython
+  - pydantic>=2.12
+  - pydantic-settings>=2.14.2
+  - pyyaml
+  - remotestate>=0.3.4,<1
+  - typer>=0.26.0,<1
+  - uri-template
+  - httpx2
+  - authlib>=1.8,<1.9
+  - joserfc>=1.6,<2
+  - keyring
+  - gavicore>=0.4.0.dev0
+  requires_python: '>=3.10'
+- pypi: ../eozilla/gavicore
+  name: gavicore
+  requires_dist:
+  - pydantic
+  - pyyaml
+  - typer>=0.26.0,<1
+  requires_python: '>=3.11'
+- pypi: ../eozilla/procodile
+  name: procodile
+  requires_dist:
+  - pydantic
+  - pyyaml
+  - typer>=0.26.0,<1
+  - gavicore>=0.4.0.dev0
+  requires_python: '>=3.10'
+- pypi: ../eozilla/wraptile
+  name: wraptile
+  requires_dist:
+  - fastapi
+  - pydantic
+  - pyyaml
+  - typer>=0.26.0,<1
+  - uvicorn
+  - gavicore>=0.4.0.dev0
+  - procodile>=0.4.0.dev0
+  requires_python: '>=3.11'
 - pypi: ./s2gos-client
   name: s2gos-client
   requires_dist:
@@ -14163,15 +14217,15 @@ packages:
   - s3fs
   - xarray
   - zarr
-  - cuiman>=0.3.1
-  - gavicore>=0.3.0
+  - cuiman>=0.4.0.dev0
+  - gavicore>=0.4.0.dev0
   requires_python: '>=3.11'
 - pypi: ./s2gos-server
   name: s2gos-server
   requires_dist:
-  - gavicore>=0.3.0
-  - procodile>=0.3.0
-  - wraptile>=0.3.0
+  - gavicore>=0.4.0.dev0
+  - procodile>=0.4.0.dev0
+  - wraptile>=0.4.0.dev0
   - universal-pathlib>=0.3.8,<0.4
   requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/10/a1/510b0a7fadc6f43a6ce50152e69dbd86415240835868bb0bd9b5b88b1e06/aioitertools-0.13.0-py3-none-any.whl
@@ -14232,29 +14286,6 @@ packages:
   requires_dist:
   - typing-extensions>=4.1.0 ; python_full_version < '3.11'
   requires_python: '>=3.10'
-- pypi: https://files.pythonhosted.org/packages/4c/b3/0d77cb7194516b8d5fd6fcae0550149a1f191d5427b3022bcfc2371c2784/appligator-0.3.0-py3-none-any.whl
-  name: appligator
-  version: 0.3.0
-  sha256: 9fd66105c3ca5ca8a7d23cc349175a398042303bd79d9f125136194b2481d0ab
-  requires_dist:
-  - gavicore>=0.3.0
-  - jinja2
-  - procodile>=0.3.0
-  - pydantic
-  - pyyaml
-  - tomli-w
-  - tomli ; python_full_version < '3.11'
-  - typer>=0.26.0,<1
-  requires_python: '>=3.11'
-- pypi: https://files.pythonhosted.org/packages/4f/4c/850b80452c688036d3e9cd8a364916b07f9faafbb647496dc799cf61f898/gavicore-0.3.0-py3-none-any.whl
-  name: gavicore
-  version: 0.3.0
-  sha256: 86b0a41baa094b0c75fc2b7f23ff212f6ad861eb38b88a10183c4f29e3734524
-  requires_dist:
-  - pydantic
-  - pyyaml
-  - typer>=0.26.0,<1
-  requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/52/b7/7cd31f29d6055bd711ae6e669367fba6f5ae9de463910a793e30556a8db7/aiohttp-3.14.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl
   name: aiohttp
   version: 3.14.3
@@ -14325,24 +14356,6 @@ packages:
   version: 1.8.0
   sha256: 119fb2a1bd47307e899c2fac7f28e85b9a543864df47aa7ec9d3c1b4545f096f
   requires_python: '>=3.9'
-- pypi: https://files.pythonhosted.org/packages/93/10/7ebae728d0b1359f29afd5132bf032423216ee0c8c2aebd31135a6949f8a/cuiman-0.3.1-py3-none-any.whl
-  name: cuiman
-  version: 0.3.1
-  sha256: 830ca4d68eff8b641064d67ebf2067dc950bba63bb8b5416e099ec7b1aefc6d3
-  requires_dist:
-  - authlib>=1.8,<1.9
-  - gavicore>=0.3.0
-  - httpx2
-  - ipython
-  - joserfc>=1.6,<2
-  - keyring
-  - pydantic-settings>=2.14.2
-  - pydantic>=2.12
-  - pyyaml
-  - remotestate>=0.3.4,<1
-  - typer>=0.26.0,<1
-  - uri-template
-  requires_python: '>=3.10'
 - pypi: https://files.pythonhosted.org/packages/94/46/19d3178e70f37fda251f3d9560f29654f09c6eedbe1c8b790adeee84da49/botocore-1.43.75-py3-none-any.whl
   name: botocore
   version: 1.43.75
@@ -14379,16 +14392,6 @@ packages:
   - brotlicffi>=1.2 ; platform_python_implementation != 'CPython' and extra == 'speedups'
   - backports-zstd ; python_full_version < '3.14' and platform_python_implementation == 'CPython' and sys_platform != 'android' and sys_platform != 'ios' and extra == 'speedups'
   requires_python: '>=3.10'
-- pypi: https://files.pythonhosted.org/packages/97/d6/4f0a21b1867661a90f801e0e9dab2f577eb0e019ab84cb36e6dad19c8be3/procodile-0.3.0-py3-none-any.whl
-  name: procodile
-  version: 0.3.0
-  sha256: 8d8410263e5c210b68e8cdf5e61823b402be30c5469cc71e99a3d071622a7239
-  requires_dist:
-  - gavicore>=0.3.0
-  - pydantic
-  - pyyaml
-  - typer>=0.26.0,<1
-  requires_python: '>=3.10'
 - pypi: https://files.pythonhosted.org/packages/98/cc/bcde19a37952ecc58e7d9d67ecaa048e1e21b17d014ce0863a6a6101e606/s3fs-2026.7.0-py3-none-any.whl
   name: s3fs
   version: 2026.7.0
@@ -14398,19 +14401,6 @@ packages:
   - fsspec>=2026.7.0,<2026.7.1
   - aiohttp>=3.9.0,!=4.0.0a0,!=4.0.0a1
   requires_python: '>=3.10'
-- pypi: https://files.pythonhosted.org/packages/b3/76/86de25c61c0968f7024da4dd79068eacb9560eece4455ddc9589e5dded32/wraptile-0.3.0-py3-none-any.whl
-  name: wraptile
-  version: 0.3.0
-  sha256: 421ca3b7bce64162376b9423a52490d7fc9acb28698c7459bd5286cb61ffbed5
-  requires_dist:
-  - fastapi
-  - gavicore>=0.3.0
-  - procodile>=0.3.0
-  - pydantic
-  - pyyaml
-  - typer>=0.26.0,<1
-  - uvicorn
-  requires_python: '>=3.11'
 - pypi: https://files.pythonhosted.org/packages/b8/c6/6f124bcfbbfb20fba22c939b4e43a06dccfc0e1ca20e5634ca573cb1e271/authlib-1.8.0-py2.py3-none-any.whl
   name: authlib
   version: 1.8.0
