@@ -4,6 +4,8 @@
 notebooks/credentials.json
 notebooks/config.json
 notebooks/storage-options.json
+# Local client profile created by the user guide
+/local-client.yaml
 
 # Legacy generated documentation (excluded from the site)
 docs/notebooks/
