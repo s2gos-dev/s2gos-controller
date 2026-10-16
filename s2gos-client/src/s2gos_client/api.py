@@ -25,9 +25,7 @@ class S2GOSConfig(ClientConfig):
     cli_name: ClassVar[str] = "s2gos-client"
 
     default_path = Path("~").expanduser() / ".s2gos-client"
-
-    display_name = "S2GOS Client"
-    cli_name = "s2gos-client"
+    require_config_file = False
 
     api_url: str | None = "https://s2gos-free.wraptile.brockmann-consult.de/"
     auth: AuthConfig = OidcAuthConfig(
