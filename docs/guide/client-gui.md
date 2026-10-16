@@ -7,7 +7,9 @@ bundled with `s2gos-client` and runs in a browser or inside Jupyter. Start with 
 
 ## Open from a terminal
 
-After creating `local-client.yaml` as described in Getting started:
+After creating the local profile `local-client.yaml` in the repository root, as
+described in [Run the examples locally](index.md#run-the-examples-locally), run
+this from the same directory:
 
 ```bash
 --8<-- "examples/guides/cli.sh:app"
