@@ -7,8 +7,11 @@ from typing import Any, ClassVar
 
 from cuiman.api import AsyncClient, Client, ClientConfig, ClientError
 from cuiman.api.auth import AuthConfig, OidcAuthConfig
+from cuiman.api.branding import AppBranding, AppImageIcon
 from pydantic import HttpUrl
 from pydantic_settings import SettingsConfigDict
+
+_BRANDING_DIR = Path(__file__).resolve().parent / "app" / "branding"
 
 
 class S2GOSConfig(ClientConfig):
@@ -22,11 +25,19 @@ class S2GOSConfig(ClientConfig):
     cli_name: ClassVar[str] = "s2gos-client"
 
     default_path = Path("~").expanduser() / ".s2gos-client"
+    require_config_file = False
 
     api_url: str | None = "https://s2gos-free.wraptile.brockmann-consult.de/"
     auth: AuthConfig = OidcAuthConfig(
         issuer_url=HttpUrl("https://auth.brockmann-consult.de/realms/dte-s2gos"),
         client_id="cuiman",
+    )
+
+    branding: AppBranding = AppBranding(
+        title="S2GOS Processes",
+        favicon=Path(_BRANDING_DIR / "favicon.ico"),
+        icon=AppImageIcon(path=_BRANDING_DIR / "icon.png"),
+        icon_position="before",
     )
 
 

@@ -7,7 +7,7 @@ from urllib.request import url2pathname
 
 import xarray as xr
 from cuiman.api.opener import JobResultOpenContext, JobResultOpener
-from gavicore.models import ProcessRequest
+from gavicore.models.core import ProcessRequest
 
 from s2gos_client import Client
 

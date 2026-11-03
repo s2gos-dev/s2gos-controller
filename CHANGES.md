@@ -1,8 +1,14 @@
+## Changes in version 0.3.0 (in development)
+
+- Added new app runtime branding as of Cuiman 0.4.x.
+
+
 ## Changes in version 0.2.1 (in development)
 
 - `s2gos-client` now defaults to OIDC login against
   `auth.brockmann-consult.de`; the password grant is no longer allowed.
 - Updated `docs/auth.md` to the current Cuiman auth configuration.
+
 
 ## Changes in version 0.2.0
 

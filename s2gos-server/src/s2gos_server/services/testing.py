@@ -17,7 +17,7 @@ The demo showcases:
 import enum
 from typing import Annotated
 
-from gavicore.models import InputDescription, Schema
+from gavicore.models.core import InputDescription, Schema
 from procodile import JobContext
 from pydantic import Field
 from wraptile.services.local import LocalService
