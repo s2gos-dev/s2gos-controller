@@ -218,8 +218,8 @@ def test_dataset_example_reads_real_local_result(monkeypatch, tmp_path, capsys):
         lambda process_id: service.process_registry.get(process_id).description,
     )
     try:
-        registry = client.config.get_job_result_opener_registry()
-        original_openers = registry.opener_types
+        registry = client.config.get_job_result_reader_registry()
+        original_readers = registry.reader_types
         job_id = results.submit_scene(
             client, ROOT / "examples/guides/simulate-scene-request.json"
         )
@@ -228,20 +228,20 @@ def test_dataset_example_reads_real_local_result(monkeypatch, tmp_path, capsys):
         assert "'time': 2" in output and "'lat': 4" in output and "'lon': 4" in output
         assert "['a', 'b']" in output
         assert output.strip().endswith("0.0")
-        assert registry.opener_types == original_openers
+        assert registry.reader_types == original_readers
     finally:
         client.close()
 
 
 def test_reopen_does_not_resubmit_and_closes_on_timeout(monkeypatch, client):
     monkeypatch.setattr(results, "connect", lambda: client)
-    client.open_job_result.side_effect = TimeoutError("still running")
+    client.read_job_result.side_effect = TimeoutError("still running")
     with pytest.raises(TimeoutError, match="still running"):
         results.main("saved-job")
     client.execute_process.assert_not_called()
-    assert client.open_job_result.call_args.args == ("saved-job",)
+    assert client.read_job_result.call_args.args == ("saved-job",)
     client.close.assert_called_once()
-    client.config.register_job_result_opener.return_value.assert_called_once()
+    client.config.register_job_result_reader.return_value.assert_called_once()
 
 
 def test_scene_session_submits_and_closes_dataset(monkeypatch, client):
@@ -249,11 +249,11 @@ def test_scene_session_submits_and_closes_dataset(monkeypatch, client):
     dataset = xr.Dataset({"a": ("time", [0.0, 0.0])})
     closed = Mock()
     dataset.set_close(closed)
-    client.open_job_result.return_value = dataset
+    client.read_job_result.return_value = dataset
     assert results.main() == "submitted-42"
     client.execute_process.assert_called_once()
     assert client.execute_process.call_args.args == ("simulate_scene",)
-    assert client.open_job_result.call_args.args == ("submitted-42",)
+    assert client.read_job_result.call_args.args == ("submitted-42",)
     closed.assert_called_once()
     client.close.assert_called_once()
 
@@ -263,12 +263,12 @@ def test_results_script_reopens_saved_job(monkeypatch, client):
 
     monkeypatch.setattr(api, "connect", lambda: client)
     monkeypatch.setattr("sys.argv", ["results.py", "--job-id", "saved-job"])
-    client.open_job_result.return_value = xr.Dataset({"a": ("time", [0.0])})
+    client.read_job_result.return_value = xr.Dataset({"a": ("time", [0.0])})
     # Relative imports in results.py need run_module rather than run_path.
     with pytest.warns(RuntimeWarning, match="found in sys.modules"):
         runpy.run_module("examples.guides.results", run_name="__main__")
     client.execute_process.assert_not_called()
-    assert client.open_job_result.call_args.args == ("saved-job",)
+    assert client.read_job_result.call_args.args == ("saved-job",)
     client.close.assert_called_once()
 
 
@@ -284,7 +284,7 @@ def test_dataset_closes_if_inspection_fails(client):
     dataset = xr.Dataset()
     closed = Mock()
     dataset.set_close(closed)
-    client.open_job_result.return_value = dataset
+    client.read_job_result.return_value = dataset
     with pytest.raises(KeyError, match="a"):
         results.inspect_dataset(client, "saved-job")
     closed.assert_called_once()
@@ -300,22 +300,22 @@ def test_dataset_closes_if_inspection_fails(client):
         ("file:///tmp/scene.zarr", "application/zarr", str, False),
     ],
 )
-def test_local_opener_selects_only_supported_outputs(
+def test_local_reader_selects_only_supported_outputs(
     href, media_type, data_type, accepted
 ):
     import asyncio
 
-    from cuiman.api.opener import JobResultOpenContext
+    from cuiman.api.reader import JobResultReadContext
     from gavicore.models.core import JobResults, Link
 
-    ctx = JobResultOpenContext(
+    ctx = JobResultReadContext(
         config=S2GOSConfig(auth={"auth_type": "none"}),
         job_id="example",
         job_results=JobResults(root={"return_value": Link(href=href, type=media_type)}),
         output_name="return_value",
         data_type=data_type,
     )
-    assert asyncio.run(results.LocalZarrOpener().accept_job_result(ctx)) is accepted
+    assert asyncio.run(results.LocalZarrReader().accept_job_result(ctx)) is accepted
 
 
 def test_rendered_api_walkthrough_runs_in_order(monkeypatch, client):

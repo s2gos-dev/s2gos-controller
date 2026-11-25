@@ -23,7 +23,7 @@ Client:
 
 - hook into DestinE JupyterLab authentication flow to reuse its access tokens 
   when making server calls.
-- Ease accessing processor outputs (implementing new client job result openers)
+- Ease accessing processor outputs (implementing new client job result readers)
 
 ## Next
 
