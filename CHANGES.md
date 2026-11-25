@@ -1,6 +1,11 @@
 ## Changes in version 0.3.0 (in development)
 
 - Added new app runtime branding as of Cuiman 0.4.x.
+- Migrated to the Cuiman 0.5 job-result reader API (eo-tools/eozilla#243):
+  examples, guides, and notebooks now use `read_job_result()` and
+  `cuiman.api.reader` instead of the deprecated `open_job_result()` and the
+  removed `cuiman.api.opener` package. The local Zarr example reader declares
+  a `reader_id`. `s2gos-client` now requires `cuiman >=0.5.0.dev0`.
 
 
 ## Changes in version 0.2.1 (in development)

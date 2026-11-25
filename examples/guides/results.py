@@ -1,4 +1,4 @@
-"""Submit a small local dataset example, or reopen it using a saved job ID."""
+"""Submit a small local dataset example, or read it again using a saved job ID."""
 
 # --8<-- [start:imports]
 from pathlib import Path
@@ -6,7 +6,7 @@ from urllib.parse import urlsplit
 from urllib.request import url2pathname
 
 import xarray as xr
-from cuiman.api.opener import JobResultOpenContext, JobResultOpener
+from cuiman.api.reader import JobResultReadContext, JobResultReader
 from gavicore.models.core import ProcessRequest
 
 from s2gos_client import Client
@@ -28,10 +28,12 @@ def submit_scene(client: Client, request_path: Path) -> str:
 
 
 # --8<-- [start:custom]
-class LocalZarrOpener(JobResultOpener):
+class LocalZarrReader(JobResultReader):
     """Convert local file URIs to native paths, including Windows drive letters."""
 
-    async def accept_job_result(self, ctx: JobResultOpenContext) -> bool:
+    reader_id = "s2gos-local-zarr"
+
+    async def accept_job_result(self, ctx: JobResultReadContext) -> bool:
         link = ctx.output_link
         if link is None or ctx.data_type not in (None, xr.Dataset):
             return False
@@ -42,7 +44,7 @@ class LocalZarrOpener(JobResultOpener):
             and url.netloc in ("", "localhost")
         )
 
-    async def open_job_result(self, ctx: JobResultOpenContext) -> xr.Dataset:
+    async def read_job_result(self, ctx: JobResultReadContext) -> xr.Dataset:
         link = ctx.output_link
         assert link is not None
         path = url2pathname(urlsplit(link.href).path)
@@ -53,10 +55,10 @@ class LocalZarrOpener(JobResultOpener):
 
 
 # --8<-- [start:registration]
-def open_local_dataset(client: Client, job_id: str) -> xr.Dataset:
-    unregister = client.config.register_job_result_opener(LocalZarrOpener)
+def read_local_dataset(client: Client, job_id: str) -> xr.Dataset:
+    unregister = client.config.register_job_result_reader(LocalZarrReader)
     try:
-        return client.open_job_result(
+        return client.read_job_result(
             job_id,
             output_name="return_value",
             data_type=xr.Dataset,
@@ -70,9 +72,9 @@ def open_local_dataset(client: Client, job_id: str) -> xr.Dataset:
 # --8<-- [end:registration]
 
 
-# --8<-- [start:open]
+# --8<-- [start:read]
 def inspect_dataset(client: Client, job_id: str) -> None:
-    dataset = open_local_dataset(client, job_id)
+    dataset = read_local_dataset(client, job_id)
     try:
         print(dict(dataset.sizes))
         print(list(dataset.data_vars))
@@ -81,7 +83,7 @@ def inspect_dataset(client: Client, job_id: str) -> None:
         dataset.close()
 
 
-# --8<-- [end:open]
+# --8<-- [end:read]
 
 
 def main(job_id: str | None = None) -> str:
@@ -102,6 +104,6 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--job-id", help="Reopen an existing job instead of submitting."
+        "--job-id", help="Read an existing job's result instead of submitting."
     )
     main(parser.parse_args().job_id)

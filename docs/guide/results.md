@@ -2,8 +2,10 @@
 
 Job results describe what a process produced. Some outputs are inline JSON
 values; others are links to data. `get_job_results(job_id)` retrieves this
-description. `open_job_result(job_id, ...)` selects a reader and opens an output,
-for example as an `xarray.Dataset`.
+description. `read_job_result(job_id, ...)` selects a reader and reads an output,
+for example as an `xarray.Dataset`. It also accepts results you already retrieved
+with `get_job_results()`; the output is then selected without fetching the
+results again.
 
 ## Generate a small dataset locally
 
@@ -31,31 +33,35 @@ python -m examples.guides.results
 ```
 
 It submits one job, prints the job ID, waits up to 60 seconds for its output,
-opens the dataset, prints a short summary, and closes both dataset and client.
+reads the dataset, prints a short summary, and closes both dataset and client.
 Expected dimensions are `time: 2`, `lat: 4`, `lon: 4`, the variables are `a` and
 `b`, and the first slice of `a` has mean `0.0`.
 
-If waiting times out, the job can still be running. Check its status, then reopen
-the **same** job without another submission:
+If waiting times out, the job can still be running. Check its status, then read
+the result of the **same** job without another submission:
 
 ```bash
 python -m examples.guides.results --job-id YOUR_JOB_ID
 ```
 
-## Open a selected output
+## Read a selected output
 
-The local dataset example uses `open_local_dataset`, defined below, to open the
+The local dataset example uses `read_local_dataset`, defined below, to read the
 output, then inspects and closes it:
 
 ```python
---8<-- "examples/guides/results.py:open"
+--8<-- "examples/guides/results.py:read"
 ```
 
 `output_name` is a key in the returned results, not a filename. The local test
 process uses `return_value`; a deployed process may use names such as `dataset`
 or `image`. Inspect `get_job_results(job_id)` before choosing a name.
-`data_type=xr.Dataset` constrains the reader to produce a dataset. The link's media
-type helps select a reader; it does not turn an arbitrary file into a dataset.
+`data_type=xr.Dataset` guarantees a dataset: the client either returns an
+`xarray.Dataset` or raises `JobResultReadError`. The link's media type takes
+precedence over the filename suffix when selecting a reader; it does not turn an
+arbitrary file into a dataset. To force a specific built-in reader, pass its ID,
+for example `reader_id="xarray"` for a GeoTIFF output that would otherwise be
+read as a plain Pillow image.
 
 Xarray may load data lazily. Inspecting dimensions and variable names is cheap;
 calling `.compute()` reads the selected data. Start with a small spatial or time
@@ -64,9 +70,9 @@ subset for large scientific outputs, and close the dataset when finished.
 ## Handle local file URLs portably
 
 Some reader versions interpret `file:///C:/...` as a path with a leading slash
-on Windows. The local example includes a small custom opener that converts the
+on Windows. The local example includes a small custom reader that converts the
 URI to a native path before calling Xarray. It also handles URL-encoded spaces.
-The opener accepts only local Zarr links and the requested dataset type, leaving
+The reader accepts only local Zarr links and the requested dataset type, leaving
 other outputs to the built-in readers.
 
 ```python
@@ -74,16 +80,17 @@ from urllib.parse import urlsplit
 from urllib.request import url2pathname
 
 import xarray as xr
-from cuiman.api.opener import JobResultOpenContext, JobResultOpener
+from cuiman.api.reader import JobResultReadContext, JobResultReader
 from s2gos_client import Client
 
 --8<-- "examples/guides/results.py:custom"
 --8<-- "examples/guides/results.py:registration"
 ```
 
-Registration temporarily gives this opener priority in the S2GOS configuration's
-registry. The returned callback removes the registration even when opening fails.
-Keep the registration around the open operation; the returned dataset remains
+Every registered reader declares a unique `reader_id`. Registration temporarily
+gives this reader priority in the S2GOS configuration's registry. The returned
+callback removes the registration even when reading fails. Keep the registration
+around the read operation; the returned dataset remains
 usable afterward and must still be closed. For hosted storage, use the built-in
 readers as shown next rather than this local-filesystem example.
 
@@ -95,12 +102,12 @@ Your S2GOS API login does not automatically grant access to an S3 bucket or anot
 storage endpoint.
 
 For an output that requires storage settings, obtain the supported settings from
-the service operator and pass them as `storage_options` to `open_job_result`.
+the service operator and pass them as `storage_options` to `read_job_result`.
 For example, in an existing client session, after setting `job_id`, `output_name`,
 and `storage_options` for that output:
 
 ```python
-dataset = client.open_job_result(
+dataset = client.read_job_result(
     job_id,
     output_name=output_name,
     data_type=xr.Dataset,
@@ -131,5 +138,5 @@ URL or use the deployment's supported download mechanism.
 | A local file does not exist | Check the server's working directory and whether client and server share the filesystem. |
 
 The client inherits its result readers from Cuiman. See the
-[Cuiman result-opener guide](https://eo-tools.github.io/eozilla/cuiman/guides/openers/)
+[Cuiman result-reader guide](https://eo-tools.github.io/eozilla/cuiman/guides/readers/)
 when you need to implement a reader for an additional output format.
